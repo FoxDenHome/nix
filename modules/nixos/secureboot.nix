@@ -21,5 +21,5 @@
   environment.systemPackages = with pkgs; [
     openssl
     sbctl
-  ]
+  ];
 }

@@ -8,5 +8,5 @@
     htop
     wget
     curl
-  ]
+  ];
 }
