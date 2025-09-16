@@ -1,6 +1,7 @@
 { lib, pkgs, ... }:
 {
   security.audit.enable = true;
+  security.apparmor.enable = true;
 
   boot = {
     initrd.systemd.enable = true;
@@ -9,7 +10,7 @@
 
     kernelPackages = pkgs.linuxPackages_latest;
 
-    kernelParams = ["module.sig_enforce=1" "lsm=landlock,lockdown,yama,integrity,apparmor,bpf" "audit=1" "audit_backlog_limit=256" "lockdown=integrity"];
+    kernelParams = ["module.sig_enforce=1" "audit=1" "audit_backlog_limit=256" "lockdown=integrity"];
 
     lanzaboote = {
       enable = true;
