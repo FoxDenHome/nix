@@ -1,6 +1,15 @@
 { lib, pkgs, ...} :
 {
-  services.openssh.authorizedKeysCommand = "${pkgs.kanidm}/bin/kanidm_ssh_authorizedkeys";
+  services.open  services.openssh = {
+    authorizedKeysCommand = "/run/wrappers/bin/kanidm_ssh_authorizedkeys %u";
+    authorizedKeysCommandUser = "nobody";
+  };
+
+  security.wrappers."kanidm_ssh_authorizedkeys" = {
+    source = "${config.services.kanidm.package}/bin/kanidm_ssh_authorizedkeys";
+    owner = "root";
+    group = "root";
+  };
 
   services.kanidm = {
     enableClient = true;
