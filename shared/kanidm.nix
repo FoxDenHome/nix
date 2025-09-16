@@ -1,6 +1,6 @@
 { lib, pkgs, ...} :
 {
-  services.open  services.openssh = {
+  services.openssh = {
     authorizedKeysCommand = "/run/wrappers/bin/kanidm_ssh_authorizedkeys %u";
     authorizedKeysCommandUser = "nobody";
   };
