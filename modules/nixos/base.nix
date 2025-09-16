@@ -1,6 +1,7 @@
 { lib, pkgs, ... }:
 {
   services.sshd.enable = true;
+
   time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "en_US.UTF-8";
 
@@ -21,7 +22,7 @@
       "/var/lib/nixos"
       "/var/lib/systemd/coredump"
       "/var/lib/systemd/timers"
-    ];
+    ] + forEach services.openssh.hostKeys ({path}: "/etc/ssh/${path}");
     files = [
       "/etc/machine-id"
       { file = "/etc/nix/id_rsa"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
