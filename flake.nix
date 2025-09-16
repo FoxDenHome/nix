@@ -17,7 +17,9 @@
           nixos-hardware.nixosModules.qemu-guest
           ./machines/testvm.nix
           lanzaboote.nixosModules.lanzaboote
-          ./server.nix
+          ./shared/base.nix
+          ./shared/boot.nix
+          ./shared/kanidm.nix
         ];
       };
 
@@ -27,7 +29,9 @@
         modules = [
           ./machines/bengalfox.nix
           lanzaboote.nixosModules.lanzaboote
-          ./server.nix
+          ./shared/base.nix
+          ./shared/boot.nix
+          ./shared/kanidm.nix
         ];
       };
       islandfox = nixpkgs.lib.nixosSystem {
@@ -36,7 +40,9 @@
         modules = [
           ./machines/islandfox.nix
           lanzaboote.nixosModules.lanzaboote
-          ./server.nix
+          ./shared/base.nix
+          ./shared/boot.nix
+          ./shared/kanidm.nix
         ];
       };
       icefox = nixpkgs.lib.nixosSystem {
@@ -45,7 +51,9 @@
         modules = [
           ./machines/icefox.nix
           lanzaboote.nixosModules.lanzaboote
-          ./server.nix
+          ./shared/base.nix
+          ./shared/boot.nix
+          ./shared/kanidm.nix
         ];
       };
     };
