@@ -30,4 +30,6 @@
 
   networking.useDHCP = lib.mkDefault true;
   networking.hostName = "testvm";
+
+  boot.lanzaboote.enable = true;
 }
