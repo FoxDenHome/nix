@@ -10,10 +10,35 @@
   outputs = inputs@{ self, lanzaboote, nixpkgs, nixos-hardware, ... }:
   {
     nixosConfigurations = {
-      bengalfox-vm = nixpkgs.lib.nixosSystem {
+      testvm = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./machines/bengalfox-vm.nix
+          ./machines/qemu.nix
+          lanzaboote.nixosModules.lanzaboote
+          ./server.nix
+        ];
+      };
+
+      bengalfox = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./machines/bengalfox.nix
+          lanzaboote.nixosModules.lanzaboote
+          ./server.nix
+        ];
+      };
+      islandfox = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./machines/islandfox.nix
+          lanzaboote.nixosModules.lanzaboote
+          ./server.nix
+        ];
+      };
+      icefox = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./machines/icefox.nix
           lanzaboote.nixosModules.lanzaboote
           ./server.nix
         ];
