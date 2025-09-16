@@ -9,8 +9,8 @@
     loader.systemd-boot.enable = lib.mkForce false;
 
     kernelPackages = pkgs.linuxPackages_latest;
-
     kernelParams = ["module.sig_enforce=1" "audit=1" "audit_backlog_limit=256" "lockdown=integrity"];
+    zfs.enabled = true;
 
     lanzaboote = {
       enable = true;
