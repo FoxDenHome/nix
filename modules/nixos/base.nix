@@ -40,4 +40,6 @@
       "${path}.pub"
     ]));
   };
+
+  networking.hostId = config.networking.hostName;
 }
