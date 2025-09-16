@@ -18,6 +18,7 @@
           ./modules/nixos/base.nix
           ./modules/nixos/boot.nix
           ./modules/nixos/kanidm.nix
+          ./modules/nixos/zfs.nix
         ];
       };
 
@@ -29,6 +30,7 @@
           ./modules/nixos/base.nix
           ./modules/nixos/boot.nix
           ./modules/nixos/kanidm.nix
+          ./modules/nixos/zfs.nix
         ];
       };
       islandfox = nixpkgs.lib.nixosSystem {
@@ -49,6 +51,7 @@
           ./modules/nixos/base.nix
           ./modules/nixos/boot.nix
           ./modules/nixos/kanidm.nix
+          ./modules/nixos/zfs.nix
         ];
       };
     };
