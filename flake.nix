@@ -11,39 +11,39 @@
     nixosConfigurations = {
       testvm = nixpkgs.lib.nixosSystem {
         modules = [
-          ./machines/testvm.nix
+          ./systems/x86_64-linux/testvm.nix
           lanzaboote.nixosModules.lanzaboote
-          ./shared/base.nix
-          ./shared/boot.nix
-          ./shared/kanidm.nix
+          ./modules/nixos/base.nix
+          ./modules/nixos/boot.nix
+          ./modules/nixos/kanidm.nix
         ];
       };
 
       bengalfox = nixpkgs.lib.nixosSystem {
         modules = [
-          ./machines/bengalfox.nix
+          ./systems/x86_64-linux/bengalfox.nix
           lanzaboote.nixosModules.lanzaboote
-          ./shared/base.nix
-          ./shared/boot.nix
-          ./shared/kanidm.nix
+          ./modules/nixos/base.nix
+          ./modules/nixos/boot.nix
+          ./modules/nixos/kanidm.nix
         ];
       };
       islandfox = nixpkgs.lib.nixosSystem {
         modules = [
-          ./machines/islandfox.nix
+          ./systems/x86_64-linux/islandfox.nix
           lanzaboote.nixosModules.lanzaboote
-          ./shared/base.nix
-          ./shared/boot.nix
-          ./shared/kanidm.nix
+          ./modules/nixos/base.nix
+          ./modules/nixos/boot.nix
+          ./modules/nixos/kanidm.nix
         ];
       };
       icefox = nixpkgs.lib.nixosSystem {
         modules = [
-          ./machines/icefox.nix
+          ./systems/x86_64-linux/icefox.nix
           lanzaboote.nixosModules.lanzaboote
-          ./shared/base.nix
-          ./shared/boot.nix
-          ./shared/kanidm.nix
+          ./modules/nixos/base.nix
+          ./modules/nixos/boot.nix
+          ./modules/nixos/kanidm.nix
         ];
       };
     };
