@@ -14,6 +14,7 @@
         system = "x86_64-linux";
         modules = [
           ./machines/bengalfox-vm.nix
+          lanzaboote.nixosModules.lanzaboote
           ./server.nix
         ];
       };
