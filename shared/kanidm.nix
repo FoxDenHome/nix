@@ -1,8 +1,10 @@
-{ lib, ...} :
+{ lib, pkgs, ...} :
 {
   services.kanidm = {
     enableClient = true;
     enablePam = true;
+
+    package = pkgs.kanidm;
 
     clientSettings = {
       uri = "https://auth.foxden.network";
