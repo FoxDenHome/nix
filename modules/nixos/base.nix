@@ -11,6 +11,8 @@
     curl
     openssl
     tcpdump
+    e2fsprogs
+    xfsprogs
   ];
 
   environment.persistence."/nix/persist/system" = {
