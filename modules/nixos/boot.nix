@@ -1,13 +1,14 @@
 { lib, pkgs, config, ... }:
 {
-  security.audit.enable = true;
+  security.audit.enable = false;
   security.apparmor.enable = true;
 
   boot = {
     initrd.systemd.enable = true;
 
     kernelPackages = pkgs.linuxPackages_latest;
-    kernelParams = ["module.sig_enforce=1" "audit=1" "audit_backlog_limit=256" "lockdown=integrity"];
+    kernelParams = ["module.sig_enforce=1" "lockdown=integrity"];
+    # "audit=1" "audit_backlog_limit=256"
 
     loader.systemd-boot.enable = lib.mkForce (! config.boot.lanzaboote.enable);
     lanzaboote.pkiBundle = "/etc/secureboot";
