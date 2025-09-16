@@ -3,11 +3,10 @@
 
   inputs = {
     lanzaboote.url = "github:nix-community/lanzaboote";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
   };
 
-  outputs = inputs@{ self, lanzaboote, nixpkgs, nixos-hardware, ... }:
+  outputs = inputs@{ self, lanzaboote, nixpkgs, ... }:
   {
     nixosConfigurations = {
       testvm = nixpkgs.lib.nixosSystem {
