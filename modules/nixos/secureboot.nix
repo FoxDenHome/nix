@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, config, ... }:
 {
   security.audit.enable = true;
   security.apparmor.enable = true;
@@ -6,7 +6,7 @@
   boot = {
     initrd.systemd.enable = true;
 
-    loader.systemd-boot.enable = lib.mkForce false;
+    loader.systemd-boot.enable = lib.mkForce !config.boot.lanzaboote.enable;
 
     kernelPackages = pkgs.linuxPackages_latest;
 
