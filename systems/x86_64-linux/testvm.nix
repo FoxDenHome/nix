@@ -32,5 +32,6 @@
   networking.hostName = "testvm";
   networking.hostId = "7178dd15";
 
+  boot.zfs.extraPools = [ "zhdd" ];
   boot.lanzaboote.enable = true;
 }
