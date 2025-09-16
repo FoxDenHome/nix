@@ -3,8 +3,8 @@
 ## Goals (MVP)
 
 - [ ] Set up basic NixOS machine template
-        - [ ] Kernel with module signing, ZFS and signed UKI
-        - [ ] Usage of pre-existing SB keys (so we can re-use)
+	- [ ] Kernel with module signing, ZFS and signed UKI
+	- [ ] Usage of pre-existing SB keys (so we can re-use)
 - [ ] Set up simple basic app/group with veth NIC
 - [ ] Port all apps from FoxDenHome/docker
 - [ ] Samba server
