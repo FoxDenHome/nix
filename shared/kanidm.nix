@@ -9,7 +9,7 @@
 
   security.polkit = {
     enable = true;
-    adminIdentities = [ "unix-group:superadmins", "unix-group:wheel" ];
+    adminIdentities = [ "unix-group:superadmins" "unix-group:wheel" ];
   };
 
   security.wrappers."kanidm_ssh_authorizedkeys" = {
