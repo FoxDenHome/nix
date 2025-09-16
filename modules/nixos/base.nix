@@ -15,6 +15,7 @@
 
   environment.persistence."/nix/persist/system" = {
     hideMounts = true;
+
     directories = [
       "/home"
       "/root"
@@ -22,7 +23,11 @@
       "/var/lib/nixos"
       "/var/lib/systemd/coredump"
       "/var/lib/systemd/timers"
-    ] ++ lib.lists.flatten (lib.lists.forEach services.openssh.hostKeys ({path}: ["/etc/ssh/${path}" "/etc/ssh/${path}.pub"]));
+    ] ++ lib.lists.flatten (lib.lists.forEach services.openssh.hostKeys ({path}: [
+      "/etc/ssh/${path}"
+      "/etc/ssh/${path}.pub"
+    ]));
+
     files = [
       "/etc/machine-id"
       { file = "/etc/nix/id_rsa"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
