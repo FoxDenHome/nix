@@ -1,5 +1,12 @@
 { lib, pkgs, ...} :
 {
+
+  security.wrappers."kanidm_ssh_authorizedkeys" = {
+    source = "${pkgs.kanidm}/bin/kanidm_ssh_authorizedkeys";
+    owner = "root";
+    group = "root";
+  };
+
   services.openssh = {
     authorizedKeysCommand = "/run/wrappers/bin/kanidm_ssh_authorizedkeys %u";
     authorizedKeysCommandUser = "nobody";
@@ -10,12 +17,6 @@
   security.polkit = {
     enable = true;
     adminIdentities = [ "unix-group:superadmins" "unix-group:wheel" ];
-  };
-
-  security.wrappers."kanidm_ssh_authorizedkeys" = {
-    source = "${pkgs.kanidm}/bin/kanidm_ssh_authorizedkeys";
-    owner = "root";
-    group = "root";
   };
 
   services.kanidm = {
