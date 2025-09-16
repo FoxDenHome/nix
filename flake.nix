@@ -6,7 +6,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
   };
 
-  outputs = inputs@{ self, lanzaboote, nixpkgs, nixos-hardware, ... }:
+  outputs = inputs@{ self, lanzaboote, nixpkgs, ... }:
   {
     nixosConfigurations = {
       testvm = nixpkgs.lib.nixosSystem {
