@@ -10,6 +10,12 @@
     boot.extraModulePackages = [ ];
 
     fileSystems."/" =
+      { device = "none";
+        fsType = "tmpfs";
+        options = [ "mode=755" ];
+      };
+
+    fileSystems."/nix" =
       { device = "/dev/vda2";
         fsType = "xfs";
       };

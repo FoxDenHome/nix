@@ -4,6 +4,7 @@
   inputs = {
     lanzaboote.url = "github:nix-community/lanzaboote";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    impermanence.url = "github:nix-community/impermanence";
   };
 
   outputs = inputs@{ self, lanzaboote, nixpkgs, ... }:
@@ -11,6 +12,7 @@
     nixosConfigurations = {
       testvm = nixpkgs.lib.nixosSystem {
         modules = [
+          impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/testvm.nix
           lanzaboote.nixosModules.lanzaboote
           ./modules/nixos/base.nix
@@ -21,6 +23,7 @@
 
       bengalfox = nixpkgs.lib.nixosSystem {
         modules = [
+          impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/bengalfox.nix
           lanzaboote.nixosModules.lanzaboote
           ./modules/nixos/base.nix
@@ -30,6 +33,7 @@
       };
       islandfox = nixpkgs.lib.nixosSystem {
         modules = [
+          impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/islandfox.nix
           lanzaboote.nixosModules.lanzaboote
           ./modules/nixos/base.nix
@@ -39,6 +43,7 @@
       };
       icefox = nixpkgs.lib.nixosSystem {
         modules = [
+          impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/icefox.nix
           lanzaboote.nixosModules.lanzaboote
           ./modules/nixos/base.nix

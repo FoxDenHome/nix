@@ -11,4 +11,20 @@
     openssl
     tcpdump
   ];
+
+  environment.persistence."/nix/persist/system" = {
+    hideMounts = true;
+    directories = [
+      "/home"
+      "/root"
+      "/var/log"
+      "/var/lib/nixos"
+      "/var/lib/systemd/coredump"
+      "/var/lib/systemd/timers"
+    ];
+    files = [
+      "/etc/machine-id"
+      { file = "/etc/nix/id_rsa"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
+    ];
+  };
 }

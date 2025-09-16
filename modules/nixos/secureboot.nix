@@ -21,4 +21,8 @@
   environment.systemPackages = with pkgs; [
     sbctl
   ];
+
+  environment.persistence."/nix/persist/system".directories = [
+    "/etc/secureboot"
+  ];
 }
