@@ -5,6 +5,13 @@
     authorizedKeysCommandUser = "nobody";
   };
 
+  security.sudo.enable = false;
+
+  security.polkit = {
+    enable = true;
+    adminIdentities = [ "unix-group:superadmins", "unix-group:wheel" ];
+  };
+
   security.wrappers."kanidm_ssh_authorizedkeys" = {
     source = "${pkgs.kanidm}/bin/kanidm_ssh_authorizedkeys";
     owner = "root";
