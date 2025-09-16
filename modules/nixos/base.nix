@@ -1,4 +1,4 @@
-{ lib, pkgs, services, ... }:
+{ lib, pkgs, config, ... }:
 {
   services.sshd.enable = true;
 
@@ -23,7 +23,7 @@
       "/var/lib/nixos"
       "/var/lib/systemd/coredump"
       "/var/lib/systemd/timers"
-    ] ++ lib.lists.flatten (lib.lists.forEach services.openssh.hostKeys ({path}: [
+    ] ++ lib.lists.flatten (lib.lists.forEach config.services.openssh.hostKeys ({path}: [
       "/etc/ssh/${path}"
       "/etc/ssh/${path}.pub"
     ]));
