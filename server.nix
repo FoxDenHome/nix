@@ -1,5 +1,7 @@
 { lib, pkgs, ... }:
 {
+  imports = [ lanzaboote.nixosModules.lanzaboote ];
+
   boot = {
     initrd.systemd.enable = true;
 
