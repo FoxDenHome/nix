@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, services, ... }:
 {
   services.sshd.enable = true;
 
