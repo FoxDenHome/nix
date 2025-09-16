@@ -6,7 +6,7 @@
   };
 
   security.wrappers."kanidm_ssh_authorizedkeys" = {
-    source = "${config.services.kanidm.package}/bin/kanidm_ssh_authorizedkeys";
+    source = "${pkgs.kanidm}/bin/kanidm_ssh_authorizedkeys";
     owner = "root";
     group = "root";
   };
