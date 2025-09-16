@@ -8,5 +8,7 @@
     htop
     wget
     curl
+    openssl
+    tcpdump
   ];
 }
