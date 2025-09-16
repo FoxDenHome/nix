@@ -23,6 +23,6 @@
   ];
 
   environment.persistence."/nix/persist/system".directories = [
-    "/etc/secureboot"
+    { directory = "/etc/secureboot"; mode = "u=rwx,g=rx,o="; }
   ];
 }
