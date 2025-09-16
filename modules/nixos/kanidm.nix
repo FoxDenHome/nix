@@ -39,4 +39,8 @@
       home_alias = "none";
     };
   };
+
+  environment.persistence."/nix/persist/system".directories = [
+    "/var/cache/kanidm-unixd"
+  ];
 }
