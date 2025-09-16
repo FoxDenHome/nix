@@ -7,7 +7,7 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
-  outputs = inputs@{ self, nixpkgs, nixos-hardware, ... }:
+  outputs = inputs@{ self, lanzaboote, nixpkgs, nixos-hardware, ... }:
   {
     nixosConfigurations = {
       bengalfox-vm = nixpkgs.lib.nixosSystem {
