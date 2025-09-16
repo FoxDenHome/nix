@@ -10,6 +10,8 @@
   {
     nixosConfigurations = {
       testvm = nixpkgs.lib.nixosSystem {
+        system.stateVersion = "25.05";
+
         modules = [
           ./machines/testvm.nix
           lanzaboote.nixosModules.lanzaboote
@@ -18,6 +20,8 @@
       };
 
       bengalfox = nixpkgs.lib.nixosSystem {
+        system.stateVersion = "25.05";
+
         modules = [
           ./machines/bengalfox.nix
           lanzaboote.nixosModules.lanzaboote
@@ -25,6 +29,8 @@
         ];
       };
       islandfox = nixpkgs.lib.nixosSystem {
+        system.stateVersion = "25.05";
+
         modules = [
           ./machines/islandfox.nix
           lanzaboote.nixosModules.lanzaboote
@@ -32,6 +38,8 @@
         ];
       };
       icefox = nixpkgs.lib.nixosSystem {
+        system.stateVersion = "25.05";
+
         modules = [
           ./machines/icefox.nix
           lanzaboote.nixosModules.lanzaboote
