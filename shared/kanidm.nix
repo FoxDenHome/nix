@@ -1,6 +1,5 @@
 { lib, pkgs, ...} :
 {
-
   security.wrappers."kanidm_ssh_authorizedkeys" = {
     source = "${pkgs.kanidm}/bin/kanidm_ssh_authorizedkeys";
     owner = "root";
