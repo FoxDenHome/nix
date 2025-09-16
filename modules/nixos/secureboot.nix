@@ -6,7 +6,7 @@
   boot = {
     initrd.systemd.enable = true;
 
-    loader.systemd-boot.enable = lib.mkForce !config.boot.lanzaboote.enable;
+    loader.systemd-boot.enable = lib.mkForce not config.boot.lanzaboote.enable;
 
     kernelPackages = pkgs.linuxPackages_latest;
 
