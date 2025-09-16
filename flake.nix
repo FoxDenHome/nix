@@ -14,7 +14,7 @@
           ./systems/x86_64-linux/testvm.nix
           lanzaboote.nixosModules.lanzaboote
           ./modules/nixos/base.nix
-          ./modules/nixos/boot.nix
+          ./modules/nixos/secureboot.nix
           ./modules/nixos/kanidm.nix
         ];
       };
@@ -24,7 +24,7 @@
           ./systems/x86_64-linux/bengalfox.nix
           lanzaboote.nixosModules.lanzaboote
           ./modules/nixos/base.nix
-          ./modules/nixos/boot.nix
+          ./modules/nixos/secureboot.nix
           ./modules/nixos/kanidm.nix
         ];
       };
@@ -33,7 +33,7 @@
           ./systems/x86_64-linux/islandfox.nix
           lanzaboote.nixosModules.lanzaboote
           ./modules/nixos/base.nix
-          ./modules/nixos/boot.nix
+          ./modules/nixos/secureboot.nix
           ./modules/nixos/kanidm.nix
         ];
       };
@@ -42,7 +42,7 @@
           ./systems/x86_64-linux/icefox.nix
           lanzaboote.nixosModules.lanzaboote
           ./modules/nixos/base.nix
-          ./modules/nixos/boot.nix
+          ./modules/nixos/secureboot.nix
           ./modules/nixos/kanidm.nix
         ];
       };
