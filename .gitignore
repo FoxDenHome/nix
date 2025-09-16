@@ -1,3 +1,4 @@
 /tmp
 /configuration.nix
 /hardware-configuration.nix
+/secrets

@@ -15,6 +15,11 @@
     xfsprogs
   ];
 
+  users.mutableUsers = false;
+  users.users.root = {
+    hashedPassword = "$y$j9T$IiDZbOYNQ3/pi9/K2QdUm0$GizBNTJUmYCp3OTixpF6kkmFy6XMwszNIxmbOcaEtyA";
+  };
+
   environment.persistence."/nix/persist/system" = {
     hideMounts = true;
 
