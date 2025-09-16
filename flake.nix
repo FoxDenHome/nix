@@ -9,12 +9,15 @@
 
   outputs = inputs@{ self, nixpkgs, nixos-hardware, ... }:
   {
-    nixosConfigurations.bengalfox-vm = nixpkgs.lib.nixosSystem {
-      modules = [
-        nixos-hardware.qemu-guest
-        ./server.nix
-        ./machines/bengalfox-vm.nix
-      ];
+    nixosConfigurations = {
+      bengalfox-vm = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          nixos-hardware.qemu-guest
+          ./server.nix
+          ./machines/bengalfox-vm.nix
+        ];
+      };
     };
   };
 }
