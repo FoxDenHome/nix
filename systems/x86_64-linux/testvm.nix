@@ -30,7 +30,7 @@
 
   networking.useDHCP = lib.mkDefault true;
   networking.hostName = "testvm";
-  networking.hostId = "testvm00";
+  networking.hostId = "7178dd15";
 
   boot.lanzaboote.enable = true;
 }
