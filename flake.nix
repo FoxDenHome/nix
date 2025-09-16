@@ -11,16 +11,14 @@
   {
     nixosConfigurations = {
       testvm = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
         modules = [
-          ./machines/qemu.nix
+          ./machines/testvm.nix
           lanzaboote.nixosModules.lanzaboote
           ./server.nix
         ];
       };
 
       bengalfox = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
         modules = [
           ./machines/bengalfox.nix
           lanzaboote.nixosModules.lanzaboote
@@ -28,7 +26,6 @@
         ];
       };
       islandfox = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
         modules = [
           ./machines/islandfox.nix
           lanzaboote.nixosModules.lanzaboote
@@ -36,7 +33,6 @@
         ];
       };
       icefox = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
         modules = [
           ./machines/icefox.nix
           lanzaboote.nixosModules.lanzaboote
