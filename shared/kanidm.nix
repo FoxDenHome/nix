@@ -1,5 +1,7 @@
 { lib, pkgs, ...} :
 {
+  services.openssh.authorizedKeysCommand = "${pkgs.kanidm}/bin/kanidm_ssh_authorizedkeys";
+
   services.kanidm = {
     enableClient = true;
     enablePam = true;
