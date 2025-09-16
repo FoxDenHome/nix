@@ -22,7 +22,7 @@
       "/var/lib/nixos"
       "/var/lib/systemd/coredump"
       "/var/lib/systemd/timers"
-    ] + forEach services.openssh.hostKeys ({path}: "/etc/ssh/${path}");
+    ] + lib.lists.forEach services.openssh.hostKeys ({path}: "/etc/ssh/${path}");
     files = [
       "/etc/machine-id"
       { file = "/etc/nix/id_rsa"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
