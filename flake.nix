@@ -4,7 +4,6 @@
   inputs = {
     lanzaboote.url = "github:nix-community/lanzaboote";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
   outputs = inputs@{ self, lanzaboote, nixpkgs, nixos-hardware, ... }:
@@ -14,7 +13,6 @@
         system.stateVersion = "25.05";
 
         modules = [
-          nixos-hardware.nixosModules.qemu-guest
           ./machines/testvm.nix
           lanzaboote.nixosModules.lanzaboote
           ./shared/base.nix
