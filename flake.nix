@@ -13,9 +13,8 @@
       bengalfox-vm = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          (nixpkgs.modulesPath + "/profiles/qemu-guest.nix")
-          ./server.nix
           ./machines/bengalfox-vm.nix
+          ./server.nix
         ];
       };
     };
