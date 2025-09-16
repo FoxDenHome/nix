@@ -18,7 +18,7 @@
 
     directories = [
       "/home"
-      "/root"
+      { directory = "/root"; mode = "u=rwx,g=,o="; }
       "/var/log"
       "/var/lib/nixos"
       "/var/lib/systemd/coredump"
@@ -29,8 +29,8 @@
       "/etc/machine-id"
       { file = "/etc/nix/id_rsa"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
     ] ++ lib.lists.flatten (lib.lists.forEach config.services.openssh.hostKeys ({path, ...}: [
-      "${path}"
-      "${path}.pub"
+      { file = "${path}"; mode = "u=rw,g=,o="; }
+      { file = "${path}.pub"; }
     ]));
   };
 }
