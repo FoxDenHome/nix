@@ -1,4 +1,4 @@
-{ lib, pkgs, ...} :
+{ pkgs, ... } :
 {
   boot.supportedFilesystems = [ "zfs" ];
   environment.systemPackages = with pkgs; [
