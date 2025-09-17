@@ -14,60 +14,44 @@
       isValidModule = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
       moduleFiles = nixpkgs.lib.filter isValidModule
                       (nixpkgs.lib.filesystem.listFilesRecursive ./modules/nixos);
-
       baseModules = [
           impermanence.nixosModules.impermanence
           lanzaboote.nixosModules.lanzaboote
       ] ++ moduleFiles;
+
+      machineFiles = nixpkgs.lib.filter isValidModule
+                      (nixpkgs.lib.filesystem.listFilesRecursive ./systems);
+
+      mkMachine = path: let
+          relPath = nixpkgs.lib.strings.removePrefix (toString ./. + "/") (toString path);
+          components = nixpkgs.lib.path.subpath.components (relPath);
+
+          hostname = nixpkgs.lib.strings.removeSuffix ".nix" (nixpkgs.lib.lists.elemAt components 2); # e.g. bengalfox;
+          system = nixpkgs.lib.lists.elemAt components 1; # e.g. x86_64-linux
+
+          hostnameChars = nixpkgs.lib.strings.stringToCharacters hostname;
+          hostIdInt = nixpkgs.lib.strings.charToInt (nixpkgs.lib.strings.elemAt hostnameChars 0) * 16777216 +
+                   nixpkgs.lib.strings.charToInt (nixpkgs.lib.strings.elemAt hostnameChars 1) * 65536 +
+                   nixpkgs.lib.strings.charToInt (nixpkgs.lib.strings.elemAt hostnameChars 2) * 256 +
+                   nixpkgs.lib.strings.charToInt (nixpkgs.lib.strings.elemAt hostnameChars 3);
+          hostIdBase = nixpkgs.lib.toHexString hostIdInt;
+          hostId = (nixpkgs.lib.strings.replicate ((nixpkgs.lib.strings.stringLength hostIdBase) - 8) "0") + hostIdBase;
+      in
+      {
+        name = hostname;
+        value = nixpkgs.lib.nixosSystem {
+          system = system;
+          modules = [
+            ({ ... }: {
+              networking.hostName = hostname;
+              networking.hostId = hostId;
+              nixpkgs.hostPlatform = nixpkgs.lib.mkDefault system;
+            })
+            path
+          ] ++ baseModules;
+        };
+      };
     in
-    {
-      # Actual machines
-      bengalfox = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-
-        modules = [
-          ./systems/x86_64-linux/bengalfox.nix
-        ] ++ baseModules;
-      };
-      islandfox = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-
-        modules = [
-          ./systems/x86_64-linux/islandfox.nix
-        ] ++ baseModules;
-      };
-      icefox = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-
-        modules = [
-          ./systems/x86_64-linux/icefox.nix
-        ] ++ baseModules;
-      };
-
-      # Test machines
-      testvm = nixpkgs.lib.nixosSystem {
-        modules = [
-          ({ ... }: {
-            networking.hostName = "testvm";
-            networking.hostId = "5445564d";
-          })
-          ./systems/x86_64-linux/testvm.nix
-        ] ++ baseModules;
-      };
-      testvm-zfs = nixpkgs.lib.nixosSystem {
-        modules = [
-          ({ ... }: {
-            networking.hostName = "testvm-zfs";
-            networking.hostId = "545a4653";
-
-            fileSystems."/mnt/zhdd" =
-              { device = "zhdd/ROOT";
-                fsType = "zfs";
-              };
-          })
-          ./systems/x86_64-linux/testvm.nix
-        ] ++ baseModules;
-      };
-    };
+    (nixpkgs.lib.attrsets.listToAttrs (map mkMachine machineFiles));
   };
 }

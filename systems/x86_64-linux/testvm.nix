@@ -26,8 +26,6 @@
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-
   networking.useDHCP = lib.mkDefault true;
 
   boot.lanzaboote.enable = true;
