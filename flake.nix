@@ -29,11 +29,13 @@
       mkMachine = path: let
         machine = import path;
 
-        components = nixpkgs.lib.path.subpath.components
-                      (nixpkgs.lib.strings.removePrefix (toString ./. + "/") (toString path));
+        splitPath = nixpkgs.lib.path.splitRoot path;
+        components = nixpkgs.lib.path.subpath.components splitPath.subpath;
+        componentsLength = nixpkgs.lib.lists.length components;
 
-        hostname = nixpkgs.lib.strings.removeSuffix ".nix" (nixpkgs.lib.strings.elemAt components 2); # e.g. bengalfox
-        system = nixpkgs.lib.strings.elemAt components 1; # e.g. x86_64-linux
+        hostname = nixpkgs.lib.strings.removeSuffix ".nix"
+                    (nixpkgs.lib.strings.elemAt components (componentsLength - 1)); # e.g. bengalfox
+        system = nixpkgs.lib.strings.elemAt components (componentsLength - 2); # e.g. x86_64-linux
       in
       {
         name = hostname;
