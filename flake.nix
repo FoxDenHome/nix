@@ -18,7 +18,6 @@
           ./modules/nixos/base.nix
           ./modules/nixos/boot.nix
           ./modules/nixos/kanidm.nix
-          ./modules/nixos/zfs.nix
         ];
       };
       testvm-zfs = nixpkgs.lib.nixosSystem {
