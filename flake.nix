@@ -10,6 +10,47 @@
   outputs = { lanzaboote, impermanence, nixpkgs, ... }:
   {
     nixosConfigurations = {
+      # Actual machines
+      bengalfox = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+
+        modules = [
+          ./systems/x86_64-linux/bengalfox.nix
+          impermanence.nixosModules.impermanence
+          lanzaboote.nixosModules.lanzaboote
+          ./modules/nixos/base.nix
+          ./modules/nixos/boot.nix
+          ./modules/nixos/kanidm.nix
+          ./modules/nixos/zfs.nix
+        ];
+      };
+      islandfox = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+
+        modules = [
+          ./systems/x86_64-linux/islandfox.nix
+          impermanence.nixosModules.impermanence
+          lanzaboote.nixosModules.lanzaboote
+          ./modules/nixos/base.nix
+          ./modules/nixos/boot.nix
+          ./modules/nixos/kanidm.nix
+        ];
+      };
+      icefox = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+
+        modules = [
+          ./systems/x86_64-linux/icefox.nix
+          impermanence.nixosModules.impermanence
+          lanzaboote.nixosModules.lanzaboote
+          ./modules/nixos/base.nix
+          ./modules/nixos/boot.nix
+          ./modules/nixos/kanidm.nix
+          ./modules/nixos/zfs.nix
+        ];
+      };
+
+      # Test machines
       testvm = nixpkgs.lib.nixosSystem {
         modules = [
           ({ ... }: {
@@ -37,40 +78,6 @@
           })
           impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/testvm.nix
-          lanzaboote.nixosModules.lanzaboote
-          ./modules/nixos/base.nix
-          ./modules/nixos/boot.nix
-          ./modules/nixos/kanidm.nix
-          ./modules/nixos/zfs.nix
-        ];
-      };
-
-      bengalfox = nixpkgs.lib.nixosSystem {
-        modules = [
-          ./systems/x86_64-linux/bengalfox.nix
-          impermanence.nixosModules.impermanence
-          lanzaboote.nixosModules.lanzaboote
-          ./modules/nixos/base.nix
-          ./modules/nixos/boot.nix
-          ./modules/nixos/kanidm.nix
-          ./modules/nixos/zfs.nix
-        ];
-      };
-      islandfox = nixpkgs.lib.nixosSystem {
-        modules = [
-          ./systems/x86_64-linux/islandfox.nix
-          impermanence.nixosModules.impermanence
-          lanzaboote.nixosModules.lanzaboote
-          ./modules/nixos/base.nix
-          ./modules/nixos/boot.nix
-          ./modules/nixos/kanidm.nix
-        ];
-      };
-      icefox = nixpkgs.lib.nixosSystem {
-
-        modules = [
-          ./systems/x86_64-linux/icefox.nix
-          impermanence.nixosModules.impermanence
           lanzaboote.nixosModules.lanzaboote
           ./modules/nixos/base.nix
           ./modules/nixos/boot.nix
