@@ -1,8 +1,10 @@
-{ lib,  ... }:
 {
-  system.stateVersion = "25.05";
+  nixosModules.system = { lib,  ... }:
+  {
+    system.stateVersion = "25.05";
 
-  networking.hostId = "49434546";
+    networking.hostId = "49434546";
 
-  # TODO: Most of this file
+    # TODO: Most of this file
+  };
 }

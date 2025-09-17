@@ -13,29 +13,34 @@
     let
       isNixFile = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
 
-      modules = (map import
-                  (nixpkgs.lib.filter isNixFile
-                    (nixpkgs.lib.filesystem.listFilesRecursive ./modules/nixos)));
+      loadModuleDir = dir: (map (path: { module = import path; path = path; })
+                            (nixpkgs.lib.filter isNixFile
+                              (nixpkgs.lib.filesystem.listFilesRecursive dir)));
+
+      getNixosModules = val: nixpkgs.lib.attrsets.attrValues val.module.nixosModules or {};
+
+      moduleClasses = loadModuleDir ./modules;
 
       # Finds things like inputs.impermanence.nixosModules.impermanence
       # Some modules might not contain this, so we filter out the empty strings
-      inputModules = nixpkgs.lib.filter (val: val != "")
-                       (map (val: nixpkgs.lib.attrsets.attrByPath [ "nixosModules" val.name ] "" val.value)
+      inputNixosModules = nixpkgs.lib.filter (val: val != null)
+                       (map (val: nixpkgs.lib.attrsets.attrByPath [ "nixosModules" val.name ] null val.value)
                          (nixpkgs.lib.attrsToList inputs));
 
-      machineFiles = nixpkgs.lib.filter isNixFile
-                      (nixpkgs.lib.filesystem.listFilesRecursive ./systems);
+      systemClasses = loadModuleDir ./systems;
 
-      mkMachine = path: let
-        machine = import path;
+      baseNixosModules = (nixpkgs.lib.lists.flatten (map getNixosModules moduleClasses)) ++ inputNixosModules;
 
-        splitPath = nixpkgs.lib.path.splitRoot path;
+      mkSystemConfig = systemClass: let
+        splitPath = nixpkgs.lib.path.splitRoot systemClass.path;
         components = nixpkgs.lib.path.subpath.components splitPath.subpath;
         componentsLength = nixpkgs.lib.lists.length components;
 
         hostname = nixpkgs.lib.strings.removeSuffix ".nix"
                     (nixpkgs.lib.strings.elemAt components (componentsLength - 1)); # e.g. bengalfox
         system = nixpkgs.lib.strings.elemAt components (componentsLength - 2); # e.g. x86_64-linux
+
+        systemNixosModules = getNixosModules systemClass;
       in
       {
         name = hostname;
@@ -46,11 +51,10 @@
               networking.hostName = hostname;
               nixpkgs.hostPlatform = nixpkgs.lib.mkDefault system;
             })
-            machine
-          ] ++ inputModules ++ modules;
+          ] ++ systemNixosModules ++ baseNixosModules;
         };
       };
     in
-    (nixpkgs.lib.attrsets.listToAttrs (map mkMachine machineFiles));
+    (nixpkgs.lib.attrsets.listToAttrs (map mkSystemConfig systemClasses));
   };
 }
