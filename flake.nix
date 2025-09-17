@@ -9,8 +9,6 @@
 
   outputs = inputs@{ nixpkgs, impermanence, ... }:
   {
-    someBS = inputs;
-
     nixosConfigurations =
     let
       isNixFile = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
