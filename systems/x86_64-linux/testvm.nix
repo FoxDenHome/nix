@@ -28,7 +28,7 @@
 
   networking.useDHCP = lib.mkDefault true;
 
-  networking.hostId = 74657374;
+  networking.hostId = "74657374";
 
   boot.lanzaboote.enable = true;
 }
