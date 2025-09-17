@@ -11,6 +11,9 @@
   {
     nixosConfigurations = {
       testvm = nixpkgs.lib.nixosSystem {
+        networking.hostName = "testvm";
+        networking.hostId = "5445564d";
+
         modules = [
           impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/testvm.nix
@@ -21,10 +24,17 @@
         ];
       };
       testvm-zfs = nixpkgs.lib.nixosSystem {
+        networking.hostName = "testvm-zfs";
+        networking.hostId = "545a4653";
+
+        fileSystems."/mnt/zhdd" =
+          { device = "zhdd/ROOT";
+            fsType = "zfs";
+          };
+
         modules = [
           impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/testvm.nix
-          ./systems/x86_64-linux/testvm-zfs.nix
           lanzaboote.nixosModules.lanzaboote
           ./modules/nixos/base.nix
           ./modules/nixos/boot.nix
@@ -34,6 +44,9 @@
       };
 
       bengalfox = nixpkgs.lib.nixosSystem {
+        networking.hostName = "bengalfox";
+        networking.hostId = "42474c46";
+  
         modules = [
           impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/bengalfox.nix
@@ -45,6 +58,9 @@
         ];
       };
       islandfox = nixpkgs.lib.nixosSystem {
+        networking.hostName = "islandfox";
+        networking.hostId = "494c4446";
+
         modules = [
           impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/islandfox.nix
@@ -55,6 +71,9 @@
         ];
       };
       icefox = nixpkgs.lib.nixosSystem {
+        networking.hostName = "icefox";
+        networking.hostId = "49434546";
+
         modules = [
           impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/icefox.nix
