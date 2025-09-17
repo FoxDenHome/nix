@@ -1,5 +1,5 @@
 {
-  description = "FoxDen NixOS config";
+  description = "FoxDen Nix config";
 
   inputs = {
     lanzaboote.url = "github:nix-community/lanzaboote";
