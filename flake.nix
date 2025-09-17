@@ -11,7 +11,6 @@
   {
     nixosConfigurations = {
       testvm = nixpkgs.lib.nixosSystem {
-
         modules = [
           ({ ... }: {
             networking.hostName = "testvm";
@@ -26,7 +25,6 @@
         ];
       };
       testvm-zfs = nixpkgs.lib.nixosSystem {
-
         modules = [
           ({ ... }: {
             networking.hostName = "testvm-zfs";
@@ -49,12 +47,8 @@
 
       bengalfox = nixpkgs.lib.nixosSystem {
         modules = [
-          ({ ... }: {
-            networking.hostName = "bengalfox";
-            networking.hostId = "42474c46";
-          })
-          impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/bengalfox.nix
+          impermanence.nixosModules.impermanence
           lanzaboote.nixosModules.lanzaboote
           ./modules/nixos/base.nix
           ./modules/nixos/boot.nix
@@ -64,12 +58,8 @@
       };
       islandfox = nixpkgs.lib.nixosSystem {
         modules = [
-          ({ ... }: {
-            networking.hostName = "islandfox";
-            networking.hostId = "494c4446";
-          })
-          impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/islandfox.nix
+          impermanence.nixosModules.impermanence
           lanzaboote.nixosModules.lanzaboote
           ./modules/nixos/base.nix
           ./modules/nixos/boot.nix
@@ -79,12 +69,8 @@
       icefox = nixpkgs.lib.nixosSystem {
 
         modules = [
-          ({ ... }: {
-            networking.hostName = "icefox";
-            networking.hostId = "49434546";
-          })
-          impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/icefox.nix
+          impermanence.nixosModules.impermanence
           lanzaboote.nixosModules.lanzaboote
           ./modules/nixos/base.nix
           ./modules/nixos/boot.nix
