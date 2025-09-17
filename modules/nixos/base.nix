@@ -26,6 +26,10 @@
     shell = "${pkgs.fish}/bin/fish";
   };
 
+  users.groups.share = {
+    gid = 1001;
+  };
+
   environment.persistence."/nix/persist/system" = {
     hideMounts = true;
 
