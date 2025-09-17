@@ -18,6 +18,8 @@
       moduleFiles = nixpkgs.lib.filter isNixFile
                       (nixpkgs.lib.filesystem.listFilesRecursive ./modules/nixos);
 
+      # Finds things like inputs.impermanence.nixosModules.impermanence
+      # Some modules might not contain this, so we filter out the empty strings
       nixosModuleInputs = nixpkgs.lib.filter (val: val != "")
                             (map (val: nixpkgs.lib.attrsets.attrByPath [ "nixosModules" val.name ] "" val.value)
                                   (nixpkgs.lib.attrsToList inputs));
@@ -28,7 +30,7 @@
         components = nixpkgs.lib.path.subpath.components
                       (nixpkgs.lib.strings.removePrefix (toString ./. + "/") (toString path));
 
-        hostname = nixpkgs.lib.strings.removeSuffix ".nix" (nixpkgs.lib.strings.elemAt components 2); # e.g. bengalfox;
+        hostname = nixpkgs.lib.strings.removeSuffix ".nix" (nixpkgs.lib.strings.elemAt components 2); # e.g. bengalfox
         system = nixpkgs.lib.strings.elemAt components 1; # e.g. x86_64-linux
       in
       {
