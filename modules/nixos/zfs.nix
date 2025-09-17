@@ -5,7 +5,7 @@
     zfs
   ];
 
-  boot.zfs.forceImportRoot = false;
+  boot.zfs.forceImportAll = true;
 
   environment.persistence."/nix/persist/system".files = [
     { file = "/etc/zfs/zpool.cache"; }
