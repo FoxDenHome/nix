@@ -7,7 +7,7 @@
     impermanence.url = "github:nix-community/impermanence";
   };
 
-  outputs = inputs@{ nixpkgs, impermanence, ... }:
+  outputs = inputs@{ nixpkgs, ... }:
   {
     nixosConfigurations =
     let
