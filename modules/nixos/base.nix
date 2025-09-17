@@ -7,9 +7,10 @@
 
   environment.systemPackages = with pkgs; [
     curl
-    wget
     e2fsprogs
     openssl
+    wget
+    xfsprogs
   ];
 
   programs.fish.enable = true;
@@ -17,7 +18,6 @@
   programs.git.enable = true;
   programs.htop.enable = true;
   programs.tcpdump.enable = true;
-  programs.xfsprogs.enable = true;
 
   users.mutableUsers = false;
   users.users.root = {
