@@ -33,6 +33,7 @@
     unixSettings = {
       pam_allowed_login_groups = [ "login-users" ];
       allow_local_account_override = [ "share" ];
+      default_shell = "${pkgs.fish}/bin/fish";
       uid_attr_map = "name";
       gid_attr_map = "name";
       home_attr = "name";
