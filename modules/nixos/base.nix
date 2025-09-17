@@ -19,9 +19,8 @@
   programs.htop.enable = true;
   programs.tcpdump.enable = true;
 
-  users.mutableUsers = false;
   users.users.root = {
-    hashedPassword = "$y$j9T$IiDZbOYNQ3/pi9/K2QdUm0$GizBNTJUmYCp3OTixpF6kkmFy6XMwszNIxmbOcaEtyA";
+    initialHashedPassword = "$y$j9T$IiDZbOYNQ3/pi9/K2QdUm0$GizBNTJUmYCp3OTixpF6kkmFy6XMwszNIxmbOcaEtyA";
     shell = "${pkgs.fish}/bin/fish";
   };
 

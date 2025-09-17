@@ -6,6 +6,8 @@
     group = "root";
   };
 
+  users.mutableUsers = false;
+
   services.openssh = {
     authorizedKeysCommand = "/run/wrappers/bin/kanidm_ssh_authorizedkeys %u";
     authorizedKeysCommandUser = "nobody";
