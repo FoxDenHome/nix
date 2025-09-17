@@ -13,12 +13,9 @@
     let
       isNixFile = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
 
-      moduleClasses = nixpkgs.lib.filter (nixpkgs.lib.attrsets.hasAttr "module")
-                        (map import
-                          (nixpkgs.lib.filter isNixFile
-                            (nixpkgs.lib.filesystem.listFilesRecursive ./modules/nixos)));
-
-      modules = (map (val: val.module) moduleClasses);
+      modules = (map import
+                  (nixpkgs.lib.filter isNixFile
+                    (nixpkgs.lib.filesystem.listFilesRecursive ./modules/nixos)));
 
       # Finds things like inputs.impermanence.nixosModules.impermanence
       # Some modules might not contain this, so we filter out the empty strings
@@ -47,7 +44,7 @@
               networking.hostName = hostname;
               nixpkgs.hostPlatform = nixpkgs.lib.mkDefault system;
             })
-            machine.module
+            machine
           ] ++ inputModules ++ modules;
         };
       };

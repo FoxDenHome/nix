@@ -1,10 +1,8 @@
+{ lib,  ... }:
 {
-  module = { lib,  ... }:
-  {
-    system.stateVersion = "25.05";
+  system.stateVersion = "25.05";
 
-    networking.hostId = "494c4446";
+  networking.hostId = "494c4446";
 
-    # TODO: Most of this file
-  };
+  # TODO: Most of this file
 }
