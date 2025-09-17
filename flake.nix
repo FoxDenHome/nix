@@ -9,7 +9,11 @@
 
   outputs = { lanzaboote, impermanence, nixpkgs, ... }:
   {
-    nixosConfigurations = {
+    nixosConfigurations =
+    let
+      module_files = nixpkgs.lib.filesystem.listFilesRecursive ./modules/nixos;
+    in
+    {
       # Actual machines
       bengalfox = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -18,11 +22,7 @@
           ./systems/x86_64-linux/bengalfox.nix
           impermanence.nixosModules.impermanence
           lanzaboote.nixosModules.lanzaboote
-          ./modules/nixos/base.nix
-          ./modules/nixos/boot.nix
-          ./modules/nixos/kanidm.nix
-          ./modules/nixos/zfs.nix
-        ];
+        ] ++ module_files;
       };
       islandfox = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -31,10 +31,7 @@
           ./systems/x86_64-linux/islandfox.nix
           impermanence.nixosModules.impermanence
           lanzaboote.nixosModules.lanzaboote
-          ./modules/nixos/base.nix
-          ./modules/nixos/boot.nix
-          ./modules/nixos/kanidm.nix
-        ];
+        ] ++ module_files;
       };
       icefox = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -43,11 +40,7 @@
           ./systems/x86_64-linux/icefox.nix
           impermanence.nixosModules.impermanence
           lanzaboote.nixosModules.lanzaboote
-          ./modules/nixos/base.nix
-          ./modules/nixos/boot.nix
-          ./modules/nixos/kanidm.nix
-          ./modules/nixos/zfs.nix
-        ];
+        ] ++ module_files;
       };
 
       # Test machines
@@ -60,10 +53,7 @@
           impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/testvm.nix
           lanzaboote.nixosModules.lanzaboote
-          ./modules/nixos/base.nix
-          ./modules/nixos/boot.nix
-          ./modules/nixos/kanidm.nix
-        ];
+        ] ++ module_files;
       };
       testvm-zfs = nixpkgs.lib.nixosSystem {
         modules = [
@@ -79,11 +69,7 @@
           impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/testvm.nix
           lanzaboote.nixosModules.lanzaboote
-          ./modules/nixos/base.nix
-          ./modules/nixos/boot.nix
-          ./modules/nixos/kanidm.nix
-          ./modules/nixos/zfs.nix
-        ];
+        ] ++ module_files;
       };
     };
   };
