@@ -1,21 +1,20 @@
-{ lib, pkgs, config, ... }:
+{ lib, config, ... }:
 {
   services.sshd.enable = true;
 
   time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  environment.systemPackages = with pkgs; [
-    htop
-    wget
-    curl
-    openssl
-    tcpdump
-    e2fsprogs
-    xfsprogs
-    fish
-    zsh
-  ];
+  programs.fish.enable = true;
+  programs.zsh.enable = true;
+  programs.git.enable = true;
+  programs.htop.enable = true;
+  programs.wget.enable = true;
+  programs.curl.enable = true;
+  programs.openssl.enable = true;
+  programs.tcpdump.enable = true;
+  programs.e2fsprogs.enable = true;
+  programs.xfsprogs.enable = true;
 
   users.mutableUsers = false;
   users.users.root = {
