@@ -7,7 +7,7 @@
     impermanence.url = "github:nix-community/impermanence";
   };
 
-  outputs = inputs@{ self, lanzaboote, impermanence, nixpkgs, ... }:
+  outputs = { lanzaboote, impermanence, nixpkgs, ... }:
   {
     nixosConfigurations = {
       testvm = nixpkgs.lib.nixosSystem {
