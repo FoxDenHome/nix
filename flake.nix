@@ -9,54 +9,51 @@
   };
 
   outputs = inputs@{ nixpkgs, ... }:
-  {
-    someI = inputs;
+  let
+    isNixFile = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
 
-    nixosConfigurations =
-    let
-      isNixFile = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
+    loadModuleDir = dir: (map (path: { module = import path; path = path; })
+                          (nixpkgs.lib.filter isNixFile
+                            (nixpkgs.lib.filesystem.listFilesRecursive dir)));
 
-      loadModuleDir = dir: (map (path: { module = import path; path = path; })
-                            (nixpkgs.lib.filter isNixFile
-                              (nixpkgs.lib.filesystem.listFilesRecursive dir)));
+    getNixosModules = classes: (nixpkgs.lib.lists.flatten
+                                  (map (val: nixpkgs.lib.attrsets.attrValues val.module.nixosModules or {})
+                                        classes));
 
-      getNixosModules = classes: (nixpkgs.lib.lists.flatten
-                                    (map (val: nixpkgs.lib.attrsets.attrValues val.module.nixosModules or {})
-                                         classes));
+    # Finds things like inputs.impermanence.nixosModules.impermanence
+    # Some modules might not contain this, so we filter out the empty strings
+    inputNixosModules = nixpkgs.lib.filter (val: val != null)
+                          (map (val: nixpkgs.lib.attrsets.attrByPath [ "nixosModules" val.name ] null val.value)
+                            (nixpkgs.lib.attrsToList inputs));
 
-      # Finds things like inputs.impermanence.nixosModules.impermanence
-      # Some modules might not contain this, so we filter out the empty strings
-      inputNixosModules = nixpkgs.lib.filter (val: val != null)
-                            (map (val: nixpkgs.lib.attrsets.attrByPath [ "nixosModules" val.name ] null val.value)
-                              (nixpkgs.lib.attrsToList inputs));
+    moduleClasses = loadModuleDir ./modules;
+    systemClasses = loadModuleDir ./systems;
 
-      moduleClasses = loadModuleDir ./modules;
-      systemClasses = loadModuleDir ./systems;
+    mkSystemConfig = systemClass: let
+      splitPath = nixpkgs.lib.path.splitRoot systemClass.path;
+      components = nixpkgs.lib.path.subpath.components splitPath.subpath;
+      componentsLength = nixpkgs.lib.lists.length components;
 
-      mkSystemConfig = systemClass: let
-        splitPath = nixpkgs.lib.path.splitRoot systemClass.path;
-        components = nixpkgs.lib.path.subpath.components splitPath.subpath;
-        componentsLength = nixpkgs.lib.lists.length components;
-
-        hostname = nixpkgs.lib.strings.removeSuffix ".nix"
-                    (nixpkgs.lib.strings.elemAt components (componentsLength - 1)); # e.g. bengalfox
-        system = nixpkgs.lib.strings.elemAt components (componentsLength - 2); # e.g. x86_64-linux
-      in
-      {
-        name = hostname;
-        value = nixpkgs.lib.nixosSystem {
-          system = system;
-          modules = [
-            ({ ... }: {
-              networking.hostName = hostname;
-              nixpkgs.hostPlatform = nixpkgs.lib.mkDefault system;
-            })
-          ]
-            ++ inputNixosModules
-            ++ getNixosModules (moduleClasses ++ [ systemClass ]);
-        };
-      };
+      hostname = nixpkgs.lib.strings.removeSuffix ".nix"
+                  (nixpkgs.lib.strings.elemAt components (componentsLength - 1)); # e.g. bengalfox
+      system = nixpkgs.lib.strings.elemAt components (componentsLength - 2); # e.g. x86_64-linux
     in
-    (nixpkgs.lib.attrsets.listToAttrs (map mkSystemConfig systemClasses));
+    {
+      name = hostname;
+      value = nixpkgs.lib.nixosSystem {
+        system = system;
+        modules = [
+          ({ ... }: {
+            networking.hostName = hostname;
+            nixpkgs.hostPlatform = nixpkgs.lib.mkDefault system;
+          })
+        ]
+          ++ inputNixosModules
+          ++ getNixosModules (moduleClasses ++ [ systemClass ]);
+      };
+    };
+  in
+  {
+    nixosConfigurations = (nixpkgs.lib.attrsets.listToAttrs (map mkSystemConfig systemClasses));
   };
 }
