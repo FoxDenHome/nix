@@ -7,18 +7,20 @@
     impermanence.url = "github:nix-community/impermanence";
   };
 
-  outputs = { lanzaboote, impermanence, nixpkgs, ... }:
+  outputs = inputs@{ nixpkgs, impermanence, ... }:
   {
+    someBS = inputs;
+
     nixosConfigurations =
     let
       isNixFile = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
 
       moduleFiles = nixpkgs.lib.filter isNixFile
                       (nixpkgs.lib.filesystem.listFilesRecursive ./modules/nixos);
-      baseModules = [
-        impermanence.nixosModules.impermanence
-        lanzaboote.nixosModules.lanzaboote
-      ] ++ moduleFiles;
+
+      nixosModuleInputs = nixpkgs.lib.filter (val: val != "")
+                            (map (val: nixpkgs.lib.attrsets.attrByPath [ "nixosModules" val.name ] "" val.value)
+                                  (nixpkgs.lib.attrsToList inputs));
 
       machineFiles = nixpkgs.lib.filter isNixFile
                       (nixpkgs.lib.filesystem.listFilesRecursive ./systems);
@@ -39,7 +41,7 @@
               nixpkgs.hostPlatform = nixpkgs.lib.mkDefault system;
             })
             path
-          ] ++ baseModules;
+          ] ++ nixosModuleInputs ++ moduleFiles;
         };
       };
     in
