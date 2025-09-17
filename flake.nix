@@ -11,9 +11,14 @@
   {
     nixosConfigurations =
     let
-      is_valid_module = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
-      module_files = nixpkgs.lib.filter is_valid_module
+      isValidModule = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
+      moduleFiles = nixpkgs.lib.filter isValidModule
                       (nixpkgs.lib.filesystem.listFilesRecursive ./modules/nixos);
+
+      baseModules = [
+          impermanence.nixosModules.impermanence
+          lanzaboote.nixosModules.lanzaboote
+      ] ++ moduleFiles;
     in
     {
       # Actual machines
@@ -22,27 +27,21 @@
 
         modules = [
           ./systems/x86_64-linux/bengalfox.nix
-          impermanence.nixosModules.impermanence
-          lanzaboote.nixosModules.lanzaboote
-        ] ++ module_files;
+        ] ++ baseModules;
       };
       islandfox = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
 
         modules = [
           ./systems/x86_64-linux/islandfox.nix
-          impermanence.nixosModules.impermanence
-          lanzaboote.nixosModules.lanzaboote
-        ] ++ module_files;
+        ] ++ baseModules;
       };
       icefox = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
 
         modules = [
           ./systems/x86_64-linux/icefox.nix
-          impermanence.nixosModules.impermanence
-          lanzaboote.nixosModules.lanzaboote
-        ] ++ module_files;
+        ] ++ baseModules;
       };
 
       # Test machines
@@ -52,10 +51,8 @@
             networking.hostName = "testvm";
             networking.hostId = "5445564d";
           })
-          impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/testvm.nix
-          lanzaboote.nixosModules.lanzaboote
-        ] ++ module_files;
+        ] ++ baseModules;
       };
       testvm-zfs = nixpkgs.lib.nixosSystem {
         modules = [
@@ -68,10 +65,8 @@
                 fsType = "zfs";
               };
           })
-          impermanence.nixosModules.impermanence
           ./systems/x86_64-linux/testvm.nix
-          lanzaboote.nixosModules.lanzaboote
-        ] ++ module_files;
+        ] ++ baseModules;
       };
     };
   };
