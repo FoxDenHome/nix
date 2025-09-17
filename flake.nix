@@ -29,6 +29,8 @@
     moduleClasses = loadModuleDir ./modules;
     systemClasses = loadModuleDir ./systems;
 
+    allClasses = moduleClasses ++ systemClasses;
+
     mkSystemConfig = systemClass: let
       splitPath = nixpkgs.lib.path.splitRoot systemClass.path;
       components = nixpkgs.lib.path.subpath.components splitPath.subpath;
@@ -55,5 +57,6 @@
   in
   {
     nixosConfigurations = (nixpkgs.lib.attrsets.listToAttrs (map mkSystemConfig systemClasses));
+    dnsRecords = nixpkgs.lib.flatten (map (val: val.module.dnsRecords or []) allClasses);
   };
 }
