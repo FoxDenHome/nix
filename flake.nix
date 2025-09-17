@@ -11,7 +11,9 @@
   {
     nixosConfigurations =
     let
-      module_files = nixpkgs.lib.filesystem.listFilesRecursive ./modules/nixos;
+      is_valid_module = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
+      module_files = nixpkgs.lib.filter is_valid_module
+                      (nixpkgs.lib.filesystem.listFilesRecursive ./modules/nixos);
     in
     {
       # Actual machines
