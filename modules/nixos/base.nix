@@ -13,6 +13,8 @@
     tcpdump
     e2fsprogs
     xfsprogs
+    fish
+    zsh
   ];
 
   users.mutableUsers = false;
