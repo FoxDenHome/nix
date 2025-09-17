@@ -7,6 +7,7 @@
 
   environment.systemPackages = with pkgs; [
     curl
+    wget
     e2fsprogs
     openssl
   ];
@@ -15,7 +16,6 @@
   programs.zsh.enable = true;
   programs.git.enable = true;
   programs.htop.enable = true;
-  programs.wget.enable = true;
   programs.tcpdump.enable = true;
   programs.xfsprogs.enable = true;
 
