@@ -21,6 +21,18 @@
           ./modules/nixos/zfs.nix
         ];
       };
+      testvm-zfs = nixpkgs.lib.nixosSystem {
+        modules = [
+          impermanence.nixosModules.impermanence
+          ./systems/x86_64-linux/testvm.nix
+          ./systems/x86_64-linux/testvm-zfs.nix
+          lanzaboote.nixosModules.lanzaboote
+          ./modules/nixos/base.nix
+          ./modules/nixos/boot.nix
+          ./modules/nixos/kanidm.nix
+          ./modules/nixos/zfs.nix
+        ];
+      };
 
       bengalfox = nixpkgs.lib.nixosSystem {
         modules = [
