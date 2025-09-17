@@ -7,6 +7,7 @@
 
   environment.systemPackages = with pkgs; [
     curl
+    e2fsprogs
   ];
 
   programs.fish.enable = true;
@@ -16,7 +17,6 @@
   programs.wget.enable = true;
   programs.openssl.enable = true;
   programs.tcpdump.enable = true;
-  programs.e2fsprogs.enable = true;
   programs.xfsprogs.enable = true;
 
   users.mutableUsers = false;
