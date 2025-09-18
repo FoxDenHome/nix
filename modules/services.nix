@@ -15,7 +15,7 @@
       };
 
       systemd.serviceConfig = {
-        NetworkNamespaceName = info.namespace;
+        NetworkNamespacePath = info.namespace;
         DevicePolicy = "closed";
         PrivateTmp = true;
         PrivateMounts = true;
