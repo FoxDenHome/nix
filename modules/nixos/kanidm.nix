@@ -24,7 +24,7 @@
     enableClient = true;
     enablePam = true;
 
-    package = pkgs.kanidm;
+    package = pkgs.kanidm_1_x;
 
     clientSettings = {
       uri = "https://auth.foxden.network";
