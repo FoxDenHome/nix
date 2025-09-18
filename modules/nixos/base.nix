@@ -1,5 +1,7 @@
 { lib, pkgs, config, ... }:
 {
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   services.sshd.enable = true;
 
   boot.supportedFilesystems = [ "vfat" "xfs" "ext4" ];
