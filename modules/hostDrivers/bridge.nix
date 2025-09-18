@@ -31,7 +31,7 @@ in
 
   networks = (mkBaseNetwork: hosts:
     nixpkgs.lib.attrsets.listToAttrs (
-      nixpkgs.lib.list.flatten
+      nixpkgs.lib.lists.flatten
         (map (({ name, value }: let
           hostSuffix = mkHostSuffix value;
         in
