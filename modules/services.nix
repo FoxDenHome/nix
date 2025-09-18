@@ -15,7 +15,6 @@
         DevicePolicy = "closed";
         PrivateTmp = true;
         PrivateMounts = true;
-        PrivateNetwork = true;
         ProtectSystem = "strict";
         ProtectHome = "tmpfs";
         ReadOnlyPaths = ["/"];
