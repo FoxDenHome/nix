@@ -18,6 +18,7 @@
         PrivateNetwork = true;
         ProtectSystem = "struct";
         ProtectHome = "tmpfs";
+        ReadOnlyPaths = "/";
       };
     });
 }

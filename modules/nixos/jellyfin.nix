@@ -9,5 +9,17 @@ let
 in
 {
   config.services.jellyfin.enable = svc.enable;
-  config.systemd.services.jellyfin.serviceConfig = svc.systemd.serviceConfig;
+  config.systemd.services.jellyfin.serviceConfig = nixpkgs.lib.attrsets.mergeAttrs
+                                                      {
+                                                          ReadWritePaths = [
+                                                            config.services.jellyfin.cacheDir
+                                                            config.services.jellyfin.configDir
+                                                          ];
+                                                      }
+                                                      svc.systemd.serviceConfig;
+
+  environment.persistence."/nix/persist/jellyfin".directories = [
+    config.services.jellyfin.cacheDir
+    config.services.jellyfin.configDir
+  ];
 }
