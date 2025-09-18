@@ -1,7 +1,7 @@
 { nixpkgs, config, ... }:
 let
   services = import ../services.nix { inherit nixpkgs; };
-  svc = services.config {
+  svc = services.make {
     inherit config;
     name = "jellyfin";
     opts.description = "Jellyfin media server";
@@ -9,5 +9,5 @@ let
 in
 {
   config.services.jellyfin.enable = svc.enable;
-  config.systemd.services.jellyfin.serviceConfig.Slice = svc.slice;
+  config.systemd.services.jellyfin.serviceConfig = svc.systemd.serviceConfig;
 }

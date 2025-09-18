@@ -1,6 +1,6 @@
 { ... }:
 {
-  config = ({ name, config, ... }:
+  make = ({ name, config, ... }:
     let
       host = config.foxDen.hosts.${name};
       info = config.foxDen.hostInfo.${name};
@@ -8,7 +8,13 @@
     {
       host = host;
       info = info;
-      slice = "${info.slice}.slice";
       enable = host != null;
+
+      systemd.serviceConfig = {
+        Slice = "${info.slice}.slice";
+        DevicePolicy = "closed";
+        PrivateTmp = true;
+        PrivateMount = true;
+      };
     });
 }
