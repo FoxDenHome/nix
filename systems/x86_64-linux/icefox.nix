@@ -6,5 +6,13 @@
     networking.hostId = "49434546";
 
     # TODO: Most of this file
+
+    foxDen.dnsRecords = 
+      {
+        name = "icefox";
+        recordType = "A";
+        value = "192.168.1.100";
+      }
+    ;
   };
 }
