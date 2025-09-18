@@ -99,6 +99,7 @@ in
   nixosModules.hosts = ({ config, ... }:
   let
     hostDriver = import (./hostDrivers + "/${config.foxDen.hostDriver}.nix") { inherit nixpkgs; driverOpts = config.foxDen.hostDriverOpts; };
+    # TODO: This needs to be a map
     managedHostsList = nixpkgs.lib.lists.filter (host: host.manageNetwork) (nixpkgs.lib.attrsets.attrValues config.foxDen.hosts);
   in
   {
@@ -126,6 +127,18 @@ in
       (map (host: {
         name = host.name;
         value = (hostDriver.info host);
+      }) managedHostsList));
+
+    config.systemd.slices = (nixpkgs.lib.attrsets.listToAttrs
+      (map (host: {
+        name = host.name;
+        value = {
+          description = "Slice for ${host.name}";
+          sliceConfig = {
+            RestrictNetworkInterfaces = info.serviceInterface;
+            PrivateNetwork = true;
+          };
+        };
       }) managedHostsList));
 
     config.systemd.network.netdevs = hostDriver.netDevs managedHostsList;
