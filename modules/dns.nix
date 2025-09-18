@@ -118,4 +118,11 @@
     hostDnsRecordType = hostDnsRecordType;
 
     mkDnsRecordsOutput = mkDnsRecordsOutput;
+
+    nixosModules.dns = ({ ... }: {
+      options.foxDen.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+        type = (listOf hostType);
+        default = [];
+      };
+    });
   }

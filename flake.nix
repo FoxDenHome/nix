@@ -15,15 +15,16 @@
     mkModuleList = dir: (nixpkgs.lib.filter isNixFile
                           (nixpkgs.lib.filesystem.listFilesRecursive dir));
 
+    dns = import ./modules/dns.nix { inherit nixpkgs; };
+
     inputNixosModules = [
       impermanence.nixosModules.impermanence
       lanzaboote.nixosModules.lanzaboote
+      dns.nixosModules.dns
     ];
 
     modules = mkModuleList ./modules/nixos;
     systems = mkModuleList ./systems;
-
-    dns = import ./modules/dns.nix { inherit nixpkgs; };
 
     mkSystemConfig = system: let
       splitPath = nixpkgs.lib.path.splitRoot system;
@@ -42,11 +43,6 @@
           ({ ... }: {
             config.networking.hostName = hostname;
             config.nixpkgs.hostPlatform = nixpkgs.lib.mkDefault systemArch;
-
-            options.foxDen.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-              type = (listOf dns.hostType);
-              default = [];
-            };
           })
         ]
           ++ inputNixosModules
