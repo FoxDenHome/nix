@@ -16,7 +16,7 @@
         PrivateTmp = true;
         PrivateMounts = true;
         PrivateNetwork = true;
-        ProtectSystem = "struct";
+        ProtectSystem = "strict";
         ProtectHome = "tmpfs";
         ReadOnlyPaths = "/";
       };
