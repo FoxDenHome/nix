@@ -95,8 +95,8 @@ in
       default = {};
     };
 
-    config.systemd.network.netdevs = hostDriver.netDevs config.foxDen.hosts;
-    config.systemd.network.networks = hostDriver.networks config.foxDen.hostInterface config.foxDen.hosts;
+    config.systemd.network.netdevs = hostDriver.netDevs config.foxDen.hostDriverOpts config.foxDen.hosts;
+    config.systemd.network.networks = hostDriver.networks config.foxDen.hostDriverOpts config.foxDen.hosts;
     config.networking.useNetworkd = true;
   });
 }

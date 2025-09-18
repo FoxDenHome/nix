@@ -7,7 +7,7 @@
     };
   };
 
-  netDevs = (hosts:
+  netDevs = (opts: (hosts:
     nixpkgs.lib.attrsets.listToAttrs
       (map ((host: let
         hostSuffix = builtins.substring 0 8 (builtins.hashString "sha256" host.name);
@@ -23,7 +23,7 @@
               Name = "vpeer-${hostSuffix}";
           };
         };
-      })) hosts));
+      })) hosts)));
 
   networks = (opts: (hosts:
     nixpkgs.lib.attrsets.listToAttrs
