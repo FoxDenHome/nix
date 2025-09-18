@@ -12,41 +12,36 @@
   let
     isNixFile = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
 
-    loadModuleDir = dir: (map (path: { module = import path; path = path; })
-                          (nixpkgs.lib.filter isNixFile
-                            (nixpkgs.lib.filesystem.listFilesRecursive dir)));
-
-    getNixosModules = classes: (nixpkgs.lib.lists.flatten
-                                  (map (val: nixpkgs.lib.attrsets.attrValues val.module.nixosModules or {})
-                                        classes));
+    mkModuleList = dir: (nixpkgs.lib.filter isNixFile
+                          (nixpkgs.lib.filesystem.listFilesRecursive dir));
 
     inputNixosModules = [
       impermanence.nixosModules.impermanence
       lanzaboote.nixosModules.lanzaboote
     ];
 
-    moduleClasses = loadModuleDir ./modules/nixos;
-    systemClasses = loadModuleDir ./systems;
+    modules = mkModuleList ./modules/nixos;
+    systems = mkModuleList ./systems;
 
     dns = import ./modules/dns.nix { inherit nixpkgs; };
 
-    mkSystemConfig = systemClass: let
-      splitPath = nixpkgs.lib.path.splitRoot systemClass.path;
+    mkSystemConfig = system: let
+      splitPath = nixpkgs.lib.path.splitRoot system;
       components = nixpkgs.lib.path.subpath.components splitPath.subpath;
       componentsLength = nixpkgs.lib.lists.length components;
 
       hostname = nixpkgs.lib.strings.removeSuffix ".nix"
                   (nixpkgs.lib.strings.elemAt components (componentsLength - 1)); # e.g. bengalfox
-      system = nixpkgs.lib.strings.elemAt components (componentsLength - 2); # e.g. x86_64-linux
+      systemArch = nixpkgs.lib.strings.elemAt components (componentsLength - 2); # e.g. x86_64-linux
     in
     {
       name = hostname;
       value = nixpkgs.lib.nixosSystem {
-        system = system;
+        system = systemArch;
         modules = [
           ({ ... }: {
             config.networking.hostName = hostname;
-            config.nixpkgs.hostPlatform = nixpkgs.lib.mkDefault system;
+            config.nixpkgs.hostPlatform = nixpkgs.lib.mkDefault systemArch;
 
             options.foxDen.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
               type = (listOf dns.hostType);
@@ -55,11 +50,10 @@
           })
         ]
           ++ inputNixosModules
-          ++ getNixosModules (moduleClasses ++ [ systemClass ]);
+          ++ modules ++ [ system ];
       };
     };
-
-    nixosConfigurations = (nixpkgs.lib.attrsets.listToAttrs (map mkSystemConfig systemClasses));
+    nixosConfigurations = (nixpkgs.lib.attrsets.listToAttrs (map mkSystemConfig systems));
 
     foxDen = nixpkgs.lib.filterAttrs (name: val: val != null)
               (nixpkgs.lib.attrsets.mapAttrs (name: val: val.config.foxDen or null) nixosConfigurations);
