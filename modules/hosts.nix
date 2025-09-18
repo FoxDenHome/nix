@@ -41,34 +41,44 @@ let
     };
   };
 
+  hostInfoType = with nixpkgs.lib.types; submodule {
+    options = {
+      hostInterface = nixpkgs.lib.mkOption {
+        type = str;
+      };
+      serviceInterface = nixpkgs.lib.mkOption {
+        type = str;
+      };
+    };
+  };
+
   hostType = with nixpkgs.lib.types; submodule {
     options = (nixpkgs.lib.mergeAttrs
-      {
-        name = nixpkgs.lib.mkOption {
-          type = str;
-          default = "";
-        };
-        root = nixpkgs.lib.mkOption {
-          type = str;
-          default = "foxden.network";
-        };
-        vlan = nixpkgs.lib.mkOption {
-          type = int;
-          default = 2;
-        };
-        manageNetwork = nixpkgs.lib.mkOption {
-          type = bool;
-          default = true;
-        };
-      }
-      (nixpkgs.lib.attrsets.listToAttrs (map (horizon: {
-        name = horizon;
-        value = nixpkgs.lib.mkOption {
-          type = hostHorizonConfigType;
-          default = {};
-        };
-      }) dns.allHorizons))
-    );
+    {
+      name = nixpkgs.lib.mkOption {
+        type = str;
+        default = "";
+      };
+      root = nixpkgs.lib.mkOption {
+        type = str;
+        default = "foxden.network";
+      };
+      vlan = nixpkgs.lib.mkOption {
+        type = int;
+        default = 2;
+      };
+      manageNetwork = nixpkgs.lib.mkOption {
+        type = bool;
+        default = true;
+      };
+    }
+    (nixpkgs.lib.attrsets.listToAttrs (map (horizon: {
+      name = horizon;
+      value = nixpkgs.lib.mkOption {
+        type = hostHorizonConfigType;
+        default = {};
+      };
+    }) dns.allHorizons)));
   };
 in
 {
@@ -88,26 +98,38 @@ in
 
   nixosModules.hosts = ({ config, ... }:
   let
-    hostDriver = import (./hostDrivers + "/${config.foxDen.hostDriver}.nix") { inherit nixpkgs; };
+    hostDriver = import (./hostDrivers + "/${config.foxDen.hostDriver}.nix") { inherit nixpkgs; driverOpts = config.foxDen.hostDriverOpts; };
     managedHostsList = nixpkgs.lib.lists.filter (host: host.manageNetwork) (nixpkgs.lib.attrsets.attrValues config.foxDen.hosts);
   in
   {
     options.foxDen.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-      type = (attrsOf (nullOr hostType));
-      default = [];
+      type = (attrsOf hostType);
+      default = {};
     };
 
     options.foxDen.hostDriver = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
       type = enum [ "bridge" "sriov" ];
       default = "bridge";
     };
+
     options.foxDen.hostDriverOpts = nixpkgs.lib.mkOption {
       type = hostDriver.configType;
       default = {};
     };
 
-    config.systemd.network.netdevs = hostDriver.netDevs config.foxDen.hostDriverOpts managedHostsList;
-    config.systemd.network.networks = hostDriver.networks config.foxDen.hostDriverOpts managedHostsList;
+    options.foxDen.hostInfo = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+      type = (attrsOf hostInfoType);
+      default = {};
+    };
+
+    config.foxDen.hostInfo = (nixpkgs.lib.attrsets.listToAttrs 
+      (map (host: {
+        name = host.name;
+        value = (hostDriver.info host);
+      }) managedHostsList));
+
+    config.systemd.network.netdevs = hostDriver.netDevs managedHostsList;
+    config.systemd.network.networks = hostDriver.networks managedHostsList;
     config.networking.useNetworkd = true;
   });
 }
