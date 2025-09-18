@@ -44,7 +44,7 @@ let
   hostInfoType = with nixpkgs.lib.types; submodule {
     options = {
       hostInterface = nixpkgs.lib.mkOption {
-        type = str;
+        type = (oneOf str);
       };
       serviceInterface = nixpkgs.lib.mkOption {
         type = str;
@@ -147,7 +147,10 @@ in
       (hostDriver.infos managedHosts));
 
     config.systemd.services = (nixpkgs.lib.attrsets.listToAttrs
-      (map (name: {
+      (map (name: let
+         info = config.foxDen.hostInfo.${name};
+       in
+       {
         name = "netns-host-${name}";
         value = {
           description = "NetNS host service for ${name}";
@@ -159,7 +162,7 @@ in
             RemainAfterExit = true;
             ExecStart = [
               "${pkgs.iproute2}/bin/ip netns add 'host-${name}'"
-              "${pkgs.iproute2}/bin/ip link set '${config.foxDen.hostInfo.${name}.serviceInterface}' netns 'host-${name}'"
+              "${pkgs.iproute2}/bin/ip link set '${info.serviceInterface}' netns 'host-${name}'"
             ];
             ExecStop = [
               "${pkgs.iproute2}/bin/ip netns del 'host-${name}'"
