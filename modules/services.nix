@@ -10,6 +10,10 @@
       info = info;
       enable = host != null;
 
+      systemd.unitConfig = {
+        Requires = info.requires;
+      };
+
       systemd.serviceConfig = {
         NetworkNamespaceName = info.namespace;
         DevicePolicy = "closed";

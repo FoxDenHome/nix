@@ -52,6 +52,9 @@ let
       namespace = nixpkgs.lib.mkOption {
         type = str;
       };
+      requires = nixpkgs.lib.mkOption {
+        type = listOf str;
+      };
     };
   };
 
@@ -139,6 +142,7 @@ in
     config.foxDen.hostInfo = (nixpkgs.lib.attrsets.mapAttrs
       (name: info: (nixpkgs.lib.mergeAttrs info {
         namespace = "host-${name}";
+        requires = ["netns-host-${name}.service"];
       }))
       (hostDriver.infos managedHosts));
 

@@ -19,6 +19,7 @@ in
                                                           ];
                                                       }
                                                       svc.systemd.serviceConfig;
+  config.systemd.services.jellyfin.unitConfig = svc.systemd.unitConfig;
 
   config.environment.persistence."/nix/persist/jellyfin".directories = [
     { directory = config.services.jellyfin.cacheDir; user = "jellyfin"; group = "jellyfin"; mode = "u=rwx,g=,o="; }
