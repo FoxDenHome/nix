@@ -18,7 +18,7 @@ in
                                                       }
                                                       svc.systemd.serviceConfig;
 
-  environment.persistence."/nix/persist/jellyfin".directories = [
+  config.environment.persistence."/nix/persist/jellyfin".directories = [
     config.services.jellyfin.cacheDir
     config.services.jellyfin.configDir
   ];
