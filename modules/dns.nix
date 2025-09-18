@@ -186,5 +186,6 @@ in
     config.systemd.network.netdevs = mkNetDevsBridge config.foxDen.hosts;
     config.systemd.network.networks = mkNetworksBridge config.foxDen.hosts;
     config.networking.bridges = mkBridges config.foxDen.hosts;
+    config.networking.useNetworkd = true;
   });
 }
