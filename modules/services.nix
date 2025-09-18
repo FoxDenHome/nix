@@ -8,7 +8,7 @@
     {
       host = host;
       info = info;
-      slice = "${info}.slice";
+      slice = "${info.slice}.slice";
       enable = host != null;
     });
 }
