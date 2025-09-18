@@ -114,14 +114,14 @@ let
   mkVlans = (hosts:
     (nixpkgs.lib.lists.unique (map (host: host.vlan) hosts)));
 
-  mkBridges = (hosts:
+  mkBridges = (interfaces: (hosts:
     nixpkgs.lib.attrsets.listToAttrs
       (map (vlan: {
         name = "bridge-vl${toString vlan}";
         value = {
-          interfaces = [];
+          interfaces = interfaces;
         };
-      }) (mkVlans hosts)));
+      }) (mkVlans hosts))));
 
   mkNetDevsBridge = (hosts:
     nixpkgs.lib.attrsets.listToAttrs
@@ -187,9 +187,14 @@ in
       default = "bridge";
     };
 
+    options.foxDen.hostInterface = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+      type = str;
+      default = "enp1s0";
+    };
+
     config.systemd.network.netdevs = mkNetDevsBridge config.foxDen.hosts;
     config.systemd.network.networks = mkNetworksBridge config.foxDen.hosts;
-    config.networking.bridges = mkBridges config.foxDen.hosts;
+    config.networking.bridges = mkBridges [config.foxDen.hostInterface] config.foxDen.hosts;
     config.networking.useNetworkd = true;
   });
 }
