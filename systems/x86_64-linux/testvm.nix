@@ -26,11 +26,18 @@
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  networking.useDHCP = lib.mkDefault true;
-
   networking.hostId = "74657374";
 
   boot.lanzaboote.enable = true;
+
+  networking.interfaces.bridge-vl2.ipv4 = {
+    addresses = "192.168.122.200/24";
+    routes = [{
+      address = "0.0.0.0";
+      prefixLength = 0;
+      via = "192.168.122.1";
+    }];
+  };
 
   foxDen.jellyfin.host = {
     name = "jellyfin";
