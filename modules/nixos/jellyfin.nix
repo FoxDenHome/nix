@@ -14,6 +14,8 @@ in
                                                           ReadWritePaths = [
                                                             config.services.jellyfin.cacheDir
                                                             config.services.jellyfin.configDir
+                                                            config.services.jellyfin.dataDir
+                                                            config.services.jellyfin.logDir
                                                           ];
                                                       }
                                                       svc.systemd.serviceConfig;
@@ -21,5 +23,7 @@ in
   config.environment.persistence."/nix/persist/jellyfin".directories = [
     { directory = config.services.jellyfin.cacheDir; user = "jellyfin"; group = "jellyfin"; mode = "u=rwx,g=,o="; }
     { directory = config.services.jellyfin.configDir; user = "jellyfin"; group = "jellyfin"; mode = "u=rwx,g=,o="; }
+    { directory = config.services.jellyfin.dataDir; user = "jellyfin"; group = "jellyfin"; mode = "u=rwx,g=,o="; }
+    { directory = config.services.jellyfin.logDir; user = "jellyfin"; group = "jellyfin"; mode = "u=rwx,g=,o="; }
   ];
 }
