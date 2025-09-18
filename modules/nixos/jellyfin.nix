@@ -18,8 +18,8 @@ in
                                                       }
                                                       svc.systemd.serviceConfig;
 
-  config.environment.persistence."/nix/persist/jellyfin".directories = [
-    config.services.jellyfin.cacheDir
-    config.services.jellyfin.configDir
+  environment.persistence."/nix/persist/jellyfin".directories = [
+    { directory = config.services.jellyfin.cacheDir; user = "jellyfin"; group = "jellyfin"; mode = "u=rwx,g=rx,o="; }
+    { directory = config.services.jellyfin.configDir; user = "jellyfin"; group = "jellyfin"; mode = "u=rwx,g=rx,o="; }
   ];
 }
