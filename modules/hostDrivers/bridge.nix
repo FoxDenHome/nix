@@ -1,6 +1,7 @@
 { nixpkgs, ... } :
 let
   util = import ../util.nix { };
+  mkHostSuffix = host: util.mkHash8 host.name;
 in
 {
   configType = with nixpkgs.lib.types; submodule {
@@ -12,11 +13,11 @@ in
 
   netDevs = (opts: (hosts:
     nixpkgs.lib.attrsets.listToAttrs
-      (map ((val: let
-        hostSuffix = util.mkHash8 val.name;
+      (map ((host: let
+        hostSuffix = mkHostSuffix host;
       in
       {
-        name = "60-host-${val.name}";
+        name = "60-host-${host.name}";
         value = {
           netdevConfig = {
               Name = "veth-${hostSuffix}";
@@ -30,12 +31,11 @@ in
 
   networks = (opts: (hosts:
     nixpkgs.lib.attrsets.listToAttrs
-      (map ((val: let
-        hostSuffix = util.mkHash8 val.name;
-        host = val.value;
+      (map ((host: let
+        hostSuffix = mkHostSuffix host;
       in
       {
-        name = "60-veth-${val.name}";
+        name = "60-veth-${host.name}";
         value = {
           name = "veth-${hostSuffix}";
           bridge = [opts.bridge];
