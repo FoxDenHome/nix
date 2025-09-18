@@ -6,7 +6,7 @@
 
   # TODO: Most of this file
 
-  foxDen.hosts = [
+  dns.hosts = [
     {
       name = "icefox";
       internal = {

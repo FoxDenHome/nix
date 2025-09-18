@@ -15,7 +15,7 @@
     mkModuleList = dir: (nixpkgs.lib.filter isNixFile
                           (nixpkgs.lib.filesystem.listFilesRecursive dir));
 
-    dns = import ./modules/dns.nix { inherit nixpkgs; };
+    dns = import ./modules/dns.nix { inherit nixpkgs; inherit nixosConfigurations; };
 
     inputNixosModules = [
       impermanence.nixosModules.impermanence
@@ -50,15 +50,9 @@
       };
     };
     nixosConfigurations = (nixpkgs.lib.attrsets.listToAttrs (map mkSystemConfig systems));
-
-    foxDen = nixpkgs.lib.filterAttrs (name: val: val != null)
-              (nixpkgs.lib.attrsets.mapAttrs (name: val: val.config.foxDen or null) nixosConfigurations);
-    foxDenHosts = nixpkgs.lib.lists.flatten (nixpkgs.lib.attrsets.attrValues (nixpkgs.lib.attrsets.mapAttrs (name: val: val.hosts or []) foxDen));
   in
   {
     nixosConfigurations = nixosConfigurations;
-    foxDen = foxDen;
-
-    dnsRecords = dns.mkDnsRecordsOutput foxDenHosts;
+    dns = dns;
   };
 }

@@ -1,4 +1,4 @@
-{ nixpkgs, ... }:
+{ nixosConfigurations, nixpkgs, ... }:
   let
     allHorizons = [ "internal" "external" ];
 
@@ -105,22 +105,23 @@
         (map (root: {name = root; value = mkDnsRecordsOutputRoot root horizon hosts; })
           roots));
 
-    mkDnsRecordsOutput = (hosts: let
-        roots = nixpkgs.lib.lists.uniqueStrings (map (host: host.root) hosts);
-      in
-      nixpkgs.lib.attrsets.listToAttrs
-        (map (horizon: {name = horizon; value = mkDnsRecordsOutputAddrType horizon hosts roots; })
-          allHorizons));
+    config = import ./config.nix { inherit nixpkgs; inherit nixosConfigurations; };
+    allHosts = config.getList ["dns" "hosts"];
   in
   {
     hostType = hostType;
     hostHorizonConfigType = hostHorizonConfigType;
     hostDnsRecordType = hostDnsRecordType;
 
-    mkDnsRecordsOutput = mkDnsRecordsOutput;
+    records = let
+        roots = nixpkgs.lib.lists.uniqueStrings (map (host: host.root) allHosts);
+      in
+      nixpkgs.lib.attrsets.listToAttrs
+        (map (horizon: {name = horizon; value = mkDnsRecordsOutputAddrType horizon allHosts roots; })
+          allHorizons);
 
     nixosModules.dns = ({ ... }: {
-      options.foxDen.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+      options.dns.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
         type = (listOf hostType);
         default = [];
       };
