@@ -12,6 +12,12 @@
         name = "icefox";
         internal = {
           ipv4 = "192.168.1.99";
+          records = [
+            {
+              type = "TXT";
+              value = "hello";
+            }
+          ];
         };
         external = {
           ipv4 = "dyn";

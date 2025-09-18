@@ -3,7 +3,7 @@
 
   inputs = {
     lanzaboote.url = "github:nix-community/lanzaboote";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     impermanence.url = "github:nix-community/impermanence";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
   };
@@ -28,7 +28,7 @@
     moduleClasses = loadModuleDir ./modules/nixos;
     systemClasses = loadModuleDir ./systems;
 
-    hosts = import ./modules/hosts.nix { inherit nixpkgs; };
+    dns = import ./modules/dns.nix { inherit nixpkgs; };
 
     mkSystemConfig = systemClass: let
       splitPath = nixpkgs.lib.path.splitRoot systemClass.path;
@@ -49,7 +49,7 @@
             config.nixpkgs.hostPlatform = nixpkgs.lib.mkDefault system;
 
             options.foxDen.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-              type = (listOf hosts.hostType);
+              type = (listOf dns.hostType);
               default = [];
             };
           })
@@ -69,7 +69,6 @@
     nixosConfigurations = nixosConfigurations;
     foxDen = foxDen;
 
-    dnsRecords.internal = nixpkgs.lib.attrsets.listToAttrs (map (root: {name = root; value = hosts.mkDnsRecordsOutput root "internal" foxDenHosts; }) hosts.allRoots);
-    dnsRecords.external = nixpkgs.lib.attrsets.listToAttrs (map (root: {name = root; value = hosts.mkDnsRecordsOutput root "external" foxDenHosts; }) hosts.allRoots);
+    dnsRecords = dns.mkDnsRecordsOutput foxDenHosts;
   };
 }
