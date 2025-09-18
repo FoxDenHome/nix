@@ -120,11 +120,11 @@ let
         name = "60-veth-${hostSuffix}";
         value = {
           netdevConfig = {
-              Name = "veth-ext-${hostSuffix}";
+              Name = "veth-${hostSuffix}";
               Kind = "veth";
           };
           peerConfig = {
-              Name = "veth-int-${hostSuffix}";
+              Name = "vethp-${hostSuffix}";
           };
         };
       })) hosts));
