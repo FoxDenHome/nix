@@ -45,8 +45,8 @@
         modules = [
           ({ ... }: {
             networking.hostName = hostname;
-            nixpkgs.hostPlatform = nixpkgs.lib.mkDefault systemArch;
-            networking.hostId = nixpkgs.lib.mkDefault (util.mkHash8 hostname);
+            nixpkgs.hostPlatform = systemArch;
+            networking.hostId = util.mkHash8 hostname;
           })
           system
         ] ++ inputNixosModules ++ modules;
