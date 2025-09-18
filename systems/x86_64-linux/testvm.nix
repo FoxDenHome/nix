@@ -29,8 +29,6 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  networking.hostId = "74657374";
-
   boot.lanzaboote.enable = true;
 
   networking.bridges.${bridgeDev} = {

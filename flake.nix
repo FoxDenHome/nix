@@ -17,6 +17,7 @@
 
     dns = import ./modules/dns.nix { inherit nixpkgs; };
     hosts = import ./modules/hosts.nix { inherit nixpkgs; };
+    util = import ./modules/util.nix { };
 
     inputNixosModules = [
       impermanence.nixosModules.impermanence
@@ -43,8 +44,9 @@
         specialArgs = { inherit nixpkgs; };
         modules = [
           ({ ... }: {
-            config.networking.hostName = hostname;
-            config.nixpkgs.hostPlatform = nixpkgs.lib.mkDefault systemArch;
+            networking.hostName = hostname;
+            nixpkgs.hostPlatform = nixpkgs.lib.mkDefault systemArch;
+            networking.hostId = nixpkgs.lib.mkDefault (util.mkHash8 hostname);
           })
           system
         ] ++ inputNixosModules ++ modules;
