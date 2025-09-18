@@ -8,4 +8,6 @@ in
 {
   get = get;
   getList = getList;
+
+  getAttrSet = (attrPath: nixpkgs.lib.attrsets.mergeAttrsList (getList attrPath));
 }
