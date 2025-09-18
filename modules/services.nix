@@ -18,7 +18,7 @@
         PrivateNetwork = true;
         ProtectSystem = "strict";
         ProtectHome = "tmpfs";
-        ReadOnlyPaths = "/";
+        ReadOnlyPaths = ["/"];
       };
     });
 }
