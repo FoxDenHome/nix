@@ -13,11 +13,17 @@
         internal = {
           ipv4 = "192.168.1.99";
         };
+        external = {
+          ipv4 = "dyn";
+        };
       }
       {
         name = "dummy";
         internal = {
           ipv4 = "192.168.1.100";
+        };
+        external = {
+          ipv4 = "dyn";
         };
       }
     ];
