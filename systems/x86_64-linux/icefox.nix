@@ -7,11 +7,18 @@
 
     # TODO: Most of this file
 
-    foxDen.dnsRecords = [
+    foxDen.hosts = [
       {
         name = "icefox";
-        type = "A";
-        value = "192.168.1.100";
+        internal = {
+          ipv4 = "192.168.1.99";
+        };
+      }
+      {
+        name = "dummy";
+        internal = {
+          ipv4 = "192.168.1.100";
+        };
       }
     ];
   };

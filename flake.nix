@@ -29,7 +29,35 @@
     moduleClasses = loadModuleDir ./modules;
     systemClasses = loadModuleDir ./systems;
 
-    allClasses = moduleClasses ++ systemClasses;
+    hostAddressType = with nixpkgs.lib.types; submodule {
+      options = {
+        ipv4 = nixpkgs.lib.mkOption {
+          type = str;
+          default = "dyn";
+        };
+        ipv6 = nixpkgs.lib.mkOption {
+          type = str;
+          default = "dyn";
+        };
+      };
+    };
+
+    hostType = with nixpkgs.lib.types; submodule {
+      options = {
+        name = nixpkgs.lib.mkOption {
+          type = str;
+          default = "";
+        };
+        internal = nixpkgs.lib.mkOption {
+          type = hostAddressType;
+          default = {};
+        };
+        external = nixpkgs.lib.mkOption {
+          type = hostAddressType;
+          default = {};
+        };
+      };
+    };
 
     mkSystemConfig = systemClass: let
       splitPath = nixpkgs.lib.path.splitRoot systemClass.path;
@@ -49,23 +77,14 @@
             config.networking.hostName = hostname;
             config.nixpkgs.hostPlatform = nixpkgs.lib.mkDefault system;
 
-            options.foxDen.dnsRecords = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-              type = (listOf (submodule {
-                options = {
-                  name = nixpkgs.lib.mkOption {
-                    type = str;
-                    default = "";
-                  };
-                  type = nixpkgs.lib.mkOption {
-                    type = enum [ "A" "AAAA" "CNAME" "TXT" "MX" "SRV" "PTR" ];
-                  };
-                  value = nixpkgs.lib.mkOption {
-                    type = str;
-                    default = "";
-                  };
-                };
-              }));
+            options.foxDen.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+              type = (listOf hostType);
               default = [];
+            };
+
+            options.foxDen.dynDns = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+              type = bool;
+              default = false;
             };
           })
         ]
@@ -77,12 +96,41 @@
     nixosConfigurations = (nixpkgs.lib.attrsets.listToAttrs (map mkSystemConfig systemClasses));
     foxDen = nixpkgs.lib.filterAttrs (name: val: val != null)
               (nixpkgs.lib.attrsets.mapAttrs (name: val: val.config.foxDen or null) nixosConfigurations);
+
+    mkSuffixedDnsRecords = (suffix: addressType: host: let
+        hostAddress = host.${addressType} or { ipv4 = ""; ipv6 = ""; };
+        name = "${host.name}.${suffix}";
+        dynDnsV4 = hostAddress.ipv4 == "dyn";
+        dynDnsV6 = hostAddress.ipv6 == "dyn";
+      in [
+        {
+          name = name;
+          type = "A";
+          value = if dynDnsV4 then "127.0.0.1" else hostAddress.ipv4;
+          dynDns = dynDnsV4;
+        }
+        {
+          name = name;
+          type = "AAAA";
+          value = if dynDnsV6 then "fe80::1" else hostAddress.ipv6;
+          dynDns = dynDnsV6;
+        }
+      ]
+    );
+
+    mkDnsRecordsOutput = (suffix: addressType:
+        nixpkgs.lib.filter (record: record.value != "")
+          (nixpkgs.lib.lists.flatten
+            (map
+              (info: (map (mkSuffixedDnsRecords suffix addressType) (info.value.hosts or [])))
+              (nixpkgs.lib.attrsets.attrsToList foxDen)))
+    );
   in
   {
     nixosConfigurations = nixosConfigurations;
     foxDen = foxDen;
-    dnsRecords = nixpkgs.lib.lists.flatten
-                  (map (val: val.dnsRecords or [])
-                    (nixpkgs.lib.attrsets.attrValues foxDen));
+
+    dnsRecords.internal = mkDnsRecordsOutput "foxden.network" "internal";
+    dnsRecords.external = mkDnsRecordsOutput "doridian.net" "external";
   };
 }
