@@ -124,23 +124,27 @@ let
       }) (mkVlans hosts)));
 
   mkNetDevsBridge = (hosts:
-    map ((host: let
-      hostSuffix = builtins.substring (builtins.hashString "sha256" host.name) 0 8;
-    in
-    {
-      Link = {
-          Name = "vl${toString host.vlan}-a-${hostSuffix}";
-          Kind = "veth";
-      };
-      Peer = {
-          Name = "vl${toString host.vlan}-b-${hostSuffix}";
-      };
-    })) hosts);
+    nixpkgs.lib.attrsets.listToAttrs
+      (map ((host: let
+        hostSuffix = builtins.substring 0 8 (builtins.hashString "sha256" host.name);
+      in
+      {
+        name = "60-vl${toString host.vlan}-veth-${hostSuffix}";
+        value ={
+          netdevConfig = {
+              Name = "vl${toString host.vlan}-a-${hostSuffix}";
+              Kind = "veth";
+          };
+          peerConfig = {
+              Name = "vl${toString host.vlan}-b-${hostSuffix}";
+          };
+        };
+      })) hosts));
 
   mkNetworksBridge = (hosts:
     nixpkgs.lib.attrsets.listToAttrs
       (map (vlan: {
-        name = "vl${toString vlan}-match";
+        name = "20-vl${toString vlan}-match";
         value = {
           matchConfig = {
             name = "vl${toString vlan}-*";
