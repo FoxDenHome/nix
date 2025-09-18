@@ -49,7 +49,7 @@ let
       serviceInterface = nixpkgs.lib.mkOption {
         type = str;
       };
-      slice = nixpkgs.lib.mkOption {
+      namespace = nixpkgs.lib.mkOption {
         type = str;
       };
     };
@@ -83,6 +83,17 @@ let
       };
     }) dns.allHorizons)));
   };
+
+  mkBaseNetwork = (name: host: {
+    addresses = (map (addr: {
+      Address = addr;
+    }) [
+      host.internal.ipv4
+      host.internal.ipv6
+      host.external.ipv4
+      host.external.ipv6
+    ]);
+  });
 in
 {
   hostType = hostType;
@@ -99,7 +110,7 @@ in
     type = if opts.default == null then (nullOr hostType) else hostType;
   } opts));
 
-  nixosModules.hosts = ({ config, ... }:
+  nixosModules.hosts = ({ config, pkgs, ... }:
   let
     hostDriver = import (./hostDrivers + "/${config.foxDen.hostDriver}.nix") { inherit nixpkgs; driverOpts = config.foxDen.hostDriverOpts; };
     managedHosts = nixpkgs.lib.attrsets.filterAttrs (name: host: host.manageNetwork) config.foxDen.hosts;
@@ -127,27 +138,34 @@ in
 
     config.foxDen.hostInfo = (nixpkgs.lib.attrsets.mapAttrs
       (name: info: (nixpkgs.lib.mergeAttrs info {
-        slice = "host-${name}";
+        namespace = "host-${name}";
       }))
       (hostDriver.infos managedHosts));
 
-    config.systemd.slices = (nixpkgs.lib.attrsets.listToAttrs
+    config.systemd.services = (nixpkgs.lib.attrsets.listToAttrs
       (map (name: {
-        name = config.foxDen.hostInfo.${name}.slice;
+        name = "netns-host-${name}";
         value = {
-          description = "Slice for ${name}";
-          sliceConfig = {
-            RestrictNetworkInterfaces = config.foxDen.hostInfo.${name}.serviceInterface;
-            PrivateNetwork = true;
+          description = "NetNS host service for ${name}";
+          unitConfig = {
+            StopWhenUnneeded = true;
           };
           serviceConfig = {
-            PrivateNetwork = true;
+            Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStart = [
+              "${pkgs.iproute2}/bin/ip netns add 'host-${name}'"
+              "${pkgs.iproute2}/bin/ip link set '${config.foxDen.hostInfo.${name}.serviceInterface}' netns 'host-${name}'"
+            ];
+            ExecStop = [
+              "${pkgs.iproute2}/bin/ip netns del 'host-${name}'"
+            ];
           };
         };
       }) (nixpkgs.lib.attrsets.attrNames managedHosts)));
 
     config.systemd.network.netdevs = hostDriver.netDevs managedHosts;
-    config.systemd.network.networks = hostDriver.networks managedHosts;
+    config.systemd.network.networks = hostDriver.networks mkBaseNetwork managedHosts;
     config.networking.useNetworkd = true;
   });
 }

@@ -11,7 +11,7 @@
       enable = host != null;
 
       systemd.serviceConfig = {
-        Slice = "${info.slice}.slice";
+        NetworkNamespaceName = info.namespace;
         DevicePolicy = "closed";
         PrivateTmp = true;
         PrivateMounts = true;

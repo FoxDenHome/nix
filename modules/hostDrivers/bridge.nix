@@ -29,14 +29,14 @@ in
         };
       })) (nixpkgs.lib.attrsets.attrsToList hosts)));
 
-  networks = (hosts:
+  networks = (mkBaseNetwork: hosts:
     nixpkgs.lib.attrsets.listToAttrs
       (map (({ name, value }: let
         hostSuffix = mkHostSuffix value;
       in
       {
         name = "60-host-${name}";
-        value = {
+        value = nixpkgs.lib.mergeAttrs {
           name = "veth-${hostSuffix}";
           bridge = [driverOpts.bridge];
           bridgeVLANs = [{
@@ -44,7 +44,7 @@ in
             EgressUntagged = value.vlan;
             VLAN = value.vlan;
           }];
-        };
+        } (mkBaseNetwork name value);
       })) (nixpkgs.lib.attrsets.attrsToList hosts)));
 
   infos = (hosts:
