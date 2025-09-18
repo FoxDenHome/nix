@@ -1,6 +1,6 @@
 { ... }:
 {
-  mkHostService = ({ name, config, ... }:
+  config = ({ name, config, ... }:
     let
       host = config.foxDen.hosts.${name};
       info = config.foxDen.hostInfo.${name};
@@ -8,14 +8,6 @@
     {
       host = host;
       info = info;
-      enabled = (config.foxDen.hosts.${name} or null) != null;
-
-      slice = {
-        description = "Slice for ${name}";
-        sliceConfig = {
-          RestrictNetworkInterfaces = info.serviceInterface;
-          PrivateNetwork = true;
-        };
-      };
+      enable = host != null;
     });
 }

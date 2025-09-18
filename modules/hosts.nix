@@ -49,6 +49,9 @@ let
       serviceInterface = nixpkgs.lib.mkOption {
         type = str;
       };
+      slice = nixpkgs.lib.mkOption {
+        type = str;
+      };
     };
   };
 
@@ -99,8 +102,7 @@ in
   nixosModules.hosts = ({ config, ... }:
   let
     hostDriver = import (./hostDrivers + "/${config.foxDen.hostDriver}.nix") { inherit nixpkgs; driverOpts = config.foxDen.hostDriverOpts; };
-    # TODO: This needs to be a map
-    managedHostsList = nixpkgs.lib.lists.filter (host: host.manageNetwork) (nixpkgs.lib.attrsets.attrValues config.foxDen.hosts);
+    managedHosts = nixpkgs.lib.attrsets.filterAttrs (name: host: host.manageNetwork) config.foxDen.hosts;
   in
   {
     options.foxDen.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
@@ -123,26 +125,26 @@ in
       default = {};
     };
 
-    config.foxDen.hostInfo = (nixpkgs.lib.attrsets.listToAttrs 
-      (map (host: {
-        name = host.name;
-        value = (hostDriver.info host);
-      }) managedHostsList));
+    config.foxDen.hostInfo = (nixpkgs.lib.attrsets.mapAttrs
+      (name: info: (nixpkgs.lib.mergeAttrs info {
+        slice = "host-${name}";
+      }))
+      (hostDriver.infos managedHosts));
 
     config.systemd.slices = (nixpkgs.lib.attrsets.listToAttrs
-      (map (host: {
-        name = host.name;
+      (map (name: {
+        name = config.foxDen.hostInfo.${name}.slice;
         value = {
-          description = "Slice for ${host.name}";
+          description = "Slice for ${name}";
           sliceConfig = {
-            RestrictNetworkInterfaces = info.serviceInterface;
+            RestrictNetworkInterfaces = config.foxDen.hostInfo.${name}.serviceInterface;
             PrivateNetwork = true;
           };
         };
-      }) managedHostsList));
+      }) (nixpkgs.lib.attrsets.attrNames managedHosts)));
 
-    config.systemd.network.netdevs = hostDriver.netDevs managedHostsList;
-    config.systemd.network.networks = hostDriver.networks managedHostsList;
+    config.systemd.network.netdevs = hostDriver.netDevs managedHosts;
+    config.systemd.network.networks = hostDriver.networks managedHosts;
     config.networking.useNetworkd = true;
   });
 }

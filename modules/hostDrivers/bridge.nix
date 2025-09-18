@@ -13,11 +13,11 @@ in
 
   netDevs = (hosts:
     nixpkgs.lib.attrsets.listToAttrs
-      (map ((host: let
-        hostSuffix = mkHostSuffix host;
+      (map (({ name, value }: let
+        hostSuffix = mkHostSuffix value;
       in
       {
-        name = "60-host-${host.name}";
+        name = "60-host-${name}";
         value = {
           netdevConfig = {
               Name = "veth-${hostSuffix}";
@@ -27,28 +27,33 @@ in
               Name = "vpeer-${hostSuffix}";
           };
         };
-      })) hosts));
+      })) (nixpkgs.lib.attrsets.attrsToList hosts)));
 
   networks = (hosts:
     nixpkgs.lib.attrsets.listToAttrs
-      (map ((host: let
-        hostSuffix = mkHostSuffix host;
+      (map (({ name, value }: let
+        hostSuffix = mkHostSuffix value;
       in
       {
-        name = "60-veth-${host.name}";
+        name = "60-host-${name}";
         value = {
           name = "veth-${hostSuffix}";
           bridge = [driverOpts.bridge];
           bridgeVLANs = [{
-            PVID = host.vlan;
-            EgressUntagged = host.vlan;
-            VLAN = host.vlan;
+            PVID = value.vlan;
+            EgressUntagged = value.vlan;
+            VLAN = value.vlan;
           }];
         };
-      })) hosts));
+      })) (nixpkgs.lib.attrsets.attrsToList hosts)));
 
-  info = (host: {
-    hostInterface = "veth-${mkHostSuffix host}";
-    serviceInterface = "vpeer-${mkHostSuffix host}";
-  });
+  infos = (hosts:
+    nixpkgs.lib.attrsets.mapAttrs
+      (name: value: let
+        hostSuffix = mkHostSuffix value;
+      in
+      {
+        hostInterface = "veth-${hostSuffix}";
+        serviceInterface = "vpeer-${hostSuffix}";
+      }) hosts);
 }

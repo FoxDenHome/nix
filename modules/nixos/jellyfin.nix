@@ -1,12 +1,13 @@
 { nixpkgs, config, ... }:
 let
   services = import ../services.nix { inherit nixpkgs; };
-  svc = services.mkHostService {
+  svc = services.config {
     inherit config;
     name = "jellyfin";
     opts.description = "Jellyfin media server";
   };
 in
 {
-  config.systemd.slices.jellyfin = svc.slice;
+  config.services.jellyfin.enable = svc.enable;
+  config.systemd.services.jellyfin.unitConfig.slice = svc.info.slice;
 }
