@@ -16,11 +16,12 @@
                           (nixpkgs.lib.filesystem.listFilesRecursive dir));
 
     dns = import ./modules/dns.nix { inherit nixpkgs; };
+    hosts = import ./modules/hosts.nix { inherit nixpkgs; };
 
     inputNixosModules = [
       impermanence.nixosModules.impermanence
       lanzaboote.nixosModules.lanzaboote
-      dns.nixosModules.dns
+      hosts.nixosModules.hosts
     ];
 
     modules = mkModuleList ./modules/nixos;

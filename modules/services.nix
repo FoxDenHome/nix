@@ -1,12 +1,12 @@
 { nixpkgs, ... }:
 let
-  dns = import ./dns.nix { inherit nixpkgs; };
+  hosts = import ./hosts.nix { inherit nixpkgs; };
 in
 {
   mkHostService = (args@{ name, ... }:
     {
       module = ({ config, ... }: {
-        options.foxDen.${name}.host = (dns.mkHostOption (nixpkgs.lib.mergeAttrs {
+        options.foxDen.${name}.host = (hosts.mkOption (nixpkgs.lib.mergeAttrs {
           default = null;
         } args.opts or {}));
 

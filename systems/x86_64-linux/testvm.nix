@@ -1,4 +1,7 @@
-{  modulesPath, ... }:
+{  modulesPath, config, ... }:
+let
+  bridgeDev = config.foxDen.hostDriverOpts.bridge;
+in
 {
   system.stateVersion = "25.05";
 
@@ -30,11 +33,11 @@
 
   boot.lanzaboote.enable = true;
 
-  networking.bridges.br-default = {
+  networking.bridges.${bridgeDev} = {
     interfaces = [ "enp1s0" ];
   };
 
-  networking.interfaces.br-default.ipv4 = {
+  networking.interfaces.${bridgeDev}.ipv4 = {
     addresses = [{
       address = "192.168.122.200";
       prefixLength = 24;
