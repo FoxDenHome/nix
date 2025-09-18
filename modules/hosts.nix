@@ -141,7 +141,7 @@ in
 
     config.foxDen.hostInfo = (nixpkgs.lib.attrsets.mapAttrs
       (name: info: (nixpkgs.lib.mergeAttrs info {
-        namespace = "/run/netns/host-${name}";
+        namespace = /run/netns + "/host-${name}";
         requires = ["netns-host-${name}.service"];
       }))
       (hostDriver.infos managedHosts));
