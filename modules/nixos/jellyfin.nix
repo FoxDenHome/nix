@@ -1,12 +1,11 @@
 { nixpkgs, ... }:
 let
-  service = import ../service.nix { inherit nixpkgs; };
+  services = import ../services.nix { inherit nixpkgs; };
+  svc = services.mkHostService {
+    name = "jellyfin";
+    opts.description = "Jellyfin media server";
+  };
 in
 {
-  imports = [
-    (service.mkHostService {
-      name = "jellyfin";
-      opts.description = "Jellyfin media server";
-    })
-  ];
+  imports = [svc.module];
 }
