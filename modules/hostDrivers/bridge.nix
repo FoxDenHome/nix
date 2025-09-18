@@ -38,7 +38,7 @@ in
         [
           {
             name = "60-host-${name}";
-            value = nixpkgs.lib.mergeAttrs {
+            value = {
               name = "veth-${hostSuffix}";
               bridge = [driverOpts.bridge];
               bridgeVLANs = [{
@@ -46,13 +46,13 @@ in
                 EgressUntagged = value.vlan;
                 VLAN = value.vlan;
               }];
-            } (mkBaseNetwork name value);
+            };
           }
           {
             name = "60-peer-${name}";
-            value = {
+            value = nixpkgs.lib.mergeAttrs {
               name = "vpeer-${hostSuffix}";
-            };
+            } (mkBaseNetwork name value);
           }
         ])) (nixpkgs.lib.attrsets.attrsToList hosts))));
 
