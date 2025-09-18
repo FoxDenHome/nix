@@ -131,17 +131,6 @@ in
       }))
       (hostDriver.infos managedHosts));
 
-    config.systemd.slices = (nixpkgs.lib.attrsets.listToAttrs
-      (map (name: {
-        name = config.foxDen.hostInfo.${name}.slice;
-        value = {
-          description = "Slice for ${name}";
-          sliceConfig = {
-            RestrictNetworkInterfaces = config.foxDen.hostInfo.${name}.serviceInterface;
-          };
-        };
-      }) (nixpkgs.lib.attrsets.attrNames managedHosts)));
-
     config.systemd.network.netdevs = hostDriver.netDevs managedHosts;
     config.systemd.network.networks = hostDriver.networks managedHosts;
     config.networking.useNetworkd = true;

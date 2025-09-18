@@ -11,10 +11,11 @@
       enable = host != null;
 
       systemd.serviceConfig = {
-        Slice = "${info.slice}.slice";
+        RestrictNetworkInterfaces = info.serviceInterface;
         DevicePolicy = "closed";
         PrivateTmp = true;
         PrivateMounts = true;
+        PrivateNetwork = true;
         ProtectSystem = "strict";
         ProtectHome = "tmpfs";
         ReadOnlyPaths = ["/"];
