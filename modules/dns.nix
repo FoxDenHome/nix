@@ -56,6 +56,10 @@ let
           type = str;
           default = "foxden.network";
         };
+        vlan = nixpkgs.lib.mkOption {
+          type = int;
+          default = 2;
+        };
       }
       (nixpkgs.lib.attrsets.listToAttrs (map (horizon: {
         name = horizon;
@@ -107,6 +111,48 @@ let
       (map (root: {name = root; value = mkDnsRecordsOutputRoot root horizon hosts; })
         roots));
 
+  mkVlans = (hosts:
+    (nixpkgs.lib.lists.unique (map (host: host.vlan) hosts)));
+
+  mkBridges = (hosts:
+    nixpkgs.lib.attrsets.listToAttrs
+      (map (vlan: {
+        name = "bridge-vl${toString vlan}";
+        value = {
+          interfaces = [];
+        };
+      }) (mkVlans hosts)));
+
+  mkNetDevsBridge = (hosts:
+    map ((host: let
+      hostSuffix = builtins.substring (builtins.hashString "sha256" host.name) 0 8;
+    in
+    {
+      Link = {
+          Name = "vl${toString host.vlan}-a-${hostSuffix}";
+          Kind = "veth";
+      };
+      Peer = {
+          Name = "vl${toString host.vlan}-b-${hostSuffix}";
+      };
+    })) hosts);
+
+  mkNetworksBridge = (hosts:
+    nixpkgs.lib.attrsets.listToAttrs
+      (map (vlan: {
+        name = "vl${toString vlan}-match";
+        value = {
+          matchConfig = {
+            name = "vl${toString vlan}-*";
+          };
+          bridge = ["bridge-vl${toString vlan}"];
+          bridgeVLANs = [{
+            PVID = vlan;
+            EgressUntagged = vlan;
+            VLAN = vlan;
+          }];
+        };
+      }) (mkVlans hosts)));
 in
 {
   hostType = hostType;
@@ -126,10 +172,19 @@ in
       (map (horizon: {name = horizon; value = mkDnsRecordsOutputAddrType horizon allHosts roots; })
         allHorizons));
 
-  nixosModules.dns = ({ ... }: {
-    options.dns.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+  nixosModules.dns = ({ config, ... }: {
+    options.foxDen.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
       type = (listOf (nullOr hostType));
       default = [];
     };
+
+    options.foxDen.hostDriver = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+      type = enum [ "bridge" "sriov" ];
+      default = "bridge";
+    };
+
+    config.systemd.network.netdevs = mkNetDevsBridge config.foxDen.hosts;
+    config.systemd.network.networks = mkNetworksBridge config.foxDen.hosts;
+    config.networking.bridges = mkBridges config.foxDen.hosts;
   });
 }

@@ -16,7 +16,7 @@
     };
   };
 
-  dns.hosts = [
+  foxDen.hosts = [
     {
       name = "icefox";
       internal = {

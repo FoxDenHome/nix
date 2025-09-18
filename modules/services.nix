@@ -10,7 +10,7 @@ in
           default = null;
         } args.opts or {}));
 
-        config.dns.hosts = [ config.foxDen.${name}.host ];
+        config.foxDen.hosts = [ config.foxDen.${name}.host ];
       });
       enabled = ({ config, ... }: config.foxDen.${name}.host != null);
     });

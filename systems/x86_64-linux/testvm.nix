@@ -31,4 +31,11 @@
   networking.hostId = "74657374";
 
   boot.lanzaboote.enable = true;
+
+  foxDen.jellyfin.host = {
+    name = "jellyfin";
+    internal = {
+      ipv4 = "192.168.122.201";
+    };
+  };
 }
