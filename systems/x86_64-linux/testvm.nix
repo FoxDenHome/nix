@@ -47,7 +47,7 @@ in
     }];
   };
 
-  foxDen.jellyfin.host = {
+  foxDen.hosts.jellyfin = {
     name = "jellyfin";
     internal = {
       ipv4 = "192.168.122.201";

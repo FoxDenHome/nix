@@ -7,5 +7,5 @@ let
   };
 in
 {
-  imports = [svc.module];
+  # TODO
 }

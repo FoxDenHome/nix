@@ -13,11 +13,11 @@ in
 
   netDevs = (opts: (hosts:
     nixpkgs.lib.attrsets.listToAttrs
-      (map ((host: let
-        hostSuffix = mkHostSuffix host;
+      (map ((val: let
+        hostSuffix = mkHostSuffix val.name;
       in
       {
-        name = "60-veth-${hostSuffix}";
+        name = "60-host-${val.name}";
         value = {
           netdevConfig = {
               Name = "veth-${hostSuffix}";
@@ -31,11 +31,12 @@ in
 
   networks = (opts: (hosts:
     nixpkgs.lib.attrsets.listToAttrs
-      (map ((host: let
-        hostSuffix = mkHostSuffix host;
+      (map ((val: let
+        hostSuffix = mkHostSuffix val.name;
+        host = val.value;
       in
       {
-        name = "60-veth-${hostSuffix}";
+        name = "60-veth-${val.name}";
         value = {
           name = "veth-${hostSuffix}";
           bridge = [opts.bridge];

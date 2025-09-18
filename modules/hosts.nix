@@ -56,6 +56,10 @@ let
           type = int;
           default = 2;
         };
+        manageNetwork = nixpkgs.lib.mkOption {
+          type = bool;
+          default = true;
+        };
       }
       (nixpkgs.lib.attrsets.listToAttrs (map (horizon: {
         name = horizon;
@@ -72,17 +76,24 @@ in
   hostHorizonConfigType = hostHorizonConfigType;
   hostDnsRecordType = hostDnsRecordType;
 
+  # CFG.${name}.${host} = X -> [{${host} =  X, ...}, ...] -> [[X, ...], ...] -> [X, ...]
+  allHosts = (nixpkgs.lib.flatten
+              (map (nixpkgs.lib.attrsets.attrValues)
+                (nixpkgs.lib.attrsets.attrValues
+                  (globalConfig.get ["foxDen" "hosts"]))));
+
   mkOption = with nixpkgs.lib.types; (opts : nixpkgs.lib.mkOption (nixpkgs.lib.mergeAttrs {
     type = if opts.default == null then (nullOr hostType) else hostType;
   } opts));
 
-  allHosts = (globalConfig.getList ["foxDen" "hosts"]);
-
-  nixosModules.hosts = ({ config, ... }: let
+  nixosModules.hosts = ({ config, ... }:
+  let
     hostDriver = import (./hostDrivers + "/${config.foxDen.hostDriver}.nix") { inherit nixpkgs; };
-  in{
+    managedHostsList = nixpkgs.lib.lists.filter (host: host.manageNetwork) (nixpkgs.lib.attrsets.attrValues config.foxDen.hosts);
+  in
+  {
     options.foxDen.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-      type = (listOf (nullOr hostType));
+      type = (attrsOf (nullOr hostType));
       default = [];
     };
 
@@ -95,8 +106,8 @@ in
       default = {};
     };
 
-    config.systemd.network.netdevs = hostDriver.netDevs config.foxDen.hostDriverOpts config.foxDen.hosts;
-    config.systemd.network.networks = hostDriver.networks config.foxDen.hostDriverOpts config.foxDen.hosts;
+    config.systemd.network.netdevs = hostDriver.netDevs config.foxDen.hostDriverOpts managedHostsList;
+    config.systemd.network.networks = hostDriver.networks config.foxDen.hostDriverOpts managedHostsList;
     config.networking.useNetworkd = true;
   });
 }
