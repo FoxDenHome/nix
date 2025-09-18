@@ -6,6 +6,16 @@
 
   # TODO: Most of this file
 
+  foxDen.jellyfin.host = {
+    name = "jellyfin";
+    internal = {
+      ipv4 = "192.168.1.11";
+    };
+    external = {
+      ipv4 = "dyn";
+    };
+  };
+
   dns.hosts = [
     {
       name = "icefox";

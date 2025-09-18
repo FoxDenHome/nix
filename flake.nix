@@ -15,7 +15,7 @@
     mkModuleList = dir: (nixpkgs.lib.filter isNixFile
                           (nixpkgs.lib.filesystem.listFilesRecursive dir));
 
-    dns = import ./modules/dns.nix { inherit nixpkgs; inherit nixosConfigurations; };
+    dns = import ./modules/dns.nix { inherit nixpkgs; };
 
     inputNixosModules = [
       impermanence.nixosModules.impermanence
@@ -39,20 +39,20 @@
       name = hostname;
       value = nixpkgs.lib.nixosSystem {
         system = systemArch;
+        specialArgs = { inherit nixpkgs; };
         modules = [
           ({ ... }: {
             config.networking.hostName = hostname;
             config.nixpkgs.hostPlatform = nixpkgs.lib.mkDefault systemArch;
           })
-        ]
-          ++ inputNixosModules
-          ++ modules ++ [ system ];
+          system
+        ] ++ inputNixosModules ++ modules;
       };
     };
     nixosConfigurations = (nixpkgs.lib.attrsets.listToAttrs (map mkSystemConfig systems));
   in
   {
     nixosConfigurations = nixosConfigurations;
-    dns = dns;
+    dnsRecords = (dns.mkRecords nixosConfigurations);
   };
 }
