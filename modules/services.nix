@@ -14,7 +14,10 @@
         Slice = "${info.slice}.slice";
         DevicePolicy = "closed";
         PrivateTmp = true;
-        PrivateMount = true;
+        PrivateMounts = true;
+        PrivateNetwork = true;
+        ProtectSystem = "struct";
+        ProtectHome = "tmpfs";
       };
     });
 }

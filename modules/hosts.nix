@@ -139,9 +139,6 @@ in
           sliceConfig = {
             RestrictNetworkInterfaces = config.foxDen.hostInfo.${name}.serviceInterface;
           };
-          unitConfig = {
-            PrivateNetwork = true;
-          };
         };
       }) (nixpkgs.lib.attrsets.attrNames managedHosts)));
 
