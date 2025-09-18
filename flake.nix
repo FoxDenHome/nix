@@ -45,18 +45,18 @@
       value = nixpkgs.lib.nixosSystem {
         system = system;
         modules = [
-          ({ options, config, ... }: {
+          ({ ... }: {
             config.networking.hostName = hostname;
             config.nixpkgs.hostPlatform = nixpkgs.lib.mkDefault system;
 
             options.foxDen.dnsRecords = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-              type = (attrsOf (submodule {
+              type = (listOf (submodule {
                 options = {
                   name = nixpkgs.lib.mkOption {
                     type = str;
                     default = "";
                   };
-                  recordType = nixpkgs.lib.mkOption {
+                  type = nixpkgs.lib.mkOption {
                     type = enum [ "A" "AAAA" "CNAME" "TXT" "MX" "SRV" "PTR" ];
                   };
                   value = nixpkgs.lib.mkOption {
@@ -65,7 +65,7 @@
                   };
                 };
               }));
-              default = {};
+              default = [];
             };
           })
         ]
@@ -76,11 +76,13 @@
 
     nixosConfigurations = (nixpkgs.lib.attrsets.listToAttrs (map mkSystemConfig systemClasses));
     foxDen = nixpkgs.lib.filterAttrs (name: val: val != null)
-              (nixpkgs.lib.attrsets.mapAttrs (name: val: val.options.foxDen or null) nixosConfigurations);
+              (nixpkgs.lib.attrsets.mapAttrs (name: val: val.config.foxDen or null) nixosConfigurations);
   in
   {
     nixosConfigurations = nixosConfigurations;
     foxDen = foxDen;
-    #dnsRecords = nixpkgs.lib.lists.flatten (map (val: val.dnsRecords or []) foxDen);
+    dnsRecords = nixpkgs.lib.lists.flatten
+                  (map (val: val.dnsRecords or [])
+                    (nixpkgs.lib.attrsets.attrValues foxDen));
   };
 }

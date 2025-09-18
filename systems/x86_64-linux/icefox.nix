@@ -7,12 +7,12 @@
 
     # TODO: Most of this file
 
-    foxDen.dnsRecords = 
+    foxDen.dnsRecords = [
       {
         name = "icefox";
-        recordType = "A";
+        type = "A";
         value = "192.168.1.100";
       }
-    ;
+    ];
   };
 }
