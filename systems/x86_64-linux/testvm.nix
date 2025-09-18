@@ -1,4 +1,4 @@
-{ lib, modulesPath, ... }:
+{  modulesPath, ... }:
 {
   system.stateVersion = "25.05";
 
@@ -30,7 +30,11 @@
 
   boot.lanzaboote.enable = true;
 
-  networking.interfaces.bridge-vl2.ipv4 = {
+  networking.bridges.br-default = {
+    interfaces = [ "enp1s0" ];
+  };
+
+  networking.interfaces.br-default.ipv4 = {
     addresses = [{
       address = "192.168.122.200";
       prefixLength = 24;
