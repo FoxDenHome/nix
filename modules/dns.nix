@@ -124,7 +124,7 @@ let
               Kind = "veth";
           };
           peerConfig = {
-              Name = "vethp-${hostSuffix}";
+              Name = "vpeer-${hostSuffix}";
           };
         };
       })) hosts));
@@ -137,6 +137,7 @@ let
       {
         name = "60-veth-${hostSuffix}";
         value = {
+          name = "veth-${hostSuffix}";
           bridge = [bridge];
           bridgeVLANs = [{
             PVID = host.vlan;
