@@ -9,5 +9,5 @@ let
 in
 {
   config.services.jellyfin.enable = svc.enable;
-  config.systemd.services.jellyfin.unitConfig.Slice = svc.slice;
+  config.systemd.services.jellyfin.serviceConfig.Slice = svc.slice;
 }
