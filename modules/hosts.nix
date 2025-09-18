@@ -138,8 +138,9 @@ in
           description = "Slice for ${name}";
           sliceConfig = {
             RestrictNetworkInterfaces = config.foxDen.hostInfo.${name}.serviceInterface;
+            PrivateNetwork = true;
           };
-          unitConfig = {
+          serviceConfig = {
             PrivateNetwork = true;
           };
         };
