@@ -6,10 +6,11 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     impermanence.url = "github:nix-community/impermanence";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
-    ragenix.url = "github:yaxitech/ragenix";
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { nixpkgs, ragenix, impermanence, lanzaboote, ... }:
+  outputs = { nixpkgs, sops-nix, impermanence, lanzaboote, ... }:
   let
     isNixFile = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
 
@@ -23,7 +24,7 @@
     inputNixosModules = [
       impermanence.nixosModules.impermanence
       lanzaboote.nixosModules.lanzaboote
-      ragenix.nixosModules.default
+      sops-nix.nixosModules.sops
       hosts.nixosModules.hosts
     ];
 
@@ -49,9 +50,6 @@
             networking.hostName = hostname;
             nixpkgs.hostPlatform = systemArch;
             networking.hostId = util.mkHash8 hostname;
-            environment.systemPackages = [
-              ragenix.packages.${systemArch}.default
-            ];
           })
           system
         ] ++ inputNixosModules ++ modules;
