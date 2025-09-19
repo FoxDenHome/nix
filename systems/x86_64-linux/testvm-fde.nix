@@ -1,6 +1,17 @@
 {  modulesPath, config, ... }:
 let
   bridgeDev = config.foxDen.hosts.driverOpts.bridge;
+
+  ipv4 = {
+    host = "192.168.122.200";
+    gateway = "192.168.122.1";
+    prefixLength = 24;
+  };
+  ipv6 = {
+    host = "fd00:dead:beef:122::200";
+    gateway = "fd00:dead:beef:122::1";
+    prefixLength = 64;
+  };
 in
 {
   system.stateVersion = "25.05";
@@ -39,27 +50,34 @@ in
 
   networking.interfaces.${bridgeDev}.ipv4 = {
     addresses = [{
-      address = config.foxDen.hosts.system.internal.ipv4;
-      prefixLength = 24;
+      address = ipv4.host;
+      prefixLength = ipv4.prefixLength;
     }];
     routes = [{
       address = "0.0.0.0";
       prefixLength = 0;
-      via = "192.168.122.1";
+      via = ipv4.gateway;
     }];
   };
 
   foxDen.hosts.routes = [
     {
-      gateway = "192.168.122.1";
+      gateway = ipv4.gateway;
     }
   ];
+
+  foxDen.hosts.driver = "bridge";
+
+  foxDen.hosts.subnet = {
+    ipv4 = ipv4.prefixLength;
+    ipv6 = ipv6.prefixLength;
+  };
 
   foxDen.hosts.hosts.system = {
     name = config.networking.hostName;
     root = "local.foxden.network";
     internal = {
-      ipv4 = "192.168.122.200";
+      ipv4 = ipv4.host;
     };
   };
 
