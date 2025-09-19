@@ -5,6 +5,13 @@ let
     inherit config;
     name = "jellyfin";
   };
+
+  mkJellyfinDir = (dir: {
+    directory = "${dir}";
+    user = config.services.jellyfin.user;
+    group = config.services.jellyfin.group;
+    mode = "u=rwx,g=,o=";
+  });
 in
 {
   config.services.jellyfin.enable = svc.enable;
@@ -22,9 +29,9 @@ in
   config.systemd.services.jellyfin.unitConfig = svc.systemd.unitConfig;
 
   config.environment.persistence."/nix/persist/jellyfin".directories = [
-    { directory = config.services.jellyfin.cacheDir; user = "jellyfin"; group = "jellyfin"; mode = "u=rwx,g=,o="; }
-    { directory = config.services.jellyfin.configDir; user = "jellyfin"; group = "jellyfin"; mode = "u=rwx,g=,o="; }
-    { directory = config.services.jellyfin.dataDir; user = "jellyfin"; group = "jellyfin"; mode = "u=rwx,g=,o="; }
-    { directory = config.services.jellyfin.logDir; user = "jellyfin"; group = "jellyfin"; mode = "u=rwx,g=,o="; }
+    mkJellyfinDir config.services.jellyfin.cacheDir
+    mkJellyfinDir config.services.jellyfin.configDir
+    mkJellyfinDir config.services.jellyfin.dataDir
+    mkJellyfinDir config.services.jellyfin.logDir
   ];
 }
