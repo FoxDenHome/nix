@@ -5,7 +5,7 @@
       #!/usr/bin/env sh
       set -x
       nix flake update --flake 'github:FoxDenHome/nix'
-      nixos-rebuild switch --flake 'github:FoxDenHome/nix#testvm-fde'
+      nixos-rebuild switch --flake "github:FoxDenHome/nix#$(hostname)"
     '';
     mode = "u=rwx,g=rx,o=rx";
   };
