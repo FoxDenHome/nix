@@ -41,8 +41,6 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  boot.lanzaboote.enable = true;
-
   networking.bridges.${bridgeDev} = {
     interfaces = [ "enp1s0" ];
   };

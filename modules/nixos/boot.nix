@@ -1,24 +1,31 @@
 { lib, pkgs, config, ... }:
 {
-  security.audit.enable = false;
-  security.apparmor.enable = true;
+  options.foxDen.boot.secureboot = lib.mkEnableOption "Enable secure boot";
 
-  boot = {
-    initrd.systemd.enable = true;
+  config = {
+    security.audit.enable = false;
+    security.apparmor.enable = true;
 
-    kernelPackages = pkgs.linuxPackages_latest;
-    kernelParams = ["module.sig_enforce=1" "lockdown=integrity"];
-    # "audit=1" "audit_backlog_limit=256"
+    boot = {
+      initrd.systemd.enable = true;
 
-    loader.systemd-boot.enable = lib.mkForce (! config.boot.lanzaboote.enable);
-    lanzaboote.pkiBundle = "/etc/secureboot";
+      kernelPackages = pkgs.linuxPackages_latest;
+      kernelParams = ["module.sig_enforce=1" "lockdown=integrity"];
+      # "audit=1" "audit_backlog_limit=256"
+
+      loader.systemd-boot.enable = lib.mkIf config.foxDen.boot.secureboot (lib.mkForce false);
+      lanzaboote = lib.mkIf config.foxDen.boot.secureboot {
+        enable = true;
+        pkiBundle = "/etc/secureboot";
+      };
+    };
+
+    environment.systemPackages = with pkgs; [
+      sbctl
+    ];
+
+    environment.persistence."/nix/persist/system".directories = [
+      { directory = "/etc/secureboot"; mode = "u=rwx,g=rx,o="; }
+    ];
   };
-
-  environment.systemPackages = with pkgs; [
-    sbctl
-  ];
-
-  environment.persistence."/nix/persist/system".directories = [
-    { directory = "/etc/secureboot"; mode = "u=rwx,g=rx,o="; }
-  ];
 }
