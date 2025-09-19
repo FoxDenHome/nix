@@ -12,6 +12,7 @@
   environment.systemPackages = with pkgs; [
     curl
     e2fsprogs
+    gptfdisk
     openssl
     wget
     xfsprogs
