@@ -5,7 +5,7 @@
       #!/usr/bin/env sh
       set -x
       nix flake update --flake 'github:FoxDenHome/nix'
-      nixos-rebuild switch --flake "github:FoxDenHome/nix#$(hostname)"
+      exec nixos-rebuild switch --flake "github:FoxDenHome/nix#$(hostname)"
     '';
     mode = "0755";
   };
