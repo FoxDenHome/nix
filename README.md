@@ -20,6 +20,8 @@
 
 ## Notes
 
+zfs must be mountpoint=legacy
+
 ```sh
 # Cleanup
 nix-collect-garbage --delete-old
