@@ -4,7 +4,6 @@ let
   svc = services.make {
     inherit config;
     name = "jellyfin";
-    opts.description = "Jellyfin media server";
   };
 in
 {
