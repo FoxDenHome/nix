@@ -44,7 +44,7 @@ let
   hostInfoType = with nixpkgs.lib.types; submodule {
     options = {
       hostInterface = nixpkgs.lib.mkOption {
-        type = (oneOf str);
+        type = (nullOr str);
       };
       serviceInterface = nixpkgs.lib.mkOption {
         type = str;
@@ -164,16 +164,16 @@ in
          info = config.foxDen.hostInfo.${name};
          depends = [
           "systemd-networkd-wait-online@${info.serviceInterface}.service"
-         ] ++ (if info.hostInterface != null then [ "systemd-networkd-wait-online@${info.hostInterface}.service" ] else []);
+         ] ++ (if (info.hostInterface != null) then [ "systemd-networkd-wait-online@${info.hostInterface}.service" ] else []);
        in
        {
         name = "netns-host-${name}";
         value = {
           description = "NetNS host service for ${name}";
+          after = depends;
+          requires = depends;
           unitConfig = {
             StopWhenUnneeded = true;
-            After = depends;
-            Requires = depends;
           };
           serviceConfig = {
             Type = "oneshot";
