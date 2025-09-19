@@ -205,10 +205,10 @@ in
             ++ (map (addr:
                   "${ip} netns exec '${namespace}' ${ip} addr add '${addr}' dev '${info.serviceInterface}'")
                   (getAddresses config host))
+            ++ [ "${ip} netns exec '${namespace}' ${ip} link set '${info.serviceInterface}' up" ]
             ++ (map (route:
-                  "${ip} netns exec '${namespace}' ${ip} route add '${route.target}'" + (if route.gateway != "" then " via '${route.gateway}'" else "dev '${info.serviceInterface}'"))
-                  config.foxDen.routes)
-            ++ [ "${ip} netns exec '${namespace}' ${ip} link set '${info.serviceInterface}' up" ];
+                "${ip} netns exec '${namespace}' ${ip} route add '${route.target}'" + (if route.gateway != "" then " via '${route.gateway}'" else "dev '${info.serviceInterface}'"))
+                  config.foxDen.routes);
             ExecStop = [
               "${ip} netns del '${namespace}'"
             ] ++ (hostDriver.execStop info);
