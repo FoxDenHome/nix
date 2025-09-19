@@ -27,6 +27,8 @@
   programs.htop.enable = true;
   programs.tcpdump.enable = true;
 
+  nix.settings.allowed-users = [ "root" "@wheel" ];
+
   users.users.root.shell = "${pkgs.fish}/bin/fish";
 
   users.groups.share.gid = 1001;

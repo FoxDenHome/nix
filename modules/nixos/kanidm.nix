@@ -18,6 +18,8 @@
     adminIdentities = [ "unix-group:superadmins" "unix-group:wheel" ];
   };
 
+  nix.settings.allowed-users = [ "@superadmins" ];
+
   services.kanidm = {
     enableClient = true;
     enablePam = true;
