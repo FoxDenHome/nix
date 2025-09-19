@@ -36,7 +36,7 @@ in
     "${ipInNsCmd} route add 169.254.13.37 dev ${eSA info.serviceInterface}"
     "${ipInNsCmd} route add fe80::e621 dev ${eSA info.serviceInterface}"
     "${ipInNsCmd} route add default via 169.254.13.37"
-    "${ipInNsCmd} -6 route add default via fe80::e621"
+    #"${ipInNsCmd} route add default via fe80::e621"
   ]);
 
   execStop = ({ ipCmd, host, info, ... }: [
