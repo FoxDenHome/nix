@@ -13,7 +13,7 @@
       systemd.unitConfig = {
         Requires = info.requires;
         BindsTo = info.requires;
-        After = info.after;
+        After = info.requires;
       };
 
       systemd.serviceConfig = {
