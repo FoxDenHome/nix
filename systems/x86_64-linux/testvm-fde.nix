@@ -61,8 +61,8 @@ in
       name = ifcfg.bridgeRoot;
       bridge = [bridgeDev];
       bridgeVLANs = [{
-        PVID = "2";
-        EgressUntagged = "2";
+        PVID = 2;
+        EgressUntagged = 2;
         VLAN = "1-10";
       }];
   };
