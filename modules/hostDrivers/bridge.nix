@@ -11,23 +11,7 @@ in
     };
   };
 
-  netDevs = (hosts:
-    nixpkgs.lib.attrsets.listToAttrs
-      (map (({ name, value }: let
-        hostSuffix = mkHostSuffix value;
-      in
-      {
-        name = "60-host-${name}";
-        value = {
-          netdevConfig = {
-              Name = "veth-${hostSuffix}";
-              Kind = "veth";
-          };
-          peerConfig = {
-              Name = "vpeer-${hostSuffix}";
-          };
-        };
-      })) (nixpkgs.lib.attrsets.attrsToList hosts)));
+  netDevs = (hosts: {});
 
   networks = (hosts:
     nixpkgs.lib.attrsets.listToAttrs (
@@ -51,6 +35,7 @@ in
         ])) (nixpkgs.lib.attrsets.attrsToList hosts))));
 
   execStart = (info: addrs: (map (addr:
+      "${pkgs.iproute2}/bin/ip link add '${info.hostInterface}' type veth peer name '${info.serviceInterface}'"
       "${pkgs.iproute2}/bin/ip addr add '${addr}' '${info.serviceInterface}'"
     ) addrs) ++ [
       "${pkgs.iproute2}/bin/ip link set '${info.serviceInterface}' up"
