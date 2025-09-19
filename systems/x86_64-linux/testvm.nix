@@ -52,6 +52,7 @@ in
   foxDen.hosts.hosts.system = {
     name = config.networking.hostName;
     root = "local.foxden.network";
+    manageNetwork = false;
     internal = {
       ipv4 = ifcfg.ipv4.address;
       ipv6 = ifcfg.ipv6.address;
