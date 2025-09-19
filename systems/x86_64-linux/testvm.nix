@@ -12,7 +12,7 @@ in
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  initrd.luks.devices.nixroot.device = "/dev/vdb2";
+  boot.initrd.luks.devices.nixroot.device = "/dev/vdb2";
 
   fileSystems."/" =
     { device = "none";
