@@ -199,6 +199,9 @@ in
             ExecStart = [
               "-${ip} netns del '${namespace}'"
               "${ip} netns add '${namespace}'"
+              "${ip} netns exec '${namespace}' ${ip} addr add 127.0.0.1/8 dev lo"
+              "${ip} netns exec '${namespace}' ${ip} addr add ::1/128 dev lo"
+              "${ip} netns exec '${namespace}' ${ip} link set lo up"
             ]
             ++ (hostDriver.execStart info)
             ++ [ "${ip} link set '${info.serviceInterface}' netns '${namespace}'" ]
