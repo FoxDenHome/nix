@@ -26,8 +26,6 @@ in
 
   boot.initrd.luks.devices.nixroot.device = "/dev/vda2";
 
-  foxDen.sops.available = true;
-
   # boot.swraid = {
   #   enable = true;
   #   mdadmConf = "ARRAY /dev/md0 metadata=1.2 UUID=da97b4e7:f1803d7d:f9de9388:32aa60ad";
@@ -55,13 +53,15 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  foxDen.boot.secure = true;
-
   networking.bridges.${bridgeDev} = {
     interfaces = [ "enp1s0" ];
   };
 
   networking.interfaces.${bridgeDev} = util.mkNwInterfaceConfig ifcfg;
+
+  foxDen.sops.available = true;
+  foxDen.boot.secure = true;
+
   foxDen.hosts.routes = util.mkRoutes ifcfg;
   foxDen.hosts.subnet = util.mkSubnet ifcfg;
 
