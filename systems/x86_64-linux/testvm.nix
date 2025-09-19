@@ -49,23 +49,23 @@ in
   foxDen.hosts.routes = util.mkRoutes ifcfg;
   foxDen.hosts.subnet = util.mkSubnet ifcfg;
 
-  foxDen.hosts.hosts.system = {
-    name = config.networking.hostName;
-    root = "local.foxden.network";
-    manageNetwork = false;
-    internal = {
-      ipv4 = ifcfg.ipv4.address;
-      ipv6 = ifcfg.ipv6.address;
+  foxDen.hosts.hosts = {
+    system = {
+      name = config.networking.hostName;
+      root = "local.foxden.network";
+      manageNetwork = false;
+      internal = {
+        ipv4 = ifcfg.ipv4.address;
+        ipv6 = ifcfg.ipv6.address;
+      };
     };
-  };
 
-  foxDen.hosts.driver = "bridge";
-
-  foxDen.hosts.hosts.jellyfin = {
-    name = "jellyfin";
-    root = "local.foxden.network";
-    internal = {
-      ipv4 = "192.168.122.201";
+    jellyfin = {
+      name = "jellyfin";
+      root = "local.foxden.network";
+      internal = {
+        ipv4 = "192.168.122.201";
+      };
     };
   };
 }
