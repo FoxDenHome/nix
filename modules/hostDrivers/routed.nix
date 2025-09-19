@@ -37,7 +37,12 @@ in
     #"${ipInNsCmd} route add fe80::e621 dev ${eSA info.serviceInterface}"
     "${ipInNsCmd} route add default via 169.254.13.37 dev ${eSA info.serviceInterface}"
     "${ipInNsCmd} route add default via fe80::e621 dev ${eSA info.serviceInterface}"
-  ] ++ (map (addr: "${ipCmd} route add ${eSA addr} dev ${eSA hostIface}") addresses));
+  ] ++ (map (addr: "${ipCmd} route add ${eSA addr} dev ${eSA hostIface}") (nixpkgs.lib.lists.filter (val: val != "") [
+    host.internal.ipv4
+    host.internal.ipv6
+    host.external.ipv4
+    host.external.ipv6
+  ])));
 
   execStop = ({ ipCmd, host, info, ... }: [
     "${ipCmd} link del ${eSA (mkIfaceName host)}"
