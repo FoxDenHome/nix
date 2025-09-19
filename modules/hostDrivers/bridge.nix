@@ -38,7 +38,7 @@ in
       "-${pkgs.iproute2}/bin/ip link del '${info.hostInterface}'"
       "${pkgs.iproute2}/bin/ip link add '${info.hostInterface}' type veth peer name '${info.serviceInterface}'"
     ] ++ (map (addr:
-      "${pkgs.iproute2}/bin/ip addr add '${addr}' '${info.serviceInterface}'"
+      "${pkgs.iproute2}/bin/ip addr add '${addr}' dev '${info.serviceInterface}'"
     ) addrs) ++ [
       "${pkgs.iproute2}/bin/ip link set '${info.serviceInterface}' up"
     ]);
