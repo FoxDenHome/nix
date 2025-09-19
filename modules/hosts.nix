@@ -87,7 +87,7 @@ let
     }) dns.allHorizons)));
   };
 
-  mkBaseNetwork = (name: host: {
+  mkBaseNetwork = (config: (name: host: {
     addresses = (map (addr: {
       Address = addr;
     }) [
@@ -96,7 +96,7 @@ let
       host.external.ipv4
       host.external.ipv6
     ]);
-  });
+  }));
 in
 {
   hostType = hostType;
@@ -122,6 +122,16 @@ in
     options.foxDen.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
       type = (attrsOf hostType);
       default = {};
+    };
+
+    options.foxDen.subnet.ipv4 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+      type = str;
+      default = "/24";
+    };
+
+    options.foxDen.subnet.ipv6 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+      type = str;
+      default = "/64";
     };
 
     options.foxDen.hostDriver = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
@@ -172,7 +182,7 @@ in
       }) (nixpkgs.lib.attrsets.attrNames managedHosts)));
 
     config.systemd.network.netdevs = hostDriver.netDevs managedHosts;
-    config.systemd.network.networks = hostDriver.networks mkBaseNetwork managedHosts;
+    config.systemd.network.networks = hostDriver.networks (mkBaseNetwork config) managedHosts;
     config.networking.useNetworkd = true;
   });
 }
