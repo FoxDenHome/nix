@@ -11,8 +11,6 @@ in
     };
   };
 
-  netDevs = (hosts: {});
-
   networks = (hosts:
     nixpkgs.lib.attrsets.listToAttrs (
       nixpkgs.lib.lists.flatten

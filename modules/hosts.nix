@@ -219,7 +219,6 @@ in
         };
       }) (nixpkgs.lib.attrsets.attrNames managedHosts)));
 
-    config.systemd.network.netdevs = hostDriver.netDevs managedHosts;
     config.systemd.network.networks = hostDriver.networks managedHosts;
     config.networking.useNetworkd = true;
   });
