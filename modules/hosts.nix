@@ -185,6 +185,7 @@ in
          info = config.foxDen.hostInfo.${name};
          host = config.foxDen.hosts.${name};
          ipCmd = eSA "${pkgs.iproute2}/bin/ip";
+         ipInNsCmd = "${ipCmd} netns exec ${eSA namespace} ${ipCmd}";
          namespace = "host-${name}";
        in
        {
@@ -200,18 +201,18 @@ in
             ExecStart = [
               "-${ipCmd} netns del ${eSA namespace}"
               "${ipCmd} netns add ${eSA namespace}"
-              "${ipCmd} netns exec ${eSA namespace} ${ipCmd} addr add 127.0.0.1/8 dev lo"
-              "${ipCmd} netns exec ${eSA namespace} ${ipCmd} addr add ::1/128 dev lo"
-              "${ipCmd} netns exec ${eSA namespace} ${ipCmd} link set lo up"
+              "${ipInNsCmd} addr add 127.0.0.1/8 dev lo"
+              "${ipInNsCmd} addr add ::1/128 dev lo"
+              "${ipInNsCmd} link set lo up"
             ]
             ++ (hostDriver.execStart info)
             ++ [ "${ipCmd} link set ${eSA info.serviceInterface} netns ${eSA namespace}" ]
             ++ (map (addr:
-                  "${ipCmd} netns exec ${eSA namespace} ${ipCmd} addr add ${eSA addr} dev ${eSA info.serviceInterface}")
+                  "${ipInNsCmd} addr add ${eSA addr} dev ${eSA info.serviceInterface}")
                   (getAddresses config host))
-            ++ [ "${ipCmd} netns exec ${eSA namespace} ${ipCmd} link set ${eSA info.serviceInterface} up" ]
+            ++ [ "${ipInNsCmd} link set ${eSA info.serviceInterface} up" ]
             ++ (map (route:
-                "${ipCmd} netns exec ${eSA namespace} ${ipCmd} route add ${eSA route.target}" + (if route.gateway != "" then " via ${eSA route.gateway}" else "dev ${eSA info.serviceInterface}"))
+                "${ipInNsCmd} route add ${eSA route.target}" + (if route.gateway != "" then " via ${eSA route.gateway}" else "dev ${eSA info.serviceInterface}"))
                   config.foxDen.routes);
             ExecStop = [
               "${ipCmd} netns del ${eSA namespace}"
