@@ -27,13 +27,9 @@
   programs.htop.enable = true;
   programs.tcpdump.enable = true;
 
-  users.users.root = {
-    shell = "${pkgs.fish}/bin/fish";
-  };
+  users.users.root.shell = "${pkgs.fish}/bin/fish";
 
-  users.groups.share = {
-    gid = 1001;
-  };
+  users.groups.share.gid = 1001;
 
   environment.persistence."/nix/persist/system" = {
     hideMounts = true;
