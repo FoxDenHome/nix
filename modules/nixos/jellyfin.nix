@@ -8,6 +8,7 @@ let
 in
 {
   config.services.jellyfin.enable = svc.enable;
+  config.services.jellyfin.group = "share";
   config.systemd.services.jellyfin.serviceConfig = nixpkgs.lib.mergeAttrs
                                                       {
                                                           ReadWritePaths = [
