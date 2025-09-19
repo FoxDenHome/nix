@@ -54,10 +54,17 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  networking.bridges.${bridgeDev} = {
-    interfaces = [];
+  systemd.network.netdevs."40-${bridgeDev}" = {
+    netdevConfig = {
+      Name = bridgeDev;
+      Kind = "bridge";
+    };
+
+    bridgeConfig = {
+      VLANFiltering = true;
+    };
   };
-  systemd.network.networks."40-${bridgeDev}-${ifcfg.bridgeRoot}" = {
+  systemd.network.networks."50-${bridgeDev}-${ifcfg.bridgeRoot}" = {
       name = ifcfg.bridgeRoot;
       bridge = [bridgeDev];
       bridgeVLANs = [{
@@ -65,9 +72,6 @@ in
         EgressUntagged = 2;
         VLAN = "1-10";
       }];
-      bridgeConfig = {
-        VLANFiltering = true;
-      };
   };
 
   networking.interfaces.${bridgeDev} = util.mkNwInterfaceConfig ifcfg;
