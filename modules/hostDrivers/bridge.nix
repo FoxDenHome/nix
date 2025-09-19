@@ -40,7 +40,7 @@ in
     ] ++ (map (addr:
       "${pkgs.iproute2}/bin/ip addr add '${addr}' dev '${info.serviceInterface}'"
     ) addrs) ++ [
-      "${pkgs.iproute2}/bin/ip link set '${info.serviceInterface}' up"
+      "${pkgs.iproute2}/bin/ip link set '${info.hostInterface}' up"
     ]);
 
   execStop = (info: [
