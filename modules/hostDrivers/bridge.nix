@@ -2,6 +2,7 @@
 let
   util = import ../util.nix { };
   mkHostSuffix = host: util.mkHash8 host.name;
+  eSA = nixpkgs.lib.strings.escapeShellArg;
 in
 {
   configType = with nixpkgs.lib.types; submodule {
@@ -10,8 +11,6 @@ in
       default = "br-default";
     };
   };
-
-  # TODO: escapeShellArg
 
   networks = (hosts:
     nixpkgs.lib.attrsets.listToAttrs (
@@ -35,12 +34,12 @@ in
         ])) (nixpkgs.lib.attrsets.attrsToList hosts))));
 
   execStart = (info: [
-    "-${pkgs.iproute2}/bin/ip link del '${info.hostInterface}'"
-    "${pkgs.iproute2}/bin/ip link add '${info.hostInterface}' type veth peer name '${info.serviceInterface}'"
+    "-${pkgs.iproute2}/bin/ip link del ${eSA info.hostInterface}"
+    "${pkgs.iproute2}/bin/ip link add ${eSA info.hostInterface} type veth peer name ${eSA info.serviceInterface}"
   ]);
 
   execStop = (info: [
-    "${pkgs.iproute2}/bin/ip link del '${info.hostInterface}'"
+    "${pkgs.iproute2}/bin/ip link del ${eSA info.hostInterface}"
   ]);
 
   infos = (hosts:

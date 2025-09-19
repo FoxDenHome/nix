@@ -2,6 +2,7 @@
 let
   dns = import ./dns.nix { inherit nixpkgs; };
   globalConfig = import ./globalConfig.nix { inherit nixpkgs; };
+  eSA = nixpkgs.lib.strings.escapeShellArg;
 
   hostDnsRecordType = with nixpkgs.lib.types; submodule {
     options = {
@@ -183,7 +184,7 @@ in
       (map (name: let
          info = config.foxDen.hostInfo.${name};
          host = config.foxDen.hosts.${name};
-         ip = "${pkgs.iproute2}/bin/ip";
+         ipCmd = eSA "${pkgs.iproute2}/bin/ip";
          namespace = "host-${name}";
        in
        {
@@ -197,23 +198,23 @@ in
             Type = "oneshot";
             RemainAfterExit = true;
             ExecStart = [
-              "-${ip} netns del '${namespace}'"
-              "${ip} netns add '${namespace}'"
-              "${ip} netns exec '${namespace}' ${ip} addr add 127.0.0.1/8 dev lo"
-              "${ip} netns exec '${namespace}' ${ip} addr add ::1/128 dev lo"
-              "${ip} netns exec '${namespace}' ${ip} link set lo up"
+              "-${ipCmd} netns del ${eSA namespace}"
+              "${ipCmd} netns add ${eSA namespace}"
+              "${ipCmd} netns exec ${eSA namespace} ${ipCmd} addr add 127.0.0.1/8 dev lo"
+              "${ipCmd} netns exec ${eSA namespace} ${ipCmd} addr add ::1/128 dev lo"
+              "${ipCmd} netns exec ${eSA namespace} ${ipCmd} link set lo up"
             ]
             ++ (hostDriver.execStart info)
-            ++ [ "${ip} link set '${info.serviceInterface}' netns '${namespace}'" ]
+            ++ [ "${ipCmd} link set ${eSA info.serviceInterface} netns ${eSA namespace}" ]
             ++ (map (addr:
-                  "${ip} netns exec '${namespace}' ${ip} addr add '${addr}' dev '${info.serviceInterface}'")
+                  "${ipCmd} netns exec ${eSA namespace} ${ipCmd} addr add ${eSA addr} dev ${eSA info.serviceInterface}")
                   (getAddresses config host))
-            ++ [ "${ip} netns exec '${namespace}' ${ip} link set '${info.serviceInterface}' up" ]
+            ++ [ "${ipCmd} netns exec ${eSA namespace} ${ipCmd} link set ${eSA info.serviceInterface} up" ]
             ++ (map (route:
-                "${ip} netns exec '${namespace}' ${ip} route add '${route.target}'" + (if route.gateway != "" then " via '${route.gateway}'" else "dev '${info.serviceInterface}'"))
+                "${ipCmd} netns exec ${eSA namespace} ${ipCmd} route add ${eSA route.target}" + (if route.gateway != "" then " via ${eSA route.gateway}" else "dev ${eSA info.serviceInterface}"))
                   config.foxDen.routes);
             ExecStop = [
-              "${ip} netns del '${namespace}'"
+              "${ipCmd} netns del ${eSA namespace}"
             ] ++ (hostDriver.execStop info);
           };
         };
