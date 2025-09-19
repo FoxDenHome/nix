@@ -174,6 +174,7 @@ in
             Type = "oneshot";
             RemainAfterExit = true;
             ExecStart = [
+              # TODO: Manage entire veth and peer in shell
               "${pkgs.iproute2}/bin/ip netns add 'host-${name}'"
               "${pkgs.iproute2}/bin/ip link set '${info.serviceInterface}' netns 'host-${name}'"
             ];
