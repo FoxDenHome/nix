@@ -185,7 +185,7 @@ in
             ];
             ExecStop = [
               "${pkgs.iproute2}/bin/ip netns del 'host-${name}'"
-            ];
+            ] ++ (hostDriver.execStop info);
           };
         };
       }) (nixpkgs.lib.attrsets.attrNames managedHosts)));
