@@ -57,6 +57,7 @@ in
 
   foxDen.hosts.jellyfin = {
     name = "jellyfin";
+    root = "local.foxden.network";
     internal = {
       ipv4 = "192.168.122.201";
     };

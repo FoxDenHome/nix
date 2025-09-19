@@ -123,10 +123,11 @@ in
   hostDnsRecordType = hostDnsRecordType;
 
   # CFG.${name}.${host} = X -> [{${host} =  X, ...}, ...] -> [[X, ...], ...] -> [X, ...]
-  allHosts = (nixpkgs.lib.flatten
-              (map (nixpkgs.lib.attrsets.attrValues)
-                (nixpkgs.lib.attrsets.attrValues
-                  (globalConfig.get ["foxDen" "hosts"]))));
+  allHosts = (nixosConfigurations:
+              (nixpkgs.lib.flatten
+                (map (nixpkgs.lib.attrsets.attrValues)
+                  (nixpkgs.lib.attrsets.attrValues
+                    (globalConfig.get ["foxDen" "hosts"] nixosConfigurations)))));
 
   mkOption = with nixpkgs.lib.types; (opts : nixpkgs.lib.mkOption (nixpkgs.lib.mergeAttrs {
     type = if opts.default == null then (nullOr hostType) else hostType;
