@@ -12,6 +12,8 @@
 
       systemd.unitConfig = {
         Requires = info.requires;
+        BindsTo = info.requires;
+        After = info.after;
       };
 
       systemd.serviceConfig = {
