@@ -1,0 +1,14 @@
+keys:
+  - &admin_doridian_fennec age1m27t2k0tyh23rt6925m8dacvkmz559deht2yelun9s7h3scsfa4q6hdjcl
+  - &server_testvm_fennec age1tgv02ark8aq0knagyt7tdpgdc2e6rds9c2rm8uumuqj6vr3ngujqg8eqr6
+# First hit rule counts
+creation_rules:
+  - path_regex: '^secrets/testvm/'
+    key_groups:
+      - age:
+        - *admin_doridian_fennec
+        - *server_testvm_fennec
+  - path_regex: '^secrets/'
+    key_groups:
+      - age:
+        - *admin_doridian_fennec
