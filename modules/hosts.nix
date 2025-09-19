@@ -177,6 +177,7 @@ in
             Type = "oneshot";
             RemainAfterExit = true;
             ExecStart = [
+              "-${pkgs.iproute2}/bin/ip netns del 'host-${name}'"
               "${pkgs.iproute2}/bin/ip netns add 'host-${name}'"
             ] ++ (hostDriver.execStart info (getAddresses config host)) ++ [
               "${pkgs.iproute2}/bin/ip link set '${info.serviceInterface}' up"
