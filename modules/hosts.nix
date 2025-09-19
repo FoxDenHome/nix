@@ -178,6 +178,7 @@ in
               "${pkgs.iproute2}/bin/ip link set '${info.serviceInterface}' netns 'host-${name}'"
             ];
             ExecStop = [
+              # TODO: Remove interface from netns again...
               "${pkgs.iproute2}/bin/ip netns del 'host-${name}'"
             ];
           };
