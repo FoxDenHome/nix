@@ -29,6 +29,8 @@
 
   nix.settings.allowed-users = [ "root" "@wheel" ];
 
+  security.sudo.enable = false;
+  security.polkit.enable = true;
   users.users.root.shell = "${pkgs.fish}/bin/fish";
 
   users.groups.share.gid = 1001;
