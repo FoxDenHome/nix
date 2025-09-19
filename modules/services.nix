@@ -10,6 +10,8 @@
       info = info;
       enable = host != null;
 
+      oci.networks = [ "ns:/${info.namespace}" ]; # TODO: Test
+
       systemd.unitConfig = {
         Requires = [ info.unit ];
         BindsTo = [ info.unit ];
