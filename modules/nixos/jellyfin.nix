@@ -7,7 +7,7 @@ let
   };
 
   mkJellyfinDir = (dir: {
-    directory = "${dir}";
+    directory = dir;
     user = config.services.jellyfin.user;
     group = config.services.jellyfin.group;
     mode = "u=rwx,g=,o=";
