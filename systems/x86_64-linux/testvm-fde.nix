@@ -2,13 +2,15 @@
 let
   bridgeDev = config.foxDen.hosts.driverOpts.bridge;
 
-  ipv4 = {
-    host = "192.168.122.200";
+  util = import ../modules/util.nix { };
+
+  ifcfg.ipv4 = {
+    address = "192.168.122.200";
     gateway = "192.168.122.1";
     prefixLength = 24;
   };
-  ipv6 = {
-    host = "fd00:dead:beef:122::200";
+  ifcfg.ipv6 = {
+    address = "fd00:dead:beef:122::200";
     gateway = "fd00:dead:beef:122::1";
     prefixLength = 64;
   };
@@ -48,38 +50,19 @@ in
     interfaces = [ "enp1s0" ];
   };
 
-  networking.interfaces.${bridgeDev}.ipv4 = {
-    addresses = [{
-      address = ipv4.host;
-      prefixLength = ipv4.prefixLength;
-    }];
-    routes = [{
-      address = "0.0.0.0";
-      prefixLength = 0;
-      via = ipv4.gateway;
-    }];
-  };
-
-  foxDen.hosts.routes = [
-    {
-      gateway = ipv4.gateway;
-    }
-  ];
-
-  foxDen.hosts.driver = "bridge";
-
-  foxDen.hosts.subnet = {
-    ipv4 = ipv4.prefixLength;
-    ipv6 = ipv6.prefixLength;
-  };
+  networking.interfaces.${bridgeDev} = util.mkNwInterfaceConfig ifcfg;
+  foxDen.hosts.routes = util.mkRoutes ifcfg;
+  foxDen.hosts.subnet = util.mkSubnet ifcfg;
 
   foxDen.hosts.hosts.system = {
     name = config.networking.hostName;
     root = "local.foxden.network";
     internal = {
-      ipv4 = ipv4.host;
+      ipv4 = ifcfg.ipv4.address;
     };
   };
+
+  foxDen.hosts.driver = "bridge";
 
   foxDen.hosts.hosts.jellyfin = {
     name = "jellyfin";
