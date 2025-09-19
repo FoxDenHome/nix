@@ -26,10 +26,10 @@ in
 
   boot.initrd.luks.devices.nixroot.device = "/dev/vda2";
 
-  boot.swraid = {
-    enable = true;
-    mdadmConf = "ARRAY /dev/md0 metadata=1.2 UUID=da97b4e7:f1803d7d:f9de9388:32aa60ad";
-  };
+  # boot.swraid = {
+  #   enable = true;
+  #   mdadmConf = "ARRAY /dev/md0 metadata=1.2 UUID=da97b4e7:f1803d7d:f9de9388:32aa60ad";
+  # };
 
   fileSystems."/" =
     { device = "none";
@@ -42,10 +42,10 @@ in
       fsType = "xfs";
     };
 
-  fileSystems."/aux" =
-    { device = "/dev/md0";
-      fsType = "xfs";
-    };
+  # fileSystems."/aux" =
+  #   { device = "/dev/md0";
+  #     fsType = "xfs";
+  #   };
 
   fileSystems."/boot" =
     { device = "/dev/vda1";
