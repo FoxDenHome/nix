@@ -1,11 +1,9 @@
-{ nixpkgs, pkgs, ... } :
+{ nixpkgs, ... } :
 let
   util = import ../util.nix { };
   mkHostSuffix = host: util.mkHash8 host.name;
   eSA = nixpkgs.lib.strings.escapeShellArg;
   mkIfaceName = host: "rveth-${mkHostSuffix host}";
-
-  ipCmd = eSA "${pkgs.iproute2}/bin/ip";
 in
 {
   configType = with nixpkgs.lib.types; submodule {
@@ -23,14 +21,23 @@ in
           }
         ])) (nixpkgs.lib.attrsets.attrsToList hosts))));
 
-  execStart = (host: info: let
-    iface = mkIfaceName host;
+  execStart = ({ ipCmd, host, info, ... }: let
+    hostIface = mkIfaceName host;
   in [
-    "-${ipCmd} link del ${eSA iface}"
-    "${ipCmd} link add ${eSA iface} type veth peer name ${eSA info.serviceInterface}"
+    "-${ipCmd} link del ${eSA hostIface}"
+    "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA info.serviceInterface}"
   ]);
 
-  execStop = (host: info: [
+  execStartLate = ({ ipCmd, ipInNsCmd, host, info, ... }: let
+    hostIface = mkIfaceName host;
+  in [
+    "${ipCmd} addr add 169.254.13.37/16 dev ${eSA hostIface}"
+    "${ipCmd} addr add fe80::1337/64 dev ${eSA hostIface}"
+    "${ipInNsCmd} route add default via 169.254.13.37"
+    "${ipInNsCmd} route add default via fe80::1337"
+  ]);
+
+  execStop = ({ ipCmd, host, info, ... }: [
     "${ipCmd} link del ${eSA (mkIfaceName host)}"
   ]);
 

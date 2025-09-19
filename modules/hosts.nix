@@ -202,7 +202,7 @@ in
               "${ipInNsCmd} addr add ::1/128 dev lo"
               "${ipInNsCmd} link set lo up"
             ]
-            ++ (hostDriver.execStart host info)
+            ++ (hostDriver.execStart { inherit host; inherit info; inherit ipCmd; inherit ipInNsCmd; })
             ++ [ "${ipCmd} link set ${eSA info.serviceInterface} netns ${eSA namespace}" ]
             ++ (map (addr:
                   "${ipInNsCmd} addr add ${eSA addr} dev ${eSA info.serviceInterface}")
@@ -210,10 +210,11 @@ in
             ++ [ "${ipInNsCmd} link set ${eSA info.serviceInterface} up" ]
             ++ (map (route:
                 "-${ipInNsCmd} route add ${eSA route.target}" + (if route.gateway != "" then " via ${eSA route.gateway}" else "dev ${eSA info.serviceInterface}"))
-                  config.foxDen.hosts.routes);
+                  config.foxDen.hosts.routes)
+            ++ (hostDriver.execStartLate { inherit host; inherit info; inherit ipCmd; inherit ipInNsCmd; });
             ExecStop = [
               "${ipCmd} netns del ${eSA namespace}"
-            ] ++ (hostDriver.execStop host info);
+            ] ++ (hostDriver.execStop { inherit host; inherit info; inherit ipCmd; inherit ipInNsCmd; });
           };
         };
       }) (nixpkgs.lib.attrsets.attrNames managedHosts)));
