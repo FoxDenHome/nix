@@ -44,6 +44,6 @@
   };
 
   environment.persistence."/nix/persist/system".directories = [
-    { directory = "/var/cache/kanidm-unixd"; mode = "u=rwx,g=rx,o="; }
+    { directory = "/var/cache/kanidm-unixd"; mode = "u=rwx,g=,o="; }
   ];
 }
