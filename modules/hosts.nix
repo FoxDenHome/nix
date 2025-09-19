@@ -89,13 +89,13 @@ let
 
   mkBaseNetwork = (config: (name: host: {
     addresses = (map (addr: {
-      Address = "${addr}/${config.foxDen.subnet.ipv4}";
+      Address = "${addr}/${toString config.foxDen.subnet.ipv4}";
     }) (nixpkgs.lib.lists.filter (val : val != null) [
       host.internal.ipv4
       host.external.ipv4
     ])) ++ (map (addr: {
-      Address = "${addr}/${config.foxDen.subnet.ipv6}";
-    }) (nixpkgs.lib.lists.filter (val : val != null) [
+      Address = "${addr}/${toString config.foxDen.subnet.ipv6}";
+    }) (nixpkgs.lib.lists.filter (val : val != null && val != "") [
       host.internal.ipv6
       host.external.ipv6
     ]));
@@ -128,13 +128,13 @@ in
     };
 
     options.foxDen.subnet.ipv4 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-      type = str;
-      default = "/24";
+      type = int;
+      default = 24;
     };
 
     options.foxDen.subnet.ipv6 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-      type = str;
-      default = "/64";
+      type = int;
+      default = 64;
     };
 
     options.foxDen.hostDriver = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
