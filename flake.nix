@@ -50,7 +50,6 @@
             networking.hostName = hostname;
             nixpkgs.hostPlatform = systemArch;
             networking.hostId = util.mkHash8 hostname;
-            sops.defaultSopsFile = ./secrets/${hostname}.yaml;
           })
           system
         ] ++ inputNixosModules ++ modules;

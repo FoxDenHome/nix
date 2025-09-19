@@ -26,7 +26,7 @@ in
 
   boot.initrd.luks.devices.nixroot.device = "/dev/vda2";
 
-  sops.secrets.example_key = {};
+  foxDen.sops.available = true;
 
   # boot.swraid = {
   #   enable = true;
