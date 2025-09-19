@@ -179,7 +179,12 @@ in
             ExecStart = [
               "-${pkgs.iproute2}/bin/ip netns del 'host-${name}'"
               "${pkgs.iproute2}/bin/ip netns add 'host-${name}'"
-            ] ++ (hostDriver.execStart info (getAddresses config host)) ++ [
+            ]
+            ++ (hostDriver.execStart info)
+            ++ ((map (addr:
+                  "${pkgs.iproute2}/bin/ip addr add '${addr}' dev '${info.serviceInterface}'")
+                  (getAddresses config host)))
+            ++ [
               "${pkgs.iproute2}/bin/ip link set '${info.serviceInterface}' up"
               "${pkgs.iproute2}/bin/ip link set '${info.serviceInterface}' netns 'host-${name}'"
             ];
