@@ -74,8 +74,6 @@ in
     };
   };
 
-  foxDen.hosts.driver = "bridge";
-
   foxDen.hosts.hosts.jellyfin = {
     name = "jellyfin";
     root = "local.foxden.network";
