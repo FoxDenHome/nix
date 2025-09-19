@@ -12,6 +12,8 @@ in
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
+  initrd.luks.devices.nixroot.device = "/dev/vdb2";
+
   fileSystems."/" =
     { device = "none";
       fsType = "tmpfs";
@@ -19,7 +21,7 @@ in
     };
 
   fileSystems."/nix" =
-    { device = "/dev/vda2";
+    { device = "/dev/mapper/nixroot";
       fsType = "xfs";
     };
 
