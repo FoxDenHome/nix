@@ -11,9 +11,9 @@
       enable = host != null;
 
       systemd.unitConfig = {
-        Requires = info.requires;
-        BindsTo = info.requires;
-        After = info.requires;
+        Requires = [ info.unit ];
+        BindsTo = [ info.unit ];
+        After = [ info.unit ];
       };
 
       systemd.serviceConfig = {
