@@ -28,7 +28,6 @@
   programs.tcpdump.enable = true;
 
   users.users.root = {
-    initialHashedPassword = "$y$j9T$IiDZbOYNQ3/pi9/K2QdUm0$GizBNTJUmYCp3OTixpF6kkmFy6XMwszNIxmbOcaEtyA";
     shell = "${pkgs.fish}/bin/fish";
   };
 
