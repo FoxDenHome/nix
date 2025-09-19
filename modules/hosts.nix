@@ -165,31 +165,34 @@ in
       (map (name: let
          info = config.foxDen.hostInfo.${name};
          host = config.foxDen.hosts.${name};
+         ip = "${pkgs.iproute2}/bin/ip";
+         namespace = "host-${name}";
        in
        {
-        name = "netns-host-${name}";
+        name = "netns-${namespace}";
         value = {
-          description = "NetNS host service for ${name}";
+          description = "NetNS ${namespace}";
           unitConfig = {
             StopWhenUnneeded = true;
           };
-          serviceConfig = {
+          serviceConfig = {`
             Type = "oneshot";
             RemainAfterExit = true;
             ExecStart = [
-              "-${pkgs.iproute2}/bin/ip netns del 'host-${name}'"
-              "${pkgs.iproute2}/bin/ip netns add 'host-${name}'"
+              "-${ip} netns del '${namespace}'"
+              "${ip} netns add '${namespace}'"
             ]
             ++ (hostDriver.execStart info)
-            ++ ((map (addr:
-                  "${pkgs.iproute2}/bin/ip addr add '${addr}' dev '${info.serviceInterface}'")
+            ++ [
+              "${ip} link set '${info.serviceInterface}' netns '${namespace}'"
+            ] ++ ((map (addr:
+                  "${ip} exec '${namespace}' ${ip} addr add '${addr}' dev '${info.serviceInterface}'")
                   (getAddresses config host)))
             ++ [
-              "${pkgs.iproute2}/bin/ip link set '${info.serviceInterface}' up"
-              "${pkgs.iproute2}/bin/ip link set '${info.serviceInterface}' netns 'host-${name}'"
+              "${ip} exec '${namespace}' ${ip} link set '${info.serviceInterface}' up"
             ];
             ExecStop = [
-              "${pkgs.iproute2}/bin/ip netns del 'host-${name}'"
+              "${ip} netns del '${namespace}'"
             ] ++ (hostDriver.execStop info);
           };
         };
