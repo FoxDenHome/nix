@@ -175,7 +175,7 @@ in
           unitConfig = {
             StopWhenUnneeded = true;
           };
-          serviceConfig = {`
+          serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
             ExecStart = [
