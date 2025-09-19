@@ -206,7 +206,7 @@ in
                   "${ip} netns exec '${namespace}' ${ip} addr add '${addr}' dev '${info.serviceInterface}'")
                   (getAddresses config host))
             ++ (map (route:
-                  "${ip} netns exec '${namespace}' ${ip} route add '${route}'" + (if route.gateway != "" then " via '${route.gateway}'" else "dev '${info.serviceInterface}'"))
+                  "${ip} netns exec '${namespace}' ${ip} route add '${route.target}'" + (if route.gateway != "" then " via '${route.gateway}'" else "dev '${info.serviceInterface}'"))
                   config.foxDen.routes)
             ++ [ "${ip} netns exec '${namespace}' ${ip} link set '${info.serviceInterface}' up" ];
             ExecStop = [
