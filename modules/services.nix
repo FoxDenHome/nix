@@ -2,8 +2,8 @@
 {
   make = ({ name, config, ... }:
     let
-      host = config.foxDen.hosts.${name};
-      info = config.foxDen.hostInfo.${name};
+      host = config.foxDen.hosts.hosts.${name};
+      info = config.foxDen.hosts.info.${name};
     in
     {
       host = host;

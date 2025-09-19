@@ -103,13 +103,13 @@ let
 
   getAddresses = (config: host:
     (map (addr: 
-      "${addr}/${toString config.foxDen.subnet.ipv4}")
+      "${addr}/${toString config.foxDen.hosts.subnet.ipv4}")
       (nixpkgs.lib.lists.filter (val: val != null && val != "") [
         host.internal.ipv4
         host.external.ipv4
       ])
     ) ++ (map (addr:
-      "${addr}/${toString config.foxDen.subnet.ipv6}")
+      "${addr}/${toString config.foxDen.hosts.subnet.ipv6}")
       (nixpkgs.lib.lists.filter (val: val != null && val != "") [
         host.internal.ipv6
         host.external.ipv6
@@ -135,46 +135,46 @@ in
 
   nixosModules.hosts = ({ config, pkgs, ... }:
   let
-    hostDriver = import (./hostDrivers + "/${config.foxDen.hostDriver}.nix") { inherit nixpkgs; inherit pkgs; driverOpts = config.foxDen.hostDriverOpts; };
-    managedHosts = nixpkgs.lib.attrsets.filterAttrs (name: host: host.manageNetwork) config.foxDen.hosts;
+    hostDriver = import (./hostDrivers + "/${config.foxDen.hosts.driver}.nix") { inherit nixpkgs; inherit pkgs; driverOpts = config.foxDen.hosts.driverOpts; };
+    managedHosts = nixpkgs.lib.attrsets.filterAttrs (name: host: host.manageNetwork) config.foxDen.hosts.hosts;
   in
   {
-    options.foxDen.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+    options.foxDen.hosts.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
       type = (attrsOf hostType);
       default = {};
     };
 
-    options.foxDen.subnet.ipv4 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+    options.foxDen.hosts.subnet.ipv4 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
       type = int;
       default = 24;
     };
 
-    options.foxDen.subnet.ipv6 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+    options.foxDen.hosts.subnet.ipv6 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
       type = int;
       default = 64;
     };
 
-    options.foxDen.routes = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+    options.foxDen.hosts.routes = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
       type = (listOf routeType);
       default = [];
     };
 
-    options.foxDen.hostDriver = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+    options.foxDen.hosts.driver = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
       type = enum [ "bridge" "sriov" ];
       default = "bridge";
     };
 
-    options.foxDen.hostDriverOpts = nixpkgs.lib.mkOption {
+    options.foxDen.hosts.driverOpts = nixpkgs.lib.mkOption {
       type = hostDriver.configType;
       default = {};
     };
 
-    options.foxDen.hostInfo = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+    options.foxDen.hosts.info = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
       type = (attrsOf hostInfoType);
       default = {};
     };
 
-    config.foxDen.hostInfo = (nixpkgs.lib.attrsets.mapAttrs
+    config.foxDen.hosts.info = (nixpkgs.lib.attrsets.mapAttrs
       (name: info: (nixpkgs.lib.mergeAttrs info {
         namespace = "/run/netns/host-${name}";
         unit = "netns-host-${name}.service";
@@ -183,8 +183,8 @@ in
 
     config.systemd.services = (nixpkgs.lib.attrsets.listToAttrs
       (map (name: let
-         info = config.foxDen.hostInfo.${name};
-         host = config.foxDen.hosts.${name};
+         info = config.foxDen.hosts.info.${name};
+         host = config.foxDen.hosts.hosts.${name};
          ipCmd = eSA "${pkgs.iproute2}/bin/ip";
          ipInNsCmd = "${ipCmd} netns exec ${eSA namespace} ${ipCmd}";
          namespace = "host-${name}";
@@ -214,7 +214,7 @@ in
             ++ [ "${ipInNsCmd} link set ${eSA info.serviceInterface} up" ]
             ++ (map (route:
                 "${ipInNsCmd} route add ${eSA route.target}" + (if route.gateway != "" then " via ${eSA route.gateway}" else "dev ${eSA info.serviceInterface}"))
-                  config.foxDen.routes);
+                  config.foxDen.hosts.routes);
             ExecStop = [
               "${ipCmd} netns del ${eSA namespace}"
             ] ++ (hostDriver.execStop info);

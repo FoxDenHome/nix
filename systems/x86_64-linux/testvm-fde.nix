@@ -1,6 +1,6 @@
 {  modulesPath, config, ... }:
 let
-  bridgeDev = config.foxDen.hostDriverOpts.bridge;
+  bridgeDev = config.foxDen.hosts.driverOpts.bridge;
 in
 {
   system.stateVersion = "25.05";
@@ -39,7 +39,7 @@ in
 
   networking.interfaces.${bridgeDev}.ipv4 = {
     addresses = [{
-      address = "192.168.122.200";
+      address = config.foxDen.hosts.system.internal.ipv4;
       prefixLength = 24;
     }];
     routes = [{
@@ -49,13 +49,21 @@ in
     }];
   };
 
-  foxDen.routes = [
+  foxDen.hosts.routes = [
     {
       gateway = "192.168.122.1";
     }
   ];
 
-  foxDen.hosts.jellyfin = {
+  foxDen.hosts.hosts.system = {
+    name = config.networking.hostName;
+    root = "local.foxden.network";
+    internal = {
+      ipv4 = "192.168.122.200";
+    };
+  };
+
+  foxDen.hosts.hosts.jellyfin = {
     name = "jellyfin";
     root = "local.foxden.network";
     internal = {

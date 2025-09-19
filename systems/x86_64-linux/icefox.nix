@@ -4,7 +4,7 @@
 
   # TODO: Most of this file
 
-  foxDen.hosts.jellyfin = {
+  foxDen.hosts.hosts.jellyfin = {
     name = "jellyfin";
     internal = {
       ipv4 = "192.168.1.11";
@@ -14,7 +14,7 @@
     };
   };
 
-  foxDen.hosts.icefox = {
+  foxDen.hosts.hosts.icefox = {
     name = "icefox";
     manageNetwork = false;
     internal = {
@@ -31,7 +31,7 @@
     };
   };
 
-  foxDen.hosts.dummy = {
+  foxDen.hosts.hosts.dummy = {
     name = "dummy";
     internal = {
       ipv4 = "192.168.1.100";
