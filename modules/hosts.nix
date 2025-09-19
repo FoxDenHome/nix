@@ -87,19 +87,21 @@ let
     }) dns.allHorizons)));
   };
 
-  mkBaseNetwork = (config: (name: host: {
-    addresses = (map (addr: {
-      Address = "${addr}/${toString config.foxDen.subnet.ipv4}";
-    }) (nixpkgs.lib.lists.filter (val : val != null && val != "") [
-      host.internal.ipv4
-      host.external.ipv4
-    ])) ++ (map (addr: {
-      Address = "${addr}/${toString config.foxDen.subnet.ipv6}";
-    }) (nixpkgs.lib.lists.filter (val : val != null && val != "") [
-      host.internal.ipv6
-      host.external.ipv6
-    ]));
-  }));
+  getAddresses = (config: host:
+    (map (addr: 
+      "${addr}/${toString config.foxDen.subnet.ipv4}")
+      (nixpkgs.lib.lists.filter (val: val != null && val != "") [
+        host.internal.ipv4
+        host.external.ipv4
+      ])
+    ) ++ (map (addr:
+      "${addr}/${toString config.foxDen.subnet.ipv6}")
+      (nixpkgs.lib.lists.filter (val: val != null && val != "") [
+        host.internal.ipv6
+        host.external.ipv6
+      ])
+    )
+  );
 in
 {
   hostType = hostType;
@@ -118,7 +120,7 @@ in
 
   nixosModules.hosts = ({ config, pkgs, ... }:
   let
-    hostDriver = import (./hostDrivers + "/${config.foxDen.hostDriver}.nix") { inherit nixpkgs; driverOpts = config.foxDen.hostDriverOpts; };
+    hostDriver = import (./hostDrivers + "/${config.foxDen.hostDriver}.nix") { inherit nixpkgs; inherit pkgs; driverOpts = config.foxDen.hostDriverOpts; };
     managedHosts = nixpkgs.lib.attrsets.filterAttrs (name: host: host.manageNetwork) config.foxDen.hosts;
   in
   {
@@ -162,16 +164,12 @@ in
     config.systemd.services = (nixpkgs.lib.attrsets.listToAttrs
       (map (name: let
          info = config.foxDen.hostInfo.${name};
-         depends = [
-          "systemd-networkd-wait-online@${info.serviceInterface}.service"
-         ] ++ (if (info.hostInterface != null) then [ "systemd-networkd-wait-online@${info.hostInterface}.service" ] else []);
+         host = config.foxDen.hosts.${name};
        in
        {
         name = "netns-host-${name}";
         value = {
           description = "NetNS host service for ${name}";
-          after = depends;
-          requires = depends;
           unitConfig = {
             StopWhenUnneeded = true;
           };
@@ -180,6 +178,8 @@ in
             RemainAfterExit = true;
             ExecStart = [
               "${pkgs.iproute2}/bin/ip netns add 'host-${name}'"
+            ] ++ (hostDriver.execStart info (getAddresses config host)) ++ [
+              "${pkgs.iproute2}/bin/ip link set '${info.serviceInterface}' up"
               "${pkgs.iproute2}/bin/ip link set '${info.serviceInterface}' netns 'host-${name}'"
             ];
             ExecStop = [
@@ -190,7 +190,7 @@ in
       }) (nixpkgs.lib.attrsets.attrNames managedHosts)));
 
     config.systemd.network.netdevs = hostDriver.netDevs managedHosts;
-    config.systemd.network.networks = hostDriver.networks (mkBaseNetwork config) managedHosts;
+    config.systemd.network.networks = hostDriver.networks managedHosts;
     config.networking.useNetworkd = true;
   });
 }

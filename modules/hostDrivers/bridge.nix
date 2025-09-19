@@ -1,4 +1,4 @@
-{ nixpkgs, driverOpts, ... } :
+{ nixpkgs, pkgs, driverOpts, ... } :
 let
   util = import ../util.nix { };
   mkHostSuffix = host: util.mkHash8 host.name;
@@ -29,7 +29,7 @@ in
         };
       })) (nixpkgs.lib.attrsets.attrsToList hosts)));
 
-  networks = (mkBaseNetwork: hosts:
+  networks = (hosts:
     nixpkgs.lib.attrsets.listToAttrs (
       nixpkgs.lib.lists.flatten
         (map (({ name, value }: let
@@ -48,13 +48,13 @@ in
               }];
             };
           }
-          {
-            name = "60-peer-${name}";
-            value = nixpkgs.lib.mergeAttrs {
-              name = "vpeer-${hostSuffix}";
-            } (mkBaseNetwork name value);
-          }
         ])) (nixpkgs.lib.attrsets.attrsToList hosts))));
+
+  execStart = (info: addrs: (map (addr:
+      "${pkgs.iproute2}/bin/ip addr add '${addr}' '${info.serviceInterface}'"
+    ) addrs) ++ [
+      "${pkgs.iproute2}/bin/ip link set '${info.serviceInterface}' up"
+    ]);
 
   infos = (hosts:
     nixpkgs.lib.attrsets.mapAttrs
