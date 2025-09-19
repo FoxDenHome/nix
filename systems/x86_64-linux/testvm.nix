@@ -47,6 +47,12 @@ in
     }];
   };
 
+  foxDen.routes = [
+    {
+      gateway = "192.168.122.1";
+    }
+  ];
+
   foxDen.hosts.jellyfin = {
     name = "jellyfin";
     internal = {
