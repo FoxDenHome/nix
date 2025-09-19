@@ -59,6 +59,7 @@ in
     root = "local.foxden.network";
     internal = {
       ipv4 = ifcfg.ipv4.address;
+      ipv6 = ifcfg.ipv6.address;
     };
   };
 
