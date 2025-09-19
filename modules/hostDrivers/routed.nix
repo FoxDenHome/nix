@@ -35,7 +35,7 @@ in
     "${ipCmd} addr add fe80::e621/64 dev ${eSA hostIface}"
     "${ipInNsCmd} route add 169.254.13.37 dev ${eSA info.serviceInterface}"
     "${ipInNsCmd} route add fe80::e621 dev ${eSA info.serviceInterface}"
-    "${ipInNsCmd} route add default via 169.254.13.37"
+    #"${ipInNsCmd} route add default via 169.254.13.37"
     #"${ipInNsCmd} route add default via fe80::e621"
   ]);
 
