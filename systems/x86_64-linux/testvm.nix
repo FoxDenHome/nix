@@ -1,9 +1,8 @@
 {  modulesPath, config, ... }:
 let
+  util = import ../../modules/util.nix { };
+
   bridgeDev = config.foxDen.hosts.driverOpts.bridge;
-
-  util = import ../modules/util.nix { };
-
   ifcfg.ipv4 = {
     address = "192.168.122.200";
     gateway = "192.168.122.1";
