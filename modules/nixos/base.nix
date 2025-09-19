@@ -45,7 +45,6 @@
 
     files = [
       "/etc/machine-id"
-      { file = "/etc/nix/id_rsa"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
     ] ++ lib.lists.flatten (lib.lists.forEach config.services.openssh.hostKeys ({path, ...}: [
       "${path}"
       "${path}.pub"
