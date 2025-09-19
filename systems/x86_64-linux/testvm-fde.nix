@@ -42,6 +42,11 @@ in
       fsType = "xfs";
     };
 
+  fileSystems."/aux" =
+    { device = "/dev/md0";
+      fsType = "xfs";
+    };
+
   fileSystems."/boot" =
     { device = "/dev/vda1";
       fsType = "vfat";
