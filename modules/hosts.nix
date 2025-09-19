@@ -162,6 +162,9 @@ in
     config.systemd.services = (nixpkgs.lib.attrsets.listToAttrs
       (map (name: let
          info = config.foxDen.hostInfo.${name};
+         depends = [
+          "systemd-networkd-wait-online@${info.serviceInterface}.service"
+         ] ++ (if info.hostInterface != null then [ "systemd-networkd-wait-online@${info.hostInterface}.service" ] else []);
        in
        {
         name = "netns-host-${name}";
@@ -169,6 +172,8 @@ in
           description = "NetNS host service for ${name}";
           unitConfig = {
             StopWhenUnneeded = true;
+            After = depends;
+            Requires = depends;
           };
           serviceConfig = {
             Type = "oneshot";
