@@ -26,11 +26,7 @@ in
 
   boot.initrd.luks.devices.nixroot.device = "/dev/vda2";
 
-  boot.initrd.services.swraid = {
-    enable = true;
-    mdadmConf = "ARRAY /dev/md0 metadata=1.2 UUID=da97b4e7:f1803d7d:f9de9388:32aa60ad";
-  };
-  boot.services.swraid = {
+  boot.swraid = {
     enable = true;
     mdadmConf = "ARRAY /dev/md0 metadata=1.2 UUID=da97b4e7:f1803d7d:f9de9388:32aa60ad";
   };
