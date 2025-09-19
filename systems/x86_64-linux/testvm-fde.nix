@@ -80,7 +80,7 @@ in
   foxDen.boot.secure = true;
   foxDen.hosts.driver = "routed";
 
-  foxDen.hosts.routes = util.mkRoutes ifcfg;
+  #foxDen.hosts.routes = util.mkRoutes ifcfg;
   foxDen.hosts.subnet = util.mkSubnet ifcfg;
 
   foxDen.hosts.hosts = {
