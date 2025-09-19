@@ -90,7 +90,7 @@ let
   mkBaseNetwork = (config: (name: host: {
     addresses = (map (addr: {
       Address = "${addr}/${toString config.foxDen.subnet.ipv4}";
-    }) (nixpkgs.lib.lists.filter (val : val != null) [
+    }) (nixpkgs.lib.lists.filter (val : val != null && val != "") [
       host.internal.ipv4
       host.external.ipv4
     ])) ++ (map (addr: {
