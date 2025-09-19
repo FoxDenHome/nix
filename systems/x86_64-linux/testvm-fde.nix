@@ -67,11 +67,11 @@ in
   systemd.network.networks."50-${bridgeDev}-${ifcfg.bridgeRoot}" = {
       name = ifcfg.bridgeRoot;
       bridge = [bridgeDev];
-      bridgeVLANs = [{
-        PVID = 2;
-        EgressUntagged = 2;
-        VLAN = "1-10";
-      }];
+      # bridgeVLANs = [{
+      #   PVID = 2;
+      #   EgressUntagged = 2;
+      #   VLAN = "1-10";
+      # }];
   };
 
   networking.interfaces.${bridgeDev} = util.mkNwInterfaceConfig ifcfg;
