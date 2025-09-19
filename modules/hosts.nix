@@ -202,7 +202,7 @@ in
               "${ipInNsCmd} addr add ::1/128 dev lo"
               "${ipInNsCmd} link set lo up"
             ]
-            ++ (hostDriver.execStart info)
+            ++ (hostDriver.execStart host info)
             ++ [ "${ipCmd} link set ${eSA info.serviceInterface} netns ${eSA namespace}" ]
             ++ (map (addr:
                   "${ipInNsCmd} addr add ${eSA addr} dev ${eSA info.serviceInterface}")
@@ -213,7 +213,7 @@ in
                   config.foxDen.hosts.routes);
             ExecStop = [
               "${ipCmd} netns del ${eSA namespace}"
-            ] ++ (hostDriver.execStop info);
+            ] ++ (hostDriver.execStop host info);
           };
         };
       }) (nixpkgs.lib.attrsets.attrNames managedHosts)));
