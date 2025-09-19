@@ -186,10 +186,10 @@ in
             ++ [
               "${ip} link set '${info.serviceInterface}' netns '${namespace}'"
             ] ++ ((map (addr:
-                  "${ip} exec '${namespace}' ${ip} addr add '${addr}' dev '${info.serviceInterface}'")
+                  "${ip} netns exec '${namespace}' ${ip} addr add '${addr}' dev '${info.serviceInterface}'")
                   (getAddresses config host)))
             ++ [
-              "${ip} exec '${namespace}' ${ip} link set '${info.serviceInterface}' up"
+              "${ip} netns exec '${namespace}' ${ip} link set '${info.serviceInterface}' up"
             ];
             ExecStop = [
               "${ip} netns del '${namespace}'"
