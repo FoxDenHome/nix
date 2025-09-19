@@ -6,7 +6,7 @@
     description = "Enable kanidm login";
   };
 
-  config = lib.mkIf config.foxDen.kanidm.enable {
+  config = lib.mkIf config.foxDen.kanidm.login {
     security.wrappers."kanidm_ssh_authorizedkeys" = {
       source = "${config.services.kanidm.package}/bin/kanidm_ssh_authorizedkeys";
       owner = "root";
