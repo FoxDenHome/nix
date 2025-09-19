@@ -87,6 +87,19 @@ let
     }) dns.allHorizons)));
   };
 
+  routeType = with nixpkgs.lib.types; submodule {
+    options = {
+      target = nixpkgs.lib.mkOption {
+        type = str;
+        default = "default";
+      };
+      gateway = nixpkgs.lib.mkOption {
+        type = str;
+        default = "";
+      };
+    };
+  };
+
   getAddresses = (config: host:
     (map (addr: 
       "${addr}/${toString config.foxDen.subnet.ipv4}")
@@ -139,6 +152,11 @@ in
       default = 64;
     };
 
+    options.foxDen.routes = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+      type = (listOf routeType);
+      default = [];
+    };
+
     options.foxDen.hostDriver = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
       type = enum [ "bridge" "sriov" ];
       default = "bridge";
@@ -183,14 +201,14 @@ in
               "${ip} netns add '${namespace}'"
             ]
             ++ (hostDriver.execStart info)
-            ++ [
-              "${ip} link set '${info.serviceInterface}' netns '${namespace}'"
-            ] ++ ((map (addr:
+            ++ [ "${ip} link set '${info.serviceInterface}' netns '${namespace}'" ]
+            ++ (map (addr:
                   "${ip} netns exec '${namespace}' ${ip} addr add '${addr}' dev '${info.serviceInterface}'")
-                  (getAddresses config host)))
-            ++ [
-              "${ip} netns exec '${namespace}' ${ip} link set '${info.serviceInterface}' up"
-            ];
+                  (getAddresses config host))
+            ++ (map (route:
+                  "${ip} netns exec '${namespace}' ${ip} route add '${route}'" + (if route.gateway != "" then " via '${route.gateway}'" else "dev '${info.serviceInterface}'"))
+                  config.foxDen.routes)
+            ++ [ "${ip} netns exec '${namespace}' ${ip} link set '${info.serviceInterface}' up" ];
             ExecStop = [
               "${ip} netns del '${namespace}'"
             ] ++ (hostDriver.execStop info);
