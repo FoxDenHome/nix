@@ -29,9 +29,9 @@ in
   config.systemd.services.jellyfin.unitConfig = svc.systemd.unitConfig;
 
   config.environment.persistence."/nix/persist/jellyfin".directories = [
-    mkJellyfinDir config.services.jellyfin.cacheDir
-    mkJellyfinDir config.services.jellyfin.configDir
-    mkJellyfinDir config.services.jellyfin.dataDir
-    mkJellyfinDir config.services.jellyfin.logDir
+    (mkJellyfinDir config.services.jellyfin.cacheDir)
+    (mkJellyfinDir config.services.jellyfin.configDir)
+    (mkJellyfinDir config.services.jellyfin.dataDir)
+    (mkJellyfinDir config.services.jellyfin.logDir)
   ];
 }
