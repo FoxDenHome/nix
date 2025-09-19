@@ -13,7 +13,7 @@ in
   config.users.mutableUsers = ! config.foxDen.sops.available;
 
   config.nix.extraOptions = lib.mkIf config.foxDen.sops.available ''
-    include ${config.sops.secrets.nixConfig.path}
+    !include ${config.sops.secrets.nixConfig.path}
   '';
   config.sops.secrets.nixConfig = lib.mkIf config.foxDen.sops.available {
     sopsFile = sharedSopsFile;
