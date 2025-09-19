@@ -7,5 +7,5 @@
   };
 
   config.users.users.root.hashedPasswordFile = lib.mkIf config.foxDen.sops.available config.sops.secrets.rootPasswordHash.path;
-  config.users.users.root.hashedPassword = lib.mkIf (!config.foxDen.sops.available) "$y$j9T$IiDZbOYNQ3/pi9/K2QdUm0$GizBNTJUmYCp3OTixpF6kkmFy6XMwszNIxmbOcaEtyA";
+  config.users.mutableUsers = config.foxDen.sops.available;
 }
