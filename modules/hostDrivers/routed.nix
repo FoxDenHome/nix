@@ -1,20 +1,15 @@
-{ nixpkgs, pkgs, driverOpts, ... } :
+{ nixpkgs, pkgs, ... } :
 let
   util = import ../util.nix { };
   mkHostSuffix = host: util.mkHash8 host.name;
   eSA = nixpkgs.lib.strings.escapeShellArg;
-  mkIfaceName = host: "bveth-${mkHostSuffix host}";
+  mkIfaceName = host: "rveth-${mkHostSuffix host}";
 
   ipCmd = eSA "${pkgs.iproute2}/bin/ip";
 in
 {
   configType = with nixpkgs.lib.types; submodule {
-    options.bridge = nixpkgs.lib.mkOption {
-      type = str;
-      default = "br-default";
-    };
   };
-
 
   networks = (hosts:
     nixpkgs.lib.attrsets.listToAttrs (
@@ -24,12 +19,6 @@ in
             name = "60-host-${name}";
             value = {
               name = mkIfaceName value;
-              bridge = [driverOpts.bridge];
-              bridgeVLANs = [{
-                PVID = value.vlan;
-                EgressUntagged = value.vlan;
-                VLAN = value.vlan;
-              }];
             };
           }
         ])) (nixpkgs.lib.attrsets.attrsToList hosts))));

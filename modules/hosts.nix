@@ -44,9 +44,6 @@ let
 
   hostInfoType = with nixpkgs.lib.types; submodule {
     options = {
-      hostInterface = nixpkgs.lib.mkOption {
-        type = (nullOr str);
-      };
       serviceInterface = nixpkgs.lib.mkOption {
         type = str;
       };
@@ -159,7 +156,7 @@ in
     };
 
     options.foxDen.hosts.driver = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-      type = enum [ "bridge" "sriov" ];
+      type = enum [ "bridge" "routed" ];
       default = "bridge";
     };
 
