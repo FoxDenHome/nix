@@ -104,13 +104,13 @@ let
   getAddresses = (config: host:
     (map (addr: 
       "${addr}/${toString config.foxDen.hosts.subnet.ipv4}")
-      (nixpkgs.lib.lists.filter (val: val != null && val != "") [
+      (nixpkgs.lib.lists.filter (val: val != "") [
         host.internal.ipv4
         host.external.ipv4
       ])
     ) ++ (map (addr:
       "${addr}/${toString config.foxDen.hosts.subnet.ipv6}")
-      (nixpkgs.lib.lists.filter (val: val != null && val != "") [
+      (nixpkgs.lib.lists.filter (val: val != "") [
         host.internal.ipv6
         host.external.ipv6
       ])
@@ -148,7 +148,6 @@ in
       type = int;
       default = 24;
     };
-
     options.foxDen.hosts.subnet.ipv6 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
       type = int;
       default = 64;
@@ -213,7 +212,7 @@ in
                   (getAddresses config host))
             ++ [ "${ipInNsCmd} link set ${eSA info.serviceInterface} up" ]
             ++ (map (route:
-                "${ipInNsCmd} route add ${eSA route.target}" + (if route.gateway != "" then " via ${eSA route.gateway}" else "dev ${eSA info.serviceInterface}"))
+                "-${ipInNsCmd} route add ${eSA route.target}" + (if route.gateway != "" then " via ${eSA route.gateway}" else "dev ${eSA info.serviceInterface}"))
                   config.foxDen.hosts.routes);
             ExecStop = [
               "${ipCmd} netns del ${eSA namespace}"
