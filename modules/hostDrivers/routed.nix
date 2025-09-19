@@ -28,7 +28,7 @@ in
     "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA info.serviceInterface}"
   ]);
 
-  execStartLate = ({ ipCmd, ipInNsCmd, addresses, host, info, ... }: let
+  execStartLate = ({ ipCmd, ipInNsCmd, host, info, ... }: let
     hostIface = mkIfaceName host;
   in [
     "${ipCmd} addr add 169.254.13.37/16 dev ${eSA hostIface}"
