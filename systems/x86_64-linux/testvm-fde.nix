@@ -55,7 +55,7 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  foxDen.boot.secureboot = true;
+  foxDen.boot.secure = true;
 
   networking.bridges.${bridgeDev} = {
     interfaces = [ "enp1s0" ];
