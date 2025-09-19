@@ -7,7 +7,7 @@
       nix flake update --flake 'github:FoxDenHome/nix'
       nixos-rebuild switch --flake "github:FoxDenHome/nix#$(hostname)"
     '';
-    mode = "u=rwx,g=rx,o=rx";
+    mode = "0755";
   };
 
   environment.etc."nix/cleanup.sh" = {
@@ -17,6 +17,6 @@
       nix-collect-garbage --delete-old
       /run/current-system/bin/switch-to-configuration boot
     '';
-    mode = "u=rwx,g=rx,o=rx";
+    mode = "0755";
   };
 }
