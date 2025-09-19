@@ -3,7 +3,17 @@ keys:
   - &server_testvm_fennec age1tgv02ark8aq0knagyt7tdpgdc2e6rds9c2rm8uumuqj6vr3ngujqg8eqr6
 # First hit rule counts
 creation_rules:
-  - path_regex: '^secrets/testvm/'
+  - path_regex: '^secrets/testvm\.'
+    key_groups:
+      - age:
+        - *admin_doridian_fennec
+        - *server_testvm_fennec
+  - path_regex: '^secrets/testvm-fde\.'
+    key_groups:
+      - age:
+        - *admin_doridian_fennec
+        - *server_testvm_fennec
+  - path_regex: '^secrets/shared\.'
     key_groups:
       - age:
         - *admin_doridian_fennec
