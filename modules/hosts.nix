@@ -74,7 +74,6 @@ let
       };
       vlan = nixpkgs.lib.mkOption {
         type = int;
-        default = 2;
       };
       manageNetwork = nixpkgs.lib.mkOption {
         type = bool;

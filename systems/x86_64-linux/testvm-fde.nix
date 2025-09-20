@@ -98,6 +98,7 @@ in
     jellyfin = {
       name = "jellyfin";
       root = "local.foxden.network";
+      vlan = 1;
       internal = {
         ipv4 = "192.168.122.201";
         ipv6 = "fd00:dead:beef:122::201";
