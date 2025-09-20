@@ -42,20 +42,22 @@ in
   make = (inputs@{ host, ... }: make host inputs);
 
   mkHttpOptions = (inputs@{ ... } : with nixpkgs.lib.types; nixpkgs.lib.mergeAttrs {
-    url = nixpkgs.lib.mkOption {
+    hostPort = nixpkgs.lib.mkOption {
       type = str;
+      default = "";
     };
     tls = nixpkgs.lib.mkEnableOption "TLS";
   } (mkOptions inputs));
   mkOptions = mkOptions;
 
-  makeHTTPProxy = (inputs@{ config, pkgs, host, tls, target, ... }:
+  makeHTTPProxy = (inputs@{ svcConfig, pkgs, host, target, ... }:
     let
       caddyStorageRoot = "/var/lib/foxden/services/caddy/${host}";
       caddyUser = "foxden-caddy-${host}";
 
-      hostCfg = hosts.mkHostConfig config host;
-      url = (if tls then "" else "http://") + "${hostCfg.name}.${hostCfg.root}";
+      hostCfg = hosts.getHostInfo host;
+      hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.name}.${hostCfg.root}";
+      url = (if svcConfig.tls then "" else "http://") + hostPort;
 
       serviceName = "${host}-ingress";
       svc = make serviceName inputs;

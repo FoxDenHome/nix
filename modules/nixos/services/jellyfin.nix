@@ -7,20 +7,21 @@ let
     group = config.services.jellyfin.group;
     mode = "u=rwx,g=,o=";
   });
+
+  svcConfig = config.foxDen.services.jellyfin;
 in
 {
   options.foxDen.services.jellyfin = services.mkHttpOptions { name = "Jellyfin media server"; };
 
-  config = lib.mkIf config.foxDen.services.jellyfin.enable (lib.mkMerge [
+  config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
-      inherit config pkgs;
+      inherit svcConfig pkgs;
       host = "jellyfin";
     })
     (services.makeHTTPProxy {
-      inherit config pkgs;
+      inherit svcConfig pkgs;
       host = "jellyfin";
       target = "http://localhost:8096";
-      tls = config.foxDen.services.jellyfin.tls;
     })
     {
       services.jellyfin.enable = true;
