@@ -18,7 +18,7 @@
     gptfdisk
     mdadm
     openssl
-    unixtools
+    unixtools.netstat
     wget
     xfsprogs
   ];
