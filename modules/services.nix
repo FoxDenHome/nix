@@ -37,6 +37,8 @@ in
     environment.persistence."/nix/persist/foxden/services".directories = [
       { directory = caddyStorageRoot; user = "caddy"; group = "caddy"; mode = "u=rwx,g=,o="; }
     ];
+
+    users.users.caddy = {};
   };
 
   make = (inputs@{ host, ... }: make host inputs);
