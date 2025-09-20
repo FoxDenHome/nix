@@ -1,7 +1,7 @@
 { nixpkgs, ifcfg, mkHostSuffix, hosts, ... } :
 let
   eSA = nixpkgs.lib.strings.escapeShellArg;
-  mkIfaceName = host: "bveth-${mkHostSuffix host}";
+  mkIfaceName = host: "brve-${mkHostSuffix host}";
 in
 {
   configType = with nixpkgs.lib.types; submodule { };
