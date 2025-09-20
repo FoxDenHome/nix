@@ -41,12 +41,7 @@ in
     "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA info.serviceInterface}"
   ]);
 
-  execStartLate = ({ ipInNsCmd, info, ... }: [
-    #"${ipInNsCmd} route add 169.254.13.37 dev ${eSA info.serviceInterface}"
-    #"${ipInNsCmd} route add fe80::e621 dev ${eSA info.serviceInterface}"
-    "${ipInNsCmd} route add default via 169.254.13.37 dev ${eSA info.serviceInterface}"
-    "${ipInNsCmd} route add default via fe80::e621 dev ${eSA info.serviceInterface}"
-  ]);
+  execStartLate = ({ ipInNsCmd, info, ... }: []);
 
   execStop = ({ ipCmd, host, info, ... }: [
     "${ipCmd} link del ${eSA (mkIfaceName host)}"
