@@ -157,7 +157,7 @@ in
       };
 
       driver = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-        type = enum [ "bridge" ];
+        type = enum [ "bridge" "routed" ];
         default = "bridge";
       };
 

@@ -54,31 +54,22 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  systemd.network.netdevs."40-${bridgeDev}" = {
-    netdevConfig = {
-      Name = bridgeDev;
-      Kind = "bridge";
-    };
-
-    bridgeConfig = {
-      VLANFiltering = true;
-    };
-  };
-
   systemd.network.networks."40-${ifcfg.default}" = util.mkNwInterfaceConfig ifcfg.default ifcfg;
-  systemd.network.networks."40-${bridgeDev}" = {
-    name = bridgeDev;
-    networkConfig = {
-      DHCP = "no";
-      IPv6AcceptRA = "no";
-      LinkLocalAddressing = "no";
-    };
-  };
   foxDen.hosts.routes = util.mkRoutes {
     ipv4.gateway = ifcfg.ipv4.address;
     ipv6.gateway = ifcfg.ipv6.address;
   };
+  foxDen.hosts.driver = "routed";
 
+  #systemd.network.netdevs."40-${bridgeDev}" = {
+  #  netdevConfig = {
+  #    Name = bridgeDev;
+  #    Kind = "bridge";
+  #  };
+  #  bridgeConfig = {
+  #    VLANFiltering = true;
+  #  };
+  #};
   #systemd.network.networks."40-${bridgeDev}" = util.mkNwInterfaceConfig bridgeDev ifcfg;
   #systemd.network.networks."40-${bridgeDev}-${ifcfg.default}" = {
   #    name = ifcfg.default;
@@ -90,13 +81,13 @@ in
       # }];
   #};
   #foxDen.hosts.routes = util.mkRoutes ifcfg;
+  #foxDen.hosts.driver = "bridge";
+  #foxDen.hosts.driverOpts = {
+  #  bridge = bridgeDev;
+  #};
 
   foxDen.sops.available = true;
   foxDen.boot.secure = true;
-  foxDen.hosts.driver = "bridge";
-  foxDen.hosts.driverOpts = {
-    bridge = bridgeDev;
-  };
 
   foxDen.hosts.subnet = util.mkSubnet ifcfg;
 
