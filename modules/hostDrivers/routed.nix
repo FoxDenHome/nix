@@ -23,7 +23,7 @@ in
           {
             name = "60-host-${name}";
             value.name = (mkIfaceName value);
-            valuea.address = util.mkNetworkdAddresses [
+            value.address = util.mkNetworkdAddresses [
               {
                 address = "169.254.13.37";
                 prefixLength = 16;
