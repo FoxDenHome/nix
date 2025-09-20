@@ -31,7 +31,7 @@ in
         (nixpkgs.lib.flatten
           (map
             (host: if host.manageNetwork then [host.external.ipv6 host.internal.ipv6] else [])
-            (nixpkgs.lib.attrsets.attrValues config.foxDen.hosts.hosts))));
+            (nixpkgs.lib.attrsets.attrValues hosts))));
     };
   } (nixpkgs.lib.attrsets.listToAttrs (
       nixpkgs.lib.lists.flatten
