@@ -258,7 +258,7 @@ in
             driverRunParams = { inherit host ipCmd ipInNsCmd serviceInterface; };
           in
           {
-            name = (nixpkgs.lib.strings.removeSuffix ".service" info.name);
+            name = (nixpkgs.lib.strings.removeSuffix ".service" info.unit);
             value = {
               description = "NetNS ${namespace}";
               unitConfig = {
