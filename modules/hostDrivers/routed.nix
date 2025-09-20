@@ -27,6 +27,8 @@ in
               DHCP = "no";
               IPv6AcceptRA = "no";
               LinkLocalAddressing = "no";
+              IPv4Forwarding = true;
+              IPv6Forwarding = true;
             };
             value.routes = map (addr: {
               Destination = addr;

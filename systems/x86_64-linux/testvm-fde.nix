@@ -57,7 +57,10 @@ in
   systemd.network.networks."40-${ifcfg.default}" = lib.mkMerge [
     {
       networkConfig = {
+        IPv4Forwarding = true;
+        IPv6Forwarding = true;
         IPv4ProxyARP = true;
+        IPv6ProxyNDP = true;
       };
     }
     (util.mkNwInterfaceConfig ifcfg.default ifcfg)
