@@ -19,12 +19,27 @@ let
     }
   ] else []));
 
+  mkRoutesGWSubnet = (ifcfg:
+  (if (ifcfg.ipv4.address or "") != "" then [
+    {
+      Destination = "${ifcfg.ipv4.address}/32";
+    }
+  ] else []) ++ (if (ifcfg.ipv6.address or "") != "" then [
+    {
+      Destination = "${ifcfg.ipv6.address}/128";
+    }
+  ] else []));
+
   mkNetworkdAddresses = (addrs: 
     map (addr: "${addr.address}/${toString addr.prefixLength}")
     (nixpkgs.lib.lists.filter (addr: addr != "") addrs));
 in
 {
-  mkRoutes = mkRoutesAK (if isRouted then "address" else "gateway");
+  mkRoutes = (ifcfg:
+    if isRouted then
+      ((mkRoutesAK "address" ifcfg) ++ (mkRoutesGWSubnet ifcfg))
+    else
+      (mkRoutesAK "gateway" ifcfg));
 
   mkNetworkConfig = (name: ifcfg: {
     name = name;
