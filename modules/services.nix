@@ -28,8 +28,17 @@ let
         };
       };
     });
+
+    caddyStorageRoot = "/var/lib/foxden/services/caddy";
 in
 {
+  nixosModules.services = { ... }:
+  {
+    environment.persistence."/nix/persist/foxden/services".directories = [
+      { directory = caddyStorageRoot; user = "caddy"; group = "caddy"; mode = "u=rwx,g=,o="; }
+    ];
+  };
+
   make = (inputs@{ host, ... }: make host inputs);
 
   makeHTTPProxy = (inputs@{ config, pkgs, host, tls, target, ... }:
@@ -41,12 +50,19 @@ in
       svc = make serviceName inputs;
       caddyfile = "/etc/caddy/sites/${host}/Caddyfile";
       cmd = (eSA "${pkgs.caddy}/bin/caddy");
+
+      storageDir = "${caddyStorageRoot}/${host}";
     in
     {
       config = nixpkgs.lib.mkMerge [
         svc.config
         {
           environment.etc.${nixpkgs.lib.strings.removePrefix "/etc/" caddyfile}.text = ''
+            {
+              storage file_system {
+                root ${storageDir}
+              }
+            }
             ${url} {
               reverse_proxy ${target}
             }
@@ -54,9 +70,15 @@ in
 
           systemd.services.${serviceName} = {
             serviceConfig = {
+              Environment = [
+                "XDG_DATA_HOME=${storageDir}"
+              ];
               ExecStart = "${cmd} run --config ${eSA caddyfile}";
               ExecReload = "${cmd} reload --config ${eSA caddyfile}";
+              User = "caddy";
+              Group = "caddy";
               Restart = "always";
+              ReadWritePaths = [storageDir];
             };
             wantedBy = ["multi-user.target"];
           };
