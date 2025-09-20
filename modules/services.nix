@@ -68,7 +68,7 @@ in
       cmd = (eSA "${pkgs.caddy}/bin/caddy");
 
       trustedProxies = config.foxDen.services.trustedProxies;
-      trustedProxiesStr = nixpkgs.lib.strings.concatStringsSep " " trustedProxies;
+      mkTrustedProxies = (prefix: if (builtins.length trustedProxies) > 0 then prefix + " " + (nixpkgs.lib.strings.concatStringsSep " " trustedProxies) else "");
     in
     (nixpkgs.lib.mkMerge [
       svc
@@ -82,12 +82,12 @@ in
               listener_wrappers {
                 proxy_protocol {
                   timeout 5s
-                  ${trustedProxiesStr}
+                  ${mkTrustedProxies "allow"}
                 }
                 tls
               }
               trusted_proxies_strict
-              trusted_proxies static ${trustedProxiesStr}
+              ${mkTrustedProxies "trusted_proxies static"}
             }
           }
 
