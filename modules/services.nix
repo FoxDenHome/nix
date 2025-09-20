@@ -82,8 +82,8 @@ in
               ];
               ExecStart = "${cmd} run --config ${eSA caddyfile}";
               ExecReload = "${cmd} reload --config ${eSA caddyfile}";
-              User = "caddy";
-              Group = "caddy";
+              User = caddyUser;
+              Group = caddyUser;
               Restart = "always";
               ReadWritePaths = [storageDir];
             };
