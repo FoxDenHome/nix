@@ -24,7 +24,7 @@ let
           ProtectSystem = "strict";
           ProtectHome = "tmpfs";
           ReadOnlyPaths = ["/"];
-          Restart = "always";
+          Restart = nixpkgs.lib.mkForce "always";
         };
       };
     });
