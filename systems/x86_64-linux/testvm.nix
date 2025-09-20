@@ -45,7 +45,7 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  systemd.network.networks."${foxDen.hosts.ifcfg.network}" =
+  systemd.network.networks."${ifcfg.network}" =
     {
       # bridgeVLANs = [{
       #   PVID = 2;
