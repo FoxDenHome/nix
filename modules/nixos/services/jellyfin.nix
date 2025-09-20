@@ -15,11 +15,11 @@ in
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
-      inherit svcConfig pkgs;
+      inherit svcConfig pkgs config;
       host = "jellyfin";
     })
     (services.makeHTTPProxy {
-      inherit svcConfig pkgs;
+      inherit svcConfig pkgs config;
       host = "jellyfin";
       target = "http://localhost:8096";
     })

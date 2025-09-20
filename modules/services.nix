@@ -50,12 +50,12 @@ in
   } (mkOptions inputs));
   mkOptions = mkOptions;
 
-  makeHTTPProxy = (inputs@{ svcConfig, pkgs, host, target, ... }:
+  makeHTTPProxy = (inputs@{ config, svcConfig, pkgs, host, target, ... }:
     let
       caddyStorageRoot = "/var/lib/foxden/services/caddy/${host}";
       caddyUser = "foxden-caddy-${host}";
 
-      hostCfg = hosts.mkHostConfig host;
+      hostCfg = hosts.mkHostConfig config host;
       hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.name}.${hostCfg.root}";
       url = (if svcConfig.tls then "" else "http://") + hostPort;
 
