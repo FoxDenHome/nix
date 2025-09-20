@@ -82,6 +82,7 @@ in
   };
 
   foxDen.services.jellyfin.enable = true;
+  foxDen.services.jellyfin.tls = false;
 
   foxDen.hosts.hosts = {
     system = {
