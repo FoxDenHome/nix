@@ -1,6 +1,7 @@
 { modulesPath, config, ... }:
 let
   ifcfg = config.foxDen.hosts.ifcfg;
+  rootInterface = "enp1s0";
 in
 {
   system.stateVersion = "25.05";
@@ -19,7 +20,7 @@ in
       prefixLength = 64;
     };
     dns = [ "8.8.8.8" ];
-    interface = "enp1s0";
+    interface = "br-default";
   };
 
   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "sr_mod" "virtio_blk" ];
@@ -60,6 +61,25 @@ in
 
   foxDen.sops.available = true;
   foxDen.boot.secure = true;
+
+  systemd.network.networks."${ifcfg.network}" =
+    {
+      # bridgeVLANs = [{
+      #   PVID = 2;
+      #   EgressUntagged = 2;
+      #   VLAN = "1-10";
+      # }];
+    };
+
+  systemd.network.networks."40-${ifcfg.interface}-${rootInterface}" = {
+      name = rootInterface;
+      bridge = [ifcfg.interface];
+      # bridgeVLANs = [{
+      #   PVID = 2;
+      #   EgressUntagged = 2;
+      #   VLAN = "1-10";
+      # }];
+  };
 
   foxDen.services.jellyfin.enable = true;
 

@@ -1,15 +1,10 @@
-{ nixpkgs, driverOpts, mkHostSuffix, hosts, ... } :
+{ nixpkgs, ifcfg, mkHostSuffix, hosts, ... } :
 let
   eSA = nixpkgs.lib.strings.escapeShellArg;
   mkIfaceName = host: "bveth-${mkHostSuffix host}";
 in
 {
-  configType = with nixpkgs.lib.types; submodule {
-    options.bridge = nixpkgs.lib.mkOption {
-      type = str;
-      default = "br-default";
-    };
-  };
+  configType = with nixpkgs.lib.types; submodule { };
 
   config.systemd.network.networks =
     nixpkgs.lib.attrsets.listToAttrs (
@@ -19,7 +14,7 @@ in
             name = "60-host-${name}";
             value = {
               name = mkIfaceName value;
-              bridge = [driverOpts.bridge];
+              bridge = [ifcfg.interface];
               bridgeVLANs = [{
                 PVID = value.vlan;
                 EgressUntagged = value.vlan;
@@ -29,9 +24,9 @@ in
           }
         ])) (nixpkgs.lib.attrsets.attrsToList hosts)));
 
-  config.systemd.network.netdevs.${driverOpts.bridge} = {
+  config.systemd.network.netdevs.${ifcfg.interface} = {
     netdevConfig = {
-      Name = driverOpts.bridge;
+      Name = ifcfg.interface;
       Kind = "bridge";
     };
 

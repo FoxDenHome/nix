@@ -1,7 +1,7 @@
 { modulesPath, config, ... }:
 let
   ifcfg = config.foxDen.hosts.ifcfg;
-  bridgeDev = config.foxDen.hosts.driverOpts.bridge;
+  rootInterface = "enp1s0";
 in
 {
   system.stateVersion = "25.05";
@@ -20,7 +20,7 @@ in
       prefixLength = 64;
     };
     dns = [ "8.8.8.8" ];
-    interface = "enp1s0";
+    interface = "br-default";
   };
 
   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "sr_mod" "virtio_blk" ];
@@ -54,9 +54,9 @@ in
       # }];
     };
 
-  systemd.network.networks."40-${bridgeDev}-${ifcfg.interface}" = {
-      name = ifcfg.interface;
-      bridge = [bridgeDev];
+  systemd.network.networks."40-${ifcfg.interface}-${rootInterface}" = {
+      name = rootInterface;
+      bridge = [ifcfg.interface];
       # bridgeVLANs = [{
       #   PVID = 2;
       #   EgressUntagged = 2;

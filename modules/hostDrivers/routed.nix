@@ -15,8 +15,7 @@ let
     ] else []);
 in
 {
-  configType = with nixpkgs.lib.types; submodule {
-  };
+  configType = with nixpkgs.lib.types; submodule { };
 
   config.systemd.network.networks = nixpkgs.lib.mergeAttrs {
     "${ifcfg.network}" = {
