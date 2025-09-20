@@ -64,7 +64,11 @@ in
       VLANFiltering = true;
     };
   };
+
   systemd.network.networks."40-${ifcfg.default}" = util.mkNwInterfaceConfig ifcfg.default ifcfg;
+  systemd.network.networks."40-${bridgeDev}" = {
+    name = bridgeDev;
+  };
 
   #systemd.network.networks."40-${bridgeDev}" = util.mkNwInterfaceConfig bridgeDev ifcfg;
   #systemd.network.networks."50-${bridgeDev}-${ifcfg.default}" = {
