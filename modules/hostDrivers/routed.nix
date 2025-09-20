@@ -48,17 +48,19 @@ in
           [
           {
             name = "60-host-${name}";
-            value.name = (mkIfaceName value);
-            value.networkConfig = {
-              DHCP = "no";
-              IPv6AcceptRA = "no";
-              LinkLocalAddressing = "no";
-              IPv4Forwarding = true;
-              IPv6Forwarding = true;
+            value = {
+              name = (mkIfaceName value);
+              networkConfig = {
+                DHCP = "no";
+                IPv6AcceptRA = "no";
+                LinkLocalAddressing = "no";
+                IPv4Forwarding = true;
+                IPv6Forwarding = true;
+              };
+              routes = map (addr: {
+                Destination = addr;
+              }) allAddrs;
             };
-            value.routes = map (addr: {
-              Destination = addr;
-            }) allAddrs;
           }
         ])) (nixpkgs.lib.attrsets.attrsToList hosts))));
 
