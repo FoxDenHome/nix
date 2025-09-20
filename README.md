@@ -5,10 +5,11 @@
 - [ ] Set up basic NixOS machine template
 	- [x] Kernel with module signing, ZFS and signed UKI
 	- [x] Usage of pre-existing SB keys (so we can re-use)
-- [ ] Set up simple basic app/group with veth NIC
+- [x] Set up simple basic app/group with veth NIC
+- [x] Kanidm auth
+- [ ] wireguard tunnel and VPN enforcement (systemd's RestrictNetworkInterfaces?)
 - [ ] Port all apps from FoxDenHome/docker
 - [ ] Samba server
-- [ ] Kanidm auth
 - [ ] All server machines should be fully NixOS
 	- [ ] bengalfox
 	- [ ] islandfox
@@ -16,7 +17,7 @@
 
 ## Goals (Post-MVP)
 
-- [ ] Set up config for SR-IOV NIC
+- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
 
 ## Notes
 
