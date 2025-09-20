@@ -55,7 +55,7 @@ in
       caddyStorageRoot = "/var/lib/foxden/services/caddy/${host}";
       caddyUser = "foxden-caddy-${host}";
 
-      hostCfg = hosts.getHostInfo host;
+      hostCfg = hosts.mkHostConfig host;
       hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.name}.${hostCfg.root}";
       url = (if svcConfig.tls then "" else "http://") + hostPort;
 
