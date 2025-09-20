@@ -64,6 +64,7 @@ in
       VLANFiltering = true;
     };
   };
+  systemd.network.networks."40-${bridgeDev}" = util.mkNwInterfaceConfig bridgeDev ifcfg;
   systemd.network.networks."50-${bridgeDev}-${ifcfg.bridgeRoot}" = {
       name = ifcfg.bridgeRoot;
       bridge = [bridgeDev];
@@ -73,8 +74,6 @@ in
       #   VLAN = "1-10";
       # }];
   };
-
-  networking.interfaces.${bridgeDev} = util.mkNwInterfaceConfig ifcfg;
 
   foxDen.sops.available = true;
   foxDen.boot.secure = true;
