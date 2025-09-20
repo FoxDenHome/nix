@@ -214,8 +214,7 @@ in
                 ++ [ "${ipInNsCmd} link set ${eSA info.serviceInterface} up" ]
                 ++ (map (route:
                       "${ipInNsCmd} route add ${eSA route.Destination} " + (if route.Gateway != "" then "via ${eSA route.Gateway}" else "dev ${eSA info.serviceInterface}"))
-                      config.foxDen.hosts.routes)
-                ++ (hostDriver.execStartLate { inherit host; inherit info; inherit ipCmd; inherit ipInNsCmd; });
+                      config.foxDen.hosts.routes);
                 ExecStop = [
                   "${ipCmd} netns del ${eSA namespace}"
                 ] ++ (hostDriver.execStop { inherit host; inherit info; inherit ipCmd; inherit ipInNsCmd; });

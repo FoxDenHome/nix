@@ -43,8 +43,6 @@ in
     "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA info.serviceInterface}"
   ]);
 
-  execStartLate = ({ ipInNsCmd, info, ... }: []);
-
   execStop = ({ ipCmd, host, info, ... }: [
     "${ipCmd} link del ${eSA (mkIfaceName host)}"
   ]);

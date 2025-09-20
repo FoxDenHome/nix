@@ -42,8 +42,6 @@ in
     "${ipCmd} link del ${eSA (mkIfaceName host)}"
   ]);
 
-  execStartLate = ({ ... }: []);
-
   info =
     nixpkgs.lib.attrsets.mapAttrs
       (name: value: {
