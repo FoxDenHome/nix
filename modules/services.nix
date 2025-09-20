@@ -58,6 +58,7 @@ in
               ExecReload = "${cmd} reload --config ${eSA caddyfile}";
               Restart = "always";
             };
+            wantedBy = ["multi-user.target"];
           };
         }
       ];
