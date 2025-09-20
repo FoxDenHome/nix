@@ -2,7 +2,7 @@
 
 ## Goals (MVP)
 
-- [ ] Set up basic NixOS machine template
+- [x] Set up basic NixOS machine template
 	- [x] Kernel with module signing, ZFS and signed UKI
 	- [x] Usage of pre-existing SB keys (so we can re-use)
 - [x] Set up simple basic app/group with veth NIC
