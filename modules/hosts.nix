@@ -259,7 +259,7 @@ in
       });
 
       systemd = nixpkgs.lib.mkMerge [ hostDriver.config.systemd {
-        network.networks."${foxDen.hosts.ifcfg.network}" = {
+        network.networks."${config.foxDen.hosts.ifcfg.network}" = {
           name = ifcfg.interface;
           routes = mkRoutesAK ifcfg "gateway";
           address = mkNetworkdAddresses [ifcfg.ipv4 ifcfg.ipv6];

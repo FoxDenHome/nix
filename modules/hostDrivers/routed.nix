@@ -21,7 +21,7 @@ in
   };
 
   config.systemd.network.networks = nixpkgs.lib.attrsets.mergeAttrs {
-    "${foxDen.hosts.ifcfg.network}" = {
+    "${ifcfg.network}" = {
       IPv4Forwarding = true;
       IPv6Forwarding = true;
       IPv4ProxyARP = true;
