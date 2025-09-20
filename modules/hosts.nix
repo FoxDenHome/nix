@@ -1,6 +1,6 @@
 { nixpkgs, ... }:
 let
-  util = import ../util.nix { inherit nixpkgs; };
+  util = import ./util.nix { inherit nixpkgs; };
   dns = import ./dns.nix { inherit nixpkgs; };
   globalConfig = import ./globalConfig.nix { inherit nixpkgs; };
   eSA = nixpkgs.lib.strings.escapeShellArg;
