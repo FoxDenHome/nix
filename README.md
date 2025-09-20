@@ -8,6 +8,7 @@
 - [x] Set up simple basic app/group with veth NIC
 - [x] Kanidm auth
 - [ ] wireguard tunnel and VPN enforcement (systemd's RestrictNetworkInterfaces?)
+- [ ] HTTP(s) frontend service with OAuth toggle
 - [ ] Port all apps from FoxDenHome/docker
 - [ ] Samba server
 - [ ] All server machines should be fully NixOS
