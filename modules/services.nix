@@ -1,15 +1,13 @@
-{ ... }:
+{ nixpkgs, ... }:
+let
+  hosts = import ./hosts.nix { inherit nixpkgs; };
+in
 {
   make = ({ name, config, ... }:
     let
-      host = config.foxDen.hosts.hosts.${name};
-      info = config.foxDen.hosts.info.${name};
+      info = hosts.mkHostInfo name;
     in
     {
-      host = host;
-      info = info;
-      enable = host != null;
-
       oci.networks = [ "ns:${info.namespace}" ]; # TODO: Test
 
       systemd.unitConfig = {

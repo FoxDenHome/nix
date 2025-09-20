@@ -1,7 +1,5 @@
-{ nixpkgs, ifcfg, hosts, mkRoutesAK, ... } :
+{ nixpkgs, ifcfg, hosts, mkRoutesAK, mkHostSuffix, ... } :
 let
-  util = import ../util.nix { inherit nixpkgs; };
-  mkHostSuffix = host: util.mkHash8 host.name;
   eSA = nixpkgs.lib.strings.escapeShellArg;
   mkIfaceName = host: "rveth-${mkHostSuffix host}";
 
@@ -64,14 +62,14 @@ in
           }
         ])) (nixpkgs.lib.attrsets.attrsToList hosts))));
 
-  execStart = ({ ipCmd, host, info, ... }: let
+  execStart = ({ ipCmd, host, serviceInterface, ... }: let
     hostIface = mkIfaceName host;
   in [
     "-${ipCmd} link del ${eSA hostIface}"
-    "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA info.serviceInterface}"
+    "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA serviceInterface}"
   ]);
 
-  execStop = ({ ipCmd, host, info, ... }: [
+  execStop = ({ ipCmd, host, ... }: [
     "${ipCmd} link del ${eSA (mkIfaceName host)}"
   ]);
 
@@ -80,10 +78,4 @@ in
     ipv4 = 32;
     ipv6 = 128;
   };
-
-  info =
-    nixpkgs.lib.attrsets.mapAttrs
-      (name: value: {
-        serviceInterface = "pveth-${mkHostSuffix value}";
-      }) hosts;
 }

@@ -1,4 +1,4 @@
-{ nixpkgs, lib, modulesPath, config, ... }:
+{ modulesPath, config, ... }:
 let
   ifcfg = config.foxDen.hosts.ifcfg;
   bridgeDev = config.foxDen.hosts.driverOpts.bridge;

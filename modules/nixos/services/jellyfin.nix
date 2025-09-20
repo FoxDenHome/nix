@@ -1,9 +1,9 @@
 { nixpkgs, lib, config, ... }:
 let
-  services = import ../services.nix { inherit nixpkgs; };
+  services = import ../../services.nix { inherit nixpkgs; };
   svc = services.make {
     inherit config;
-    name = "jellyfin";
+    name = config.foxDen.services.jellyfin.host;
   };
 
   mkJellyfinDir = (dir: {
@@ -14,7 +14,15 @@ let
   });
 in
 {
-  config = lib.mkIf svc.enable {
+  options.foxDen.services.jellyfin = with nixpkgs.lib.types; { 
+    host = {
+      type = str;
+      default = "jellyfin";
+    };
+    enable = nixpgkgs.lib.mkEnableOption "Jellyfin media server";
+  };
+
+  config = lib.mkIf config.foxDen.services.jellyfin.enable {
     services.jellyfin.enable = true;
     services.jellyfin.group = "share";
 

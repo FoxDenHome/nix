@@ -1,7 +1,5 @@
-{ nixpkgs, driverOpts, hosts, ... } :
+{ nixpkgs, driverOpts, mkHostSuffix, hosts, ... } :
 let
-  util = import ../util.nix { inherit nixpkgs; };
-  mkHostSuffix = host: util.mkHash8 host.name;
   eSA = nixpkgs.lib.strings.escapeShellArg;
   mkIfaceName = host: "bveth-${mkHostSuffix host}";
 in
@@ -42,20 +40,14 @@ in
     };
   };
 
-  execStart = ({ ipCmd, host, info, ... }: let
+  execStart = ({ ipCmd, host, serviceInterface, ... }: let
     iface = mkIfaceName host;
   in [
     "-${ipCmd} link del ${eSA iface}"
-    "${ipCmd} link add ${eSA iface} type veth peer name ${eSA info.serviceInterface}"
+    "${ipCmd} link add ${eSA iface} type veth peer name ${eSA (serviceInterface host)}"
   ]);
 
-  execStop = ({ ipCmd, host, info, ... }: [
+  execStop = ({ ipCmd, host, ... }: [
     "${ipCmd} link del ${eSA (mkIfaceName host)}"
   ]);
-
-  info =
-    nixpkgs.lib.attrsets.mapAttrs
-      (name: value: {
-        serviceInterface = "pveth-${mkHostSuffix value}";
-      }) hosts;
 }

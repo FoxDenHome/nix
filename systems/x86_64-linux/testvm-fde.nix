@@ -1,4 +1,4 @@
-{ nixpkgs, modulesPath, config, ... }:
+{ modulesPath, config, ... }:
 let
   ifcfg = config.foxDen.hosts.ifcfg;
 in
