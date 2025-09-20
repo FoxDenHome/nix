@@ -254,7 +254,7 @@ in
             ipCmd = eSA "${pkgs.iproute2}/bin/ip";
             ipInNsCmd = "${ipCmd} netns exec ${eSA namespace} ${ipCmd}";
 
-            mkServiceInterface = hostDriver.serviceInterface or (host: "pveth-${mkHostSuffix host}");
+            mkServiceInterface = hostDriver.serviceInterface or (host: "host-${mkHostSuffix host}");
             serviceInterface = mkServiceInterface host;
             driverRunParams = { inherit host ipCmd ipInNsCmd serviceInterface; };
           in
