@@ -1,7 +1,7 @@
 { nixpkgs, ifcfg, hosts, mkRoutesAK, mkHostSuffix, ... } :
 let
   eSA = nixpkgs.lib.strings.escapeShellArg;
-  mkIfaceName = host: "rtve-${mkHostSuffix host}";
+  mkIfaceName = host: "vethrt${mkHostSuffix host}";
 
   routesGWSubnet =
     (if (ifcfg.ipv4.address or "") != "" then [

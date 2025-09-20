@@ -103,7 +103,7 @@ let
     };
   };
 
-  getAddresses = (config: host:
+  mkIpCmdAddresses = (config: host:
     (map (addr: 
       "${addr}/${toString config.foxDen.hosts.subnet.ipv4}")
       (nixpkgs.lib.lists.filter (val: val != "") [
@@ -280,7 +280,7 @@ in
                 ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA namespace}" ]
                 ++ (map (addr:
                       "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
-                      (getAddresses config host))
+                      (mkIpCmdAddresses config host))
                 ++ [ "${ipInNsCmd} link set ${eSA serviceInterface} up" ]
                 ++ (map (route:
                       "${ipInNsCmd} route add ${eSA route.Destination} dev ${eSA serviceInterface}" + (if (route.Gateway or "") != "" then " via ${eSA route.Gateway}" else ""))
