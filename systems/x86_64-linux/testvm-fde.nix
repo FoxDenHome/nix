@@ -1,8 +1,7 @@
-{ nixpkgs, lib, modulesPath, config, ... }:
+{ nixpkgs, modulesPath, config, ... }:
 let
-  util = import ../../modules/util.nix { inherit nixpkgs; };
+  sysutil = import ../../modules/sysutil.nix { inherit config; inherit nixpkgs; };
 
-  bridgeDev = "br-default";
   ifcfg.ipv4 = {
     address = "192.168.122.200";
     gateway = "192.168.122.1";
@@ -54,59 +53,13 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  systemd.network.networks."40-${ifcfg.default}" = lib.mkMerge [
-    {
-      networkConfig = {
-        IPv4Forwarding = true;
-        IPv6Forwarding = true;
-        IPv4ProxyARP = true;
-        IPv6ProxyNDP = true;
-
-        IPv6ProxyNDPAddress =
-          (nixpkgs.lib.filter (addr: addr != "")
-            (nixpkgs.lib.flatten
-              (map
-                (host: [host.external.ipv6 host.internal.ipv6])
-                (lib.attrsets.attrValues config.foxDen.hosts.hosts))));
-      };
-    }
-    (util.mkNwInterfaceConfig ifcfg.default ifcfg)
-  ];
-  foxDen.hosts.routes = util.mkRoutes {
-    ipv4.gateway = ifcfg.ipv4.address;
-    ipv6.gateway = ifcfg.ipv6.address;
-  };
+  systemd.network.networks."40-${ifcfg.default}" = sysutil.mkNetworkConfig ifcfg.default ifcfg;
+  foxDen.hosts.routes = sysutil.mkRoutes ifcfg;
+  foxDen.hosts.subnet = sysutil.mkSubnet ifcfg;
   foxDen.hosts.driver = "routed";
-
-  #systemd.network.netdevs."40-${bridgeDev}" = {
-  #  netdevConfig = {
-  #    Name = bridgeDev;
-  #    Kind = "bridge";
-  #  };
-  #  bridgeConfig = {
-  #    VLANFiltering = true;
-  #  };
-  #};
-  #systemd.network.networks."40-${bridgeDev}" = util.mkNwInterfaceConfig bridgeDev ifcfg;
-  #systemd.network.networks."40-${bridgeDev}-${ifcfg.default}" = {
-  #    name = ifcfg.default;
-  #    bridge = [bridgeDev];
-      # bridgeVLANs = [{
-      #   PVID = 2;
-      #   EgressUntagged = 2;
-      #   VLAN = "1-10";
-      # }];
-  #};
-  #foxDen.hosts.routes = util.mkRoutes ifcfg;
-  #foxDen.hosts.driver = "bridge";
-  #foxDen.hosts.driverOpts = {
-  #  bridge = bridgeDev;
-  #};
 
   foxDen.sops.available = true;
   foxDen.boot.secure = true;
-
-  foxDen.hosts.subnet = util.mkSubnet ifcfg;
 
   foxDen.hosts.hosts = {
     system = {

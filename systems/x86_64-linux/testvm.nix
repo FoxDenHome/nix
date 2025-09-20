@@ -1,6 +1,6 @@
-{ nixpkgs, modulesPath, config, ... }:
+{ nixpkgs, lib, modulesPath, config, ... }:
 let
-  util = import ../../modules/util.nix { inherit nixpkgs; };
+  sysutil = import ../../modules/sysutil.nix { inherit config; inherit nixpkgs; };
 
   bridgeDev = config.foxDen.hosts.driverOpts.bridge;
   ifcfg.ipv4 = {
@@ -53,13 +53,15 @@ in
     };
   };
 
-  systemd.network.networks."40-${bridgeDev}" = nixpkgs.lib.attrsets.merge {
+  systemd.network.networks."40-${ifcfg.default}" = sysutil.mkNetworkConfig lib.mkMerge [
+    {
       # bridgeVLANs = [{
       #   PVID = 2;
       #   EgressUntagged = 2;
       #   VLAN = "1-10";
       # }];
-  } (util.mkNwInterfaceConfig bridgeDev ifcfg);
+    }
+    ifcfg.default ifcfg];
 
   systemd.network.networks."40-${bridgeDev}-${ifcfg.default}" = {
       name = ifcfg.default;
@@ -71,8 +73,8 @@ in
       # }];
   };
 
-  foxDen.hosts.routes = util.mkRoutes ifcfg;
-  foxDen.hosts.subnet = util.mkSubnet ifcfg;
+  foxDen.hosts.routes = sysutil.mkRoutes ifcfg;
+  foxDen.hosts.subnet = sysutil.mkSubnet ifcfg;
 
   foxDen.hosts.hosts = {
     system = {
