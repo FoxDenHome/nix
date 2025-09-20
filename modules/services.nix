@@ -30,15 +30,20 @@ let
     });
 
     caddyStorageRoot = "/var/lib/foxden/services/caddy";
+    caddyUser = "foxden-caddy";
 in
 {
   nixosModules.services = { ... }:
   {
     environment.persistence."/nix/persist/foxden/services".directories = [
-      { directory = caddyStorageRoot; user = "caddy"; group = "caddy"; mode = "u=rwx,g=,o="; }
+      { directory = caddyStorageRoot; user = caddyUser; group = caddyUser; mode = "u=rwx,g=,o="; }
     ];
 
-    users.users.caddy = {};
+    users.users.${caddyUser} = {
+      isSystemUser = true;
+      group = caddyUser;
+    };
+    user.groups.${caddyUser} = {};
   };
 
   make = (inputs@{ host, ... }: make host inputs);
