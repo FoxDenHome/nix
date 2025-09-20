@@ -1,24 +1,26 @@
 { nixpkgs, modulesPath, config, ... }:
 let
-  sysutil = import ../../modules/sysutil.nix { inherit config; inherit nixpkgs; };
-
-  ifcfg.ipv4 = {
-    address = "192.168.122.200";
-    gateway = "192.168.122.1";
-    prefixLength = 24;
-  };
-  ifcfg.ipv6 = {
-    address = "fd00:dead:beef:122::200";
-    gateway = "fd00:dead:beef:122::1";
-    prefixLength = 64;
-  };
-  ifcfg.dns = [ "8.8.8.8" ];
-  ifcfg.default = "enp1s0";
+  ifcfg = config.foxDen.hosts.ifcfg;
 in
 {
   system.stateVersion = "25.05";
 
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
+
+  foxDen.hosts.ifcfg = {
+    ipv4 = {
+      address = "192.168.122.200";
+      gateway = "192.168.122.1";
+      prefixLength = 24;
+    };
+    ipv6 = {
+      address = "fd00:dead:beef:122::200";
+      gateway = "fd00:dead:beef:122::1";
+      prefixLength = 64;
+    };
+    dns = [ "8.8.8.8" ];
+    interface = "enp1s0";
+  };
 
   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "sr_mod" "virtio_blk" ];
   boot.initrd.kernelModules = [ ];
@@ -54,9 +56,6 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  systemd.network.networks."40-${ifcfg.default}" = sysutil.mkNetworkConfig ifcfg.default ifcfg;
-  foxDen.hosts.routes = sysutil.mkRoutes ifcfg;
-  foxDen.hosts.subnet = sysutil.mkSubnet ifcfg;
   foxDen.hosts.driver = "routed";
 
   foxDen.sops.available = true;

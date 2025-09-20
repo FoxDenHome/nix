@@ -4,6 +4,23 @@ let
   globalConfig = import ./globalConfig.nix { inherit nixpkgs; };
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
+  ifcfgAddressType = with nixpkgs.lib.types; submodule {
+    options = {
+      address = nixpkgs.lib.mkOption {
+        type = str;
+        default = "";
+      };
+      gateway = nixpkgs.lib.mkOption {
+        type = str;
+        default = "";
+      };
+      prefixLength = nixpkgs.lib.mkOption {
+        type = int;
+        default = null;
+      };
+    };
+  };
+
   hostDnsRecordType = with nixpkgs.lib.types; submodule {
     options = {
       type = nixpkgs.lib.mkOption {
@@ -111,8 +128,62 @@ let
         host.internal.ipv6
         host.external.ipv6
       ])
-    )
-  );
+    ));
+
+  mkRoutesAK = (ifcfg: addrKey: let
+    addr.ipv4 = ifcfg.ipv4.${addrKey} or "";
+    addr.ipv6 = ifcfg.ipv6.${addrKey} or "";
+  in
+    (if (addr.ipv4 or "") != "" then [
+      {
+        Destination = "0.0.0.0/0";
+        Gateway = addr.ipv4;
+      }
+    ] else []) ++ (if (addr.ipv6 or "") != "" then [
+      {
+        Destination = "::/0";
+        Gateway = addr.ipv6;
+      }
+    ] else []));
+
+  mkRoutesGWSubnet = (ifcfg:
+    (if (ifcfg.ipv4.address or "") != "" then [
+      {
+        Destination = "${ifcfg.ipv4.address}/32";
+      }
+    ] else []) ++ (if (ifcfg.ipv6.address or "") != "" then [
+      {
+        Destination = "${ifcfg.ipv6.address}/128";
+      }
+    ] else []));
+
+  mkNetworkdAddresses = (addrs: 
+    map (addr: "${addr.address}/${toString addr.prefixLength}")
+    (nixpkgs.lib.lists.filter (addr: addr != "") addrs));
+
+  mkNetworkConfig = {
+    name = ifcfg.name;
+    routes = mkRoutesAK ifcfg "gateway";
+    address = mkNetworkdAddresses [ifcfg.ipv4 ifcfg.ipv6];
+    dns = ifcfg.dns or [];
+
+    networkConfig = {
+      DHCP = "no";
+      IPv6AcceptRA = false;
+
+      IPv4Forwarding = isRouted;
+      IPv6Forwarding = isRouted;
+      IPv4ProxyARP = isRouted;
+      IPv6ProxyNDP = isRouted;
+
+      IPv6ProxyNDPAddress = nixpkgs.lib.mkIf isRouted
+        (nixpkgs.lib.filter (addr: addr != "")
+          (nixpkgs.lib.flatten
+            (map
+              (host: if host.manageNetwork then [host.external.ipv6 host.internal.ipv6] else [])
+              (nixpkgs.lib.attrsets.attrValues config.foxDen.hosts.hosts))));
+    };
+  };
 in
 {
   hostType = hostType;
@@ -133,7 +204,8 @@ in
   nixosModules.hosts = ({ config, pkgs, ... }:
   let
     hosts = nixpkgs.lib.attrsets.filterAttrs (name: host: host.manageNetwork) config.foxDen.hosts.hosts;
-    hostDriver = import (./hostDrivers + "/${config.foxDen.hosts.driver}.nix") { inherit hosts; inherit nixpkgs; inherit pkgs; driverOpts = config.foxDen.hosts.driverOpts; };
+    ifcfg = config.foxDen.hosts.ifcfg;
+    hostDriver = import (./hostDrivers + "/${config.foxDen.hosts.driver}.nix") { inherit ifcfg; inherit mkRoutesAK; inherit hosts; inherit nixpkgs; inherit pkgs; driverOpts = config.foxDen.hosts.driverOpts; };
   in
   {
     options.foxDen.hosts = {
@@ -142,13 +214,36 @@ in
         default = {};
       };
 
-      subnet.ipv4 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-        type = int;
-        default = 24;
+      subnet = {
+        ipv4 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+          type = int;
+          default = 24;
+        };
+        ipv6 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+          type = int;
+          default = 64;
+        };
       };
-      subnet.ipv6 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-        type = int;
-        default = 64;
+
+      ifcfg = with nixpkgs.lib.types; {
+        dns = nixpkgs.lib.mkOption {
+          type = listOf str;
+          default = [ "8.8.8.8" ];
+        };
+        ipv4 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+          type = nullOr ifcfgAddressType;
+          default = null;
+        };
+        ipv6 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+          type = nullOr ifcfgAddressType;
+          default = null;
+        };
+        interface = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+          type = str;
+        };
+        network = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+          type = str;
+        };
       };
 
       routes = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
@@ -180,7 +275,38 @@ in
         }))
         hostDriver.info);
 
+      foxDen.hosts.ifcfg.network = nixpkgs.lib.mkDefault "40-${ifcfg.interface}";
+      foxDen.hosts.routes = nixpkgs.lib.mkDefault (hostDriver.routes or (mkRoutesAK ifcfg "gateway"));
+      foxDen.hosts.subnet = nixpkgs.lib.mkDefault (hostDriver.subnet or {
+        ipv4 = ifcfg.ipv4.prefixLength;
+        ipv6 = ifcfg.ipv6.prefixLength;
+      });
+
       systemd = nixpkgs.lib.mkMerge [ hostDriver.config.systemd {
+        network.networks."${foxDen.hosts.ifcfg.network}" = {
+          name = ifcfg.interface;
+          routes = mkRoutesAK ifcfg "gateway";
+          address = mkNetworkdAddresses [ifcfg.ipv4 ifcfg.ipv6];
+          dns = ifcfg.dns or [];
+
+          networkConfig = {
+            DHCP = "no";
+            IPv6AcceptRA = false;
+
+            IPv4Forwarding = isRouted;
+            IPv6Forwarding = isRouted;
+            IPv4ProxyARP = isRouted;
+            IPv6ProxyNDP = isRouted;
+
+            IPv6ProxyNDPAddress = nixpkgs.lib.mkIf isRouted
+              (nixpkgs.lib.filter (addr: addr != "")
+                (nixpkgs.lib.flatten
+                  (map
+                    (host: if host.manageNetwork then [host.external.ipv6 host.internal.ipv6] else [])
+                    (nixpkgs.lib.attrsets.attrValues config.foxDen.hosts.hosts))));
+          };
+        };
+
         services = (nixpkgs.lib.attrsets.listToAttrs
           (map (name: let
             info = config.foxDen.hosts.info.${name};

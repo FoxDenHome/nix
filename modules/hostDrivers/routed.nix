@@ -1,9 +1,20 @@
-{ nixpkgs, hosts, ... } :
+{ nixpkgs, ifcfg, hosts, ... } :
 let
   util = import ../util.nix { inherit nixpkgs; };
   mkHostSuffix = host: util.mkHash8 host.name;
   eSA = nixpkgs.lib.strings.escapeShellArg;
   mkIfaceName = host: "rveth-${mkHostSuffix host}";
+
+  routesGWSubnet =
+    (if (ifcfg.ipv4.address or "") != "" then [
+      {
+        Destination = "${ifcfg.ipv4.address}/32";
+      }
+    ] else []) ++ (if (ifcfg.ipv6.address or "") != "" then [
+      {
+        Destination = "${ifcfg.ipv6.address}/128";
+      }
+    ] else []);
 in
 {
   configType = with nixpkgs.lib.types; submodule {
@@ -46,6 +57,12 @@ in
   execStop = ({ ipCmd, host, info, ... }: [
     "${ipCmd} link del ${eSA (mkIfaceName host)}"
   ]);
+
+  routes = routesGWSubnet ++ (mkRoutesAK ifcfg "address");
+  subnet = {
+    ipv4 = 32;
+    ipv6 = 128;
+  };
 
   info =
     nixpkgs.lib.attrsets.mapAttrs

@@ -31,6 +31,17 @@ in
           }
         ])) (nixpkgs.lib.attrsets.attrsToList hosts)));
 
+  config.systemd.network.netdevs.${driverOpts.bridge} = {
+    netdevConfig = {
+      Name = driverOpts.bridge;
+      Kind = "bridge";
+    };
+
+    bridgeConfig = {
+      VLANFiltering = true;
+    };
+  };
+
   execStart = ({ ipCmd, host, info, ... }: let
     iface = mkIfaceName host;
   in [

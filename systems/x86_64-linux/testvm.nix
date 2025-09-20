@@ -1,25 +1,27 @@
 { nixpkgs, lib, modulesPath, config, ... }:
 let
-  sysutil = import ../../modules/sysutil.nix { inherit config; inherit nixpkgs; };
-
+  ifcfg = config.foxDen.hosts.ifcfg;
   bridgeDev = config.foxDen.hosts.driverOpts.bridge;
-  ifcfg.ipv4 = {
-    address = "192.168.122.200";
-    gateway = "192.168.122.1";
-    prefixLength = 24;
-  };
-  ifcfg.ipv6 = {
-    address = "fd00:dead:beef:122::200";
-    gateway = "fd00:dead:beef:122::1";
-    prefixLength = 64;
-  };
-  ifcfg.dns = [ "8.8.8.8" ];
-  ifcfg.default = "enp1s0";
 in
 {
   system.stateVersion = "25.05";
 
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
+
+  foxDen.hosts.ifcfg = {
+    ipv4 = {
+      address = "192.168.122.200";
+      gateway = "192.168.122.1";
+      prefixLength = 24;
+    };
+    ipv6 = {
+      address = "fd00:dead:beef:122::200";
+      gateway = "fd00:dead:beef:122::1";
+      prefixLength = 64;
+    };
+    dns = [ "8.8.8.8" ];
+    interface = "enp1s0";
+  };
 
   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "sr_mod" "virtio_blk" ];
   boot.initrd.kernelModules = [ ];
@@ -43,29 +45,17 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  systemd.network.netdevs."40-${bridgeDev}" = {
-    netdevConfig = {
-      Name = bridgeDev;
-      Kind = "bridge";
-    };
-
-    bridgeConfig = {
-      VLANFiltering = true;
-    };
-  };
-
-  systemd.network.networks."40-${ifcfg.default}" = sysutil.mkNetworkConfig lib.mkMerge [
+  systemd.network.networks."${foxDen.hosts.ifcfg.network}" =
     {
       # bridgeVLANs = [{
       #   PVID = 2;
       #   EgressUntagged = 2;
       #   VLAN = "1-10";
       # }];
-    }
-    ifcfg.default ifcfg];
+    };
 
-  systemd.network.networks."40-${bridgeDev}-${ifcfg.default}" = {
-      name = ifcfg.default;
+  systemd.network.networks."40-${bridgeDev}-${ifcfg.interface}" = {
+      name = ifcfg.interface;
       bridge = [bridgeDev];
       # bridgeVLANs = [{
       #   PVID = 2;
@@ -73,9 +63,6 @@ in
       #   VLAN = "1-10";
       # }];
   };
-
-  foxDen.hosts.routes = sysutil.mkRoutes ifcfg;
-  foxDen.hosts.subnet = sysutil.mkSubnet ifcfg;
 
   foxDen.hosts.hosts = {
     system = {
