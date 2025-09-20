@@ -14,12 +14,12 @@ let
   });
 in
 {
-  options.foxDen.services.jellyfin = with nixpkgs.lib.types; { 
+  options.foxDen.services.jellyfin = with lib.types; { 
     host = {
       type = str;
       default = "jellyfin";
     };
-    enable = nixpgkgs.lib.mkEnableOption "Jellyfin media server";
+    enable = lib.mkEnableOption "Jellyfin media server";
   };
 
   config = lib.mkIf config.foxDen.services.jellyfin.enable {
@@ -27,7 +27,7 @@ in
     services.jellyfin.group = "share";
 
     systemd.services.jellyfin.serviceConfig =
-      nixpkgs.lib.mergeAttrs
+      lib.mergeAttrs
         {
             ReadWritePaths = [
               config.services.jellyfin.cacheDir
