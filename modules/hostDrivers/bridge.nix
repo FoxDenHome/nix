@@ -1,4 +1,4 @@
-{ nixpkgs, driverOpts, ... } :
+{ nixpkgs, driverOpts, hosts, ... } :
 let
   util = import ../util.nix { };
   mkHostSuffix = host: util.mkHash8 host.name;
@@ -13,8 +13,7 @@ in
     };
   };
 
-
-  networks = (hosts:
+  config.systemd.network.networks =
     nixpkgs.lib.attrsets.listToAttrs (
       nixpkgs.lib.lists.flatten
         (map (({ name, value }: [
@@ -30,7 +29,7 @@ in
               }];
             };
           }
-        ])) (nixpkgs.lib.attrsets.attrsToList hosts))));
+        ])) (nixpkgs.lib.attrsets.attrsToList hosts)));
 
   execStart = ({ ipCmd, host, info, ... }: let
     iface = mkIfaceName host;
@@ -45,9 +44,9 @@ in
 
   execStartLate = ({ ... }: []);
 
-  infos = (hosts:
+  info =
     nixpkgs.lib.attrsets.mapAttrs
       (name: value: {
         serviceInterface = "pveth-${mkHostSuffix value}";
-      }) hosts);
+      }) hosts;
 }

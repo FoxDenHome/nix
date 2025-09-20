@@ -1,4 +1,4 @@
-{ nixpkgs, ... } :
+{ nixpkgs, hosts, ... } :
 let
   util = import ../util.nix { };
   mkHostSuffix = host: util.mkHash8 host.name;
@@ -9,8 +9,7 @@ in
   configType = with nixpkgs.lib.types; submodule {
   };
 
-  networks = (hosts:
-    nixpkgs.lib.attrsets.listToAttrs (
+  config.systemd.network.networks = nixpkgs.lib.attrsets.listToAttrs (
       nixpkgs.lib.lists.flatten
         (map (({ name, value }: [
           {
@@ -19,7 +18,7 @@ in
               name = mkIfaceName value;
             };
           }
-        ])) (nixpkgs.lib.attrsets.attrsToList hosts))));
+        ])) (nixpkgs.lib.attrsets.attrsToList hosts)));
 
   execStart = ({ ipCmd, host, info, ... }: let
     hostIface = mkIfaceName host;
@@ -48,9 +47,9 @@ in
     "${ipCmd} link del ${eSA (mkIfaceName host)}"
   ]);
 
-  infos = (hosts:
+  info =
     nixpkgs.lib.attrsets.mapAttrs
       (name: value: {
         serviceInterface = "pveth-${mkHostSuffix value}";
-      }) hosts);
+      }) hosts;
 }

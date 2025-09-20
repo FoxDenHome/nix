@@ -3,6 +3,7 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   services.sshd.enable = true;
+  networking.useNetworkd = true;
 
   boot.supportedFilesystems = [ "vfat" "xfs" "ext4" ];
 

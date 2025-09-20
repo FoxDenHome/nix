@@ -132,94 +132,97 @@ in
 
   nixosModules.hosts = ({ config, pkgs, ... }:
   let
-    hostDriver = import (./hostDrivers + "/${config.foxDen.hosts.driver}.nix") { inherit nixpkgs; inherit pkgs; driverOpts = config.foxDen.hosts.driverOpts; };
-    managedHosts = nixpkgs.lib.attrsets.filterAttrs (name: host: host.manageNetwork) config.foxDen.hosts.hosts;
+    hosts = nixpkgs.lib.attrsets.filterAttrs (name: host: host.manageNetwork) config.foxDen.hosts.hosts;
+    hostDriver = import (./hostDrivers + "/${config.foxDen.hosts.driver}.nix") { inherit hosts; inherit nixpkgs; inherit pkgs; driverOpts = config.foxDen.hosts.driverOpts; };
   in
   {
-    options.foxDen.hosts.hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-      type = (attrsOf hostType);
-      default = {};
+    options.foxDen.hosts = {
+      hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+        type = (attrsOf hostType);
+        default = {};
+      };
+
+      subnet.ipv4 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+        type = int;
+        default = 24;
+      };
+      subnet.ipv6 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+        type = int;
+        default = 64;
+      };
+
+      routes = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+        type = (listOf routeType);
+        default = [];
+      };
+
+      driver = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+        type = enum [ "bridge" "routed" ];
+        default = "bridge";
+      };
+
+      driverOpts = nixpkgs.lib.mkOption {
+        type = hostDriver.configType;
+        default = {};
+      };
+
+      info = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+        type = (attrsOf hostInfoType);
+        default = {};
+      };
     };
 
-    options.foxDen.hosts.subnet.ipv4 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-      type = int;
-      default = 24;
+    config = {
+      foxDen.hosts.info = (nixpkgs.lib.attrsets.mapAttrs
+        (name: info: (nixpkgs.lib.mergeAttrs info {
+          namespace = "/run/netns/host-${name}";
+          unit = "netns-host-${name}.service";
+        }))
+        hostDriver.info);
+
+      systemd = nixpkgs.lib.mkMerge [ hostDriver.config.systemd {
+        services = (nixpkgs.lib.attrsets.listToAttrs
+          (map (name: let
+            info = config.foxDen.hosts.info.${name};
+            host = config.foxDen.hosts.hosts.${name};
+            ipCmd = eSA "${pkgs.iproute2}/bin/ip";
+            ipInNsCmd = "${ipCmd} netns exec ${eSA namespace} ${ipCmd}";
+            namespace = "host-${name}";
+          in
+          {
+            name = "netns-${namespace}";
+            value = {
+              description = "NetNS ${namespace}";
+              unitConfig = {
+                StopWhenUnneeded = true;
+              };
+              serviceConfig = {
+                Type = "oneshot";
+                RemainAfterExit = true;
+                ExecStart = [
+                  "-${ipCmd} netns del ${eSA namespace}"
+                  "${ipCmd} netns add ${eSA namespace}"
+                  "${ipInNsCmd} addr add 127.0.0.1/8 dev lo"
+                  "${ipInNsCmd} addr add ::1/128 dev lo"
+                  "${ipInNsCmd} link set lo up"
+                ]
+                ++ (hostDriver.execStart { inherit host; inherit info; inherit ipCmd; inherit ipInNsCmd; })
+                ++ [ "${ipCmd} link set ${eSA info.serviceInterface} netns ${eSA namespace}" ]
+                ++ (map (addr:
+                      "${ipInNsCmd} addr add ${eSA addr} dev ${eSA info.serviceInterface}")
+                      (getAddresses config host))
+                ++ [ "${ipInNsCmd} link set ${eSA info.serviceInterface} up" ]
+                ++ (map (route:
+                    "-${ipInNsCmd} route add ${eSA route.target}" + (if route.gateway != "" then " via ${eSA route.gateway}" else "dev ${eSA info.serviceInterface}"))
+                      config.foxDen.hosts.routes)
+                ++ (hostDriver.execStartLate { inherit host; inherit info; inherit ipCmd; inherit ipInNsCmd; });
+                ExecStop = [
+                  "${ipCmd} netns del ${eSA namespace}"
+                ] ++ (hostDriver.execStop { inherit host; inherit info; inherit ipCmd; inherit ipInNsCmd; });
+              };
+            };
+          }) (nixpkgs.lib.attrsets.attrNames hosts)));
+      }];
     };
-    options.foxDen.hosts.subnet.ipv6 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-      type = int;
-      default = 64;
-    };
-
-    options.foxDen.hosts.routes = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-      type = (listOf routeType);
-      default = [];
-    };
-
-    options.foxDen.hosts.driver = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-      type = enum [ "bridge" "routed" ];
-      default = "bridge";
-    };
-
-    options.foxDen.hosts.driverOpts = nixpkgs.lib.mkOption {
-      type = hostDriver.configType;
-      default = {};
-    };
-
-    options.foxDen.hosts.info = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-      type = (attrsOf hostInfoType);
-      default = {};
-    };
-
-    config.foxDen.hosts.info = (nixpkgs.lib.attrsets.mapAttrs
-      (name: info: (nixpkgs.lib.mergeAttrs info {
-        namespace = "/run/netns/host-${name}";
-        unit = "netns-host-${name}.service";
-      }))
-      (hostDriver.infos managedHosts));
-
-    config.systemd.services = (nixpkgs.lib.attrsets.listToAttrs
-      (map (name: let
-         info = config.foxDen.hosts.info.${name};
-         host = config.foxDen.hosts.hosts.${name};
-         ipCmd = eSA "${pkgs.iproute2}/bin/ip";
-         ipInNsCmd = "${ipCmd} netns exec ${eSA namespace} ${ipCmd}";
-         namespace = "host-${name}";
-       in
-       {
-        name = "netns-${namespace}";
-        value = {
-          description = "NetNS ${namespace}";
-          unitConfig = {
-            StopWhenUnneeded = true;
-          };
-          serviceConfig = {
-            Type = "oneshot";
-            RemainAfterExit = true;
-            ExecStart = [
-              "-${ipCmd} netns del ${eSA namespace}"
-              "${ipCmd} netns add ${eSA namespace}"
-              "${ipInNsCmd} addr add 127.0.0.1/8 dev lo"
-              "${ipInNsCmd} addr add ::1/128 dev lo"
-              "${ipInNsCmd} link set lo up"
-            ]
-            ++ (hostDriver.execStart { inherit host; inherit info; inherit ipCmd; inherit ipInNsCmd; })
-            ++ [ "${ipCmd} link set ${eSA info.serviceInterface} netns ${eSA namespace}" ]
-            ++ (map (addr:
-                  "${ipInNsCmd} addr add ${eSA addr} dev ${eSA info.serviceInterface}")
-                  (getAddresses config host))
-            ++ [ "${ipInNsCmd} link set ${eSA info.serviceInterface} up" ]
-            ++ (map (route:
-                "-${ipInNsCmd} route add ${eSA route.target}" + (if route.gateway != "" then " via ${eSA route.gateway}" else "dev ${eSA info.serviceInterface}"))
-                  config.foxDen.hosts.routes)
-            ++ (hostDriver.execStartLate { inherit host; inherit info; inherit ipCmd; inherit ipInNsCmd; });
-            ExecStop = [
-              "${ipCmd} netns del ${eSA namespace}"
-            ] ++ (hostDriver.execStop { inherit host; inherit info; inherit ipCmd; inherit ipInNsCmd; });
-          };
-        };
-      }) (nixpkgs.lib.attrsets.attrNames managedHosts)));
-
-    config.systemd.network.networks = hostDriver.networks managedHosts;
-    config.networking.useNetworkd = true;
   });
 }
