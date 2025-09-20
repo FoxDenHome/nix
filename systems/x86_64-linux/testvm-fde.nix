@@ -54,6 +54,7 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
+  networking.interfaces.${ifcfg.default}.proxyARP = true;
   systemd.network.networks."40-${ifcfg.default}" = util.mkNwInterfaceConfig ifcfg.default ifcfg;
   foxDen.hosts.routes = util.mkRoutes {
     ipv4.gateway = ifcfg.ipv4.address;
