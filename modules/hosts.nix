@@ -160,30 +160,6 @@ let
   mkNetworkdAddresses = (addrs: 
     map (addr: "${addr.address}/${toString addr.prefixLength}")
     (nixpkgs.lib.lists.filter (addr: addr != "") addrs));
-
-  mkNetworkConfig = {
-    name = ifcfg.name;
-    routes = mkRoutesAK ifcfg "gateway";
-    address = mkNetworkdAddresses [ifcfg.ipv4 ifcfg.ipv6];
-    dns = ifcfg.dns or [];
-
-    networkConfig = {
-      DHCP = "no";
-      IPv6AcceptRA = false;
-
-      IPv4Forwarding = isRouted;
-      IPv6Forwarding = isRouted;
-      IPv4ProxyARP = isRouted;
-      IPv6ProxyNDP = isRouted;
-
-      IPv6ProxyNDPAddress = nixpkgs.lib.mkIf isRouted
-        (nixpkgs.lib.filter (addr: addr != "")
-          (nixpkgs.lib.flatten
-            (map
-              (host: if host.manageNetwork then [host.external.ipv6 host.internal.ipv6] else [])
-              (nixpkgs.lib.attrsets.attrValues config.foxDen.hosts.hosts))));
-    };
-  };
 in
 {
   hostType = hostType;
@@ -292,18 +268,6 @@ in
           networkConfig = {
             DHCP = "no";
             IPv6AcceptRA = false;
-
-            IPv4Forwarding = isRouted;
-            IPv6Forwarding = isRouted;
-            IPv4ProxyARP = isRouted;
-            IPv6ProxyNDP = isRouted;
-
-            IPv6ProxyNDPAddress = nixpkgs.lib.mkIf isRouted
-              (nixpkgs.lib.filter (addr: addr != "")
-                (nixpkgs.lib.flatten
-                  (map
-                    (host: if host.manageNetwork then [host.external.ipv6 host.internal.ipv6] else [])
-                    (nixpkgs.lib.attrsets.attrValues config.foxDen.hosts.hosts))));
           };
         };
 

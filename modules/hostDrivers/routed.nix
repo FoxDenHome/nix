@@ -20,7 +20,20 @@ in
   configType = with nixpkgs.lib.types; submodule {
   };
 
-  config.systemd.network.networks = nixpkgs.lib.attrsets.listToAttrs (
+  config.systemd.network.networks = nixpkgs.lib.attrsets.mergeAttrs {
+    "${foxDen.hosts.ifcfg.network}" = {
+      IPv4Forwarding = true;
+      IPv6Forwarding = true;
+      IPv4ProxyARP = true;
+      IPv6ProxyNDP = true;
+
+      IPv6ProxyNDPAddress = (nixpkgs.lib.filter (addr: addr != "")
+        (nixpkgs.lib.flatten
+          (map
+            (host: if host.manageNetwork then [host.external.ipv6 host.internal.ipv6] else [])
+            (nixpkgs.lib.attrsets.attrValues config.foxDen.hosts.hosts))));
+    };
+  } (nixpkgs.lib.attrsets.listToAttrs (
       nixpkgs.lib.lists.flatten
         (map (({ name, value }: let
           allAddrs = (nixpkgs.lib.lists.filter (val: val != "") [
@@ -45,7 +58,7 @@ in
               Destination = addr;
             }) allAddrs;
           }
-        ])) (nixpkgs.lib.attrsets.attrsToList hosts)));
+        ])) (nixpkgs.lib.attrsets.attrsToList hosts))));
 
   execStart = ({ ipCmd, host, info, ... }: let
     hostIface = mkIfaceName host;
