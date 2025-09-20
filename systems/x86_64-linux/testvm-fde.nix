@@ -61,6 +61,13 @@ in
         IPv6Forwarding = true;
         IPv4ProxyARP = true;
         IPv6ProxyNDP = true;
+
+        IPv6ProxyNDPAddress =
+          (nixpkgs.lib.filter (addr: addr != "")
+            (nixpkgs.lib.flatten
+              (map
+                (host: [host.external.ipv6 host.internal.ipv6])
+                (lib.attrsets.attrValues config.foxDen.hosts.hosts))));
       };
     }
     (util.mkNwInterfaceConfig ifcfg.default ifcfg)
