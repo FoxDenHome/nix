@@ -4,8 +4,7 @@ let
 
   isRouted = driver == "routed";
 
-  mkRoutes = (ifcfg: let
-    addrKey = if isRouted then "address" else "gateway";
+  mkRoutesAK = (addrKey: ifcfg: let
     addr.ipv4 = ifcfg.ipv4.${addrKey} or "";
     addr.ipv6 = ifcfg.ipv6.${addrKey} or "";
   in(if (addr.ipv4 or "") != "" then [
@@ -25,11 +24,11 @@ let
     (nixpkgs.lib.lists.filter (addr: addr != "") addrs));
 in
 {
-  mkRoutes = mkRoutes;
+  mkRoutes = mkRoutesAK (if isRouted then "address" else "gateway");
 
   mkNetworkConfig = (name: ifcfg: {
     name = name;
-    routes = mkRoutes ifcfg;
+    routes = mkRoutesAK "gateway" ifcfg;
     address = mkNetworkdAddresses [ifcfg.ipv4 ifcfg.ipv6];
     dns = ifcfg.dns or [];
 
