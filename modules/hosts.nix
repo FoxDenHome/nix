@@ -213,7 +213,7 @@ in
                       (getAddresses config host))
                 ++ [ "${ipInNsCmd} link set ${eSA info.serviceInterface} up" ]
                 ++ (map (route:
-                      "${ipInNsCmd} route add ${eSA route.Destination} " + (if route.Gateway != "" then "via ${eSA route.Gateway}" else "dev ${eSA info.serviceInterface}"))
+                      "${ipInNsCmd} route add ${eSA route.Destination} dev ${eSA info.serviceInterface}" + (if route.Gateway != "" then " via ${eSA route.Gateway}" else ""))
                       config.foxDen.hosts.routes);
                 ExecStop = [
                   "${ipCmd} netns del ${eSA namespace}"
