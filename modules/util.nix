@@ -3,7 +3,7 @@ let
   mkShortHash = (len: str:
     builtins.substring 0 len (builtins.hashString "sha256" str));
 
-  mkNetworkdRoutes = (ifcfg: (if (ifcfg.ipv4.gateway or "") != "" then [
+  mkRoutes = (ifcfg: (if (ifcfg.ipv4.gateway or "") != "" then [
     {
       Destination = "0.0.0.0/0";
       Gateway = ifcfg.ipv4.gateway;
@@ -23,10 +23,9 @@ in
   mkShortHash = mkShortHash;
   mkHash8 = mkShortHash 8;
 
-  mkNetworkdAddresses = mkNetworkdAddresses;
   mkNwInterfaceConfig = (name: ifcfg: {
     name = name;
-    routes = mkNetworkdRoutes ifcfg;
+    routes = mkRoutes ifcfg;
     address = mkNetworkdAddresses [ifcfg.ipv4 ifcfg.ipv6];
     networkConfig = {
       DHCP = "no";
@@ -34,15 +33,7 @@ in
     };
   });
 
-  mkRoutes = (ifcfg: (if ifcfg.ipv4.gateway != null then [
-    {
-      gateway = ifcfg.ipv4.gateway;
-    }
-  ] else []) ++ (if ifcfg.ipv6.gateway != null then [
-    {
-      gateway = ifcfg.ipv6.gateway;
-    }
-  ] else []));
+  mkRoutes = mkRoutes;
 
   mkSubnet = (ifcfg: {
     ipv4 = ifcfg.ipv4.prefixLength;

@@ -74,6 +74,10 @@ in
       LinkLocalAddressing = "no";
     };
   };
+  foxDen.hosts.routes = util.mkRoutes {
+    ipv4.gateway = ifcfg.ipv4.address;
+    ipv6.gateway = ifcfg.ipv6.address;
+  };
 
   #systemd.network.networks."40-${bridgeDev}" = util.mkNwInterfaceConfig bridgeDev ifcfg;
   #systemd.network.networks."40-${bridgeDev}-${ifcfg.default}" = {
@@ -85,6 +89,7 @@ in
       #   VLAN = "1-10";
       # }];
   #};
+  #foxDen.hosts.routes = util.mkRoutes ifcfg;
 
   foxDen.sops.available = true;
   foxDen.boot.secure = true;
@@ -93,7 +98,6 @@ in
     bridge = bridgeDev;
   };
 
-  #foxDen.hosts.routes = util.mkRoutes ifcfg;
   foxDen.hosts.subnet = util.mkSubnet ifcfg;
 
   foxDen.hosts.hosts = {
