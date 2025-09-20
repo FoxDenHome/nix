@@ -28,28 +28,20 @@ let
         };
       };
     });
-
-    caddyStorageRoot = "/var/lib/foxden/services/caddy";
-    caddyUser = "foxden-caddy";
 in
 {
   nixosModules.services = { ... }:
   {
-    environment.persistence."/nix/persist/foxden/services".directories = [
-      { directory = caddyStorageRoot; user = caddyUser; group = caddyUser; mode = "u=rwx,g=,o="; }
-    ];
 
-    users.users.${caddyUser} = {
-      isSystemUser = true;
-      group = caddyUser;
-    };
-    users.groups.${caddyUser} = {};
   };
 
   make = (inputs@{ host, ... }: make host inputs);
 
   makeHTTPProxy = (inputs@{ config, pkgs, host, tls, target, ... }:
     let
+      caddyStorageRoot = "/var/lib/foxden/services/caddy/${host}";
+      caddyUser = "foxden-caddy-${host}";
+
       hostCfg = hosts.mkHostConfig config host;
       url = (if tls then "" else "http://") + "${hostCfg.name}.${hostCfg.root}";
 
@@ -57,8 +49,6 @@ in
       svc = make serviceName inputs;
       caddyfile = "/etc/caddy/sites/${host}/Caddyfile";
       cmd = (eSA "${pkgs.caddy}/bin/caddy");
-
-      storageDir = "${caddyStorageRoot}/${host}";
     in
     {
       config = nixpkgs.lib.mkMerge [
@@ -67,7 +57,7 @@ in
           environment.etc.${nixpkgs.lib.strings.removePrefix "/etc/" caddyfile}.text = ''
             {
               storage file_system {
-                root ${storageDir}
+                root ${caddyStorageRoot}
               }
             }
             ${url} {
@@ -75,17 +65,27 @@ in
             }
           '';
 
+          environment.persistence."/nix/persist/foxden/services".directories = [
+            { directory = caddyStorageRoot; user = caddyUser; group = caddyUser; mode = "u=rwx,g=,o="; }
+          ];
+
+          users.users.${caddyUser} = {
+            isSystemUser = true;
+            group = caddyUser;
+          };
+          users.groups.${caddyUser} = {};
+
           systemd.services.${serviceName} = {
             serviceConfig = {
               Environment = [
-                "XDG_DATA_HOME=${storageDir}"
+                "XDG_DATA_HOME=${caddyStorageRoot}"
               ];
               ExecStart = "${cmd} run --config ${eSA caddyfile}";
               ExecReload = "${cmd} reload --config ${eSA caddyfile}";
               User = caddyUser;
               Group = caddyUser;
               Restart = "always";
-              ReadWritePaths = [storageDir];
+              ReadWritePaths = [caddyStorageRoot];
             };
             wantedBy = ["multi-user.target"];
           };
