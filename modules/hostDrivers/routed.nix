@@ -22,16 +22,18 @@ in
 
   config.systemd.network.networks = nixpkgs.lib.mergeAttrs {
     "${ifcfg.network}" = {
-      IPv4Forwarding = true;
-      IPv6Forwarding = true;
-      IPv4ProxyARP = true;
-      IPv6ProxyNDP = true;
+      networkConfig = {
+        IPv4Forwarding = true;
+        IPv6Forwarding = true;
+        IPv4ProxyARP = true;
+        IPv6ProxyNDP = true;
 
-      IPv6ProxyNDPAddress = (nixpkgs.lib.filter (addr: addr != "")
-        (nixpkgs.lib.flatten
-          (map
-            (host: if host.manageNetwork then [host.external.ipv6 host.internal.ipv6] else [])
-            (nixpkgs.lib.attrsets.attrValues hosts))));
+        IPv6ProxyNDPAddress = (nixpkgs.lib.filter (addr: addr != "")
+          (nixpkgs.lib.flatten
+            (map
+              (host: if host.manageNetwork then [host.external.ipv6 host.internal.ipv6] else [])
+              (nixpkgs.lib.attrsets.attrValues hosts))));
+      };
     };
   } (nixpkgs.lib.attrsets.listToAttrs (
       nixpkgs.lib.lists.flatten
