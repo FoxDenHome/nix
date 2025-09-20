@@ -1,4 +1,4 @@
-{ nixpkgs, modulesPath, config, ... }:
+{ nixpkgs, lib, modulesPath, config, ... }:
 let
   util = import ../../modules/util.nix { inherit nixpkgs; };
 
@@ -54,11 +54,14 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  systemd.network.networks."40-${ifcfg.default}" = util.mkNwInterfaceConfig {
-    networkConfig = {
-      IPv4ProxyARP = true;
-    };
-  } ifcfg.default ifcfg;
+  systemd.network.networks."40-${ifcfg.default}" = lib.mkMerge [
+    {
+      networkConfig = {
+        IPv4ProxyARP = true;
+      };
+    }
+    (util.mkNwInterfaceConfig ifcfg.default ifcfg)
+  ];
   foxDen.hosts.routes = util.mkRoutes {
     ipv4.gateway = ifcfg.ipv4.address;
     ipv6.gateway = ifcfg.ipv6.address;
@@ -74,7 +77,7 @@ in
   #    VLANFiltering = true;
   #  };
   #};
-  #systemd.network.networks."40-${bridgeDev}" = util.mkNwInterfaceConfig {} bridgeDev ifcfg;
+  #systemd.network.networks."40-${bridgeDev}" = util.mkNwInterfaceConfig bridgeDev ifcfg;
   #systemd.network.networks."40-${bridgeDev}-${ifcfg.default}" = {
   #    name = ifcfg.default;
   #    bridge = [bridgeDev];

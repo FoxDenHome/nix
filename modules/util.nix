@@ -23,7 +23,7 @@ in
   mkShortHash = mkShortHash;
   mkHash8 = mkShortHash 8;
 
-  mkNwInterfaceConfig = (opts: name: ifcfg: nixpkgs.lib.mergeAttrs opts {
+  mkNwInterfaceConfig = (name: ifcfg: {
     name = name;
     routes = mkRoutes ifcfg;
     address = mkNetworkdAddresses [ifcfg.ipv4 ifcfg.ipv6];
