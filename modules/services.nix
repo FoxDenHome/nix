@@ -41,7 +41,7 @@ in
 
   make = (inputs@{ host, ... }: make host inputs);
 
-  mkHttpOptions = (inputs@{ ... } : with nixpkgs.lib.types; nixpkgs.lib.attrsets.mergeAttrs {
+  mkHttpOptions = (inputs@{ ... } : with nixpkgs.lib.types; nixpkgs.lib.mergeAttrs {
     url = nixpkgs.lib.mkOption {
       type = str;
     };

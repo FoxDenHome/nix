@@ -9,5 +9,5 @@ in
   get = get;
   getList = getList;
 
-  getAttrSet = (attrPath: nixosConfigurations: nixpkgs.lib.attrsets.mergeAttrsList (getList attrPath nixosConfigurations));
+  getAttrSet = (attrPath: nixosConfigurations: nixpkgs.lib.mergeAttrsList (getList attrPath nixosConfigurations));
 }
