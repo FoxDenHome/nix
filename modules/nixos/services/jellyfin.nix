@@ -29,12 +29,12 @@ in
     systemd.services.jellyfin.serviceConfig =
       lib.mergeAttrs
         {
-            ReadWritePaths = [
-              config.services.jellyfin.cacheDir
-              config.services.jellyfin.configDir
-              config.services.jellyfin.dataDir
-              config.services.jellyfin.logDir
-            ];
+          ReadWritePaths = [
+            config.services.jellyfin.cacheDir
+            config.services.jellyfin.configDir
+            config.services.jellyfin.dataDir
+            config.services.jellyfin.logDir
+          ];
         }
         svc.systemd.serviceConfig;
 
