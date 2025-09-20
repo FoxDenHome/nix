@@ -23,15 +23,3 @@
 ## Notes
 
 zfs must be mountpoint=legacy
-
-```sh
-# Cleanup
-nix-collect-garbage --delete-old
-/run/current-system/bin/switch-to-configuration boot
-# Update
-nix flake update --flake 'github:FoxDenHome/nix'
-nixos-rebuild switch --flake "github:FoxDenHome/nix#$(hostname)"
-# Optionl: For update
-export GITHUB_TOKEN='github_pat_.......'
-export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
-```
