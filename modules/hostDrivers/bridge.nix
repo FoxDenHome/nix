@@ -44,7 +44,7 @@ in
     iface = mkIfaceName host;
   in [
     "-${ipCmd} link del ${eSA iface}"
-    "${ipCmd} link add ${eSA iface} type veth peer name ${eSA (serviceInterface host)}"
+    "${ipCmd} link add ${eSA iface} type veth peer name ${eSA (serviceInterface)}"
   ]);
 
   execStop = ({ ipCmd, host, ... }: [
