@@ -9,25 +9,19 @@ let
   });
 in
 {
-  options.foxDen.services.jellyfin = with nixpkgs.types; {
-    enable = lib.mkEnableOption "Jellyfin media server";
-    url = lib.mkOption {
-      type = str;
-    };
-    tls = lib.mkEnableOption "TLS";
-  };
+  options.foxDen.services.jellyfin = services.mkHttpOptions { name = "Jellyfin media server"; };
 
   config = lib.mkIf config.foxDen.services.jellyfin.enable (lib.mkMerge [
     (services.make {
       inherit config pkgs;
       host = "jellyfin";
-    }).config
+    })
     (services.makeHTTPProxy {
       inherit config pkgs;
       host = "jellyfin";
       target = "http://localhost:8096";
       tls = config.foxDen.services.jellyfin.tls;
-    }).config
+    })
     {
       services.jellyfin.enable = true;
       services.jellyfin.group = "share";

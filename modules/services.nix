@@ -9,7 +9,7 @@ let
     in
     {
       # oci.networks = [ "ns:${info.namespace}" ]; # TODO: Test
-      config.systemd.services.${svc} = {
+      systemd.services.${svc} = {
         unitConfig = {
           Requires = [ info.unit ];
           BindsTo = [ info.unit ];
@@ -28,6 +28,10 @@ let
         };
       };
     });
+
+  mkOptions = { name }: {
+    enable = nixpkgs.lib.mkEnableOption name;
+  };
 in
 {
   nixosModules.services = { ... }:
@@ -36,6 +40,14 @@ in
   };
 
   make = (inputs@{ host, ... }: make host inputs);
+
+  mkHttpOptions = (inputs@{ ... } : with nixpkgs.lib.types; nixpkgs.lib.attrsets.mergeAttrs {
+    url = nixpkgs.lib.mkOption {
+      type = str;
+    };
+    tls = nixpkgs.lib.mkEnableOption "TLS";
+  } (mkOptions inputs));
+  mkOptions = mkOptions;
 
   makeHTTPProxy = (inputs@{ config, pkgs, host, tls, target, ... }:
     let
@@ -50,52 +62,50 @@ in
       caddyfile = "/etc/caddy/sites/${host}/Caddyfile";
       cmd = (eSA "${pkgs.caddy}/bin/caddy");
     in
-    {
-      config = nixpkgs.lib.mkMerge [
-        svc.config
-        {
-          environment.etc.${nixpkgs.lib.strings.removePrefix "/etc/" caddyfile}.text = ''
-            {
-              storage file_system {
-                root ${caddyStorageRoot}
-              }
+    (nixpkgs.lib.mkMerge [
+      svc
+      {
+        environment.etc.${nixpkgs.lib.strings.removePrefix "/etc/" caddyfile}.text = ''
+          {
+            storage file_system {
+              root ${caddyStorageRoot}
             }
+          }
 
-            http:// {
-              # Required dummy empty section
-            }
+          http:// {
+            # Required dummy empty section
+          }
 
-            ${url} {
-              reverse_proxy ${target}
-            }
-          '';
+          ${url} {
+            reverse_proxy ${target}
+          }
+        '';
 
-          environment.persistence."/nix/persist/foxden/services".directories = [
-            { directory = caddyStorageRoot; user = caddyUser; group = caddyUser; mode = "u=rwx,g=,o="; }
-          ];
+        environment.persistence."/nix/persist/foxden/services".directories = [
+          { directory = caddyStorageRoot; user = caddyUser; group = caddyUser; mode = "u=rwx,g=,o="; }
+        ];
 
-          users.users.${caddyUser} = {
-            isSystemUser = true;
-            group = caddyUser;
+        users.users.${caddyUser} = {
+          isSystemUser = true;
+          group = caddyUser;
+        };
+        users.groups.${caddyUser} = {};
+
+        systemd.services.${serviceName} = {
+          serviceConfig = {
+            Environment = [
+              "XDG_DATA_HOME=${caddyStorageRoot}"
+            ];
+            ExecStart = "${cmd} run --config ${eSA caddyfile}";
+            ExecReload = "${cmd} reload --config ${eSA caddyfile}";
+            User = caddyUser;
+            Group = caddyUser;
+            Restart = "always";
+            ReadWritePaths = [caddyStorageRoot];
+            AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
           };
-          users.groups.${caddyUser} = {};
-
-          systemd.services.${serviceName} = {
-            serviceConfig = {
-              Environment = [
-                "XDG_DATA_HOME=${caddyStorageRoot}"
-              ];
-              ExecStart = "${cmd} run --config ${eSA caddyfile}";
-              ExecReload = "${cmd} reload --config ${eSA caddyfile}";
-              User = caddyUser;
-              Group = caddyUser;
-              Restart = "always";
-              ReadWritePaths = [caddyStorageRoot];
-              AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
-            };
-            wantedBy = ["multi-user.target"];
-          };
-        }
-      ];
-    });
+          wantedBy = ["multi-user.target"];
+        };
+      }
+    ]));
 }
