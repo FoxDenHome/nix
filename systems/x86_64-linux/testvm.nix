@@ -1,6 +1,6 @@
-{  modulesPath, config, ... }:
+{ nixpkgs, modulesPath, config, ... }:
 let
-  util = import ../../modules/util.nix { };
+  util = import ../../modules/util.nix { inherit nixpkgs; };
 
   bridgeDev = config.foxDen.hosts.driverOpts.bridge;
   ifcfg.ipv4 = {

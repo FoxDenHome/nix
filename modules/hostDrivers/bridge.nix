@@ -1,6 +1,6 @@
 { nixpkgs, driverOpts, hosts, ... } :
 let
-  util = import ../util.nix { };
+  util = import ../util.nix { inherit nixpkgs; };
   mkHostSuffix = host: util.mkHash8 host.name;
   eSA = nixpkgs.lib.strings.escapeShellArg;
   mkIfaceName = host: "bveth-${mkHostSuffix host}";

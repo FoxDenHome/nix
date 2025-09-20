@@ -19,7 +19,7 @@
 
     dns = import ./modules/dns.nix { inherit nixpkgs; };
     hosts = import ./modules/hosts.nix { inherit nixpkgs; };
-    util = import ./modules/util.nix { };
+    util = import ./modules/util.nix { inherit nixpkgs; };
 
     inputNixosModules = [
       impermanence.nixosModules.impermanence

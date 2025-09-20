@@ -1,4 +1,4 @@
-{ ... }:
+{ nixpkgs, ... }:
 let
   mkShortHash = (len: str:
     builtins.substring 0 len (builtins.hashString "sha256" str));
@@ -15,20 +15,19 @@ let
     }
   ] else []));
 
-  mkNetworkdAddresses = (ifcfg: (if (ifcfg.ipv4.address or "") != "" then [
-    "${ifcfg.ipv4.address}/${toString ifcfg.ipv4.prefixLength}"
-  ] else []) ++ (if (ifcfg.ipv6.address or "") != "" then [
-    "${ifcfg.ipv6.address}/${toString ifcfg.ipv6.prefixLength}"
-  ] else []));
+  mkNetworkdAddresses = (addrs: 
+    map (addr: "${addr.address}/${toString addr.prefixLength}")
+    (nixpkgs.lib.lists.filter (addr: addr != "") addrs));
 in
 {
   mkShortHash = mkShortHash;
   mkHash8 = mkShortHash 8;
 
+  mkNetworkdAddresses = mkNetworkdAddresses;
   mkNwInterfaceConfig = (name: ifcfg: {
     name = name;
     routes = mkNetworkdRoutes ifcfg;
-    address = mkNetworkdAddresses ifcfg;
+    address = mkNetworkdAddresses [ifcfg.ipv4 ifcfg.ipv6];
   });
 
   mkRoutes = (ifcfg: (if ifcfg.ipv4.gateway != null then [

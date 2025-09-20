@@ -1,6 +1,6 @@
-{  modulesPath, config, ... }:
+{ nixpkgs, modulesPath, config, ... }:
 let
-  util = import ../../modules/util.nix { };
+  util = import ../../modules/util.nix { inherit nixpkgs; };
 
   bridgeDev = "br-default";
   ifcfg.ipv4 = {
