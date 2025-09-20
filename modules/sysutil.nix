@@ -31,6 +31,7 @@ in
     name = name;
     routes = mkRoutes ifcfg;
     address = mkNetworkdAddresses [ifcfg.ipv4 ifcfg.ipv6];
+    dns = ifcfg.dns or [];
 
     networkConfig = {
       DHCP = "no";
