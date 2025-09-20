@@ -13,6 +13,7 @@ let
     gateway = "fd00:dead:beef:122::1";
     prefixLength = 64;
   };
+  ifcfg.dns = [ "8.8.8.8" ];
   ifcfg.default = "enp1s0";
 in
 {
