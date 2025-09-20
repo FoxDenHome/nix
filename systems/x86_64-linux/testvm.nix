@@ -13,7 +13,7 @@ let
     gateway = "fd00:dead:beef:122::1";
     prefixLength = 64;
   };
-  ifcfg.bridgeRoot = "enp1s0";
+  ifcfg.default = "enp1s0";
 in
 {
   system.stateVersion = "25.05";
@@ -45,8 +45,8 @@ in
   networking.bridges.${bridgeDev} = {
     interfaces = [ "enp1s0" ];
   };
-  systemd.network.networks."40-${bridgeDev}-${ifcfg.bridgeRoot}" = {
-      name = ifcfg.bridgeRoot;
+  systemd.network.networks."40-${bridgeDev}-${ifcfg.default}" = {
+      name = ifcfg.default;
       bridge = [bridgeDev];
       bridgeVLANs = [{
         PVID = "2";

@@ -13,7 +13,7 @@ let
     gateway = "fd00:dead:beef:122::1";
     prefixLength = 64;
   };
-  ifcfg.bridgeRoot = "enp1s0";
+  ifcfg.default = "enp1s0";
 in
 {
   system.stateVersion = "25.05";
@@ -64,20 +64,25 @@ in
       VLANFiltering = true;
     };
   };
-  systemd.network.networks."40-${bridgeDev}" = util.mkNwInterfaceConfig bridgeDev ifcfg;
-  systemd.network.networks."50-${bridgeDev}-${ifcfg.bridgeRoot}" = {
-      name = ifcfg.bridgeRoot;
-      bridge = [bridgeDev];
+  systemd.network.networks."40-${ifcfg.default}" = util.mkNwInterfaceConfig ifcfg.default ifcfg;
+
+  #systemd.network.networks."40-${bridgeDev}" = util.mkNwInterfaceConfig bridgeDev ifcfg;
+  #systemd.network.networks."50-${bridgeDev}-${ifcfg.default}" = {
+  #    name = ifcfg.default;
+  #    bridge = [bridgeDev];
       # bridgeVLANs = [{
       #   PVID = 2;
       #   EgressUntagged = 2;
       #   VLAN = "1-10";
       # }];
-  };
+  #};
 
   foxDen.sops.available = true;
   foxDen.boot.secure = true;
-  foxDen.hosts.driver = "routed";
+  foxDen.hosts.driver = "bridge";
+  foxDen.hosts.driverOpts = {
+    bridge = bridgeDev;
+  };
 
   #foxDen.hosts.routes = util.mkRoutes ifcfg;
   foxDen.hosts.subnet = util.mkSubnet ifcfg;
