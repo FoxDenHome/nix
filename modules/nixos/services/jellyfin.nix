@@ -5,6 +5,11 @@ let
     inherit config;
     name = config.foxDen.services.jellyfin.host;
   };
+  svcHttp = services.makeHTTPProxy {
+    inherit config;
+    name = config.foxDen.services.jellyfin.host;
+    target = "http://localhost:8096";
+  };
 
   mkJellyfinDir = (dir: {
     directory = dir;
