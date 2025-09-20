@@ -15,7 +15,7 @@ let
 in
 {
   options.foxDen.services.jellyfin = with lib.types; { 
-    host = {
+    host = lib.mkOption {
       type = str;
       default = "jellyfin";
     };
