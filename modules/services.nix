@@ -43,7 +43,7 @@ in
       isSystemUser = true;
       group = caddyUser;
     };
-    user.groups.${caddyUser} = {};
+    users.groups.${caddyUser} = {};
   };
 
   make = (inputs@{ host, ... }: make host inputs);
