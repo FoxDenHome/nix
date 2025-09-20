@@ -1,4 +1,4 @@
-{ nixpkgs, ifcfg, hosts, ... } :
+{ nixpkgs, ifcfg, hosts, mkRoutesAK, ... } :
 let
   util = import ../util.nix { inherit nixpkgs; };
   mkHostSuffix = host: util.mkHash8 host.name;
