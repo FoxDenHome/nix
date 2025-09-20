@@ -16,13 +16,9 @@ let
   ] else []));
 
   mkNetworkdAddresses = (ifcfg: (if (ifcfg.ipv4.address or "") != "" then [
-    {
-      Address = "${ifcfg.ipv4.address}/${toString ifcfg.ipv4.prefixLength}";
-    }
+    "${ifcfg.ipv4.address}/${toString ifcfg.ipv4.prefixLength}"
   ] else []) ++ (if (ifcfg.ipv6.address or "") != "" then [
-    {
-      Address = "${ifcfg.ipv6.address}/${toString ifcfg.ipv6.prefixLength}";
-    }
+    "${ifcfg.ipv6.address}/${toString ifcfg.ipv6.prefixLength}"
   ] else []));
 in
 {
