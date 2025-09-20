@@ -34,7 +34,7 @@ in
 
   makeHTTPProxy = (inputs@{ config, pkgs, host, tls, target, ... }:
     let
-      hostCfg = config.foxDen.hosts.${host};
+      hostCfg = hosts.mkHostConfig config host;
       url = (if tls then "" else "http://") + "${hostCfg.name}.${hostCfg.root}";
 
       serviceName = "${host}-http";

@@ -149,6 +149,7 @@ in
   hostDnsRecordType = hostDnsRecordType;
 
   mkHostInfo = mkHostInfo;
+  mkHostConfig = (config: name: config.foxDen.hosts.hosts.${name});
 
   # CFG.${name}.${host} = X -> [{${host} =  X, ...}, ...] -> [[X, ...], ...] -> [X, ...]
   allHosts = (nixosConfigurations:
