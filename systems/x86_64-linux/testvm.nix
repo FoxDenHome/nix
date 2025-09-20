@@ -59,7 +59,7 @@ in
       #   EgressUntagged = 2;
       #   VLAN = "1-10";
       # }];
-  } (util.mkNwInterfaceConfig bridgeDev ifcfg);
+  } (util.mkNwInterfaceConfig {} bridgeDev ifcfg);
 
   systemd.network.networks."40-${bridgeDev}-${ifcfg.default}" = {
       name = ifcfg.default;

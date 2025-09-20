@@ -54,8 +54,11 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  networking.interfaces.${ifcfg.default}.proxyARP = true;
-  systemd.network.networks."40-${ifcfg.default}" = util.mkNwInterfaceConfig ifcfg.default ifcfg;
+  systemd.network.networks."40-${ifcfg.default}" = util.mkNwInterfaceConfig {
+    networkConfig = {
+      IPv4ProxyARP = true;
+    };
+  } ifcfg.default ifcfg;
   foxDen.hosts.routes = util.mkRoutes {
     ipv4.gateway = ifcfg.ipv4.address;
     ipv6.gateway = ifcfg.ipv6.address;
@@ -71,7 +74,7 @@ in
   #    VLANFiltering = true;
   #  };
   #};
-  #systemd.network.networks."40-${bridgeDev}" = util.mkNwInterfaceConfig bridgeDev ifcfg;
+  #systemd.network.networks."40-${bridgeDev}" = util.mkNwInterfaceConfig {} bridgeDev ifcfg;
   #systemd.network.networks."40-${bridgeDev}-${ifcfg.default}" = {
   #    name = ifcfg.default;
   #    bridge = [bridgeDev];
