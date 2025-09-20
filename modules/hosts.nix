@@ -283,7 +283,7 @@ in
                       (getAddresses config host))
                 ++ [ "${ipInNsCmd} link set ${eSA serviceInterface} up" ]
                 ++ (map (route:
-                      "${ipInNsCmd} route add ${eSA route.Destination} dev ${eSA serviceInterface}" + (if route.Gateway != "" then " via ${eSA route.Gateway}" else ""))
+                      "${ipInNsCmd} route add ${eSA route.Destination} dev ${eSA serviceInterface}" + (if (route.Gateway or "") != "" then " via ${eSA route.Gateway}" else ""))
                       netnsRoutes);
 
                 ExecStop =
