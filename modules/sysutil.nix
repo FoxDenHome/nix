@@ -45,7 +45,7 @@ in
         (nixpkgs.lib.filter (addr: addr != "")
           (nixpkgs.lib.flatten
             (map
-              (host: [host.external.ipv6 host.internal.ipv6])
+              (host: if host.manageNetwork then [host.external.ipv6 host.internal.ipv6] else [])
               (nixpkgs.lib.attrsets.attrValues config.foxDen.hosts.hosts))));
     };
   });
