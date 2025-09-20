@@ -3,7 +3,7 @@ let
   util = import ../util.nix { inherit nixpkgs; };
   mkHostSuffix = host: util.mkHash8 host.name;
   eSA = nixpkgs.lib.strings.escapeShellArg;
-  mkIfaceName = host: "veth-${mkHostSuffix host}";
+  mkIfaceName = host: "bveth-${mkHostSuffix host}";
 in
 {
   configType = with nixpkgs.lib.types; submodule {
