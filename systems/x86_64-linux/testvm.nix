@@ -42,20 +42,35 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  networking.bridges.${bridgeDev} = {
-    interfaces = [ "enp1s0" ];
+  systemd.network.netdevs."40-${bridgeDev}" = {
+    netdevConfig = {
+      Name = bridgeDev;
+      Kind = "bridge";
+    };
+
+    bridgeConfig = {
+      VLANFiltering = true;
+    };
   };
+
+  systemd.network.networks."40-${bridgeDev}" = nixpkgs.lib.attrsets.merge {
+      # bridgeVLANs = [{
+      #   PVID = 2;
+      #   EgressUntagged = 2;
+      #   VLAN = "1-10";
+      # }];
+  } (util.mkNwInterfaceConfig bridgeDev ifcfg);
+
   systemd.network.networks."40-${bridgeDev}-${ifcfg.default}" = {
       name = ifcfg.default;
       bridge = [bridgeDev];
-      bridgeVLANs = [{
-        PVID = "2";
-        EgressUntagged = "2";
-        VLAN = "1-10";
-      }];
+      # bridgeVLANs = [{
+      #   PVID = 2;
+      #   EgressUntagged = 2;
+      #   VLAN = "1-10";
+      # }];
   };
 
-  networking.interfaces.${bridgeDev} = util.mkNwInterfaceConfig ifcfg;
   foxDen.hosts.routes = util.mkRoutes ifcfg;
   foxDen.hosts.subnet = util.mkSubnet ifcfg;
 

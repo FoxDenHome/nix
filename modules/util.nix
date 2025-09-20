@@ -28,6 +28,10 @@ in
     name = name;
     routes = mkNetworkdRoutes ifcfg;
     address = mkNetworkdAddresses [ifcfg.ipv4 ifcfg.ipv6];
+    networkConfig = {
+      DHCP = "no";
+      IPv6AcceptRA = "no";
+    };
   });
 
   mkRoutes = (ifcfg: (if ifcfg.ipv4.gateway != null then [

@@ -68,10 +68,14 @@ in
   systemd.network.networks."40-${ifcfg.default}" = util.mkNwInterfaceConfig ifcfg.default ifcfg;
   systemd.network.networks."40-${bridgeDev}" = {
     name = bridgeDev;
+    networkConfig = {
+      DHCP = "no";
+      IPv6AcceptRA = "no";
+    };
   };
 
   #systemd.network.networks."40-${bridgeDev}" = util.mkNwInterfaceConfig bridgeDev ifcfg;
-  #systemd.network.networks."50-${bridgeDev}-${ifcfg.default}" = {
+  #systemd.network.networks."40-${bridgeDev}-${ifcfg.default}" = {
   #    name = ifcfg.default;
   #    bridge = [bridgeDev];
       # bridgeVLANs = [{
