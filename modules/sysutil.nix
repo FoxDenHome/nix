@@ -7,28 +7,29 @@ let
   mkRoutesAK = (addrKey: ifcfg: let
     addr.ipv4 = ifcfg.ipv4.${addrKey} or "";
     addr.ipv6 = ifcfg.ipv6.${addrKey} or "";
-  in(if (addr.ipv4 or "") != "" then [
-    {
-      Destination = "0.0.0.0/0";
-      Gateway = addr.ipv4;
-    }
-  ] else []) ++ (if (addr.ipv6 or "") != "" then [
-    {
-      Destination = "::/0";
-      Gateway = addr.ipv6;
-    }
-  ] else []));
+  in
+    (if (addr.ipv4 or "") != "" then [
+      {
+        Destination = "0.0.0.0/0";
+        Gateway = addr.ipv4;
+      }
+    ] else []) ++ (if (addr.ipv6 or "") != "" then [
+      {
+        Destination = "::/0";
+        Gateway = addr.ipv6;
+      }
+    ] else []));
 
   mkRoutesGWSubnet = (ifcfg:
-  (if (ifcfg.ipv4.address or "") != "" then [
-    {
-      Destination = "${ifcfg.ipv4.address}/32";
-    }
-  ] else []) ++ (if (ifcfg.ipv6.address or "") != "" then [
-    {
-      Destination = "${ifcfg.ipv6.address}/128";
-    }
-  ] else []));
+    (if (ifcfg.ipv4.address or "") != "" then [
+      {
+        Destination = "${ifcfg.ipv4.address}/32";
+      }
+    ] else []) ++ (if (ifcfg.ipv6.address or "") != "" then [
+      {
+        Destination = "${ifcfg.ipv6.address}/128";
+      }
+    ] else []));
 
   mkNetworkdAddresses = (addrs: 
     map (addr: "${addr.address}/${toString addr.prefixLength}")
