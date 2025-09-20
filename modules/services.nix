@@ -60,6 +60,11 @@ in
                 root ${caddyStorageRoot}
               }
             }
+
+            http:// {
+              # Required dummy empty section
+            }
+
             ${url} {
               reverse_proxy ${target}
             }
