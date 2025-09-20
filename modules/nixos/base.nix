@@ -18,6 +18,7 @@
     gptfdisk
     mdadm
     openssl
+    unixtools
     wget
     xfsprogs
   ];
