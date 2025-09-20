@@ -203,7 +203,7 @@ in
                   "-${ipCmd} netns del ${eSA namespace}"
                   "${ipCmd} netns add ${eSA namespace}"
                   "${ipInNsCmd} addr add 127.0.0.1/8 dev lo"
-                  "${ipInNsCmd} addr add ::1/128 dev lo"
+                  "${ipInNsCmd} addr add ::1/128 dev lo noprefixroute"
                   "${ipInNsCmd} link set lo up"
                 ]
                 ++ (hostDriver.execStart { inherit host; inherit info; inherit ipCmd; inherit ipInNsCmd; })
