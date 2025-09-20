@@ -37,7 +37,7 @@ in
       hostCfg = hosts.mkHostConfig config host;
       url = (if tls then "" else "http://") + "${hostCfg.name}.${hostCfg.root}";
 
-      serviceName = "${host}-http";
+      serviceName = "${host}-ingress";
       svc = make serviceName inputs;
       caddyfile = "/etc/caddy/sites/${host}/Caddyfile";
       cmd = (eSA "${pkgs.caddy}/bin/caddy");
