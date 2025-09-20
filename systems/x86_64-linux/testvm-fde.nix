@@ -61,6 +61,8 @@ in
   foxDen.sops.available = true;
   foxDen.boot.secure = true;
 
+  foxDen.services.jellyfin.enable = true;
+
   foxDen.hosts.hosts = {
     system = {
       name = config.networking.hostName;
