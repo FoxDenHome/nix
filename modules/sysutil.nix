@@ -37,7 +37,7 @@ in
 {
   mkRoutes = (ifcfg:
     if isRouted then
-      ((mkRoutesAK "address" ifcfg))
+      ((mkRoutesGWSubnet ifcfg) ++ (mkRoutesAK "address" ifcfg))
     else
       (mkRoutesAK "gateway" ifcfg));
 
