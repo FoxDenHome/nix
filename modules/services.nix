@@ -36,10 +36,13 @@ in
 {
   nixosModules.services = { ... }:
   {
-
+    options.foxDen.services.trustedProxies = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+      type = listOf str;
+      default = [];
+    };
   };
 
-  make = (inputs@{ host, ... }: make host inputs);
+  make = (inputs@{ host, ... }: make (inputs.name or host) inputs);
 
   mkHttpOptions = (inputs@{ ... } : with nixpkgs.lib.types; nixpkgs.lib.mergeAttrs {
     hostPort = nixpkgs.lib.mkOption {
@@ -59,10 +62,13 @@ in
       hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.name}.${hostCfg.root}";
       url = (if svcConfig.tls then "" else "http://") + hostPort;
 
-      serviceName = "${host}-ingress";
+      serviceName = "host-${host}-ingress";
       svc = make serviceName inputs;
       caddyfile = "/etc/caddy/sites/${host}/Caddyfile";
       cmd = (eSA "${pkgs.caddy}/bin/caddy");
+
+      trustedProxies = config.foxDen.services.trustedProxies;
+      trustedProxiesStr = nixpkgs.lib.strings.concatStringsSep " " trustedProxies;
     in
     (nixpkgs.lib.mkMerge [
       svc
@@ -71,6 +77,17 @@ in
           {
             storage file_system {
               root ${caddyStorageRoot}
+            }
+            servers {
+              listener_wrappers {
+                proxy_protocol {
+                  timeout 5s
+                  ${trustedProxiesStr}
+                }
+                tls
+              }
+              trusted_proxies_strict
+              trusted_proxies static ${trustedProxiesStr}
             }
           }
 

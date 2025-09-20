@@ -84,6 +84,8 @@ in
   foxDen.services.jellyfin.enable = true;
   foxDen.services.jellyfin.tls = false;
 
+  foxDen.services.trustedProxies = ["169.254.169.254/32"];
+
   foxDen.hosts.hosts = {
     system = {
       name = config.networking.hostName;
