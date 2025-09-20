@@ -86,6 +86,7 @@ in
               Group = caddyUser;
               Restart = "always";
               ReadWritePaths = [caddyStorageRoot];
+              AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
             };
             wantedBy = ["multi-user.target"];
           };
