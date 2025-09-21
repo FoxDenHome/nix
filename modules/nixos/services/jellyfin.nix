@@ -36,12 +36,15 @@ in
         ];
       };
 
-      environment.persistence."/nix/persist/jellyfin".directories = [
-        (mkJellyfinDir config.services.jellyfin.cacheDir)
-        (mkJellyfinDir config.services.jellyfin.configDir)
-        (mkJellyfinDir config.services.jellyfin.dataDir)
-        (mkJellyfinDir config.services.jellyfin.logDir)
-      ];
+      environment.persistence."/nix/persist/jellyfin" = {
+        hideMounts = true;
+        directories = [
+          (mkJellyfinDir config.services.jellyfin.cacheDir)
+          (mkJellyfinDir config.services.jellyfin.configDir)
+          (mkJellyfinDir config.services.jellyfin.dataDir)
+          (mkJellyfinDir config.services.jellyfin.logDir)
+        ];
+      };
     }
   ]);
 }

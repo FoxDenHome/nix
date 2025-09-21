@@ -105,9 +105,12 @@ in
           }
         '';
 
-        environment.persistence."/nix/persist/foxden/services".directories = [
-          { directory = caddyStorageRoot; user = caddyUser; group = caddyUser; mode = "u=rwx,g=,o="; }
-        ];
+        environment.persistence."/nix/persist/foxden/services" = {
+          hideMounts = true;
+          directories = [
+            { directory = caddyStorageRoot; user = caddyUser; group = caddyUser; mode = "u=rwx,g=,o="; }
+          ];
+        };
 
         users.users.${caddyUser} = {
           isSystemUser = true;
