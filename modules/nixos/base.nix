@@ -35,11 +35,6 @@
   security.polkit.enable = true;
   users.users.root.shell = "${pkgs.fish}/bin/fish";
 
-  users.users.share = {
-    isSystemUser = true;
-    uid = 1001;
-    group = "share";
-  };
   users.groups.share.gid = 1001;
 
   environment.persistence."/nix/persist/system" = {
