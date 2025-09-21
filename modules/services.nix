@@ -64,16 +64,18 @@ in
 
       serviceName = "host-${host}-ingress";
       svc = make serviceName inputs;
-      caddyfile = "/etc/caddy/sites/${host}/Caddyfile";
+      caddyFilePath = "/etc/caddy/sites/${host}/Caddyfile";
       cmd = (eSA "${pkgs.caddy}/bin/caddy");
 
       trustedProxies = config.foxDen.services.trustedProxies;
       mkTrustedProxies = (prefix: if (builtins.length trustedProxies) > 0 then prefix + " " + (nixpkgs.lib.strings.concatStringsSep " " trustedProxies) else "");
+
+      caddyFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" caddyFilePath;
     in
     (nixpkgs.lib.mkMerge [
       svc
       {
-        environment.etc.${nixpkgs.lib.strings.removePrefix "/etc/" caddyfile}.text = ''
+        environment.etc.${caddyFileEtc}.text = ''
           {
             storage file_system {
               root ${caddyStorageRoot}
@@ -111,12 +113,13 @@ in
         users.groups.${caddyUser} = {};
 
         systemd.services.${serviceName} = {
+          reloadTriggers = [ config.environment.etc.${caddyFileEtc} ];
           serviceConfig = {
             Environment = [
               "XDG_DATA_HOME=${caddyStorageRoot}"
             ];
-            ExecStart = "${cmd} run --config ${eSA caddyfile}";
-            ExecReload = "${cmd} reload --config ${eSA caddyfile}";
+            ExecStart = "${cmd} run --config ${eSA caddyFilePath}";
+            ExecReload = "${cmd} reload --config ${eSA caddyFilePath}";
             User = caddyUser;
             Group = caddyUser;
             Restart = "always";
