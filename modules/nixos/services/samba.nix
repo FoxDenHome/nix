@@ -6,7 +6,7 @@ let
   smbServices = ["samba-smbd" "samba-nmbd" "samba-winbindd"];
 
   smbPaths = [
-    "/var/run/samba"
+    "/run/samba"
     "/var/log/samba"
     "/var/lib/samba"
     "/var/lib/samba/private"
