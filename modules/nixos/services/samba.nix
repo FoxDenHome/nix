@@ -80,7 +80,7 @@ in
           "writable" = "yes";
           "create mask" = "0600";
           "directory mask" = "0700";
-          "path" = "/home/%u";
+          "path" = "/xhome/%u";
           "follow symlinks" = "no";
           "wide links" = "no";
         };
