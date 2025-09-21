@@ -25,6 +25,12 @@ in
     })) smbServices)
     ++ [
     {
+      users.users.smbguest = {
+        isSystemUser = true;
+        group = "smbguest";
+      };
+      users.groups.smbguest = {};
+
       services.samba.enable = true;
       services.samba.settings = {
         global = {
@@ -49,7 +55,7 @@ in
           "disable spoolss" = "yes";
 
           # guest account
-          "guest account" = "guest";
+          "guest account" = "smbguest";
           "map to guest" = "Never";
 
           # macOS stuff
