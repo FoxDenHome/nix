@@ -25,11 +25,6 @@ in
     })) smbServices)
     ++ [
     {
-      users.users.guest = {
-        isSystemUser = true;
-        group = "share";
-      };
-
       services.samba.enable = true;
       services.samba.settings = {
         global = {
@@ -85,14 +80,12 @@ in
         };
       };
 
-      systemd.services = (nixpkgs.lib.attrsets.genAttrs smbServices (name: {
-        wantedBy = [ "multi-user.target" ];
-        enable = true;
-        serviceConfig = {
-          JoinsNamespaceOf = lib.mkIf (name != "samba-smbd") "samba-smbd.service";
-          ReadWritePaths = smbPaths;
-        };
-      }));
+      # systemd.services = (nixpkgs.lib.attrsets.genAttrs smbServices (name: {
+      #   serviceConfig = {
+      #     JoinsNamespaceOf = lib.mkIf (name != "samba-smbd") "samba-smbd.service";
+      #     ReadWritePaths = smbPaths;
+      #   };
+      # }));
 
       environment.persistence."/nix/persist/samba" = {
         hideMounts = true;
