@@ -83,7 +83,7 @@ in
 
   foxDen.services.jellyfin.enable = true;
   foxDen.services.jellyfin.tls = false;
-  foxDen.services.samba.enable = false;
+  foxDen.services.samba.enable = true;
 
   systemd.services."getty@tty1" = {
     overrideStrategy = "asDropin";
