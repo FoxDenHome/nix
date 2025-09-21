@@ -74,7 +74,7 @@ in
 
       systemd.services.samba.serviceConfig = {
         ReadWritePaths = [
-          "/var/lib/samba"
+          "/var/lib/samba/private"
           "/var/cache/samba"
           "/etc/samba/private"
         ];
@@ -83,7 +83,7 @@ in
       environment.persistence."/nix/persist/samba" = {
         hideMounts = true;
         directories = [
-          "/var/lib/samba"
+          "/var/lib/samba/private"
           "/var/cache/samba"
           "/etc/samba/private"
         ];
