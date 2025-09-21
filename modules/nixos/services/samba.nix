@@ -25,7 +25,7 @@ in
     })) smbServices)
     ++ [
     {
-      #services.samba.enable = true;
+      services.samba.enable = true;
       services.samba.settings = {
         global = {
           # basic setup
