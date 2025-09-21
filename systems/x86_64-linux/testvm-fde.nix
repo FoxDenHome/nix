@@ -107,5 +107,15 @@ in
         ipv6 = "fd00:dead:beef:122::201";
       };
     };
+
+    samba = {
+      name = "samba";
+      root = "local.foxden.network";
+      vlan = 1;
+      internal = {
+        ipv4 = "192.168.122.202";
+        ipv6 = "fd00:dead:beef:122::202";
+      };
+    };
   };
 }
