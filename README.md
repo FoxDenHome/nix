@@ -23,3 +23,5 @@
 ## Notes
 
 zfs must be mountpoint=legacy
+
+DO NOT use /var/run, always use /run, or the entire OS explodes
