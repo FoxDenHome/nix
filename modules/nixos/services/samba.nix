@@ -25,7 +25,7 @@ in
     })) smbServices)
     ++ [
     {
-      services.samba.enable = true;
+      #services.samba.enable = true;
       services.samba.settings = {
         global = {
           # basic setup
@@ -81,8 +81,10 @@ in
       };
 
       # systemd.services = (nixpkgs.lib.attrsets.genAttrs smbServices (name: {
-      #   serviceConfig = {
+      #   unitConfig = {
       #     JoinsNamespaceOf = lib.mkIf (name != "samba-smbd") "samba-smbd.service";
+      #   };
+      #   serviceConfig = {
       #     ReadWritePaths = smbPaths;
       #   };
       # }));
