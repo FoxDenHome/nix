@@ -112,13 +112,15 @@ in
         users.users.${caddyUser} = {
           isSystemUser = true;
           group = caddyUser;
-          home = caddyStorageRoot;
         };
         users.groups.${caddyUser} = {};
 
         systemd.services.${serviceName} = {
           reloadTriggers = [ config.environment.etc.${caddyFileEtc}.text ];
           serviceConfig = {
+            Environment = [
+              "XDG_CONFIG_HOME=${caddyStorageRoot}"
+            ];
             ExecStart = "${cmd} run --config ${eSA caddyFilePath}";
             ExecReload = "${cmd} reload --config ${eSA caddyFilePath}";
             User = caddyUser;
