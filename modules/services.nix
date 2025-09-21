@@ -120,6 +120,7 @@ in
           serviceConfig = {
             Environment = [
               "XDG_CONFIG_HOME=${caddyStorageRoot}"
+              "XDG_DATA_HOME=${caddyStorageRoot}"
             ];
             ExecStart = "${cmd} run --config ${eSA caddyFilePath}";
             ExecReload = "${cmd} reload --config ${eSA caddyFilePath}";
