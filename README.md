@@ -9,6 +9,8 @@
 - [x] Kanidm auth
 - [ ] wireguard tunnel and VPN enforcement (systemd's RestrictNetworkInterfaces?)
 - [ ] HTTP(s) frontend service with OAuth toggle
+	- [x] Basics
+	- [ ] OAuth
 - [ ] Port all apps from FoxDenHome/docker
 - [ ] Samba server
 - [ ] All server machines should be fully NixOS
