@@ -7,9 +7,9 @@ let
 
   smbPaths = [
     "/var/log/samba"
+    "/var/lib/samba"
     "/var/lib/samba/private"
     "/var/cache/samba"
-    "/etc/samba/private"
   ];
 in
 {
@@ -87,7 +87,8 @@ in
         wantedBy = [ "multi-user.target" ];
         enable = true;
         serviceConfig = {
-          ReadWritePaths = smbPaths;
+          ReadWritePaths = smbPaths ++ [ "/var/lock/samba" ];
+          TemporaryFileSystem = [ "/var/lock/samba" ];
         };
       }));
 
