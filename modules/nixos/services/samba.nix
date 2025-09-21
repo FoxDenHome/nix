@@ -80,14 +80,14 @@ in
         };
       };
 
-      # systemd.services = (nixpkgs.lib.attrsets.genAttrs smbServices (name: {
-      #   unitConfig = {
-      #     JoinsNamespaceOf = lib.mkIf (name != "samba-smbd") "samba-smbd.service";
-      #   };
-      #   serviceConfig = {
-      #     ReadWritePaths = smbPaths;
-      #   };
-      # }));
+      systemd.services = (nixpkgs.lib.attrsets.genAttrs smbServices (name: {
+        unitConfig = {
+          JoinsNamespaceOf = lib.mkIf (name != "samba-smbd") "samba-smbd.service";
+        };
+        serviceConfig = {
+          ReadWritePaths = smbPaths;
+        };
+      }));
 
       environment.persistence."/nix/persist/samba" = {
         hideMounts = true;
