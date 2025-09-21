@@ -9,6 +9,17 @@ in
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
       inherit svcConfig pkgs config;
+      name = "samba-smbd";
+      host = "samba";
+    })
+    (services.make {
+      inherit svcConfig pkgs config;
+      name = "samba-nmbd";
+      host = "samba";
+    })
+    (services.make {
+      inherit svcConfig pkgs config;
+      name = "samba-winbindd";
       host = "samba";
     })
     {
