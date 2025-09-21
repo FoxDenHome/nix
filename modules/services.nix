@@ -55,6 +55,7 @@ in
   makeHTTPProxy = (inputs@{ config, svcConfig, pkgs, host, target, ... }:
     let
       caddyStorageRoot = "/var/lib/foxden/services/caddy/${host}";
+      caddyConfigRoot = "/etc/caddy/sites/${host}";
       caddyUser = "foxden-caddy-${host}";
 
       hostCfg = hosts.mkHostConfig config host;
@@ -63,7 +64,7 @@ in
 
       serviceName = "host-${host}-ingress";
       svc = make serviceName inputs;
-      caddyFilePath = "/etc/caddy/sites/${host}/Caddyfile";
+      caddyFilePath = "${caddyConfigRoot}/Caddyfile";
       cmd = (eSA "${pkgs.caddy}/bin/caddy");
 
       trustedProxies = config.foxDen.services.trustedProxies;
@@ -111,21 +112,20 @@ in
         users.users.${caddyUser} = {
           isSystemUser = true;
           group = caddyUser;
+          home = caddyStorageRoot;
         };
         users.groups.${caddyUser} = {};
 
         systemd.services.${serviceName} = {
           reloadTriggers = [ config.environment.etc.${caddyFileEtc}.text ];
           serviceConfig = {
-            Environment = [
-              "XDG_DATA_HOME=${caddyStorageRoot}"
-            ];
             ExecStart = "${cmd} run --config ${eSA caddyFilePath}";
             ExecReload = "${cmd} reload --config ${eSA caddyFilePath}";
             User = caddyUser;
             Group = caddyUser;
             Restart = "always";
             ReadWritePaths = [caddyStorageRoot];
+            ReadOnlyPaths = [caddyConfigRoot];
             AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
           };
           wantedBy = ["multi-user.target"];
