@@ -12,7 +12,7 @@
 	- [x] Basics
 	- [ ] OAuth
 - [ ] Port all apps from FoxDenHome/docker
-- [ ] Samba server
+- [x] Samba server
 - [ ] All server machines should be fully NixOS
 	- [ ] bengalfox
 	- [ ] islandfox
