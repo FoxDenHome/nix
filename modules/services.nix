@@ -68,7 +68,10 @@ in
       cmd = (eSA "${pkgs.caddy}/bin/caddy");
 
       trustedProxies = config.foxDen.services.trustedProxies;
-      mkTrustedProxies = (prefix: if (builtins.length trustedProxies) > 0 then prefix + " " + (nixpkgs.lib.strings.concatStringsSep " " trustedProxies) else "#${prefix} none");
+      mkTrustedProxies = (prefix:
+                          if (builtins.length trustedProxies) > 0
+                            then (prefix + " " + (nixpkgs.lib.strings.concatStringsSep " " trustedProxies))
+                            else "#${prefix} none");
 
       caddyFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" caddyFilePath;
     in
