@@ -23,7 +23,6 @@ let
           PrivateMounts = true;
           ProtectSystem = "strict";
           ProtectHome = "tmpfs";
-          ReadOnlyPaths = ["/"];
           Restart = nixpkgs.lib.mkForce "always";
         };
       };
