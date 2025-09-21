@@ -113,7 +113,7 @@ in
         users.groups.${caddyUser} = {};
 
         systemd.services.${serviceName} = {
-          reloadTriggers = [ config.environment.etc.${caddyFileEtc} ];
+          reloadTriggers = [ config.environment.etc.${caddyFileEtc}.text ];
           serviceConfig = {
             Environment = [
               "XDG_DATA_HOME=${caddyStorageRoot}"
