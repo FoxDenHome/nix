@@ -1,4 +1,4 @@
-{ modulesPath, config, ... }:
+{ modulesPath, pkgs, config, ... }:
 let
   ifcfg = config.foxDen.hosts.ifcfg;
   rootInterface = "enp1s0";
@@ -84,6 +84,11 @@ in
   foxDen.services.jellyfin.enable = true;
   foxDen.services.jellyfin.tls = false;
   foxDen.services.samba.enable = true;
+
+  systemd.services."getty@tty1" = {
+    overrideStrategy = "asDropin";
+    serviceConfig.ExecStart = ["" "@${pkgs.util-linux}/sbin/agetty agetty --login-program ${config.services.getty.loginProgram} --autologin root --noclear --keep-baud %I 115200,38400,9600 $TERM"];
+  };
 
   foxDen.services.trustedProxies = [];
 
