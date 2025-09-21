@@ -37,15 +37,13 @@ let
     else []
   );
 
-  mkDnsRecordsOutputRoot = (root: horizon: hosts: 
+  mkDnsRecordsOutputRoot = (horizon: hosts: root:
       nixpkgs.lib.filter (record: record.value != "")
         (nixpkgs.lib.lists.flatten
           (map (mkDnsRecordsOutputHost root horizon) hosts)));
 
-  mkDnsRecordsOutputAddrType = (horizon: hosts: roots:
-    nixpkgs.lib.attrsets.listToAttrs
-      (map (root: {name = root; value = mkDnsRecordsOutputRoot root horizon hosts; })
-        roots));
+  mkDnsRecordsOutputAddrType = (hosts: roots: horizon:
+    nixpkgs.lib.attrsets.genAttrs roots (mkDnsRecordsOutputRoot horizon hosts));
 in
 {
   defaultTtl = defaultTtl;
@@ -56,7 +54,5 @@ in
       allHosts = hosts.allHosts nixosConfigurations;
       roots = nixpkgs.lib.lists.uniqueStrings (map (host: host.root) allHosts);
     in
-    nixpkgs.lib.attrsets.listToAttrs
-      (map (horizon: {name = horizon; value = mkDnsRecordsOutputAddrType horizon allHosts roots; })
-        allHorizons));
+    nixpkgs.lib.attrsets.genAttrs allHorizons (mkDnsRecordsOutputAddrType allHosts roots));
 }

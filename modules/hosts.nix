@@ -80,13 +80,10 @@ let
         default = true;
       };
     }
-    (nixpkgs.lib.attrsets.listToAttrs (map (horizon: {
-      name = horizon;
-      value = nixpkgs.lib.mkOption {
-        type = hostHorizonConfigType;
-        default = {};
-      };
-    }) dns.allHorizons)));
+    (nixpkgs.lib.attrsets.genAttrs dns.allHorizons (horizon: nixpkgs.lib.mkOption {
+      type = hostHorizonConfigType;
+      default = {};
+    })));
   };
 
   routeType = with nixpkgs.lib.types; submodule {

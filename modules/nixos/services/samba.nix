@@ -2,26 +2,26 @@
 let
   services = import ../../services.nix { inherit nixpkgs; };
   svcConfig = config.foxDen.services.samba;
+
+  smbServices = ["samba-smbd" "samba-nmbd" "samba-winbindd"];
+
+  smbPaths = [
+    "/var/log/samba"
+    "/var/lib/samba/private"
+    "/var/cache/samba"
+    "/etc/samba/private"
+  ];
 in
 {
   options.foxDen.services.samba = services.mkOptions { name = "Samba for SMB"; };
 
-  config = lib.mkIf svcConfig.enable (lib.mkMerge [
-    (services.make {
+  config = lib.mkIf svcConfig.enable (lib.mkMerge
+    (map (name: (services.make {
       inherit svcConfig pkgs config;
-      name = "samba-smbd";
+      name = name;
       host = "samba";
-    })
-    (services.make {
-      inherit svcConfig pkgs config;
-      name = "samba-nmbd";
-      host = "samba";
-    })
-    (services.make {
-      inherit svcConfig pkgs config;
-      name = "samba-winbindd";
-      host = "samba";
-    })
+    })) smbServices)
+    ++ [
     {
       users.users.guest = {
         isSystemUser = true;
@@ -83,23 +83,17 @@ in
         };
       };
 
-      systemd.services.samba.serviceConfig = {
-        ReadWritePaths = [
-          "/var/log/samba"
-          "/var/lib/samba/private"
-          "/var/cache/samba"
-          "/etc/samba/private"
-        ];
-      };
+      systemd.services = (nixpkgs.lib.attrsets.genAttrs smbServices (name: {
+        wantedBy = [ "multi-user.target" ];
+        enable = true;
+        serviceConfig = {
+          ReadWritePaths = smbPaths;
+        };
+      }));
 
       environment.persistence."/nix/persist/samba" = {
         hideMounts = true;
-        directories = [
-          "/var/log/samba"
-          "/var/lib/samba/private"
-          "/var/cache/samba"
-          "/etc/samba/private"
-        ];
+        directories = smbPaths;
       };
     }
   ]);
