@@ -83,6 +83,7 @@ in
 
   foxDen.services.jellyfin.enable = true;
   foxDen.services.jellyfin.tls = false;
+  foxDen.services.samba.enable = true;
 
   foxDen.services.trustedProxies = [];
 
