@@ -16,9 +16,9 @@
 	- [ ] bengalfox
 		- [ ] nas
 			- [x] samba
+			- [x] jellyfin
 			- [ ] nasweb
 			- [ ] deluge
-			- [ ] jellyfin
 			- [ ] kiwix
 		- [ ] restic
 		- [ ] mirror
