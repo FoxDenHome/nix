@@ -11,12 +11,46 @@
 - [ ] HTTP(s) frontend service with OAuth toggle
 	- [x] Basics
 	- [ ] OAuth
-- [ ] Port all apps from FoxDenHome/docker
 - [x] Samba server
 - [ ] All server machines should be fully NixOS
 	- [ ] bengalfox
+		- [ ] nas
+			- [x] samba
+			- [ ] nasweb
+			- [ ] deluge
+			- [ ] jellyfin
+			- [ ] kiwix
+		- [ ] restic
+		- [ ] mirror
+		- [ ] gitbackup
+		- [ ] e621dumper
+		- [ ] fadumper
+		- [ ] aurbuild
+		- [ ] ollama
+		- [ ] hashtopolis
+		- [ ] hashtopolis-agent
+		- [ ] owncast
 	- [ ] islandfox
+		- [ ] auth
+		- [ ] scrypted
+		- [ ] monitoring
+		- [ ] syncthing
+		- [ ] unifi-network
+		- [ ] foxcaves
+		- [ ] git
+		- [ ] gitbackup
+		- [ ] website
+		- [ ] minecraft
+		- [ ] darksignsonline
+		- [ ] affine
 	- [ ] icefox
+		- [ ] nas (see bengalfox)
+		- [ ] gitbackup
+		- [ ] syncthing
+		- [ ] xmpp
+		- [ ] mirror
+		- [ ] snirouter
+		- [ ] restic
 
 ## Goals (Post-MVP)
 
