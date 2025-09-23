@@ -28,14 +28,16 @@ let
       };
     });
 
-  mkOauthProxy = (inputs@{ config, svcConfig, pkgs, host, target, ... }: let
-    serviceName = "host-${host}-oauth";
+  mkOauthProxy = (inputs@{ config, svcConfig, pkgs, target, ... }: let
+    name = inputs.name or inputs.host;
+    serviceName = "oauth2-proxy-${name}";
+
     svc = make serviceName inputs;
     cmd = (eSA "${pkgs.oauth2-proxy}/bin/oauth2-proxy");
     secure = if svcConfig.tls then "true" else "false";
 
-    oAuthUser = "foxden-oauth-${host}";
-    configFile = "/etc/foxden/oauth2-proxy/${host}.conf";
+    oAuthUser = "oauth2-proxy-${name}";
+    configFile = "/etc/foxden/oauth2-proxy/${name}.conf";
     configFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" configFile;
 
   in
@@ -135,7 +137,7 @@ in
     };
   };
 
-  make = (inputs@{ host, ... }: make (inputs.name or host) inputs);
+  mkCustom = (inputs@{ host, ... }: make (inputs.name or host) inputs);
 
   mkHttpOptions = (inputs@{ ... } : with nixpkgs.lib.types; nixpkgs.lib.mergeAttrs {
     hostPort = nixpkgs.lib.mkOption {
@@ -156,17 +158,19 @@ in
   } (mkOptions inputs));
   mkOptions = mkOptions;
 
-  makeHTTPProxy = (inputs@{ config, svcConfig, pkgs, host, target, ... }:
+  mkCaddy = (inputs@{ config, svcConfig, pkgs, target, ... }:
     let
-      caddyStorageRoot = "/var/lib/foxden/caddy/${host}";
-      caddyConfigRoot = "/etc/foxden/caddy/Caddyfile.${host}";
-      caddyUser = "foxden-caddy-${host}";
+      name = inputs.name or inputs.host;
 
-      hostCfg = hosts.mkHostConfig config host;
+      caddyStorageRoot = "/var/lib/foxden/caddy/${name}";
+      caddyConfigRoot = "/etc/foxden/caddy/Caddyfile.${name}";
+      caddyUser = "caddy-${name}";
+
+      hostCfg = hosts.mkHostConfig config inputs.host;
       hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.name}.${hostCfg.root}";
       url = (if svcConfig.tls then "" else "http://") + hostPort;
 
-      serviceName = "host-${host}-ingress";
+      serviceName = "caddy-${name}";
       svc = make serviceName inputs;
       caddyFilePath = "${caddyConfigRoot}/Caddyfile";
       cmd = (eSA "${pkgs.caddy}/bin/caddy");

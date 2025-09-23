@@ -14,11 +14,11 @@ in
   options.foxDen.services.jellyfin = services.mkHttpOptions { name = "Jellyfin media server"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
-    (services.make {
+    (services.mkCustom {
       inherit svcConfig pkgs config;
       host = "jellyfin";
     })
-    (services.makeHTTPProxy {
+    (services.mkCaddy {
       inherit svcConfig pkgs config;
       host = "jellyfin";
       target = "reverse_proxy http://localhost:8096";
