@@ -87,7 +87,7 @@ in
 
   foxDen.services.jellyfin.oAuth = {
     enable = true;
-    clientId = "jellyfin";
+    clientId = "nas-bengalfox";
     clientSecret = "something funny";
   };
 
