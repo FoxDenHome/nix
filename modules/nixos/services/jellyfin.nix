@@ -21,7 +21,7 @@ in
     (services.makeHTTPProxy {
       inherit svcConfig pkgs config;
       host = "jellyfin";
-      target = "http://localhost:8096";
+      target = "reverse_proxy http://localhost:8096";
     })
     {
       services.jellyfin.enable = true;

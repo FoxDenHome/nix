@@ -35,7 +35,7 @@ let
     secure = if svcConfig.tls then "true" else "false";
 
     oAuthUser = "foxden-oauth-${host}";
-    configFile = "/etc/foxden/oauth/${host}";
+    configFile = "/etc/foxden/oauth2-proxy/${host}.conf";
     configFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" configFile;
 
   in
@@ -158,8 +158,8 @@ in
 
   makeHTTPProxy = (inputs@{ config, svcConfig, pkgs, host, target, ... }:
     let
-      caddyStorageRoot = "/var/lib/foxden/services/caddy/${host}";
-      caddyConfigRoot = "/etc/caddy/sites/${host}";
+      caddyStorageRoot = "/var/lib/foxden/caddy/${host}";
+      caddyConfigRoot = "/etc/foxden/caddy/Caddyfile.${host}";
       caddyUser = "foxden-caddy-${host}";
 
       hostCfg = hosts.mkHostConfig config host;
@@ -207,7 +207,7 @@ in
             }
 
             ${url} {
-              ${mkCaddyHandler "reverse_proxy ${target}" svcConfig}
+              ${mkCaddyHandler target svcConfig}
             }
           '';
           user = caddyUser;
