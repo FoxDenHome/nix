@@ -137,7 +137,7 @@ in
     in
     (nixpkgs.lib.mkMerge [
       svc
-      nixpkgs.lib.mkIf svcConfig.oAuth.enable (makeOauthProxy inputs)
+      (nixpkgs.lib.mkIf svcConfig.oAuth.enable (makeOauthProxy inputs))
       {
         environment.etc.${caddyFileEtc}.text = ''
           {
