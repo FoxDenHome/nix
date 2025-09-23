@@ -61,7 +61,7 @@ let
           skip_provider_button = true
 
           cookie_secure = false
-          cookie_secret = "CHANGE ME RIGHT NOW"
+          cookie_secret = "CHANGE ME RIGHT "
           client_id = "${svcConfig.oAuth.clientId}"
           client_secret = "${svcConfig.oAuth.clientSecret}"
           oidc_issuer_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}"
