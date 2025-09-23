@@ -36,7 +36,6 @@ let
     cmd = (eSA "${pkgs.oauth2-proxy}/bin/oauth2-proxy");
     secure = if svcConfig.tls then "true" else "false";
 
-    oAuthUser = "oauth2-proxy-${name}";
     configFile = "/etc/foxden/oauth2-proxy/${name}.conf";
     configFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" configFile;
 
@@ -44,11 +43,11 @@ let
   (nixpkgs.lib.mkMerge [
     svc
     {
-      users.users.${oAuthUser} = {
+      users.users.${serviceName} = {
         isSystemUser = true;
-        group = oAuthUser;
+        group = serviceName;
       };
-      users.groups.${oAuthUser} = {};
+      users.groups.${serviceName} = {};
 
       environment.etc.${configFileEtc} = {
         text = ''
@@ -70,8 +69,8 @@ let
           client_secret = "${svcConfig.oAuth.clientSecret}"
           oidc_issuer_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}"
         '';
-        user = oAuthUser;
-        group = oAuthUser;
+        user = serviceName;
+        group = serviceName;
         mode = "0600";
       };
 
@@ -79,8 +78,8 @@ let
         restartTriggers = [ config.environment.etc.${configFileEtc}.text ];
         serviceConfig = {
           ExecStart = "${cmd} --config=${eSA configFile}";
-          User = oAuthUser;
-          Group = oAuthUser;
+          User = serviceName;
+          Group = serviceName;
           Restart = "always";
         };
         wantedBy = ["multi-user.target"];
@@ -164,7 +163,6 @@ in
 
       caddyStorageRoot = "/var/lib/foxden/caddy/${name}";
       caddyConfigRoot = "/etc/foxden/caddy/Caddyfile.${name}";
-      caddyUser = "caddy-${name}";
 
       hostCfg = hosts.mkHostConfig config inputs.host;
       hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.name}.${hostCfg.root}";
@@ -214,23 +212,23 @@ in
               ${mkCaddyHandler target svcConfig}
             }
           '';
-          user = caddyUser;
-          group = caddyUser;
+          user = serviceName;
+          group = serviceName;
           mode = "0600";
         };
 
         environment.persistence."/nix/persist/foxden/services" = {
           hideMounts = true;
           directories = [
-            { directory = caddyStorageRoot; user = caddyUser; group = caddyUser; mode = "u=rwx,g=,o="; }
+            { directory = caddyStorageRoot; user = serviceName; group = serviceName; mode = "u=rwx,g=,o="; }
           ];
         };
 
-        users.users.${caddyUser} = {
+        users.users.${serviceName} = {
           isSystemUser = true;
-          group = caddyUser;
+          group = serviceName;
         };
-        users.groups.${caddyUser} = {};
+        users.groups.${serviceName} = {};
 
         systemd.services.${serviceName} = {
           reloadTriggers = [ config.environment.etc.${caddyFileEtc}.text ];
@@ -241,8 +239,8 @@ in
             ];
             ExecStart = "${cmd} run --config ${eSA caddyFilePath}";
             ExecReload = "${cmd} reload --config ${eSA caddyFilePath}";
-            User = caddyUser;
-            Group = caddyUser;
+            User = serviceName;
+            Group = serviceName;
             Restart = "always";
             ReadWritePaths = [caddyStorageRoot];
             ReadOnlyPaths = [caddyConfigRoot];
