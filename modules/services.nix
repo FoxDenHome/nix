@@ -28,6 +28,57 @@ let
       };
     });
 
+  makeOauthProxy = (inputs@{ config, svcConfig, pkgs, host, target, ... }: let
+    serviceName = "host-${host}-oauth";
+    svc = make serviceName inputs;
+    cmd = (eSA "${pkgs.oauth2-proxy}/bin/oauth2-proxy");
+
+    oAuthUser = "foxden-oauth-${host}";
+    configFile = "/etc/foxden/oauth/${host}";
+    configFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" configFile;
+  in
+  (nixpkgs.lib.mkMerge [
+    svc
+    {
+      users.users.${oAuthUser} = {
+        isSystemUser = true;
+        group = oAuthUser;
+      };
+      users.groups.${oAuthUser} = {};
+
+      environment.etc.${configFileEtc}.text = ''
+        http_address = "127.0.0.1:4180"
+        reverse_proxy = true
+        provider = "oidc"
+        provider_display_name = "FoxDen"
+        code_challenge_method = "S256"
+        email_domains = ["*"]
+        scope = "openid email profile"
+        cookie_name = "_oauth2_proxy"
+        cookie_expire = "168h"
+        cookie_httponly = true
+        skip_provider_button = true
+
+        cookie_secure = false
+        cookie_secret = "CHANGE ME RIGHT NOW"
+        client_id = "${svcConfig.oAuth.clientId}"
+        client_secret = "${svcConfig.oAuth.clientSecret}"
+        oidc_issuer_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}"
+      '';
+
+      systemd.services.${serviceName} = {
+        restartTriggers = [ config.environment.etc.${configFileEtc}.text ];
+        serviceConfig = {
+          ExecStart = "${cmd} --config=${eSA configFileEtc}";
+          User = oAuthUser;
+          Group = oAuthUser;
+          Restart = "always";
+        };
+        wantedBy = ["multi-user.target"];
+      };
+    }
+  ]));
+
   mkOptions = { name }: {
     enable = nixpkgs.lib.mkEnableOption name;
   };
@@ -49,6 +100,15 @@ in
       default = "";
     };
     tls = nixpkgs.lib.mkEnableOption "TLS";
+    oAuth = {
+      enable = nixpkgs.lib.mkEnableOption "OAuth2 Proxy";
+      clientId = nixpkgs.lib.mkOption {
+        type = str;
+      };
+      clientSecret = nixpkgs.lib.mkOption {
+        type = str;
+      };
+    };
   } (mkOptions inputs));
   mkOptions = mkOptions;
 
@@ -77,6 +137,7 @@ in
     in
     (nixpkgs.lib.mkMerge [
       svc
+      (if svcConfig.oAuth.enable then makeOauthProxy inputs else {})
       {
         environment.etc.${caddyFileEtc}.text = ''
           {

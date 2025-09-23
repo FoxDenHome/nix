@@ -85,6 +85,12 @@ in
   foxDen.services.jellyfin.tls = false;
   foxDen.services.samba.enable = true;
 
+  foxDen.services.jellyfin.oAuth = {
+    enable = true;
+    clientId = "jellyfin";
+    clientSecret = "something funny";
+  };
+
   systemd.services."getty@tty1" = {
     overrideStrategy = "asDropin";
     serviceConfig.ExecStart = ["" "@${pkgs.util-linux}/sbin/agetty agetty --login-program ${config.services.getty.loginProgram} --autologin root --noclear --keep-baud %I 115200,38400,9600 $TERM"];
