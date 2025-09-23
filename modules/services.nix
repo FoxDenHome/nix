@@ -46,30 +46,32 @@ let
       };
       users.groups.${oAuthUser} = {};
 
-      environment.etc.${configFileEtc}.text = ''
-        http_address = "127.0.0.1:4180"
-        reverse_proxy = true
-        provider = "oidc"
-        provider_display_name = "FoxDen"
-        code_challenge_method = "S256"
-        email_domains = ["*"]
-        scope = "openid email profile"
-        cookie_name = "_oauth2_proxy"
-        cookie_expire = "168h"
-        cookie_httponly = true
-        skip_provider_button = true
+      environment.etc.${configFileEtc} = {
+        text = ''
+          http_address = "127.0.0.1:4180"
+          reverse_proxy = true
+          provider = "oidc"
+          provider_display_name = "FoxDen"
+          code_challenge_method = "S256"
+          email_domains = ["*"]
+          scope = "openid email profile"
+          cookie_name = "_oauth2_proxy"
+          cookie_expire = "168h"
+          cookie_httponly = true
+          skip_provider_button = true
 
-        cookie_secure = false
-        cookie_secret = "CHANGE ME RIGHT NOW"
-        client_id = "${svcConfig.oAuth.clientId}"
-        client_secret = "${svcConfig.oAuth.clientSecret}"
-        oidc_issuer_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}"
-      '';
+          cookie_secure = false
+          cookie_secret = "CHANGE ME RIGHT NOW"
+          client_id = "${svcConfig.oAuth.clientId}"
+          client_secret = "${svcConfig.oAuth.clientSecret}"
+          oidc_issuer_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}"
+        '';
+      };
 
       systemd.services.${serviceName} = {
         restartTriggers = [ config.environment.etc.${configFileEtc}.text ];
         serviceConfig = {
-          ExecStart = "${cmd} --config=${eSA configFileEtc}";
+          ExecStart = "${cmd} --config=${eSA configFile}";
           User = oAuthUser;
           Group = oAuthUser;
           Restart = "always";
