@@ -68,6 +68,9 @@ let
           client_secret = "${svcConfig.oAuth.clientSecret}"
           oidc_issuer_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}"
         '';
+        user = oAuthUser;
+        group = oAuthUser;
+        mode = "0600";
       };
 
       systemd.services.${serviceName} = {
@@ -180,32 +183,37 @@ in
       svc
       (nixpkgs.lib.mkIf svcConfig.oAuth.enable (mkOauthProxy inputs))
       {
-        environment.etc.${caddyFileEtc}.text = ''
-          {
-            storage file_system {
-              root ${caddyStorageRoot}
-            }
-            servers {
-              listener_wrappers {
-                proxy_protocol {
-                  timeout 5s
-                  ${mkTrustedProxies "allow"}
-                }
-                tls
+        environment.etc.${caddyFileEtc} = {
+          text = ''
+            {
+              storage file_system {
+                root ${caddyStorageRoot}
               }
-              trusted_proxies_strict
-              ${mkTrustedProxies "trusted_proxies static"}
+              servers {
+                listener_wrappers {
+                  proxy_protocol {
+                    timeout 5s
+                    ${mkTrustedProxies "allow"}
+                  }
+                  tls
+                }
+                trusted_proxies_strict
+                ${mkTrustedProxies "trusted_proxies static"}
+              }
             }
-          }
 
-          http:// {
-            # Required dummy empty section
-          }
+            http:// {
+              # Required dummy empty section
+            }
 
-          ${url} {
-            ${mkCaddyHandler "reverse_proxy ${target}" svcConfig}
-          }
-        '';
+            ${url} {
+              ${mkCaddyHandler "reverse_proxy ${target}" svcConfig}
+            }
+          '';
+          user = caddyUser;
+          group = caddyUser;
+          mode = "0600";
+        };
 
         environment.persistence."/nix/persist/foxden/services" = {
           hideMounts = true;
