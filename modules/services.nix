@@ -28,14 +28,16 @@ let
       };
     });
 
-  makeOauthProxy = (inputs@{ config, svcConfig, pkgs, host, target, ... }: let
+  mkOauthProxy = (inputs@{ config, svcConfig, pkgs, host, target, ... }: let
     serviceName = "host-${host}-oauth";
     svc = make serviceName inputs;
     cmd = (eSA "${pkgs.oauth2-proxy}/bin/oauth2-proxy");
+    secure = if svcConfig.tls then "true" else "false";
 
     oAuthUser = "foxden-oauth-${host}";
     configFile = "/etc/foxden/oauth/${host}";
     configFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" configFile;
+
   in
   (nixpkgs.lib.mkMerge [
     svc
@@ -58,9 +60,9 @@ let
           cookie_name = "_oauth2_proxy"
           cookie_expire = "168h"
           cookie_httponly = true
+          cookie_secure = ${secure}
           skip_provider_button = true
 
-          cookie_secure = false
           cookie_secret = "CHANGE ME RIGHT "
           client_id = "${svcConfig.oAuth.clientId}"
           client_secret = "${svcConfig.oAuth.clientSecret}"
@@ -80,6 +82,42 @@ let
       };
     }
   ]));
+
+  mkCaddyInternalBypass = (handler: svcConfig: if svcConfig.oAuth.bypassInternal then ''
+    @internal {
+      client_ip private_ranges
+    }
+
+    handle @internal {
+      ${handler}
+    }
+  '' else "");
+
+  mkCaddyHandler = (handler: svcConfig: if svcConfig.oAuth.enable then ''
+    handle /oauth2/* {
+      reverse_proxy 127.0.0.1:4180 {
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-Uri {uri}
+      }
+    }
+
+    ${mkCaddyInternalBypass handler svcConfig}
+
+    handle {
+      forward_auth 127.0.0.1:4180 {
+        uri /oauth2/auth
+        header_up X-Real-IP {remote_host}
+        # Make sure to configure the --set-xauthrequest flag to enable this feature.
+        copy_headers X-Auth-Request-User X-Auth-Request-Email
+        @error status 401
+        handle_response @error {
+          redir * /oauth2/sign_in?rd={scheme}://{host}{uri}
+        }
+      }
+
+      ${handler}
+    }
+  '' else handler);
 
   mkOptions = { name }: {
     enable = nixpkgs.lib.mkEnableOption name;
@@ -104,6 +142,7 @@ in
     tls = nixpkgs.lib.mkEnableOption "TLS";
     oAuth = {
       enable = nixpkgs.lib.mkEnableOption "OAuth2 Proxy";
+      bypassInternal = nixpkgs.lib.mkEnableOption "Bypass OAuth for internal requests";
       clientId = nixpkgs.lib.mkOption {
         type = str;
       };
@@ -139,7 +178,7 @@ in
     in
     (nixpkgs.lib.mkMerge [
       svc
-      (nixpkgs.lib.mkIf svcConfig.oAuth.enable (makeOauthProxy inputs))
+      (nixpkgs.lib.mkIf svcConfig.oAuth.enable (mkOauthProxy inputs))
       {
         environment.etc.${caddyFileEtc}.text = ''
           {
@@ -164,7 +203,7 @@ in
           }
 
           ${url} {
-            reverse_proxy ${target}
+            ${mkCaddyHandler "reverse_proxy ${target}" svcConfig}
           }
         '';
 
