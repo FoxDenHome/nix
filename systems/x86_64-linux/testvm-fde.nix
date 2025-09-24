@@ -88,10 +88,10 @@ in
       name = "jellyfin";
       zone = "local.foxden.network";
       vlan = 1;
-      internal = {
-        ipv4 = "192.168.122.201";
-        ipv6 = "fd00:dead:beef:122::201";
-      };
+      addresses = [
+        "192.168.122.201/24"
+        "fd00:dead:beef:122::201/64"
+      ];
     };
     oAuth = {
       enable = false;
@@ -105,10 +105,10 @@ in
       name = "samba";
       zone = "local.foxden.network";
       vlan = 1;
-      internal = {
-        ipv4 = "192.168.122.202";
-        ipv6 = "fd00:dead:beef:122::202";
-      };
+      addresses = [
+        "192.168.122.202/24"
+        "fd00:dead:beef:122::202/64"
+      ];
     };
   };
 

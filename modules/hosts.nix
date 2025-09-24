@@ -21,28 +21,8 @@ let
     };
   };
 
-  hostHorizonConfigType = with nixpkgs.lib.types; submodule {
-    options = {
-      ipTtl = nixpkgs.lib.mkOption {
-        type = int;
-        default = 3600;
-      };
-      ipv4 = nixpkgs.lib.mkOption {
-        type = str;
-        default = "";
-      };
-      ipv6 = nixpkgs.lib.mkOption {
-        type = str;
-        default = "";
-      };
-    };
-  };
-
-  allHorizons = [ "internal" "external" ];
-
   hostType = with nixpkgs.lib.types; submodule {
-    options = (nixpkgs.lib.mergeAttrs
-    {
+    options = {
       name = nixpkgs.lib.mkOption {
         type = str;
         default = "";
@@ -54,11 +34,14 @@ let
       vlan = nixpkgs.lib.mkOption {
         type = int;
       };
-    }
-    (nixpkgs.lib.attrsets.genAttrs allHorizons (horizon: nixpkgs.lib.mkOption {
-      type = hostHorizonConfigType;
-      default = {};
-    })));
+      addressTtl = nixpkgs.lib.mkOption {
+        type = int;
+        default = 3600;
+      };
+      addresses = nixpkgs.lib.mkOption {
+        type = listOf str;
+      };
+    };
   };
 
   routeType = with nixpkgs.lib.types; submodule {
@@ -73,21 +56,6 @@ let
       };
     };
   };
-
-  mkIpCmdAddresses = (config: host:
-    (map (addr: 
-      "${addr}/${toString config.foxDen.hosts.subnet.ipv4}")
-      (nixpkgs.lib.lists.filter (val: val != "") [
-        host.internal.ipv4
-        host.external.ipv4
-      ])
-    ) ++ (map (addr:
-      "${addr}/${toString config.foxDen.hosts.subnet.ipv6}")
-      (nixpkgs.lib.lists.filter (val: val != "") [
-        host.internal.ipv6
-        host.external.ipv6
-      ])
-    ));
 
   mkRoutesAK = (ifcfg: addrKey: let
     addr.ipv4 = ifcfg.ipv4.${addrKey} or "";
@@ -116,7 +84,6 @@ let
 in
 {
   hostType = hostType;
-  hostHorizonConfigType = hostHorizonConfigType;
 
   mkHostInfo = mkHostInfo;
 
@@ -137,17 +104,6 @@ in
       hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
         type = (listOf hostType);
         default = [];
-      };
-
-      subnet = {
-        ipv4 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-          type = int;
-          default = 24;
-        };
-        ipv6 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-          type = int;
-          default = 64;
-        };
       };
 
       ifcfg = with nixpkgs.lib.types; {
@@ -188,30 +144,18 @@ in
 
     config = {
       foxDen.hosts.ifcfg.network = nixpkgs.lib.mkDefault "40-${ifcfg.interface}";
-      foxDen.hosts.subnet = nixpkgs.lib.mkDefault (hostDriver.subnet or {
-        ipv4 = ifcfg.ipv4.prefixLength;
-        ipv6 = ifcfg.ipv6.prefixLength;
-      });
 
       foxDen.dns.records = nixpkgs.lib.flatten (map (host: let
-        mkRecord = (horizon: addrType: let
-          addr = host.${horizon}.${addrType} or "";
-        in
-        (if addr != "" then [{
+        mkRecord = (addr: {
           zone = host.zone;
           name = host.name;
-          type = if addrType == "ipv4" then "A" else "AAAA";
-          ttl = host.internal.ipTtl;
-          value = host.${horizon}.${addrType};
-          horizon = horizon;
-        }] else []));
+          type = if (util.isIPv6 addr) then "AAAA" else "A";
+          ttl = host.addressTtl;
+          value = (builtins.elemAt (nixpkgs.lib.strings.splitString "/" addr) 0);
+          horizon = if (util.isPrivateIP addr) then "internal" else "external";
+        });
       in
-      [
-        (mkRecord "internal" "ipv4")
-        (mkRecord "internal" "ipv6")
-        (mkRecord "external" "ipv4")
-        (mkRecord "external" "ipv6")
-      ]) hosts);
+      (map mkRecord host.addresses)) hosts);
 
       systemd = nixpkgs.lib.mkMerge [
         hostDriver.config.systemd
@@ -263,7 +207,7 @@ in
                 ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA namespace}" ]
                 ++ (map (addr:
                       "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
-                      (mkIpCmdAddresses config host))
+                      host.addresses)
                 ++ [ "${ipInNsCmd} link set ${eSA serviceInterface} up" ]
                 ++ (map (route:
                       "${ipInNsCmd} route add ${eSA route.Destination} dev ${eSA serviceInterface}" + (if (route.Gateway or "") != "" then " via ${eSA route.Gateway}" else ""))

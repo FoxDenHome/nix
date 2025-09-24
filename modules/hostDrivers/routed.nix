@@ -32,34 +32,23 @@ in
               hosts)));
       };
     };
-  } (nixpkgs.lib.attrsets.listToAttrs (
-      nixpkgs.lib.lists.flatten
-        (map ((host: let
-          allAddrs = (nixpkgs.lib.lists.filter (val: val != "") [
-            value.internal.ipv4
-            value.internal.ipv6
-            value.external.ipv4
-            value.external.ipv6
-          ]);
-          in
-          [
-          {
-            name = "60-host-${host.name}";
-            value = {
-              name = (mkIfaceName host);
-              networkConfig = {
-                DHCP = "no";
-                IPv6AcceptRA = "no";
-                LinkLocalAddressing = "no";
-                IPv4Forwarding = true;
-                IPv6Forwarding = true;
-              };
-              routes = map (addr: {
-                Destination = addr;
-              }) allAddrs;
+  } (nixpkgs.lib.attrsets.listToAttrs
+      (map ((host: {
+          name = "60-host-${host.name}";
+          value = {
+            name = (mkIfaceName host);
+            networkConfig = {
+              DHCP = "no";
+              IPv6AcceptRA = "no";
+              LinkLocalAddressing = "no";
+              IPv4Forwarding = true;
+              IPv6Forwarding = true;
             };
-          }
-        ])) hosts)));
+            routes = map (addr: {
+              Destination = addr;
+            }) host.addresses;
+          };
+        })) hosts));
 
   execStart = ({ ipCmd, host, serviceInterface, ... }: let
     hostIface = mkIfaceName host;
@@ -73,8 +62,4 @@ in
   ]);
 
   routes = routesGWSubnet ++ (mkRoutesAK ifcfg "address");
-  subnet = {
-    ipv4 = 32;
-    ipv6 = 128;
-  };
 }
