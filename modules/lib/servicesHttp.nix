@@ -182,7 +182,7 @@ in
           '';
           user = "nobody";
           group = "nogroup";
-          mode = "0600";
+          mode = "0644";
         };
 
         environment.persistence."/nix/persist/foxden/services" = {
