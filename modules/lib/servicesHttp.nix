@@ -196,6 +196,7 @@ in
           serviceConfig = {
             DynamicUser = true;
             StateDirectory = caddyStorageRoot;
+            ConfigurationDirectory = caddyConfigRoot;
             Environment = [
               "XDG_CONFIG_HOME=${caddyStorageRoot}"
               "XDG_DATA_HOME=${caddyStorageRoot}"
