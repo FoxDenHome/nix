@@ -1,7 +1,6 @@
 { nixpkgs, ... }:
 let
   util = import ./util.nix { inherit nixpkgs; };
-  dns = import ./global/dns.nix { inherit nixpkgs; };
   eSA = nixpkgs.lib.strings.escapeShellArg;
   mkHostSuffix = host: util.mkHash8 host.name;
 
@@ -22,28 +21,11 @@ let
     };
   };
 
-  hostDnsRecordType = with nixpkgs.lib.types; submodule {
-    options = {
-      type = nixpkgs.lib.mkOption {
-        type = str;
-        default = "A";
-      };
-      value = nixpkgs.lib.mkOption {
-        type = str;
-        default = "";
-      };
-      ttl = nixpkgs.lib.mkOption {
-        type = int;
-        default = dns.defaultTtl;
-      };
-    };
-  };
-
   hostHorizonConfigType = with nixpkgs.lib.types; submodule {
     options = {
       ipTtl = nixpkgs.lib.mkOption {
         type = int;
-        default = dns.defaultTtl;
+        default = 3600;
       };
       ipv4 = nixpkgs.lib.mkOption {
         type = str;
@@ -53,12 +35,10 @@ let
         type = str;
         default = "";
       };
-      records = nixpkgs.lib.mkOption {
-        type = listOf hostDnsRecordType;
-        default = [];
-      };
     };
   };
+
+  allHorizons = [ "internal" "external" ];
 
   hostType = with nixpkgs.lib.types; submodule {
     options = (nixpkgs.lib.mergeAttrs
@@ -67,7 +47,7 @@ let
         type = str;
         default = "";
       };
-      root = nixpkgs.lib.mkOption {
+      zone = nixpkgs.lib.mkOption {
         type = str;
         default = "foxden.network";
       };
@@ -79,7 +59,7 @@ let
         default = true;
       };
     }
-    (nixpkgs.lib.attrsets.genAttrs dns.allHorizons (horizon: nixpkgs.lib.mkOption {
+    (nixpkgs.lib.attrsets.genAttrs allHorizons (horizon: nixpkgs.lib.mkOption {
       type = hostHorizonConfigType;
       default = {};
     })));
@@ -137,14 +117,14 @@ let
     namespace = "/run/netns/host-${name}";
     unit = "netns-host-${name}.service";
   });
+  mkHostConfig = (config: name: config.foxDen.hosts.hosts.${name});
 in
 {
   hostType = hostType;
   hostHorizonConfigType = hostHorizonConfigType;
-  hostDnsRecordType = hostDnsRecordType;
 
   mkHostInfo = mkHostInfo;
-  mkHostConfig = (config: name: config.foxDen.hosts.hosts.${name});
+  mkHostConfig = mkHostConfig;
 
   mkOption = with nixpkgs.lib.types; (opts: nixpkgs.lib.mkOption (nixpkgs.lib.mergeAttrs {
     type = if opts.default == null then (nullOr hostType) else hostType;
@@ -218,24 +198,45 @@ in
         ipv6 = ifcfg.ipv6.prefixLength;
       });
 
-      systemd = nixpkgs.lib.mkMerge [ hostDriver.config.systemd {
-        # Configure host/primary network/bridge
-        network.networks."${config.foxDen.hosts.ifcfg.network}" = {
-          name = ifcfg.interface;
-          routes = mkRoutesAK ifcfg "gateway";
-          address = mkNetworkAddresses [ifcfg.ipv4 ifcfg.ipv6];
-          dns = ifcfg.dns or [];
+      foxDen.dns.records = nixpkgs.lib.flatten (map (host: let
+        mkRecord = (horizon: addrType: let
+          addr = host.${horizon}.${addrType} or "";
+        in
+        (if addr != "" then [{
+          zone = host.zone;
+          name = host.name;
+          type = if addrType == "ipv4" then "A" else "AAAA";
+          ttl = host.internal.ipTtl;
+          value = host.${horizon}.${addrType};
+          horizon = horizon;
+        }] else []));
+      in
+      [
+        (mkRecord "internal" "ipv4")
+        (mkRecord "internal" "ipv6")
+        (mkRecord "external" "ipv4")
+        (mkRecord "external" "ipv6")
+      ]) (nixpkgs.lib.attrsets.attrValues config.foxDen.hosts.hosts));
 
-          networkConfig = {
-            DHCP = "no";
-            IPv6AcceptRA = false;
+      systemd = nixpkgs.lib.mkMerge [
+        hostDriver.config.systemd
+        {
+          # Configure host/primary network/bridge
+          network.networks."${config.foxDen.hosts.ifcfg.network}" = {
+            name = ifcfg.interface;
+            routes = mkRoutesAK ifcfg "gateway";
+            address = mkNetworkAddresses [ifcfg.ipv4 ifcfg.ipv6];
+            dns = ifcfg.dns or [];
+
+            networkConfig = {
+              DHCP = "no";
+              IPv6AcceptRA = false;
+            };
           };
-        };
 
-        # Configure each host's NetNS
-        services = (nixpkgs.lib.attrsets.listToAttrs
-          (map (name: let
-            host = config.foxDen.hosts.hosts.${name};
+          # Configure each host's NetNS
+          services = (nixpkgs.lib.attrsets.listToAttrs (map (name: let
+            host = mkHostConfig config name;
             info = mkHostInfo name;
             namespace = (nixpkgs.lib.strings.removePrefix "/run/netns/" info.namespace);
 
@@ -281,8 +282,10 @@ in
                   ];
               };
             };
-          }) (nixpkgs.lib.attrsets.attrNames hosts)));
-      }];
+          })
+          (nixpkgs.lib.attrsets.attrNames hosts)));
+        }
+      ];
     };
   });
 }

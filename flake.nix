@@ -28,6 +28,7 @@
       sops-nix.nixosModules.sops
       hosts.nixosModule
       servicesHttp.nixosModule
+      dns.nixosModule
     ];
 
     modules = mkModuleList ./modules/nixos;

@@ -2,64 +2,53 @@
 let
   globalConfig = import ./config.nix { inherit nixpkgs; };
 
-  allHorizons = [ "internal" "external" ];
-
   defaultTtl = 3600;
   dynDnsTtl = 5;
 
-  mkDnsRecordsOutputHost = (root: horizon: host: let
-      hostAddress = host.${horizon};
-      dynDnsV4 = hostAddress.ipv4 == "dyn";
-      dynDnsV6 = hostAddress.ipv6 == "dyn";
-    in if root == host.root then [
-      {
-        name = host.name;
-        type = "A";
-        value = if dynDnsV4 then "127.0.0.1" else hostAddress.ipv4;
-        ttl = if dynDnsV4 then dynDnsTtl else hostAddress.ipTtl;
-        dynDns = dynDnsV4;
-      }
-      {
-        name = host.name;
-        type = "AAAA";
-        value = if dynDnsV6 then "fe80::1" else hostAddress.ipv6;
-        ttl = if dynDnsV6 then dynDnsTtl else hostAddress.ipTtl;
-        dynDns = dynDnsV6;
-      }
-    ] ++
-      map (record: {
-        name = host.name;
-        type = record.type;
-        value = record.value;
-        ttl = record.ttl;
-        dynDns = false;
-      }) (hostAddress.records or [])
-    else []
-  );
-
-  # CFG.${name}.${host} = X -> [{${host} =  X, ...}, ...] -> [[X, ...], ...] -> [X, ...]
-  mkAllHosts = (nixosConfigurations:
-                (nixpkgs.lib.flatten
-                  (map (nixpkgs.lib.attrsets.attrValues)
-                    (nixpkgs.lib.attrsets.attrValues
-                      (globalConfig.get ["foxDen" "hosts" "hosts"] nixosConfigurations)))));
-
-  mkDnsRecordsOutputRoot = (horizon: hosts: root:
-      nixpkgs.lib.filter (record: record.value != "")
-        (nixpkgs.lib.lists.flatten
-          (map (mkDnsRecordsOutputHost root horizon) hosts)));
-
-  mkDnsRecordsOutputAddrType = (hosts: roots: horizon:
-    nixpkgs.lib.attrsets.genAttrs roots (mkDnsRecordsOutputRoot horizon hosts));
+  dnsRecordType = with nixpkgs.lib.types; submodule {
+    options = {
+      zone = nixpkgs.lib.mkOption {
+        type = str;
+      };
+      name = nixpkgs.lib.mkOption {
+        type = str;
+      };
+      type = nixpkgs.lib.mkOption {
+        type = str;
+      };
+      value = nixpkgs.lib.mkOption {
+        type = str;
+      };
+      ttl = nixpkgs.lib.mkOption {
+        type = int;
+        default = defaultTtl;
+      };
+      horizon = nixpkgs.lib.mkOption {
+        type = str;
+      };
+    };
+  };
 in
 {
   defaultTtl = defaultTtl;
   dynDnsTtl = dynDnsTtl;
-  allHorizons = allHorizons;
+
+  nixosModule = { lib, ... }:
+  {
+    options.foxDen.dns.records = with lib.types; lib.mkOption {
+      type = listOf dnsRecordType;
+      default = [];
+    };
+  };
 
   mkRecords = (nixosConfigurations: let
-      allHosts = mkAllHosts nixosConfigurations;
-      roots = nixpkgs.lib.lists.uniqueStrings (map (host: host.root) allHosts);
-    in
-    nixpkgs.lib.attrsets.genAttrs allHorizons (mkDnsRecordsOutputAddrType allHosts roots));
+    records = (globalConfig.getList ["foxDen" "dns" "records"] nixosConfigurations);
+    horizons = nixpkgs.lib.lists.uniqueStrings (map (record: record.horizon) records);
+    zones = nixpkgs.lib.lists.uniqueStrings (map (record: record.zone) records);
+  in
+  (nixpkgs.lib.attrsets.genAttrs horizons (horizon:
+    nixpkgs.lib.attrsets.genAttrs zones (zone:
+      nixpkgs.lib.filter (record: record.horizon == horizon && record.zone == zone) records
+    )
+  )));
 }

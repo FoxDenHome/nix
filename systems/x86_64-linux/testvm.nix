@@ -67,7 +67,7 @@ in
   foxDen.hosts.hosts = {
     system = {
       name = config.networking.hostName;
-      root = "local.foxden.network";
+      zone = "local.foxden.network";
       manageNetwork = false;
       internal = {
         ipv4 = ifcfg.ipv4.address;
@@ -77,7 +77,7 @@ in
 
     jellyfin = {
       name = "jellyfin";
-      root = "local.foxden.network";
+      zone = "local.foxden.network";
       vlan = 1;
       internal = {
         ipv4 = "192.168.122.201";
