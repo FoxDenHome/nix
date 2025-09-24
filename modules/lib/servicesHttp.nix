@@ -129,7 +129,7 @@ in
       name = inputs.name or svcConfig.host.name;
 
       caddyStorageRoot = "/var/lib/foxden/caddy/${name}";
-      caddyConfigRoot = "/etc/foxden/caddy/Caddyfile.${name}";
+      caddyConfigRoot = "/etc/foxden/caddy/${name}";
 
       hostCfg = svcConfig.host;
       hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.dns.name}.${hostCfg.dns.zone}";
