@@ -1,6 +1,6 @@
 { nixpkgs, ... }:
 let
-  globalConfig = import ./globalConfig.nix { inherit nixpkgs; };
+  globalConfig = import ./config.nix { inherit nixpkgs; };
 
   allHorizons = [ "internal" "external" ];
 
@@ -42,7 +42,7 @@ let
                 (nixpkgs.lib.flatten
                   (map (nixpkgs.lib.attrsets.attrValues)
                     (nixpkgs.lib.attrsets.attrValues
-                      (globalConfig.get ["foxDen" "hosts"] nixosConfigurations)))));
+                      (globalConfig.get ["foxDen" "hosts" "hosts"] nixosConfigurations)))));
 
   mkDnsRecordsOutputRoot = (horizon: hosts: root:
       nixpkgs.lib.filter (record: record.value != "")

@@ -1,7 +1,7 @@
 { nixpkgs, ... }:
 let
   util = import ./util.nix { inherit nixpkgs; };
-  dns = import ./dns.nix { inherit nixpkgs; };
+  dns = import ./global/dns.nix { inherit nixpkgs; };
   eSA = nixpkgs.lib.strings.escapeShellArg;
   mkHostSuffix = host: util.mkHash8 host.name;
 

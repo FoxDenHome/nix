@@ -17,7 +17,7 @@
     mkModuleList = dir: (nixpkgs.lib.filter isNixFile
                           (nixpkgs.lib.filesystem.listFilesRecursive dir));
 
-    dns = import ./modules/dns.nix { inherit nixpkgs; };
+    dns = import ./modules/global/dns.nix { inherit nixpkgs; };
     hosts = import ./modules/hosts.nix { inherit nixpkgs; };
     servicesHttp = import ./modules/servicesHttp.nix { inherit nixpkgs; };
     util = import ./modules/util.nix { inherit nixpkgs; };
