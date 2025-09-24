@@ -14,24 +14,23 @@
   let
     isNixFile = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
 
-    mkModuleList = dir: (nixpkgs.lib.filter isNixFile
-                          (nixpkgs.lib.filesystem.listFilesRecursive dir));
+    mkModuleList = (dir: (nixpkgs.lib.filter isNixFile
+                          (nixpkgs.lib.filesystem.listFilesRecursive dir)));
+
+    mkModuleAttrSet = (dir: nixpkgs.lib.attrsets.listToAttrs
+                          (map (path: { name = nixpkgs.lib.strings.removeSuffix ".nix" (nixpkgs.lib.path.baseName path); value = path; })
+                               (mkModuleList dir)));
 
     dns = import ./modules/global/dns.nix { inherit nixpkgs; };
-    hosts = import ./modules/hosts.nix { inherit nixpkgs; };
-    servicesHttp = import ./modules/servicesHttp.nix { inherit nixpkgs; };
-    util = import ./modules/util.nix { inherit nixpkgs; };
 
     inputNixosModules = [
       impermanence.nixosModules.impermanence
       lanzaboote.nixosModules.lanzaboote
       sops-nix.nixosModules.sops
-      hosts.nixosModule
-      servicesHttp.nixosModule
-      dns.nixosModule
     ];
 
     modules = mkModuleList ./modules/nixos;
+    libs = mkModuleList ./modules/lib;
     systems = mkModuleList ./systems;
 
     mkSystemConfig = system: let
@@ -52,7 +51,6 @@
           ({ ... }: {
             networking.hostName = hostname;
             nixpkgs.hostPlatform = systemArch;
-            networking.hostId = util.mkHash8 hostname;
             sops.defaultSopsFile = ./secrets/${hostname}.yaml;
           })
           system

@@ -37,6 +37,8 @@
 
   users.groups.share.gid = 1001;
 
+  networking.hostId = util.mkHash8 config.networking.hostName;
+
   environment.persistence."/nix/persist/system" = {
     hideMounts = true;
 

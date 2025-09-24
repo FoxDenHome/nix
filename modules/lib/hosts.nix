@@ -77,7 +77,7 @@ in
     hosts = config.foxDen.hosts.hosts;
     ifcfg = config.foxDen.hosts.ifcfg;
 
-    hostDriver = import (./hostDrivers + "/${config.foxDen.hosts.driver}.nix")
+    hostDriver = import (../hostDrivers + "/${config.foxDen.hosts.driver}.nix")
       { inherit ifcfg hosts nixpkgs pkgs mkHostSuffix; driverOpts = config.foxDen.hosts.driverOpts; };
 
     netnsRoutes = (hostDriver.routes or ifcfg.routes) ++ config.foxDen.hosts.routes;
