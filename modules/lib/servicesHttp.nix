@@ -188,7 +188,7 @@ in
         environment.persistence."/nix/persist/foxden/services" = {
           hideMounts = true;
           directories = [
-            { directory = caddyPrivateStorageRoot; }
+            { directory = caddyPrivateStorageRoot; mode = "u=rwx,g=,o="; }
           ];
         };
 
