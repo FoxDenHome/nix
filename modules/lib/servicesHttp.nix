@@ -191,23 +191,17 @@ in
           ];
         };
 
-        users.users.${serviceName} = {
-          isSystemUser = true;
-          group = serviceName;
-        };
-        users.groups.${serviceName} = {};
-
         systemd.services.${serviceName} = {
           reloadTriggers = [ config.environment.etc.${caddyFileEtc}.text ];
           serviceConfig = {
+            DynamicUser = true;
+            StateDirectory = caddyStorageRoot;
             Environment = [
               "XDG_CONFIG_HOME=${caddyStorageRoot}"
               "XDG_DATA_HOME=${caddyStorageRoot}"
             ];
             ExecStart = "${cmd} run --config ${eSA caddyFilePath}";
             ExecReload = "${cmd} reload --config ${eSA caddyFilePath}";
-            User = serviceName;
-            Group = serviceName;
             Restart = "always";
             ReadWritePaths = [caddyStorageRoot];
             ReadOnlyPaths = [caddyConfigRoot];
