@@ -186,7 +186,6 @@ in
       ifcfg = with nixpkgs.lib.types; {
         dns = nixpkgs.lib.mkOption {
           type = listOf str;
-          default = [ "8.8.8.8" ];
         };
         ipv4 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
           type = nullOr ifcfgAddressType;
@@ -205,7 +204,7 @@ in
       };
 
       routes = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-        type = (listOf routeType);
+        type = listOf routeType;
         default = [];
       };
 
