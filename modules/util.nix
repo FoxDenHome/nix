@@ -16,7 +16,7 @@ let
     (nixpkgs.lib.strings.hasPrefix "fd" ip) ||
     (nixpkgs.lib.strings.hasPrefix "fc" ip));
 
-  isIPv6 = (ip: nixpkgs.lib.strings.hasInfix ":" ip);
+  isIPv6 = nixpkgs.lib.strings.hasInfix ":";
 
   removeIpCidr = (ip: builtins.elemAt (nixpkgs.lib.strings.splitString "/" ip) 0);
 in
