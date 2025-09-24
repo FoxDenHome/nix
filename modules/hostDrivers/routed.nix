@@ -6,11 +6,11 @@ let
   routesGWSubnet =
     (if (ifcfg.ipv4.address or "") != "" then [
       {
-        Destination = "${ifcfg.ipv4.address}/32";
+        Destination = "${util.removeIpCidr ifcfg.ipv4.address}/32";
       }
     ] else []) ++ (if (ifcfg.ipv6.address or "") != "" then [
       {
-        Destination = "${ifcfg.ipv6.address}/128";
+        Destination = "${util.removeIpCidr ifcfg.ipv6.address}/128";
       }
     ] else []);
 in

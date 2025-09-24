@@ -24,4 +24,5 @@ in
 
   isPrivateIP = (ip: if (isIPv6 ip) then (isPrivateIPv6 ip) else (isPrivateIPv4 ip));
   isIPv6 = isIPv6;
+  removeIpCidr = (ip: builtins.elemAt (nixpkgs.lib.strings.splitString "/" ip) 0);
 }

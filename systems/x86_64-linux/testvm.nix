@@ -10,14 +10,12 @@ in
 
   foxDen.hosts.ifcfg = {
     ipv4 = {
-      address = "192.168.122.200";
+      address = "192.168.122.200/24";
       gateway = "192.168.122.1";
-      prefixLength = 24;
     };
     ipv6 = {
-      address = "fd00:dead:beef:122::200";
+      address = "fd00:dead:beef:122::200/64";
       gateway = "fd00:dead:beef:122::1";
-      prefixLength = 64;
     };
     dns = [ "8.8.8.8" ];
     interface = "br-default";

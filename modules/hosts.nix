@@ -14,10 +14,6 @@ let
         type = str;
         default = "";
       };
-      prefixLength = nixpkgs.lib.mkOption {
-        type = int;
-        default = null;
-      };
     };
   };
 
@@ -64,18 +60,14 @@ let
     (if (addr.ipv4 or "") != "" then [
       {
         Destination = "0.0.0.0/0";
-        Gateway = addr.ipv4;
+        Gateway = util.removeIpCidr addr.ipv4;
       }
     ] else []) ++ (if (addr.ipv6 or "") != "" then [
       {
         Destination = "::/0";
-        Gateway = addr.ipv6;
+        Gateway = util.removeIpCidr addr.ipv6;
       }
     ] else []));
-
-  mkNetworkAddresses = (addrs:
-    map (addr: "${addr.address}/${toString addr.prefixLength}")
-    (nixpkgs.lib.lists.filter (addr: addr != "") addrs));
 
   mkHostInfo = (host: {
     namespace = "/run/netns/host-${host.name}";
@@ -164,7 +156,7 @@ in
           network.networks."${config.foxDen.hosts.ifcfg.network}" = {
             name = ifcfg.interface;
             routes = mkRoutesAK ifcfg "gateway";
-            address = mkNetworkAddresses [ifcfg.ipv4 ifcfg.ipv6];
+            address = nixpkgs.lib.filter (val: val != "") [ifcfg.ipv4.address ifcfg.ipv6.address];
             dns = ifcfg.dns or [];
 
             networkConfig = {
