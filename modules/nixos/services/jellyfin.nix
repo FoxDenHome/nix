@@ -1,6 +1,8 @@
 { nixpkgs, pkgs, lib, config, ... }:
 let
   services = import ../../services.nix { inherit nixpkgs; };
+  servicesHttp = import ../../servicesHttp.nix { inherit nixpkgs; };
+
   mkJellyfinDir = (dir: {
     directory = dir;
     user = config.services.jellyfin.user;
@@ -11,14 +13,14 @@ let
   svcConfig = config.foxDen.services.jellyfin;
 in
 {
-  options.foxDen.services.jellyfin = services.mkHttpOptions { name = "Jellyfin media server"; };
+  options.foxDen.services.jellyfin = servicesHttp.mkOptions { name = "Jellyfin media server"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
-    (services.mkCustom {
+    (services.make {
       inherit svcConfig pkgs config;
       host = "jellyfin";
     })
-    (services.mkCaddy {
+    (servicesHttp.make {
       inherit svcConfig pkgs config;
       host = "jellyfin";
       target = "reverse_proxy http://localhost:8096";

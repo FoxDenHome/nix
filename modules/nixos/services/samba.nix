@@ -18,7 +18,7 @@ in
   options.foxDen.services.samba = services.mkOptions { name = "Samba for SMB"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge (
-    (map (name: (services.mkCustom {
+    (map (name: (services.make {
       inherit svcConfig pkgs config;
       name = name;
       host = "samba";

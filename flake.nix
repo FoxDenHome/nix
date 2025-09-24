@@ -19,7 +19,7 @@
 
     dns = import ./modules/dns.nix { inherit nixpkgs; };
     hosts = import ./modules/hosts.nix { inherit nixpkgs; };
-    services = import ./modules/services.nix { inherit nixpkgs; };
+    servicesHttp = import ./modules/servicesHttp.nix { inherit nixpkgs; };
     util = import ./modules/util.nix { inherit nixpkgs; };
 
     inputNixosModules = [
@@ -27,7 +27,7 @@
       lanzaboote.nixosModules.lanzaboote
       sops-nix.nixosModules.sops
       hosts.nixosModules.hosts
-      services.nixosModules.services
+      servicesHttp.nixosModules.servicesHttp
     ];
 
     modules = mkModuleList ./modules/nixos;
