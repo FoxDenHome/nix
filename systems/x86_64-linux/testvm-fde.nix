@@ -83,8 +83,10 @@ in
     enable = true;
     tls = true;
     host = {
-      name = "jellyfin";
-      zone = "local.foxden.network";
+      dns = {
+        name = "jellyfin";
+        zone = "local.foxden.network";
+      };
       vlan = 1;
       addresses = [
         "192.168.122.201/24"
@@ -100,8 +102,10 @@ in
   foxDen.services.samba = {
     enable = true;
     host = {
-      name = "samba";
-      zone = "local.foxden.network";
+      dns = {
+        name = "samba";
+        zone = "local.foxden.network";
+      };
       vlan = 1;
       addresses = [
         "192.168.122.202/24"

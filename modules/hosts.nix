@@ -19,13 +19,15 @@ let
 
   hostType = with nixpkgs.lib.types; submodule {
     options = {
-      name = nixpkgs.lib.mkOption {
-        type = str;
-        default = "";
-      };
-      zone = nixpkgs.lib.mkOption {
-        type = str;
-        default = "foxden.network";
+      dns = {
+        name = nixpkgs.lib.mkOption {
+          type = str;
+          default = "";
+        };
+        zone = nixpkgs.lib.mkOption {
+          type = str;
+          default = "foxden.network";
+        };
       };
       vlan = nixpkgs.lib.mkOption {
         type = int;
@@ -138,9 +140,9 @@ in
       foxDen.hosts.ifcfg.network = nixpkgs.lib.mkDefault "40-${ifcfg.interface}";
 
       foxDen.dns.records = nixpkgs.lib.flatten (map (host: let
-        mkRecord = (addr: {
-          zone = host.zone;
-          name = host.name;
+        mkRecord = (addr: nixpkgs.lib.mkIf (host.dns.name != "") {
+          zone = host.dns.zone;
+          name = host.dns.name;
           type = if (util.isIPv6 addr) then "AAAA" else "A";
           ttl = host.addressTtl;
           value = (builtins.elemAt (nixpkgs.lib.strings.splitString "/" addr) 0);
