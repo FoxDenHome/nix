@@ -1,6 +1,6 @@
-{ nixpkgs, ... }:
+{ nixpkgs, foxDenLib, ... }:
 let
-  globalConfig = import ./config.nix { inherit nixpkgs; };
+  globalConfig = foxDenLib.global.config;
 
   defaultTtl = 3600;
   dynDnsTtl = 5;

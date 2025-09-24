@@ -53,8 +53,6 @@
 
     systems = mkModuleList ./systems;
 
-    dns = import ./modules/global/dns.nix modParams;
-
     mkSystemConfig = system: let
       splitPath = nixpkgs.lib.path.splitRoot system;
       components = nixpkgs.lib.path.subpath.components splitPath.subpath;
@@ -83,6 +81,6 @@
   in
   {
     nixosConfigurations = nixosConfigurations;
-    dnsRecords = (dns.mkRecords nixosConfigurations);
+    dnsRecords = (foxDenLib.global.dns.mkRecords nixosConfigurations);
   };
 }
