@@ -195,8 +195,8 @@ in
           reloadTriggers = [ config.environment.etc.${caddyFileEtc}.text ];
           serviceConfig = {
             DynamicUser = true;
-            StateDirectory = caddyStorageRoot;
-            ConfigurationDirectory = caddyConfigRoot;
+            StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" caddyStorageRoot;
+            ConfigurationDirectory = nixpkgs.lib.strings.removePrefix "/etc/" caddyConfigRoot;
             Environment = [
               "XDG_CONFIG_HOME=${caddyStorageRoot}"
               "XDG_DATA_HOME=${caddyStorageRoot}"
