@@ -9,14 +9,14 @@ in
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
   foxDen.hosts.ifcfg = {
-    ipv4 = {
-      address = "192.168.122.200/24";
-      gateway = "192.168.122.1";
-    };
-    ipv6 = {
-      address = "fd00:dead:beef:122::200/64";
-      gateway = "fd00:dead:beef:122::1";
-    };
+    addresses = [
+      "192.168.122.200/24"
+      "fd00:dead:beef:122::200/64"
+    ];
+    routes = [
+      { Destination = "0.0.0.0/0"; Gateway = "192.168.122.1"; }
+      { Destination = "::/0"; Gateway = "fd00:dead:beef:122::1"; }
+    ];
     dns = [ "8.8.8.8" ];
     interface = "br-default";
   };

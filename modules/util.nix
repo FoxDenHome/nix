@@ -17,12 +17,20 @@ let
     (nixpkgs.lib.strings.hasPrefix "fc" ip));
 
   isIPv6 = (ip: nixpkgs.lib.strings.hasInfix ":" ip);
+
+  removeIpCidr = (ip: builtins.elemAt (nixpkgs.lib.strings.splitString "/" ip) 0);
 in
 {
   mkShortHash = mkShortHash;
   mkHash8 = mkShortHash 8;
 
   isPrivateIP = (ip: if (isIPv6 ip) then (isPrivateIPv6 ip) else (isPrivateIPv4 ip));
+
   isIPv6 = isIPv6;
-  removeIpCidr = (ip: builtins.elemAt (nixpkgs.lib.strings.splitString "/" ip) 0);
+  isIPv4 = (ip: !isIPv6 ip);
+
+  removeIpCidr = removeIpCidr;
+  addHostCidr = (ipRaw: let
+    ip = removeIpCidr ipRaw;
+  in if (isIPv6 ip) then "${ip}/128" else "${ip}/32");
 }

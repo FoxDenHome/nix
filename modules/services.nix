@@ -30,9 +30,11 @@ let
   });
 in
 {
-  mkOptions = { name }: {
+  mkOptions = { name, svcName }: {
     enable = nixpkgs.lib.mkEnableOption name;
-    host = hosts.mkOption { };
+    host = hosts.mkOption {
+      nameDef = svcName;
+    };
   };
 
   make = (inputs@{ svcConfig, ... }: mkNamed (inputs.name or svcConfig.host.name) inputs);

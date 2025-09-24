@@ -4,21 +4,25 @@ let
   eSA = nixpkgs.lib.strings.escapeShellArg;
   mkHostSuffix = host: util.mkHash8 host.name;
 
-  ifcfgAddressType = with nixpkgs.lib.types; submodule {
+  ifcfgRouteType = with nixpkgs.lib.types; submodule {
     options = {
-      address = nixpkgs.lib.mkOption {
+      Destination = nixpkgs.lib.mkOption {
         type = str;
-        default = "";
       };
-      gateway = nixpkgs.lib.mkOption {
+      Gateway = nixpkgs.lib.mkOption {
         type = str;
-        default = "";
       };
     };
   };
 
-  hostType = with nixpkgs.lib.types; submodule {
+  hostType = (nameDef: with nixpkgs.lib.types; submodule {
     options = {
+      name = nixpkgs.lib.mkOption (if nameDef != null then {
+        type = str;
+        default = nameDef;
+      } else {
+        type = str;
+      });
       dns = {
         name = nixpkgs.lib.mkOption {
           type = str;
@@ -40,7 +44,7 @@ let
         type = listOf str;
       };
     };
-  };
+  });
 
   routeType = with nixpkgs.lib.types; submodule {
     options = {
@@ -55,48 +59,33 @@ let
     };
   };
 
-  mkRoutesAK = (ifcfg: addrKey: let
-    addr.ipv4 = ifcfg.ipv4.${addrKey} or "";
-    addr.ipv6 = ifcfg.ipv6.${addrKey} or "";
-  in
-    (if (addr.ipv4 or "") != "" then [
-      {
-        Destination = "0.0.0.0/0";
-        Gateway = util.removeIpCidr addr.ipv4;
-      }
-    ] else []) ++ (if (addr.ipv6 or "") != "" then [
-      {
-        Destination = "::/0";
-        Gateway = util.removeIpCidr addr.ipv6;
-      }
-    ] else []));
-
   mkHostInfo = (host: {
     namespace = "/run/netns/host-${host.name}";
     unit = "netns-host-${host.name}.service";
   });
 in
 {
-  hostType = hostType;
-
   mkHostInfo = mkHostInfo;
 
-  mkOption = with nixpkgs.lib.types; (opts: nixpkgs.lib.mkOption (nixpkgs.lib.mergeAttrs {
-    type = if (opts.default or null) == null then (nullOr hostType) else hostType;
-    default = opts.default or null;
-  } opts));
+  mkOption = with nixpkgs.lib.types; (inputs@{ nameDef, ... }: nixpkgs.lib.mkOption ({
+    type = if (inputs.default or null) == null then (nullOr (hostType nameDef)) else (hostType nameDef);
+    default = inputs.default or null;
+  }));
 
   nixosModule = ({ config, pkgs, ... }:
   let
     hosts = config.foxDen.hosts.hosts;
     ifcfg = config.foxDen.hosts.ifcfg;
-    hostDriver = import (./hostDrivers + "/${config.foxDen.hosts.driver}.nix") { inherit ifcfg hosts nixpkgs pkgs mkRoutesAK mkHostSuffix; driverOpts = config.foxDen.hosts.driverOpts; };
-    netnsRoutes = (hostDriver.routes or (mkRoutesAK ifcfg "gateway")) ++ config.foxDen.hosts.routes;
+
+    hostDriver = import (./hostDrivers + "/${config.foxDen.hosts.driver}.nix")
+      { inherit ifcfg hosts nixpkgs pkgs mkHostSuffix; driverOpts = config.foxDen.hosts.driverOpts; };
+
+    netnsRoutes = (hostDriver.routes or ifcfg.routes) ++ config.foxDen.hosts.routes;
   in
   {
     options.foxDen.hosts = {
       hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-        type = (listOf hostType);
+        type = (listOf (hostType null));
         default = [];
       };
 
@@ -104,13 +93,13 @@ in
         dns = nixpkgs.lib.mkOption {
           type = listOf str;
         };
-        ipv4 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-          type = nullOr ifcfgAddressType;
-          default = null;
+        addresses = nixpkgs.lib.mkOption {
+          type = listOf str;
+          default = [];
         };
-        ipv6 = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-          type = nullOr ifcfgAddressType;
-          default = null;
+        routes = nixpkgs.lib.mkOption {
+          type = listOf ifcfgRouteType;
+          default = [];
         };
         interface = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
           type = str;
@@ -157,9 +146,9 @@ in
           # Configure host/primary network/bridge
           network.networks."${config.foxDen.hosts.ifcfg.network}" = {
             name = ifcfg.interface;
-            routes = mkRoutesAK ifcfg "gateway";
-            address = nixpkgs.lib.filter (val: val != "") [ifcfg.ipv4.address ifcfg.ipv6.address];
-            dns = ifcfg.dns or [];
+            routes = ifcfg.routes;
+            address = ifcfg.addresses;
+            dns = ifcfg.dns;
 
             networkConfig = {
               DHCP = "no";

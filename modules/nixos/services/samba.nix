@@ -15,7 +15,7 @@ let
   ];
 in
 {
-  options.foxDen.services.samba = services.mkOptions { name = "Samba for SMB"; };
+  options.foxDen.services.samba = services.mkOptions { svcName = "samba"; name = "Samba for SMB"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge (
     (map (name: (services.make {

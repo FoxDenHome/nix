@@ -13,7 +13,7 @@ let
   svcConfig = config.foxDen.services.jellyfin;
 in
 {
-  options.foxDen.services.jellyfin = servicesHttp.mkOptions { name = "Jellyfin media server"; };
+  options.foxDen.services.jellyfin = servicesHttp.mkOptions { svcName = "jellyfin"; name = "Jellyfin media server"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {

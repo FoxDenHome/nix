@@ -1,23 +1,22 @@
-{ nixpkgs, ifcfg, hosts, mkRoutesAK, mkHostSuffix, ... } :
+{ nixpkgs, ifcfg, hosts, mkHostSuffix, ... } :
 let
+  util = import ../util.nix { inherit nixpkgs; };
+
   eSA = nixpkgs.lib.strings.escapeShellArg;
   mkIfaceName = host: "vethrt${mkHostSuffix host}";
 
-  routesGWSubnet =
-    (if (ifcfg.ipv4.address or "") != "" then [
-      {
-        Destination = "${util.removeIpCidr ifcfg.ipv4.address}/32";
-      }
-    ] else []) ++ (if (ifcfg.ipv6.address or "") != "" then [
-      {
-        Destination = "${util.removeIpCidr ifcfg.ipv6.address}/128";
-      }
-    ] else []);
+  routeHostAddrs = (map (addr: {
+    Destination = (util.addHostCidr addr);
+  }) ifcfg.addresses);
+
+  mkFirstGw = (predicate: gw: let
+    addr = nixpkgs.lib.lists.findFirst predicate "" ifcfg.addresses;
+  in if addr != "" then [{ Destination = (util.addHostCidr addr); Gateway = gw; }] else []);
 in
 {
   configType = with nixpkgs.lib.types; submodule { };
 
-  config.systemd.network.networks = nixpkgs.lib.mergeAttrs {
+  config.systemd.network.networks = {
     "${ifcfg.network}" = {
       networkConfig = {
         IPv4Forwarding = true;
@@ -25,14 +24,12 @@ in
         IPv4ProxyARP = true;
         IPv6ProxyNDP = true;
 
-        IPv6ProxyNDPAddress = (nixpkgs.lib.filter (addr: addr != "")
+        IPv6ProxyNDPAddress = (nixpkgs.lib.filter util.isIPv6
           (nixpkgs.lib.flatten
-            (map
-              (host: [host.external.ipv6 host.internal.ipv6])
-              hosts)));
+            (map (host: host.addresses) hosts)));
       };
     };
-  } (nixpkgs.lib.attrsets.listToAttrs
+  } // (nixpkgs.lib.attrsets.listToAttrs
       (map ((host: {
           name = "60-host-${host.name}";
           value = {
@@ -61,5 +58,8 @@ in
     "${ipCmd} link del ${eSA (mkIfaceName host)}"
   ]);
 
-  routes = routesGWSubnet ++ (mkRoutesAK ifcfg "address");
+  routes = routeHostAddrs ++ (nixpkgs.lib.flatten [
+    (mkFirstGw util.isIPv4 "0.0.0.0/0")
+    (mkFirstGw util.isIPv6 "::/0")
+  ]);
 }

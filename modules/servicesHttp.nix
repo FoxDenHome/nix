@@ -107,7 +107,7 @@ in
     };
   };
 
-  mkOptions = (inputs@{ ... } : with nixpkgs.lib.types; nixpkgs.lib.mergeAttrs {
+  mkOptions = (inputs@{ ... } : with nixpkgs.lib.types; {
     hostPort = nixpkgs.lib.mkOption {
       type = str;
       default = "";
@@ -123,7 +123,7 @@ in
         type = str;
       };
     };
-  } (services.mkOptions inputs));
+  } // (services.mkOptions inputs));
 
   make = (inputs@{ config, svcConfig, pkgs, target, ... }:
     let
