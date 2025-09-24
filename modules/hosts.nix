@@ -28,13 +28,13 @@ let
           type = str;
           default = "foxden.network";
         };
+        ttl = nixpkgs.lib.mkOption {
+          type = int;
+          default = 3600;
+        };
       };
       vlan = nixpkgs.lib.mkOption {
         type = int;
-      };
-      addressTtl = nixpkgs.lib.mkOption {
-        type = int;
-        default = 3600;
       };
       addresses = nixpkgs.lib.mkOption {
         type = listOf str;
@@ -144,7 +144,7 @@ in
           zone = host.dns.zone;
           name = host.dns.name;
           type = if (util.isIPv6 addr) then "AAAA" else "A";
-          ttl = host.addressTtl;
+          ttl = host.dns.ttl;
           value = (builtins.elemAt (nixpkgs.lib.strings.splitString "/" addr) 0);
           horizon = if (util.isPrivateIP addr) then "internal" else "external";
         });
