@@ -81,35 +81,10 @@ in
       # }];
   };
 
-  foxDen.services.jellyfin.enable = true;
-  foxDen.services.jellyfin.tls = false;
-  foxDen.services.samba.enable = true;
-
-  foxDen.services.jellyfin.oAuth = {
+  foxDen.services.jellyfin = {
     enable = true;
-    clientId = "nas-bengalfox";
-    clientSecret = "something funny";
-  };
-
-  systemd.services."getty@tty1" = {
-    overrideStrategy = "asDropin";
-    serviceConfig.ExecStart = ["" "@${pkgs.util-linux}/sbin/agetty agetty --login-program ${config.services.getty.loginProgram} --autologin root --noclear --keep-baud %I 115200,38400,9600 $TERM"];
-  };
-
-  foxDen.services.trustedProxies = [];
-
-  foxDen.hosts.hosts = {
-    system = {
-      name = config.networking.hostName;
-      zone = "local.foxden.network";
-      manageNetwork = false;
-      internal = {
-        ipv4 = ifcfg.ipv4.address;
-        ipv6 = ifcfg.ipv6.address;
-      };
-    };
-
-    jellyfin = {
+    tls = true;
+    host = {
       name = "jellyfin";
       zone = "local.foxden.network";
       vlan = 1;
@@ -118,8 +93,15 @@ in
         ipv6 = "fd00:dead:beef:122::201";
       };
     };
-
-    samba = {
+    oAuth = {
+      enable = false;
+      clientId = "nas-bengalfox";
+      clientSecret = "something funny";
+    };
+  };
+  foxDen.services.samba = {
+    enable = true;
+    host = {
       name = "samba";
       zone = "local.foxden.network";
       vlan = 1;
@@ -129,4 +111,11 @@ in
       };
     };
   };
+
+  systemd.services."getty@tty1" = {
+    overrideStrategy = "asDropin";
+    serviceConfig.ExecStart = ["" "@${pkgs.util-linux}/sbin/agetty agetty --login-program ${config.services.getty.loginProgram} --autologin root --noclear --keep-baud %I 115200,38400,9600 $TERM"];
+  };
+
+  foxDen.services.trustedProxies = [];
 }

@@ -28,13 +28,13 @@ in
         IPv6ProxyNDPAddress = (nixpkgs.lib.filter (addr: addr != "")
           (nixpkgs.lib.flatten
             (map
-              (host: if host.manageNetwork then [host.external.ipv6 host.internal.ipv6] else [])
-              (nixpkgs.lib.attrsets.attrValues hosts))));
+              (host: [host.external.ipv6 host.internal.ipv6])
+              hosts)));
       };
     };
   } (nixpkgs.lib.attrsets.listToAttrs (
       nixpkgs.lib.lists.flatten
-        (map (({ name, value }: let
+        (map ((host: let
           allAddrs = (nixpkgs.lib.lists.filter (val: val != "") [
             value.internal.ipv4
             value.internal.ipv6
@@ -44,9 +44,9 @@ in
           in
           [
           {
-            name = "60-host-${name}";
+            name = "60-host-${host.name}";
             value = {
-              name = (mkIfaceName value);
+              name = (mkIfaceName host);
               networkConfig = {
                 DHCP = "no";
                 IPv6AcceptRA = "no";
@@ -59,7 +59,7 @@ in
               }) allAddrs;
             };
           }
-        ])) (nixpkgs.lib.attrsets.attrsToList hosts))));
+        ])) hosts)));
 
   execStart = ({ ipCmd, host, serviceInterface, ... }: let
     hostIface = mkIfaceName host;

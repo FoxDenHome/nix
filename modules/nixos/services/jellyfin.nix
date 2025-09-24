@@ -18,11 +18,9 @@ in
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
       inherit svcConfig pkgs config;
-      host = "jellyfin";
     })
     (servicesHttp.make {
       inherit svcConfig pkgs config;
-      host = "jellyfin";
       target = "reverse_proxy http://localhost:8096";
     })
     {

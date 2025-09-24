@@ -63,25 +63,4 @@ in
       #   VLAN = "1-10";
       # }];
   };
-
-  foxDen.hosts.hosts = {
-    system = {
-      name = config.networking.hostName;
-      zone = "local.foxden.network";
-      manageNetwork = false;
-      internal = {
-        ipv4 = ifcfg.ipv4.address;
-        ipv6 = ifcfg.ipv6.address;
-      };
-    };
-
-    jellyfin = {
-      name = "jellyfin";
-      zone = "local.foxden.network";
-      vlan = 1;
-      internal = {
-        ipv4 = "192.168.122.201";
-      };
-    };
-  };
 }

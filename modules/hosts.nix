@@ -54,10 +54,6 @@ let
       vlan = nixpkgs.lib.mkOption {
         type = int;
       };
-      manageNetwork = nixpkgs.lib.mkOption {
-        type = bool;
-        default = true;
-      };
     }
     (nixpkgs.lib.attrsets.genAttrs allHorizons (horizon: nixpkgs.lib.mkOption {
       type = hostHorizonConfigType;
@@ -113,26 +109,25 @@ let
     map (addr: "${addr.address}/${toString addr.prefixLength}")
     (nixpkgs.lib.lists.filter (addr: addr != "") addrs));
 
-  mkHostInfo = (name: {
-    namespace = "/run/netns/host-${name}";
-    unit = "netns-host-${name}.service";
+  mkHostInfo = (host: {
+    namespace = "/run/netns/host-${host.name}";
+    unit = "netns-host-${host.name}.service";
   });
-  mkHostConfig = (config: name: config.foxDen.hosts.hosts.${name});
 in
 {
   hostType = hostType;
   hostHorizonConfigType = hostHorizonConfigType;
 
   mkHostInfo = mkHostInfo;
-  mkHostConfig = mkHostConfig;
 
   mkOption = with nixpkgs.lib.types; (opts: nixpkgs.lib.mkOption (nixpkgs.lib.mergeAttrs {
-    type = if opts.default == null then (nullOr hostType) else hostType;
+    type = if (opts.default or null) == null then (nullOr hostType) else hostType;
+    default = opts.default or null;
   } opts));
 
   nixosModule = ({ config, pkgs, ... }:
   let
-    hosts = nixpkgs.lib.attrsets.filterAttrs (name: host: host.manageNetwork) config.foxDen.hosts.hosts;
+    hosts = config.foxDen.hosts.hosts;
     ifcfg = config.foxDen.hosts.ifcfg;
     hostDriver = import (./hostDrivers + "/${config.foxDen.hosts.driver}.nix") { inherit ifcfg hosts nixpkgs pkgs mkRoutesAK mkHostSuffix; driverOpts = config.foxDen.hosts.driverOpts; };
     netnsRoutes = (hostDriver.routes or (mkRoutesAK ifcfg "gateway")) ++ config.foxDen.hosts.routes;
@@ -140,8 +135,8 @@ in
   {
     options.foxDen.hosts = {
       hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-        type = (attrsOf hostType);
-        default = {};
+        type = (listOf hostType);
+        default = [];
       };
 
       subnet = {
@@ -216,7 +211,7 @@ in
         (mkRecord "internal" "ipv6")
         (mkRecord "external" "ipv4")
         (mkRecord "external" "ipv6")
-      ]) (nixpkgs.lib.attrsets.attrValues config.foxDen.hosts.hosts));
+      ]) hosts);
 
       systemd = nixpkgs.lib.mkMerge [
         hostDriver.config.systemd
@@ -235,9 +230,8 @@ in
           };
 
           # Configure each host's NetNS
-          services = (nixpkgs.lib.attrsets.listToAttrs (map (name: let
-            host = mkHostConfig config name;
-            info = mkHostInfo name;
+          services = (nixpkgs.lib.attrsets.listToAttrs (map (host: let
+            info = mkHostInfo host;
             namespace = (nixpkgs.lib.strings.removePrefix "/run/netns/" info.namespace);
 
             ipCmd = eSA "${pkgs.iproute2}/bin/ip";
@@ -282,8 +276,7 @@ in
                   ];
               };
             };
-          })
-          (nixpkgs.lib.attrsets.attrNames hosts)));
+          }) hosts));
         }
       ];
     };

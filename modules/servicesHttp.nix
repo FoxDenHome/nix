@@ -127,12 +127,12 @@ in
 
   make = (inputs@{ config, svcConfig, pkgs, target, ... }:
     let
-      name = inputs.name or inputs.host;
+      name = inputs.name or svcConfig.host.name;
 
       caddyStorageRoot = "/var/lib/foxden/caddy/${name}";
       caddyConfigRoot = "/etc/foxden/caddy/Caddyfile.${name}";
 
-      hostCfg = hosts.mkHostConfig config inputs.host;
+      hostCfg = svcConfig.host;
       hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.name}.${hostCfg.root}";
       url = (if svcConfig.tls then "" else "http://") + hostPort;
 

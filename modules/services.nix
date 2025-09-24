@@ -2,9 +2,9 @@
 let
   hosts = import ./hosts.nix { inherit nixpkgs; };
 
-  mkNamed = (svc: { host, ... }:
+  mkNamed = (svc: { svcConfig, ... }:
   let
-    info = hosts.mkHostInfo host;
+    info = hosts.mkHostInfo svcConfig.host;
   in
   {
     # oci.networks = [ "ns:${info.namespace}" ]; # TODO: Test
@@ -25,13 +25,16 @@ let
         Restart = nixpkgs.lib.mkForce "always";
       };
     };
+
+    foxDen.hosts.hosts = nixpkgs.lib.mkIf (svcConfig.host != null) [svcConfig.host];
   });
 in
 {
   mkOptions = { name }: {
     enable = nixpkgs.lib.mkEnableOption name;
+    host = hosts.mkOption { };
   };
 
-  make = (inputs@{ host, ... }: mkNamed (inputs.name or host) inputs);
+  make = (inputs@{ svcConfig, ... }: mkNamed (inputs.name or svcConfig.host.name) inputs);
   mkNamed = mkNamed;
 }

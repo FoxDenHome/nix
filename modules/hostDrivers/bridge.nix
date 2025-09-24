@@ -9,20 +9,20 @@ in
   config.systemd.network.networks =
     nixpkgs.lib.attrsets.listToAttrs (
       nixpkgs.lib.lists.flatten
-        (map (({ name, value }: [
+        (map ((host: [
           {
-            name = "60-host-${name}";
+            name = "60-host-${host.name}";
             value = {
-              name = mkIfaceName value;
+              name = mkIfaceName host;
               bridge = [ifcfg.interface];
               bridgeVLANs = [{
-                PVID = value.vlan;
-                EgressUntagged = value.vlan;
-                VLAN = value.vlan;
+                PVID = host.vlan;
+                EgressUntagged = host.vlan;
+                VLAN = host.vlan;
               }];
             };
           }
-        ])) (nixpkgs.lib.attrsets.attrsToList hosts)));
+        ])) hosts));
 
   config.systemd.network.netdevs.${ifcfg.interface} = {
     netdevConfig = {
