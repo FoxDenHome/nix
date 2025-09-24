@@ -1,6 +1,6 @@
-{ nixpkgs, ... }:
+{ nixpkgs, foxDenLib, ... }:
 let
-  hosts = import ./hosts.nix { inherit nixpkgs; };
+  hosts = foxDenLib.hosts;
 
   mkNamed = (svc: { svcConfig, ... }:
   let

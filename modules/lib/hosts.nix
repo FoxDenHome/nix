@@ -1,6 +1,6 @@
-{ nixpkgs, ... }:
+{ nixpkgs, foxDenLib, ... }:
 let
-  util = import ./util.nix { inherit nixpkgs; };
+  util = foxDenLib.util;
   eSA = nixpkgs.lib.strings.escapeShellArg;
   mkHostSuffix = host: util.mkHash8 host.name;
 

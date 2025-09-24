@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, foxDenLib, config, ... }:
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
@@ -37,7 +37,7 @@
 
   users.groups.share.gid = 1001;
 
-  networking.hostId = util.mkHash8 config.networking.hostName;
+  networking.hostId = foxDenLib.util.mkHash8 config.networking.hostName;
 
   environment.persistence."/nix/persist/system" = {
     hideMounts = true;

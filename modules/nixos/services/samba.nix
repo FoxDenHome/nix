@@ -1,6 +1,6 @@
-{ nixpkgs, pkgs, lib, config, ... }:
+{ nixpkgs, foxDenLib, pkgs, lib, config, ... }:
 let
-  services = import ../../services.nix { inherit nixpkgs; };
+  services = foxDenLib.services;
   svcConfig = config.foxDen.services.samba;
 
   smbServices = ["samba-smbd" "samba-nmbd" "samba-winbindd"];

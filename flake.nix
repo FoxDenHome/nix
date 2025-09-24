@@ -1,5 +1,5 @@
 {
-  description = "FoxDen Nix config";
+  description = "FoxDen NixOS config";
 
   inputs = {
     lanzaboote.url = "github:nix-community/lanzaboote";
@@ -14,24 +14,46 @@
   let
     isNixFile = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
 
+    mkRelPath = (root: path: nixpkgs.lib.strings.removePrefix (builtins.toString root+"/") (builtins.toString path));
+
     mkModuleList = (dir: (nixpkgs.lib.filter isNixFile
                           (nixpkgs.lib.filesystem.listFilesRecursive dir)));
 
-    mkModuleAttrSet = (dir: nixpkgs.lib.attrsets.listToAttrs
-                          (map (path: { name = nixpkgs.lib.strings.removeSuffix ".nix" (nixpkgs.lib.path.baseName path); value = path; })
-                               (mkModuleList dir)));
+    modParams = { inherit nixpkgs; inherit foxDenLib; };
 
-    dns = import ./modules/global/dns.nix { inherit nixpkgs; };
+    mkModuleAttrSet = (dir: let
+                        loadedMods = map (path: {
+                          name = nixpkgs.lib.strings.removeSuffix ".nix" (mkRelPath dir path);
+                          value = import path modParams;
+                        }) (mkModuleList dir);
+                      in
+                      {
+                          nested = (nixpkgs.lib.attrsets.mergeAttrsList (map
+                            ({ name, value }:
+                              nixpkgs.lib.setAttrByPath
+                                (nixpkgs.lib.strings.splitString "/" name)
+                                value)
+                            loadedMods));
 
-    inputNixosModules = [
+                          flat = nixpkgs.lib.attrsets.listToAttrs loadedMods;
+                      });
+
+    foxDenLibsRaw = mkModuleAttrSet ./modules/lib;
+    foxDenLib = foxDenLibsRaw.nested;
+
+    modules = (mkModuleList ./modules/nixos) ++ [
       impermanence.nixosModules.impermanence
       lanzaboote.nixosModules.lanzaboote
       sops-nix.nixosModules.sops
-    ];
+    ] ++ (nixpkgs.lib.filter (mod: mod != null)
+      (map
+        (mod: mod.nixosModule or null)
+        (nixpkgs.lib.attrsets.attrValues foxDenLibsRaw.flat)
+    ));
 
-    modules = mkModuleList ./modules/nixos;
-    libs = mkModuleList ./modules/lib;
     systems = mkModuleList ./systems;
+
+    dns = import ./modules/global/dns.nix modParams;
 
     mkSystemConfig = system: let
       splitPath = nixpkgs.lib.path.splitRoot system;
@@ -46,7 +68,7 @@
       name = hostname;
       value = nixpkgs.lib.nixosSystem {
         system = systemArch;
-        specialArgs = { inherit nixpkgs; };
+        specialArgs = { inherit nixpkgs; inherit foxDenLib; };
         modules = [
           ({ ... }: {
             networking.hostName = hostname;
@@ -54,7 +76,7 @@
             sops.defaultSopsFile = ./secrets/${hostname}.yaml;
           })
           system
-        ] ++ inputNixosModules ++ modules;
+        ] ++ modules;
       };
     };
     nixosConfigurations = (nixpkgs.lib.attrsets.listToAttrs (map mkSystemConfig systems));
@@ -62,5 +84,6 @@
   {
     nixosConfigurations = nixosConfigurations;
     dnsRecords = (dns.mkRecords nixosConfigurations);
+    x = modules;
   };
 }

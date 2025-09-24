@@ -1,7 +1,6 @@
-{ nixpkgs, ... }:
+{ nixpkgs, foxDenLib, ... }:
 let
-  hosts = import ./hosts.nix { inherit nixpkgs; };
-  services = import ./services.nix { inherit nixpkgs; };
+  services = foxDenLib.services;
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
   mkOauthProxy = (inputs@{ config, svcConfig, pkgs, target, ... }: let
@@ -133,7 +132,7 @@ in
       caddyConfigRoot = "/etc/foxden/caddy/Caddyfile.${name}";
 
       hostCfg = svcConfig.host;
-      hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.name}.${hostCfg.root}";
+      hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.dns.name}.${hostCfg.dns.zone}";
       url = (if svcConfig.tls then "" else "http://") + hostPort;
 
       serviceName = "caddy-${name}";

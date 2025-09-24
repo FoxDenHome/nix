@@ -1,6 +1,6 @@
-{ nixpkgs, ifcfg, hosts, mkHostSuffix, ... } :
+{ nixpkgs, foxDenLib, ifcfg, hosts, mkHostSuffix, ... } :
 let
-  util = import ../util.nix { inherit nixpkgs; };
+  util = foxDenLib.util;
 
   eSA = nixpkgs.lib.strings.escapeShellArg;
   mkIfaceName = host: "vethrt${mkHostSuffix host}";

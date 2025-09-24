@@ -1,7 +1,7 @@
-{ nixpkgs, pkgs, lib, config, ... }:
+{ nixpkgs, foxDenLib, pkgs, lib, config, ... }:
 let
-  services = import ../../services.nix { inherit nixpkgs; };
-  servicesHttp = import ../../servicesHttp.nix { inherit nixpkgs; };
+  services = foxDenLib.services;
+  servicesHttp = foxDenLib.servicesHttp;
 
   mkJellyfinDir = (dir: {
     directory = dir;
