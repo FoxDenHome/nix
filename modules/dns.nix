@@ -1,6 +1,6 @@
 { nixpkgs, ... }:
 let
-  hosts = import ./hosts.nix { inherit nixpkgs; };
+  globalConfig = import ./globalConfig.nix { inherit nixpkgs; };
 
   allHorizons = [ "internal" "external" ];
 
@@ -37,6 +37,13 @@ let
     else []
   );
 
+  # CFG.${name}.${host} = X -> [{${host} =  X, ...}, ...] -> [[X, ...], ...] -> [X, ...]
+  mkAllHosts = (nixosConfigurations:
+                (nixpkgs.lib.flatten
+                  (map (nixpkgs.lib.attrsets.attrValues)
+                    (nixpkgs.lib.attrsets.attrValues
+                      (globalConfig.get ["foxDen" "hosts"] nixosConfigurations)))));
+
   mkDnsRecordsOutputRoot = (horizon: hosts: root:
       nixpkgs.lib.filter (record: record.value != "")
         (nixpkgs.lib.lists.flatten
@@ -51,7 +58,7 @@ in
   allHorizons = allHorizons;
 
   mkRecords = (nixosConfigurations: let
-      allHosts = hosts.allHosts nixosConfigurations;
+      allHosts = mkAllHosts nixosConfigurations;
       roots = nixpkgs.lib.lists.uniqueStrings (map (host: host.root) allHosts);
     in
     nixpkgs.lib.attrsets.genAttrs allHorizons (mkDnsRecordsOutputAddrType allHosts roots));

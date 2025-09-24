@@ -2,7 +2,6 @@
 let
   util = import ./util.nix { inherit nixpkgs; };
   dns = import ./dns.nix { inherit nixpkgs; };
-  globalConfig = import ./globalConfig.nix { inherit nixpkgs; };
   eSA = nixpkgs.lib.strings.escapeShellArg;
   mkHostSuffix = host: util.mkHash8 host.name;
 
@@ -147,18 +146,11 @@ in
   mkHostInfo = mkHostInfo;
   mkHostConfig = (config: name: config.foxDen.hosts.hosts.${name});
 
-  # CFG.${name}.${host} = X -> [{${host} =  X, ...}, ...] -> [[X, ...], ...] -> [X, ...]
-  allHosts = (nixosConfigurations:
-              (nixpkgs.lib.flatten
-                (map (nixpkgs.lib.attrsets.attrValues)
-                  (nixpkgs.lib.attrsets.attrValues
-                    (globalConfig.get ["foxDen" "hosts"] nixosConfigurations)))));
-
   mkOption = with nixpkgs.lib.types; (opts: nixpkgs.lib.mkOption (nixpkgs.lib.mergeAttrs {
     type = if opts.default == null then (nullOr hostType) else hostType;
   } opts));
 
-  nixosModules.hosts = ({ config, pkgs, ... }:
+  nixosModule = ({ config, pkgs, ... }:
   let
     hosts = nixpkgs.lib.attrsets.filterAttrs (name: host: host.manageNetwork) config.foxDen.hosts.hosts;
     ifcfg = config.foxDen.hosts.ifcfg;

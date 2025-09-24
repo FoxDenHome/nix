@@ -99,7 +99,7 @@ let
   '' else handler);
 in
 {
-  nixosModules.servicesHttp = { ... }:
+  nixosModule = { ... }:
   {
     options.foxDen.services.trustedProxies = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
       type = listOf str;
