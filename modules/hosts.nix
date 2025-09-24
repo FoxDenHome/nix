@@ -145,7 +145,7 @@ in
           name = host.dns.name;
           type = if (util.isIPv6 addr) then "AAAA" else "A";
           ttl = host.dns.ttl;
-          value = (builtins.elemAt (nixpkgs.lib.strings.splitString "/" addr) 0);
+          value = util.removeIpCidr addr;
           horizon = if (util.isPrivateIP addr) then "internal" else "external";
         });
       in
