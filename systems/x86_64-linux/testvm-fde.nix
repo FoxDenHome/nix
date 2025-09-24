@@ -82,14 +82,14 @@ in
   };
 
   foxDen.services.jellyfin.enable = true;
-  foxDen.services.jellyfin.tls = false;
+  #foxDen.services.jellyfin.tls = false;
   foxDen.services.samba.enable = true;
 
-  foxDen.services.jellyfin.oAuth = {
-    enable = true;
-    clientId = "nas-bengalfox";
-    clientSecret = "something funny";
-  };
+  # foxDen.services.jellyfin.oAuth = {
+  #   enable = true;
+  #   clientId = "nas-bengalfox";
+  #   clientSecret = "something funny";
+  # };
 
   systemd.services."getty@tty1" = {
     overrideStrategy = "asDropin";

@@ -1,6 +1,5 @@
 { nixpkgs, pkgs, lib, config, ... }:
 let
-  services = import ../../services.nix { inherit nixpkgs; };
   svcConfig = config.foxDen.services.samba;
 
   smbServices = ["samba-smbd" "samba-nmbd" "samba-winbindd"];
@@ -15,90 +14,86 @@ let
   ];
 in
 {
-  options.foxDen.services.samba = services.mkOptions { name = "Samba for SMB"; };
+  options.foxDen.services.samba = {
+    enable = lib.mkEnableOption "Samba file and print server";
+  };
 
-  config = lib.mkIf svcConfig.enable (lib.mkMerge (
-    (map (name: (services.make {
-      inherit svcConfig pkgs config;
-      name = name;
-      host = "samba";
-    })) smbServices)
-    ++ [
-    {
-      users.users.smbguest = {
-        isSystemUser = true;
-        group = "smbguest";
-      };
-      users.groups.smbguest = {};
+  config.foxDen.services.services = map (name: {
+    host = "samba";
+  }) smbServices;
 
-      services.samba.enable = true;
-      services.samba.settings = {
-        global = {
-          # basic setup
-          "workgroup" = "WORKGROUP";
-          "vfs objects" = "catia fruit streams_xattr io_uring";
-          "min protocol" = "SMB3";
+  config.users.users.smbguest = {
+    isSystemUser = true;
+    group = "smbguest";
+  };
+  config.users.groups.smbguest = {};
 
-          # performance tuning
-          "server multi channel support" = "yes";
-          "aio read size" = "16384";
-          "aio write size" = "16384";
-          "read raw" = "yes";
-          "write raw" = "yes";
-          "use sendfile" = "yes";
-          "socket options" = "TCP_NODELAY IPTOS_LOWDELAY IPTOS_THROUGHPUT SO_KEEPALIVE SO_RCVBUF=65536 SO_SNDBUF=65536";
-          "strict locking" = "no";
-          "strict sync" = "no";
+  config.services.samba.enable = true;
+  config.services.samba.settings = {
+    global = {
+      # basic setup
+      "workgroup" = "WORKGROUP";
+      "vfs objects" = "catia fruit streams_xattr io_uring";
+      "min protocol" = "SMB3";
 
-          # disable printing
-          "load printers" = "no";
-          "disable spoolss" = "yes";
+      # performance tuning
+      "server multi channel support" = "yes";
+      "aio read size" = "16384";
+      "aio write size" = "16384";
+      "read raw" = "yes";
+      "write raw" = "yes";
+      "use sendfile" = "yes";
+      "socket options" = "TCP_NODELAY IPTOS_LOWDELAY IPTOS_THROUGHPUT SO_KEEPALIVE SO_RCVBUF=65536 SO_SNDBUF=65536";
+      "strict locking" = "no";
+      "strict sync" = "no";
 
-          # guest account
-          "guest account" = "smbguest";
-          "map to guest" = "Never";
+      # disable printing
+      "load printers" = "no";
+      "disable spoolss" = "yes";
 
-          # macOS stuff
-          "fruit:metadata" = "stream";
-          "fruit:model" = "MacSamba";
-          "fruit:posix_rename" = "yes";
-          "fruit:veto_appledouble" = "yes";
-          "fruit:wipe_intentionally_left_blank_rfork" = "yes";
-          "fruit:delete_empty_adfiles" = "yes";
-          "fruit:zero_file_id" = "yes";
-          "spotlight" = "no";
+      # guest account
+      "guest account" = "smbguest";
+      "map to guest" = "Never";
 
-          # security
-          "allow insecure wide links" = "no";
-        };
+      # macOS stuff
+      "fruit:metadata" = "stream";
+      "fruit:model" = "MacSamba";
+      "fruit:posix_rename" = "yes";
+      "fruit:veto_appledouble" = "yes";
+      "fruit:wipe_intentionally_left_blank_rfork" = "yes";
+      "fruit:delete_empty_adfiles" = "yes";
+      "fruit:zero_file_id" = "yes";
+      "spotlight" = "no";
 
-        # TODO: Remove this
-        # homes = {
-        #   "comment" = "Home Directories";
-        #   "browseable" = "no";
-        #   "guest ok" = "no";
-        #   "writable" = "yes";
-        #   "create mask" = "0600";
-        #   "directory mask" = "0700";
-        #   "path" = "/home/%u";
-        #   "follow symlinks" = "no";
-        #   "wide links" = "no";
-        # };
-      };
+      # security
+      "allow insecure wide links" = "no";
+    };
 
-      systemd.services = (nixpkgs.lib.attrsets.genAttrs smbServices (name: {
-        unitConfig = {
-          JoinsNamespaceOf = lib.mkIf (name != "samba-smbd") "samba-smbd.service";
-        };
-        serviceConfig = {
-          ReadWritePaths = smbPaths;
-        };
-      }));
+    # TODO: Remove this
+    # homes = {
+    #   "comment" = "Home Directories";
+    #   "browseable" = "no";
+    #   "guest ok" = "no";
+    #   "writable" = "yes";
+    #   "create mask" = "0600";
+    #   "directory mask" = "0700";
+    #   "path" = "/home/%u";
+    #   "follow symlinks" = "no";
+    #   "wide links" = "no";
+    # };
+  };
 
-      environment.persistence."/nix/persist/samba" = {
-        hideMounts = true;
-        directories = smbPaths;
-      };
-    }
-  ]));
+  config.systemd.services = (nixpkgs.lib.attrsets.genAttrs smbServices (name: {
+    unitConfig = {
+      JoinsNamespaceOf = lib.mkIf (name != "samba-smbd") "samba-smbd.service";
+    };
+    serviceConfig = {
+      ReadWritePaths = smbPaths;
+    };
+  }));
+
+  config.environment.persistence."/nix/persist/samba" = {
+    hideMounts = true;
+    directories = smbPaths;
+  };
 }

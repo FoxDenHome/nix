@@ -138,14 +138,12 @@ let
     namespace = "/run/netns/host-${name}";
     unit = "netns-host-${name}.service";
   });
+
+  mkHostConfig = (config: name: config.foxDen.hosts.hosts.${name});
 in
 {
-  hostType = hostType;
-  hostHorizonConfigType = hostHorizonConfigType;
-  hostDnsRecordType = hostDnsRecordType;
-
   mkHostInfo = mkHostInfo;
-  mkHostConfig = (config: name: config.foxDen.hosts.hosts.${name});
+  mkHostConfig = mkHostConfig;
 
   # CFG.${name}.${host} = X -> [{${host} =  X, ...}, ...] -> [[X, ...], ...] -> [X, ...]
   allHosts = (nixosConfigurations:
@@ -154,11 +152,7 @@ in
                   (nixpkgs.lib.attrsets.attrValues
                     (globalConfig.get ["foxDen" "hosts"] nixosConfigurations)))));
 
-  mkOption = with nixpkgs.lib.types; (opts: nixpkgs.lib.mkOption (nixpkgs.lib.mergeAttrs {
-    type = if opts.default == null then (nullOr hostType) else hostType;
-  } opts));
-
-  nixosModules.hosts = ({ config, pkgs, ... }:
+  nixosModule = ({ config, pkgs, ... }:
   let
     hosts = nixpkgs.lib.attrsets.filterAttrs (name: host: host.manageNetwork) config.foxDen.hosts.hosts;
     ifcfg = config.foxDen.hosts.ifcfg;
@@ -243,7 +237,7 @@ in
         # Configure each host's NetNS
         services = (nixpkgs.lib.attrsets.listToAttrs
           (map (name: let
-            host = config.foxDen.hosts.hosts.${name};
+            host = mkHostConfig config name;
             info = mkHostInfo name;
             namespace = (nixpkgs.lib.strings.removePrefix "/run/netns/" info.namespace);
 

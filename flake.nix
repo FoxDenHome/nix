@@ -26,8 +26,8 @@
       impermanence.nixosModules.impermanence
       lanzaboote.nixosModules.lanzaboote
       sops-nix.nixosModules.sops
-      hosts.nixosModules.hosts
-      servicesHttp.nixosModules.servicesHttp
+      hosts.nixosModule
+      servicesHttp.nixosModule
     ];
 
     modules = mkModuleList ./modules/nixos;

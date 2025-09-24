@@ -13,40 +13,45 @@ let
   svcConfig = config.foxDen.services.jellyfin;
 in
 {
-  options.foxDen.services.jellyfin = servicesHttp.mkOptions { name = "Jellyfin media server"; };
+  options.foxDen.services.jellyfin = {
+    enable = lib.mkEnableOption "Jellyfin media server";
+  };
 
-  config = lib.mkIf svcConfig.enable (lib.mkMerge [
-    (services.make {
-      inherit svcConfig pkgs config;
-      host = "jellyfin";
-    })
-    (servicesHttp.make {
-      inherit svcConfig pkgs config;
-      host = "jellyfin";
-      target = "reverse_proxy http://localhost:8096";
-    })
-    {
-      services.jellyfin.enable = true;
-      services.jellyfin.group = "share";
+  config.foxDen.services.services.jellyfin = {
+    host = "jellyfin";
+  };
 
-      systemd.services.jellyfin.serviceConfig = {
-        ReadWritePaths = [
-          config.services.jellyfin.cacheDir
-          config.services.jellyfin.configDir
-          config.services.jellyfin.dataDir
-          config.services.jellyfin.logDir
-        ];
-      };
+  # (services.make {
+  #   inherit svcConfig pkgs config;
+  #   host = "jellyfin";
+  # })
+  # (servicesHttp.make {
+  #   inherit svcConfig pkgs config;
+  #   host = "jellyfin";
+  #   target = "reverse_proxy http://localhost:8096";
+  # })
 
-      environment.persistence."/nix/persist/jellyfin" = {
-        hideMounts = true;
-        directories = [
-          (mkJellyfinDir config.services.jellyfin.cacheDir)
-          (mkJellyfinDir config.services.jellyfin.configDir)
-          (mkJellyfinDir config.services.jellyfin.dataDir)
-          (mkJellyfinDir config.services.jellyfin.logDir)
-        ];
-      };
-    }
-  ]);
+  config.services.jellyfin = {
+    enable = true;
+    group = "share";
+  };
+
+  config.systemd.services.jellyfin.serviceConfig = {
+    ReadWritePaths = [
+      config.services.jellyfin.cacheDir
+      config.services.jellyfin.configDir
+      config.services.jellyfin.dataDir
+      config.services.jellyfin.logDir
+    ];
+  };
+
+  config.environment.persistence."/nix/persist/jellyfin" = {
+    hideMounts = true;
+    directories = [
+      (mkJellyfinDir config.services.jellyfin.cacheDir)
+      (mkJellyfinDir config.services.jellyfin.configDir)
+      (mkJellyfinDir config.services.jellyfin.dataDir)
+      (mkJellyfinDir config.services.jellyfin.logDir)
+    ];
+  };
 }

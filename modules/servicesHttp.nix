@@ -1,66 +1,65 @@
 { nixpkgs, ... }:
 let
   hosts = import ./hosts.nix { inherit nixpkgs; };
-  services = import ./services.nix { inherit nixpkgs; };
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
   mkOauthProxy = (inputs@{ config, svcConfig, pkgs, target, ... }: let
     name = inputs.name or inputs.host;
     serviceName = "oauth2-proxy-${name}";
 
-    svc = services.mkNamed serviceName inputs;
     cmd = (eSA "${pkgs.oauth2-proxy}/bin/oauth2-proxy");
     secure = if svcConfig.tls then "true" else "false";
 
     configFile = "/etc/foxden/oauth2-proxy/${name}.conf";
     configFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" configFile;
   in
-  (nixpkgs.lib.mkMerge [
-    svc
-    {
-      users.users.${serviceName} = {
-        isSystemUser = true;
-        group = serviceName;
-      };
-      users.groups.${serviceName} = {};
+  {
+    users.users.${serviceName} = {
+      isSystemUser = true;
+      group = serviceName;
+    };
+    users.groups.${serviceName} = {};
 
-      environment.etc.${configFileEtc} = {
-        text = ''
-          http_address = "127.0.0.1:4180"
-          reverse_proxy = true
-          provider = "oidc"
-          provider_display_name = "FoxDen"
-          code_challenge_method = "S256"
-          email_domains = ["*"]
-          scope = "openid email profile"
-          cookie_name = "_oauth2_proxy"
-          cookie_expire = "168h"
-          cookie_httponly = true
-          cookie_secure = ${secure}
-          skip_provider_button = true
+    foxDen.services.services.${serviceName} = {
+      host = inputs.host;
+    };
 
-          cookie_secret = "CHANGE ME RIGHT "
-          client_id = "${svcConfig.oAuth.clientId}"
-          client_secret = "${svcConfig.oAuth.clientSecret}"
-          oidc_issuer_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}"
-        '';
-        user = serviceName;
-        group = serviceName;
-        mode = "0600";
-      };
+    environment.etc.${configFileEtc} = {
+      text = ''
+        http_address = "127.0.0.1:4180"
+        reverse_proxy = true
+        provider = "oidc"
+        provider_display_name = "FoxDen"
+        code_challenge_method = "S256"
+        email_domains = ["*"]
+        scope = "openid email profile"
+        cookie_name = "_oauth2_proxy"
+        cookie_expire = "168h"
+        cookie_httponly = true
+        cookie_secure = ${secure}
+        skip_provider_button = true
 
-      systemd.services.${serviceName} = {
-        restartTriggers = [ config.environment.etc.${configFileEtc}.text ];
-        serviceConfig = {
-          ExecStart = "${cmd} --config=${eSA configFile}";
-          User = serviceName;
-          Group = serviceName;
-          Restart = "always";
-        };
-        wantedBy = ["multi-user.target"];
+        cookie_secret = "CHANGE ME RIGHT "
+        client_id = "${svcConfig.oAuth.clientId}"
+        client_secret = "${svcConfig.oAuth.clientSecret}"
+        oidc_issuer_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}"
+      '';
+      user = serviceName;
+      group = serviceName;
+      mode = "0600";
+    };
+
+    systemd.services.${serviceName} = {
+      restartTriggers = [ config.environment.etc.${configFileEtc}.text ];
+      serviceConfig = {
+        ExecStart = "${cmd} --config=${eSA configFile}";
+        User = serviceName;
+        Group = serviceName;
+        Restart = "always";
       };
-    }
-  ]));
+      wantedBy = ["multi-user.target"];
+    };
+  });
 
   mkCaddyInternalBypass = (handler: svcConfig: if svcConfig.oAuth.bypassInternal then ''
     @internal {
@@ -99,15 +98,15 @@ let
   '' else handler);
 in
 {
-  nixosModules.servicesHttp = { ... }:
+  nixosModule = { lib, ... }:
   {
-    options.foxDen.services.trustedProxies = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+    options.foxDen.services.trustedProxies = with lib.types; lib.mkOption {
       type = listOf str;
       default = [];
     };
   };
 
-  mkOptions = (inputs@{ ... } : with nixpkgs.lib.types; nixpkgs.lib.mergeAttrs {
+  mkOptions = (inputs@{ ... } : with nixpkgs.lib.types; {
     hostPort = nixpkgs.lib.mkOption {
       type = str;
       default = "";
@@ -123,7 +122,7 @@ in
         type = str;
       };
     };
-  } (services.mkOptions inputs));
+  });
 
   make = (inputs@{ config, svcConfig, pkgs, target, ... }:
     let
@@ -137,11 +136,10 @@ in
       url = (if svcConfig.tls then "" else "http://") + hostPort;
 
       serviceName = "caddy-${name}";
-      svc = services.mkNamed serviceName inputs;
       caddyFilePath = "${caddyConfigRoot}/Caddyfile";
       cmd = (eSA "${pkgs.caddy}/bin/caddy");
 
-      trustedProxies = config.foxDen.services.trustedProxies;
+      trustedProxies = config.foxDen.services.http.trustedProxies;
       mkTrustedProxies = (prefix:
                           if (builtins.length trustedProxies) > 0
                             then (prefix + " " + (nixpkgs.lib.strings.concatStringsSep " " trustedProxies))
@@ -150,9 +148,12 @@ in
       caddyFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" caddyFilePath;
     in
     (nixpkgs.lib.mkMerge [
-      svc
       (nixpkgs.lib.mkIf svcConfig.oAuth.enable (mkOauthProxy inputs))
       {
+        foxDen.services.services.${serviceName} = {
+          host = inputs.host;
+        };
+
         environment.etc.${caddyFileEtc} = {
           text = ''
             {
