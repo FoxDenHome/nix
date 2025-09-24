@@ -81,7 +81,7 @@ in
 
   foxDen.services.jellyfin = {
     enable = true;
-    tls = true;
+    tls = false;
     host = {
       dns = {
         name = "jellyfin";
