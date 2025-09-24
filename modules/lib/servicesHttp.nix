@@ -179,8 +179,8 @@ in
               ${mkCaddyHandler target svcConfig}
             }
           '';
-          user = serviceName;
-          group = serviceName;
+          user = "nobody";
+          group = "nogroup";
           mode = "0600";
         };
 
