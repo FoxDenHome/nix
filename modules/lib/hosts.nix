@@ -72,15 +72,17 @@ in
     default = inputs.default or null;
   }));
 
-  nixosModule = ({ config, pkgs, ... }:
+  nixosModule = ({ config, pkgs, foxDenLib, ... }:
   let
     hosts = config.foxDen.hosts.hosts;
     ifcfg = config.foxDen.hosts.ifcfg;
 
-    hostDriver = import (../hostDrivers + "/${config.foxDen.hosts.driver}.nix")
+    hostDriver = foxDenLib.hostDrivers.${config.foxDen.hosts.driver};
+
+    hostDriverConfig = hostDriver.build
       { inherit ifcfg hosts nixpkgs pkgs mkHostSuffix; driverOpts = config.foxDen.hosts.driverOpts; };
 
-    netnsRoutes = (hostDriver.routes or ifcfg.routes) ++ config.foxDen.hosts.routes;
+    netnsRoutes = (hostDriverConfig.routes or ifcfg.routes) ++ config.foxDen.hosts.routes;
   in
   {
     options.foxDen.hosts = {
@@ -120,7 +122,7 @@ in
       };
 
       driverOpts = nixpkgs.lib.mkOption {
-        type = hostDriver.configType;
+        type = hostDriver.driverOptsType;
         default = {};
       };
     };
@@ -141,7 +143,7 @@ in
       (map mkRecord host.addresses)) hosts);
 
       systemd = nixpkgs.lib.mkMerge [
-        hostDriver.config.systemd
+        hostDriverConfig.config.systemd
         {
           # Configure host/primary network/bridge
           network.networks."${config.foxDen.hosts.ifcfg.network}" = {
@@ -164,7 +166,7 @@ in
             ipCmd = eSA "${pkgs.iproute2}/bin/ip";
             ipInNsCmd = "${ipCmd} netns exec ${eSA namespace} ${ipCmd}";
 
-            mkServiceInterface = hostDriver.serviceInterface or (host: "host-${mkHostSuffix host}");
+            mkServiceInterface = hostDriverConfig.serviceInterface or (host: "host-${mkHostSuffix host}");
             serviceInterface = mkServiceInterface host;
             driverRunParams = { inherit host ipCmd ipInNsCmd serviceInterface; };
           in
@@ -186,7 +188,7 @@ in
                   "${ipInNsCmd} addr add ::1/128 dev lo noprefixroute"
                   "${ipInNsCmd} link set lo up"
                 ]
-                ++ (hostDriver.execStart driverRunParams)
+                ++ (hostDriverConfig.execStart driverRunParams)
                 ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA namespace}" ]
                 ++ (map (addr:
                       "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
@@ -197,7 +199,7 @@ in
                       netnsRoutes);
 
                 ExecStop =
-                  (hostDriver.execStop driverRunParams)
+                  (hostDriverConfig.execStop driverRunParams)
                   ++ [
                     "${ipCmd} netns del ${eSA namespace}"
                   ];

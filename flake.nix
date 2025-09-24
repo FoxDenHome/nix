@@ -28,12 +28,12 @@
                         }) (mkModuleList dir);
                       in
                       {
-                          nested = (nixpkgs.lib.attrsets.mergeAttrsList (map
-                            ({ name, value }:
-                              nixpkgs.lib.setAttrByPath
-                                (nixpkgs.lib.strings.splitString "/" name)
-                                value)
-                            loadedMods));
+                          nested = (nixpkgs.lib.attrsets.updateManyAttrsByPath (map
+                            ({ name, value }: {
+                                path = (nixpkgs.lib.strings.splitString "/" name);
+                                update = (old: value);
+                            })
+                            loadedMods) {});
 
                           flat = nixpkgs.lib.attrsets.listToAttrs loadedMods;
                       });
@@ -84,6 +84,5 @@
   {
     nixosConfigurations = nixosConfigurations;
     dnsRecords = (dns.mkRecords nixosConfigurations);
-    x = modules;
   };
 }
