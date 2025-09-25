@@ -33,6 +33,8 @@ let
             "-/etc/localtime"
             "-/etc/passwd"
             "-/etc/group"
+            "-/etc/subuid"
+            "-/etc/subgid"
             "-/etc/pki/tls/certs"
             "-/etc/ssl/certs"
             "-/etc/static/pki/tls/certs"
