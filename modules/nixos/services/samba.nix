@@ -1,4 +1,4 @@
-{ nixpkgs, foxDenLib, lib, config, ... }:
+{ nixpkgs, pkgs, foxDenLib, lib, config, ... }:
 let
   services = foxDenLib.services;
   svcConfig = config.foxDen.services.samba;
@@ -104,7 +104,10 @@ in
             "/etc/samba"
             "/etc/static/samba"
           ];
-          RuntimeDirectory = "samba:/var/run/samba";
+          ExecStartPre = [
+            "-${pkgs.coreutils}/bin/mkdir -p /var"
+            "-${pkgs.coreutils}/bin/ln -sf /run /var"
+          ];
         };
       }));
 
