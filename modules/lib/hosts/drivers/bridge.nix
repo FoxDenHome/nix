@@ -5,10 +5,10 @@ in
 {
   driverOptsType = with nixpkgs.lib.types; submodule { };
 
-  build = { ifcfg, hosts, ... } :
+  build = { ifcfg, config, hosts, ... } :
   let
     mkIfaceName = (name: let
-      host = foxDenLib.hosts.getByName name;
+      host = foxDenLib.hosts.getByName config name;
     in
       "vethbr${host.info.suffix}");
   in
