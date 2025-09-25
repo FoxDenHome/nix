@@ -5,9 +5,12 @@ in
 {
   driverOptsType = with nixpkgs.lib.types; submodule { };
 
-  build = { nixpkgs, ifcfg, mkHostSuffix, hosts, ... } :
+  build = { ifcfg, hosts, ... } :
   let
-    mkIfaceName = name: "vethbr${mkHostSuffix name}";
+    mkIfaceName = (name: let
+      host = hosts.getByName name;
+    in
+      "vethbr${host.info.suffix}");
   in
   {
     config.systemd.network.networks =

@@ -4,7 +4,7 @@ let
 
   mkNamed = (svc: { svcConfig, config, ... }:
   let
-    info = hosts.mkHostInfo svcConfig.host;
+    host = hosts.getByName config svcConfig.host;
   in
   {
     configDir = "/etc/foxden/services/${svc}";
@@ -15,13 +15,13 @@ let
         confinement.enable = true;
 
         unitConfig = {
-          Requires = [ info.unit ];
-          BindsTo = [ info.unit ];
-          After = [ info.unit ];
+          Requires = [ host.info.unit ];
+          BindsTo = [ host.info.unit ];
+          After = [ host.info.unit ];
         };
 
         serviceConfig = {
-          NetworkNamespacePath = info.namespace;
+          NetworkNamespacePath = host.info.namespace;
           DevicePolicy = "closed";
           PrivateDevices = nixpkgs.lib.mkForce true;
           Restart = nixpkgs.lib.mkForce "always";
@@ -29,7 +29,7 @@ let
           BindReadOnlyPaths = [
             "/run/systemd/notify"
             "/nix/store"
-            "${info.resolvConf}:/etc/resolv.conf"
+            "${host.info.resolvConf}:/etc/resolv.conf"
             "-/etc/hosts"
             "-/etc/localtime"
             "-/etc/passwd"

@@ -127,8 +127,8 @@ in
 
       caddyStorageRoot = "/var/lib/foxden/caddy/${name}";
 
-      hostCfg = foxDenLib.hosts.mkHostConfig config svcConfig.host;
-      hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.dns.name}.${hostCfg.dns.zone}";
+      host = foxDenLib.hosts.getByName config svcConfig.host;
+      hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${host.config.dns.name}.${host.config.dns.zone}";
       url = (if svcConfig.tls then "" else "http://") + hostPort;
 
       svc = services.mkNamed serviceName inputs;

@@ -6,9 +6,12 @@ in
 {
   driverOptsType = with nixpkgs.lib.types; submodule { };
 
-  build = { ifcfg, hosts, mkHostSuffix, ... } :
+  build = { ifcfg, hosts, ... } :
   let
-    mkIfaceName = name: "vethrt${mkHostSuffix name}";
+    mkIfaceName = (name: let
+      host = hosts.getByName name;
+    in
+      "vethrt${host.info.suffix}");
 
     routeHostAddrs = (map (addr: {
       Destination = (util.addHostCidr addr);

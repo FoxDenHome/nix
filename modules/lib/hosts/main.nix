@@ -53,15 +53,21 @@ let
     };
   };
 
-  mkHostInfo = (host: {
-    namespace = "/run/netns/host-${host}";
-    unit = "netns-host-${host}.service";
+  mkHostInfo = (name: {
+    namespace = "/run/netns/host-${name}";
+    unit = "netns-host-${name}.service";
     resolvConf = "/etc/foxden/hosts/resolv.conf";
+    suffix = mkHostSuffix name;
+  });
+
+  getByName = (config: name: {
+    inherit name;
+    info = mkHostInfo name;
+    config = config.foxDen.hosts.hosts.${name};
   });
 in
 {
-  mkHostInfo = mkHostInfo;
-  mkHostConfig = (config: name: config.foxDen.hosts.hosts.${name});
+  getByName = getByName;
 
   nixosModule = ({ config, pkgs, foxDenLib, ... }:
   let
@@ -71,7 +77,7 @@ in
     hostDriver = foxDenLib.hosts.drivers.${config.foxDen.hosts.driver};
 
     hostDriverConfig = hostDriver.build
-      { inherit ifcfg hosts nixpkgs pkgs mkHostSuffix; driverOpts = config.foxDen.hosts.driverOpts; };
+      { inherit ifcfg hosts pkgs; driverOpts = config.foxDen.hosts.driverOpts; };
 
     netnsRoutes = (hostDriverConfig.routes or ifcfg.routes) ++ config.foxDen.hosts.routes;
   in
