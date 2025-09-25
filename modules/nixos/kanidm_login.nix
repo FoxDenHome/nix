@@ -13,6 +13,7 @@
       group = "root";
     };
 
+    # BEGIN: Fix "normal" shells
     environment.shells = [
       "/usr/bin/fish"
       "/usr/bin/zsh"
@@ -21,8 +22,6 @@
       "/bin/zsh"
       "/bin/bash"
     ];
-
-    # Otherwise, selected shells just won't work...
     systemd.tmpfiles.rules = [
       "L /usr/bin/bash - - - - ${pkgs.bash}/bin/bash"
       "L /usr/bin/fish - - - - ${pkgs.fish}/bin/fish"
@@ -31,6 +30,13 @@
       "L /bin/fish - - - - ${pkgs.fish}/bin/fish"
       "L /bin/zsh - - - - ${pkgs.zsh}/bin/zsh"
     ];
+
+    systemd.services.kanidm-unixd = {
+      serviceConfig = {
+        BindReadOnlyPaths = [ "-/bin" "-/usr/bin" ];
+      };
+    };
+    # END: Fix "normal" shells
 
     services.openssh = {
       authorizedKeysCommand = "/run/wrappers/bin/kanidm_ssh_authorizedkeys %u";
@@ -52,12 +58,6 @@
         gid_attr_map = "name";
         home_attr = "name";
         home_alias = "none";
-      };
-    };
-
-    systemd.services.kanidm-unixd = {
-      serviceConfig = {
-        BindReadOnlyPaths = [ "-/bin" "-/usr/bin" ];
       };
     };
 

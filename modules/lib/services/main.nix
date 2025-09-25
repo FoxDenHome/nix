@@ -19,6 +19,7 @@ let
         };
 
         serviceConfig = {
+          TemporaryFileSystem = ["/:ro"];
           NetworkNamespacePath = info.namespace;
           DevicePolicy = "closed";
           PrivateTmp = true;

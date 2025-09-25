@@ -91,7 +91,7 @@ in
           JoinsNamespaceOf = lib.mkIf (name != "samba-smbd") "samba-smbd.service";
         };
         serviceConfig = {
-          ReadWritePaths = smbPaths;
+          BindPaths = smbPaths;
         };
       }));
 

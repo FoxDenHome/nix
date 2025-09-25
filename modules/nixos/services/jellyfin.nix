@@ -27,7 +27,7 @@ in
       services.jellyfin.group = "share";
 
       systemd.services.jellyfin.serviceConfig = {
-        ReadWritePaths = [
+        BindPaths = [
           config.services.jellyfin.cacheDir
           config.services.jellyfin.configDir
           config.services.jellyfin.dataDir

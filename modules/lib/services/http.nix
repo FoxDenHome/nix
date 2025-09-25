@@ -126,14 +126,13 @@ in
       serviceName = "caddy-${name}";
 
       caddyStorageRoot = "/var/lib/foxden/caddy/${name}";
-      caddyConfigRoot = "${svc.configDir}/${name}";
 
       hostCfg = svcConfig.host;
       hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.dns.name}.${hostCfg.dns.zone}";
       url = (if svcConfig.tls then "" else "http://") + hostPort;
 
       svc = services.mkNamed serviceName inputs;
-      caddyFilePath = "${caddyConfigRoot}/Caddyfile";
+      caddyFilePath = "${svc.configDir}/Caddyfile.${name}";
       cmd = (eSA "${pkgs.caddy}/bin/caddy");
 
       trustedProxies = config.foxDen.services.trustedProxies;
@@ -192,8 +191,7 @@ in
               ];
               ExecStart = "${cmd} run --config \"\${CREDENTIALS_DIRECTORY}/Caddyfile\"";
               Restart = "always";
-              ReadWritePaths = [caddyStorageRoot];
-              ReadOnlyPaths = [caddyConfigRoot];
+              BindPaths = [caddyStorageRoot];
               AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
             };
             wantedBy = ["multi-user.target"];
