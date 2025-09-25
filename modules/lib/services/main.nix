@@ -34,6 +34,7 @@ let
             "-/etc/passwd"
             "-/etc/group"
             "-/etc/pki/tls/certs"
+            "-/etc/ssl/certs"
           ];
         };
       };
