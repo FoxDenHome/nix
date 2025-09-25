@@ -4,7 +4,7 @@ let
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
   mkOauthProxy = (inputs@{ config, svcConfig, pkgs, target, ... }: let
-    name = inputs.name or inputs.host;
+    name = inputs.name or svcConfig.host.name;
     serviceName = "oauth2-proxy-${name}";
 
     svc = services.mkNamed serviceName inputs;
@@ -121,6 +121,7 @@ in
   make = (inputs@{ config, svcConfig, pkgs, target, ... }:
     let
       name = inputs.name or svcConfig.host.name;
+      serviceName = "caddy-${name}";
 
       caddyStorageRoot = "/var/lib/foxden/caddy/${name}";
       caddyConfigRoot = "/etc/foxden/caddy/${name}";
@@ -129,7 +130,6 @@ in
       hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.dns.name}.${hostCfg.dns.zone}";
       url = (if svcConfig.tls then "" else "http://") + hostPort;
 
-      serviceName = "caddy-${name}";
       svc = services.mkNamed serviceName inputs;
       caddyFilePath = "${caddyConfigRoot}/Caddyfile";
       cmd = (eSA "${pkgs.caddy}/bin/caddy");
