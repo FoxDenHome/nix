@@ -182,6 +182,8 @@ in
             restartTriggers = [ config.environment.etc.${caddyFileEtc}.text ];
             serviceConfig = {
               DynamicUser = true;
+              PrivateUsers = false; # needed for the capabilities sadly
+              AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
               StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" caddyStorageRoot;
               LoadCredential = "Caddyfile:${caddyFilePath}";
               Environment = [
@@ -192,7 +194,6 @@ in
               ExecStart = "${cmd} run --config \"\${CREDENTIALS_DIRECTORY}/Caddyfile\"";
               Restart = "always";
               BindPaths = [caddyStorageRoot];
-              AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
             };
             wantedBy = ["multi-user.target"];
           };

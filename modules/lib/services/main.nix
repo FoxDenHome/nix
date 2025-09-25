@@ -24,7 +24,6 @@ let
           NetworkNamespacePath = info.namespace;
           DevicePolicy = "closed";
           Restart = nixpkgs.lib.mkForce "always";
-          PrivateUsers = false;
 
           BindReadOnlyPaths = [
             "/run/systemd/notify"
