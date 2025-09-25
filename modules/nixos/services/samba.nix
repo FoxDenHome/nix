@@ -105,6 +105,7 @@ in
           BindReadOnlyPaths = [
             "/etc/samba"
             "/etc/static/samba"
+            "/var/run/nscd/socket"
           ];
         };
       }));
