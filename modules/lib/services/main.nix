@@ -19,10 +19,9 @@ let
         };
 
         serviceConfig = {
-          TemporaryFileSystem = ["/:ro"];
+          confinement.enable = true;
           NetworkNamespacePath = info.namespace;
           DevicePolicy = "closed";
-          PrivateTmp = true;
           PrivateMounts = true;
           Restart = nixpkgs.lib.mkForce "always";
           BindReadOnlyPaths = [
