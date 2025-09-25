@@ -94,7 +94,7 @@ in
       ];
     };
     oAuth = {
-      enable = false;
+      enable = true;
       clientId = "nas-bengalfox";
       clientSecret = "something funny";
     };
