@@ -177,7 +177,7 @@ in
         };
 
         systemd.services.${serviceName} = {
-          reloadTriggers = [ config.environment.etc.${caddyFileEtc}.text ];
+          restartTriggers = [ config.environment.etc.${caddyFileEtc}.text ];
           serviceConfig = {
             DynamicUser = true;
             StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" caddyStorageRoot;
@@ -188,7 +188,6 @@ in
               "HOME=${caddyStorageRoot}"
             ];
             ExecStart = "${cmd} run --config \"\${CREDENTIALS_DIRECTORY}/Caddyfile\"";
-            ExecReload = "${cmd} reload --config \"\${CREDENTIALS_DIRECTORY}/Caddyfile\"";
             Restart = "always";
             ReadWritePaths = [caddyStorageRoot];
             ReadOnlyPaths = [caddyConfigRoot];
