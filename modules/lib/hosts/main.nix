@@ -77,7 +77,7 @@ in
     hostDriver = foxDenLib.hosts.drivers.${config.foxDen.hosts.driver};
 
     hostDriverConfig = hostDriver.build
-      { inherit ifcfg hosts pkgs; driverOpts = config.foxDen.hosts.driverOpts; };
+      { inherit ifcfg hosts pkgs config; driverOpts = config.foxDen.hosts.driverOpts; };
 
     netnsRoutes = (hostDriverConfig.routes or ifcfg.routes) ++ config.foxDen.hosts.routes;
   in
@@ -171,7 +171,7 @@ in
 
             mkServiceInterface = hostDriverConfig.serviceInterface or (name: host: "host-${mkHostSuffix name}");
             serviceInterface = mkServiceInterface name value;
-            driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface host config; };
+            driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface host; };
           in
           {
             name = (nixpkgs.lib.strings.removeSuffix ".service" host.info.unit);
