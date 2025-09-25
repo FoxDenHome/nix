@@ -28,10 +28,10 @@ let
 
           MountAPIVFS = wantsAPIVFS;
           PrivateTmp = wantsAPIVFS;
-          PrivateUsers = wantsAPIVFS;
-          # ProtectControlGroups = wantsAPIVFS;
-          # ProtectKernelModules = wantsAPIVFS;
-          # ProtectKernelTunables = wantsAPIVFS;
+          #PrivateUsers = wantsAPIVFS;
+          ProtectControlGroups = wantsAPIVFS;
+          ProtectKernelModules = wantsAPIVFS;
+          ProtectKernelTunables = wantsAPIVFS;
 
           BindReadOnlyPaths = [
             "/run/systemd/notify"
