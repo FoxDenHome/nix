@@ -33,6 +33,10 @@ in
           config.services.jellyfin.dataDir
           config.services.jellyfin.logDir
         ];
+
+        TemporaryPaths = [
+          "/var/cache/fontconfig"
+        ];
       };
 
       environment.persistence."/nix/persist/jellyfin" = {
