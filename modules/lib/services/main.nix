@@ -29,7 +29,7 @@ let
           MountAPIVFS = wantsAPIVFS;
           PrivateTmp = wantsAPIVFS;
           #PrivateUsers = wantsAPIVFS;
-          #ProtectControlGroups = wantsAPIVFS;
+          ProtectControlGroups = wantsAPIVFS;
           #ProtectKernelModules = wantsAPIVFS;
           #ProtectKernelTunables = wantsAPIVFS;
 
