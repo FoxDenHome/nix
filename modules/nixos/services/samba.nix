@@ -100,6 +100,7 @@ in
           JoinsNamespaceOf = lib.mkIf (name != "samba-smbd") "samba-smbd.service";
         };
         serviceConfig = {
+          TemporaryFileSystem = ["/:ro"];
           BindPaths = smbPaths ++ svcConfig.sharePaths;
         };
       }));
