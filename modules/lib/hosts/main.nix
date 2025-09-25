@@ -77,7 +77,7 @@ in
     hosts = config.foxDen.hosts.hosts;
     ifcfg = config.foxDen.hosts.ifcfg;
 
-    hostDriver = foxDenLib.hostDrivers.${config.foxDen.hosts.driver};
+    hostDriver = foxDenLib.hosts.drivers.${config.foxDen.hosts.driver};
 
     hostDriverConfig = hostDriver.build
       { inherit ifcfg hosts nixpkgs pkgs mkHostSuffix; driverOpts = config.foxDen.hosts.driverOpts; };
