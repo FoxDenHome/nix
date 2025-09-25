@@ -26,8 +26,10 @@
     in if eval.success then eval.value else {});
 
     mkModuleAttrSet = (dir: let
-                        loadedMods = map (path: {
-                          name = nixpkgs.lib.strings.removeSuffix ".nix" (mkRelPath dir path);
+                        loadedMods = map (path: let
+                          nameRaw = nixpkgs.lib.strings.removeSuffix ".nix" (mkRelPath dir path);
+                        in {
+                          name = nixpkgs.lib.strings.removeSuffix "/main" nameRaw;
                           value = import path modParams;
                         }) (mkModuleList dir);
                       in
