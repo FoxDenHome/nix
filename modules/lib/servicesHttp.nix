@@ -189,7 +189,7 @@ in
           serviceConfig = {
             DynamicUser = true;
             StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" caddyStorageRoot;
-            ConfigurationDirectory = caddyFileEtc;
+            ConfigurationDirectory = nixpkgs.lib.strings.removePrefix "/etc/" caddyConfigRoot;
             Environment = [
               "XDG_CONFIG_HOME=${caddyStorageRoot}"
               "XDG_DATA_HOME=${caddyStorageRoot}"
