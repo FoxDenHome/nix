@@ -24,7 +24,6 @@ let
           DevicePolicy = "closed";
           PrivateTmp = true;
           PrivateMounts = true;
-          ProtectHome = true;
           Restart = nixpkgs.lib.mkForce "always";
           BindReadOnlyPaths = [
             "/nix/store"
