@@ -35,6 +35,8 @@ let
             "-/etc/group"
             "-/etc/pki/tls/certs"
             "-/etc/ssl/certs"
+            "-/etc/static/pki/tls/certs"
+            "-/etc/static/ssl/certs"
           ];
         };
       };
