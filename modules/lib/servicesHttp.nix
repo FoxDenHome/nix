@@ -181,7 +181,7 @@ in
           '';
           user = "nobody";
           group = "nogroup";
-          mode = "0600";
+          mode = "0644";
         };
 
         systemd.services.${serviceName} = {
