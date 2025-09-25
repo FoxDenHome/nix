@@ -29,7 +29,6 @@ let
             "/run/systemd/notify"
             "/nix/store"
             "${info.resolvConf}:/etc/resolv.conf"
-            "-/etc/nsswitch.conf"
             "-/etc/hosts"
             "-/etc/localtime"
             "-/etc/passwd"

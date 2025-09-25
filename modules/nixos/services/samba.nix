@@ -103,9 +103,10 @@ in
             "/var/run/samba"
           ];
           BindReadOnlyPaths = [
+            "-/etc/nsswitch.conf"
+            "-/var/run/nscd/socket"
             "/etc/samba"
             "/etc/static/samba"
-            "/var/run/nscd/socket"
           ];
         };
       }));
