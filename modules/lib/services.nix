@@ -2,6 +2,8 @@
 let
   hosts = foxDenLib.hosts;
 
+  configPath = "/etc/foxden/private/";
+
   mkNamed = (svc: { svcConfig, ... }:
   let
     info = hosts.mkHostInfo svcConfig.host;
@@ -22,6 +24,7 @@ let
         PrivateMounts = true;
         ProtectSystem = "strict";
         ProtectHome = "tmpfs";
+        TemporaryFileSystem = [ configPath ];
         Restart = nixpkgs.lib.mkForce "always";
       };
     };
@@ -40,6 +43,8 @@ in
   make = (inputs@{ svcConfig, ... }: mkNamed (inputs.name or svcConfig.host.name) inputs);
   mkNamed = mkNamed;
 
+  configPath = configPath;
+
   nixosModule = { ... }:
   {
     environment.persistence."/nix/persist/foxden/services" = {
@@ -47,12 +52,6 @@ in
       directories = [
         { directory = "/var/lib/private"; user = "root"; group = "root"; mode = "u=rwx,g=,o="; }
       ];
-    };
-
-    environment.etc."/etc/foxden/private" = {
-      user = "root";
-      group = "root";
-      mode = "0700";
     };
   };
 }
