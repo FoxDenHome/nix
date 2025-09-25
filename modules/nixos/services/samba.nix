@@ -1,4 +1,4 @@
-{ nixpkgs, pkgs, foxDenLib, lib, config, ... }:
+{ nixpkgs, foxDenLib, lib, config, ... }:
 let
   services = foxDenLib.services;
   svcConfig = config.foxDen.services.samba;
@@ -46,6 +46,10 @@ in
           "workgroup" = "WORKGROUP";
           "vfs objects" = "catia fruit streams_xattr io_uring";
           "min protocol" = "SMB3";
+
+          "winbindd socket directory" = "/run/samba/windbindd";
+          "ncalrpc dir" = "/run/samba/ncalrpc";
+          "pid directory" = "/run/samba";
 
           # performance tuning
           "server multi channel support" = "yes";
@@ -103,10 +107,6 @@ in
           BindReadOnlyPaths = [
             "/etc/samba"
             "/etc/static/samba"
-          ];
-          ExecStartPre = [
-            "-${pkgs.coreutils}/bin/mkdir -p /var"
-            "-${pkgs.coreutils}/bin/ln -sf /run /var"
           ];
         };
       }));
