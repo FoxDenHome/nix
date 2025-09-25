@@ -49,10 +49,6 @@ in
           "vfs objects" = "catia fruit streams_xattr io_uring";
           "min protocol" = "SMB3";
 
-          "winbindd socket directory" = "/run/samba/windbindd";
-          "ncalrpc dir" = "/run/samba/ncalrpc";
-          "pid directory" = "/run/samba";
-
           # performance tuning
           "server multi channel support" = "yes";
           "aio read size" = "16384";
@@ -107,6 +103,7 @@ in
         serviceConfig = {
           BindPaths = smbPaths ++ svcConfig.sharePaths ++ [
             "/run/samba"
+            "/var/run/samba"
           ];
           BindReadOnlyPaths = [
             "/etc/samba"
