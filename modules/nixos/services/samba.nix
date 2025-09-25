@@ -6,7 +6,6 @@ let
   smbServices = ["samba-smbd" "samba-nmbd" "samba-winbindd"];
 
   smbPaths = [
-    "/run/samba"
     "/var/log/samba"
     "/var/lib/samba"
     "/var/lib/samba/private"
@@ -101,6 +100,10 @@ in
         };
         serviceConfig = {
           BindPaths = smbPaths ++ svcConfig.sharePaths;
+          BindReadOnlyPaths = [
+            "/etc/samba"
+          ];
+          RuntimeDirectory = "samba";
         };
       }));
 
