@@ -13,6 +13,15 @@
       group = "root";
     };
 
+    environment.shells = [
+      "/usr/bin/fish"
+      "/usr/bin/zsh"
+      "/usr/bin/bash"
+      "/bin/fish"
+      "/bin/zsh"
+      "/bin/bash"
+    ];
+
     # Otherwise, selected shells just won't work...
     systemd.tmpfiles.rules = [
       "L /usr/bin/bash - - - - ${pkgs.bash}/bin/bash"
