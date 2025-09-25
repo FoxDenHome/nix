@@ -12,6 +12,8 @@ let
 
     config = {
       systemd.services.${svc} = {
+        confinement.enable = true;
+
         unitConfig = {
           Requires = [ info.unit ];
           BindsTo = [ info.unit ];
@@ -19,7 +21,6 @@ let
         };
 
         serviceConfig = {
-          confinement.enable = true;
           NetworkNamespacePath = info.namespace;
           DevicePolicy = "closed";
           PrivateMounts = true;
