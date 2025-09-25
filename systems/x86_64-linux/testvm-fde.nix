@@ -82,7 +82,20 @@ in
   foxDen.services.jellyfin = {
     enable = true;
     tls = false;
-    host = {
+    host = "jellyfin";
+    oAuth = {
+      enable = true;
+      clientId = "nas-bengalfox";
+      clientSecret = "something funny";
+    };
+  };
+  foxDen.services.samba = {
+    enable = true;
+    host = "samba";
+  };
+
+  foxDen.hosts.hosts = {
+    jellyfin = {
       dns = {
         name = "jellyfin";
         zone = "local.foxden.network";
@@ -93,15 +106,7 @@ in
         "fd00:dead:beef:122::201/64"
       ];
     };
-    oAuth = {
-      enable = true;
-      clientId = "nas-bengalfox";
-      clientSecret = "something funny";
-    };
-  };
-  foxDen.services.samba = {
-    enable = true;
-    host = {
+    samba = {
       dns = {
         name = "samba";
         zone = "local.foxden.network";

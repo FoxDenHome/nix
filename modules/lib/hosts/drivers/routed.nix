@@ -8,7 +8,7 @@ in
 
   build = { ifcfg, hosts, mkHostSuffix, ... } :
   let
-    mkIfaceName = host: "vethrt${mkHostSuffix host}";
+    mkIfaceName = name: "vethrt${mkHostSuffix name}";
 
     routeHostAddrs = (map (addr: {
       Destination = (util.addHostCidr addr);
@@ -33,10 +33,10 @@ in
         };
       };
     } // (nixpkgs.lib.attrsets.listToAttrs
-        (map ((host: {
-            name = "60-host-${host.name}";
+        (map (({ name, value }: {
+            name = "60-host-${name}";
             value = {
-              name = (mkIfaceName host);
+              name = (mkIfaceName name);
               networkConfig = {
                 DHCP = "no";
                 IPv6AcceptRA = "no";
@@ -46,19 +46,19 @@ in
               };
               routes = map (addr: {
                 Destination = addr;
-              }) host.addresses;
+              }) value.addresses;
             };
-          })) hosts));
+          })) (nixpkgs.lib.attrsets.attrsToList hosts)));
 
-    execStart = ({ ipCmd, host, serviceInterface, ... }: let
-      hostIface = mkIfaceName host;
+    execStart = ({ ipCmd, hostName, serviceInterface, ... }: let
+      hostIface = mkIfaceName hostName;
     in [
       "-${ipCmd} link del ${eSA hostIface}"
       "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA serviceInterface}"
     ]);
 
-    execStop = ({ ipCmd, host, ... }: [
-      "${ipCmd} link del ${eSA (mkIfaceName host)}"
+    execStop = ({ ipCmd, hostName, ... }: [
+      "${ipCmd} link del ${eSA (mkIfaceName hostName)}"
     ]);
 
     routes = routeHostAddrs ++ (nixpkgs.lib.flatten [

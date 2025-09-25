@@ -2,7 +2,7 @@
 let
   util = foxDenLib.util;
   eSA = nixpkgs.lib.strings.escapeShellArg;
-  mkHostSuffix = host: util.mkHash8 host.name;
+  mkHostSuffix = name: util.mkHash8 name;
 
   ifcfgRouteType = with nixpkgs.lib.types; submodule {
     options = {
@@ -17,12 +17,6 @@ let
 
   hostType = (nameDef: with nixpkgs.lib.types; submodule {
     options = {
-      name = nixpkgs.lib.mkOption (if nameDef != null then {
-        type = str;
-        default = nameDef;
-      } else {
-        type = str;
-      });
       dns = {
         name = nixpkgs.lib.mkOption {
           type = str;
@@ -60,18 +54,14 @@ let
   };
 
   mkHostInfo = (host: {
-    namespace = "/run/netns/host-${host.name}";
-    unit = "netns-host-${host.name}.service";
+    namespace = "/run/netns/host-${host}";
+    unit = "netns-host-${host}.service";
     resolvConf = "/etc/foxden/hosts/resolv.conf";
   });
 in
 {
   mkHostInfo = mkHostInfo;
-
-  mkOption = with nixpkgs.lib.types; (inputs@{ nameDef, ... }: nixpkgs.lib.mkOption ({
-    type = if (inputs.default or null) == null then (nullOr (hostType nameDef)) else (hostType nameDef);
-    default = inputs.default or null;
-  }));
+  mkHostConfig = (config: name: config.foxDen.hosts.hosts.${name});
 
   nixosModule = ({ config, pkgs, foxDenLib, ... }:
   let
@@ -88,7 +78,7 @@ in
   {
     options.foxDen.hosts = {
       hosts = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-        type = (listOf (hostType null));
+        type = (attrsOf (hostType null));
         default = [];
       };
 
@@ -165,16 +155,16 @@ in
           };
 
           # Configure each host's NetNS
-          services = (nixpkgs.lib.attrsets.listToAttrs (map (host: let
-            info = mkHostInfo host;
+          services = (nixpkgs.lib.attrsets.listToAttrs (map ({ name, value }: let
+            info = mkHostInfo name;
             namespace = (nixpkgs.lib.strings.removePrefix "/run/netns/" info.namespace);
 
             ipCmd = eSA "${pkgs.iproute2}/bin/ip";
             ipInNsCmd = "${ipCmd} netns exec ${eSA namespace} ${ipCmd}";
 
-            mkServiceInterface = hostDriverConfig.serviceInterface or (host: "host-${mkHostSuffix host}");
-            serviceInterface = mkServiceInterface host;
-            driverRunParams = { inherit host ipCmd ipInNsCmd serviceInterface; };
+            mkServiceInterface = hostDriverConfig.serviceInterface or (name: host: "host-${mkHostSuffix name}");
+            serviceInterface = mkServiceInterface name value;
+            driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface; hostName = name; hostInfo = info; host = value; };
           in
           {
             name = (nixpkgs.lib.strings.removeSuffix ".service" info.unit);
@@ -198,7 +188,7 @@ in
                 ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA namespace}" ]
                 ++ (map (addr:
                       "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
-                      host.addresses)
+                      value.addresses)
                 ++ [ "${ipInNsCmd} link set ${eSA serviceInterface} up" ]
                 ++ (map (route:
                       "${ipInNsCmd} route add ${eSA route.Destination} dev ${eSA serviceInterface}" + (if (route.Gateway or "") != "" then " via ${eSA route.Gateway}" else ""))
@@ -211,7 +201,7 @@ in
                   ];
               };
             };
-          }) hosts));
+          }) (nixpkgs.lib.attrsets.attrsToList hosts)));
         }
       ];
     };

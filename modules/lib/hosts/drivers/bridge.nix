@@ -7,26 +7,26 @@ in
 
   build = { nixpkgs, ifcfg, mkHostSuffix, hosts, ... } :
   let
-    mkIfaceName = host: "vethbr${mkHostSuffix host}";
+    mkIfaceName = name: "vethbr${mkHostSuffix name}";
   in
   {
     config.systemd.network.networks =
       nixpkgs.lib.attrsets.listToAttrs (
         nixpkgs.lib.lists.flatten
-          (map ((host: [
+          (map (({ name, value }: [
             {
-              name = "60-host-${host.name}";
+              name = "60-host-${name}";
               value = {
-                name = mkIfaceName host;
+                name = mkIfaceName name;
                 bridge = [ifcfg.interface];
                 bridgeVLANs = [{
-                  PVID = host.vlan;
-                  EgressUntagged = host.vlan;
-                  VLAN = host.vlan;
+                  PVID = value.vlan;
+                  EgressUntagged = value.vlan;
+                  VLAN = value.vlan;
                 }];
               };
             }
-          ])) hosts));
+          ])) (nixpkgs.lib.attrsets.attrsToList hosts)));
 
     config.systemd.network.netdevs.${ifcfg.interface} = {
       netdevConfig = {
@@ -39,15 +39,15 @@ in
       };
     };
 
-    execStart = ({ ipCmd, host, serviceInterface, ... }: let
-      iface = mkIfaceName host;
+    execStart = ({ ipCmd, hostName, serviceInterface, ... }: let
+      iface = mkIfaceName hostName;
     in [
       "-${ipCmd} link del ${eSA iface}"
-      "${ipCmd} link add ${eSA iface} type veth peer name ${eSA (serviceInterface)}"
+      "${ipCmd} link add ${eSA iface} type veth peer name ${eSA serviceInterface}"
     ]);
 
-    execStop = ({ ipCmd, host, ... }: [
-      "${ipCmd} link del ${eSA (mkIfaceName host)}"
+    execStop = ({ ipCmd, hostName, ... }: [
+      "${ipCmd} link del ${eSA (mkIfaceName hostName)}"
     ]);
   };
 }

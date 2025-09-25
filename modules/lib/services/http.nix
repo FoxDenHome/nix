@@ -4,7 +4,7 @@ let
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
   mkOauthProxy = (inputs@{ config, svcConfig, pkgs, target, ... }: let
-    name = inputs.name or svcConfig.host.name;
+    name = inputs.name or svcConfig.host;
     serviceName = "oauth2-proxy-${name}";
 
     svc = services.mkNamed serviceName inputs;
@@ -122,12 +122,12 @@ in
 
   make = (inputs@{ config, svcConfig, pkgs, target, ... }:
     let
-      name = inputs.name or svcConfig.host.name;
+      name = inputs.name or svcConfig.host;
       serviceName = "caddy-${name}";
 
       caddyStorageRoot = "/var/lib/foxden/caddy/${name}";
 
-      hostCfg = svcConfig.host;
+      hostCfg = foxDenLib.hosts.mkHostConfig config svcConfig.host;
       hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.dns.name}.${hostCfg.dns.zone}";
       url = (if svcConfig.tls then "" else "http://") + hostPort;
 
