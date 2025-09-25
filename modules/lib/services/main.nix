@@ -23,7 +23,7 @@ let
         serviceConfig = {
           NetworkNamespacePath = info.namespace;
           DevicePolicy = "closed";
-          PrivateDevices = false;
+          PrivateDevices = nixpkgs.lib.mkForce true;
           Restart = nixpkgs.lib.mkForce "always";
 
           BindReadOnlyPaths = [
