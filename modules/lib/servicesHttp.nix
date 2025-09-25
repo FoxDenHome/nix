@@ -193,8 +193,8 @@ in
               "XDG_DATA_HOME=${caddyStorageRoot}"
               "HOME=${caddyStorageRoot}"
             ];
-            ExecStart = "${cmd} run --config \${CREDENTIALS_DIRECTORY}/Caddyfile";
-            ExecReload = "${cmd} reload --config \${CREDENTIALS_DIRECTORY}/Caddyfile";
+            ExecStart = "${cmd} run --config \"\${CREDENTIALS_DIRECTORY}/Caddyfile\"";
+            ExecReload = "${cmd} reload --config \"\${CREDENTIALS_DIRECTORY}/Caddyfile\"";
             Restart = "always";
             ReadWritePaths = [caddyStorageRoot];
             ReadOnlyPaths = [caddyConfigRoot];
