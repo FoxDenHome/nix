@@ -28,12 +28,12 @@ let
           Restart = nixpkgs.lib.mkForce "always";
           BindReadOnlyPaths = [
             "/nix/store"
-            "/etc/resolv.conf"
-            "/etc/nsswitch.conf"
-            "/etc/hosts"
-            "/etc/localtime"
-            "/etc/passwd"
-            "/etc/group"
+            "-/etc/resolv.conf"
+            "-/etc/nsswitch.conf"
+            "-/etc/hosts"
+            "-/etc/localtime"
+            "-/etc/passwd"
+            "-/etc/group"
           ];
         };
       };
