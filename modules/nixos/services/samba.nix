@@ -105,16 +105,19 @@ in
           JoinsNamespaceOf = lib.mkIf (name != "samba-smbd") "samba-smbd.service";
         };
         serviceConfig = {
-          BindPaths = smbPaths ++ svcConfig.sharePaths;
+          BindPaths = smbPaths ++ svcConfig.sharePaths ++ [
+            "/run/samba"
+          ];
           BindReadOnlyPaths = [
             "/etc/samba"
             "/etc/static/samba"
           ];
-          PIDFile = nixpkgs.lib.mkForce null;
-          Type = nixpkgs.lib.mkForce "simple";
-          RuntimeDirectory = "samba";
         };
       }));
+
+      systemd.tmpfiles.rules = [
+        "d /run/samba - - - - -"
+      ];
 
       environment.persistence."/nix/persist/samba" = {
         hideMounts = true;
