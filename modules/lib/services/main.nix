@@ -13,13 +13,13 @@ let
         confinement.enable = true;
 
         unitConfig = {
-          Requires = [ host.info.unit ];
-          BindsTo = [ host.info.unit ];
-          After = [ host.info.unit ];
+          Requires = [ host.unit ];
+          BindsTo = [ host.unit ];
+          After = [ host.unit ];
         };
 
         serviceConfig = {
-          NetworkNamespacePath = host.info.namespace;
+          NetworkNamespacePath = host.namespace;
           DevicePolicy = "closed";
           PrivateDevices = nixpkgs.lib.mkForce true;
           Restart = nixpkgs.lib.mkForce "always";
@@ -27,7 +27,7 @@ let
           BindReadOnlyPaths = [
             "/run/systemd/notify"
             "/nix/store"
-            "${host.info.resolvConf}:/etc/resolv.conf"
+            "${host.resolvConf}:/etc/resolv.conf"
             "-/etc/hosts"
             "-/etc/localtime"
             "-/etc/passwd"

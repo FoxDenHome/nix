@@ -8,7 +8,7 @@ in
 
   build = { ifcfg, config, hosts, ... } :
   let
-    mkIfaceName = (host: "vethrt${host.info.suffix}");
+    mkIfaceName = (host: "vethrt${host.suffix}");
 
     routeHostAddrs = (map (addr: {
       Destination = (util.addHostCidr addr);
@@ -46,7 +46,7 @@ in
               };
               routes = map (addr: {
                 Destination = addr;
-              }) host.config.addresses;
+              }) host.addresses;
             };
           })) hosts));
 

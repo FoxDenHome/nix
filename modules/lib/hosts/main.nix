@@ -54,14 +54,11 @@ let
 
   getByName = (config: name: {
     inherit name;
-    info = {
-      namespace = "/run/netns/host-${name}";
-      unit = "netns-host-${name}.service";
-      resolvConf = "/etc/foxden/hosts/resolv.conf";
-      suffix = util.mkHash8 name;
-    };
-    config = config.foxDen.hosts.hosts.${name};
-  });
+    namespace = "/run/netns/host-${name}";
+    unit = "netns-host-${name}.service";
+    resolvConf = "/etc/foxden/hosts/resolv.conf";
+    suffix = util.mkHash8 name;
+  } // config.foxDen.hosts.hosts.${name});
 in
 {
   getByName = getByName;
@@ -125,16 +122,16 @@ in
 
       foxDen.dns.records = nixpkgs.lib.flatten (map
           (host: let
-            mkRecord = (addr: nixpkgs.lib.mkIf (host.config.dns.name != "") {
-              zone = host.config.dns.zone;
-              name = host.config.dns.name;
+            mkRecord = (addr: nixpkgs.lib.mkIf (host.dns.name != "") {
+              zone = host.dns.zone;
+              name = host.dns.name;
               type = if (util.isIPv6 addr) then "AAAA" else "A";
-              ttl = host.config.dns.ttl;
+              ttl = host.dns.ttl;
               value = util.removeIpCidr addr;
               horizon = if (util.isPrivateIP addr) then "internal" else "external";
             });
           in
-          (map mkRecord host.config.addresses))
+          (map mkRecord host.addresses))
         hosts);
 
       environment.etc."foxden/hosts/resolv.conf".text = ''
@@ -160,17 +157,17 @@ in
 
           # Configure each host's NetNS
           services = (nixpkgs.lib.attrsets.listToAttrs (map (host: let
-            namespace = (nixpkgs.lib.strings.removePrefix "/run/netns/" host.info.namespace);
+            namespace = (nixpkgs.lib.strings.removePrefix "/run/netns/" host.namespace);
 
             ipCmd = eSA "${pkgs.iproute2}/bin/ip";
             ipInNsCmd = "${ipCmd} netns exec ${eSA namespace} ${ipCmd}";
 
-            mkServiceInterface = hostDriverConfig.serviceInterface or (host: "host-${host.info.suffix}");
+            mkServiceInterface = hostDriverConfig.serviceInterface or (host: "host-${host.suffix}");
             serviceInterface = mkServiceInterface host;
             driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface host; };
           in
           {
-            name = (nixpkgs.lib.strings.removeSuffix ".service" host.info.unit);
+            name = (nixpkgs.lib.strings.removeSuffix ".service" host.unit);
             value = {
               description = "NetNS ${namespace}";
               unitConfig = {
@@ -191,7 +188,7 @@ in
                 ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA namespace}" ]
                 ++ (map (addr:
                       "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
-                      host.config.addresses)
+                      host.addresses)
                 ++ [ "${ipInNsCmd} link set ${eSA serviceInterface} up" ]
                 ++ (map (route:
                       "${ipInNsCmd} route add ${eSA route.Destination} dev ${eSA serviceInterface}" + (if (route.Gateway or "") != "" then " via ${eSA route.Gateway}" else ""))

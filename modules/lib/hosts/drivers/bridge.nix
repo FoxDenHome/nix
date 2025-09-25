@@ -7,7 +7,7 @@ in
 
   build = { ifcfg, config, hosts, ... } :
   let
-    mkIfaceName = (host: "vethbr${host.info.suffix}");
+    mkIfaceName = (host: "vethbr${host.suffix}");
   in
   {
     config.systemd.network.networks =
@@ -20,9 +20,9 @@ in
                 name = mkIfaceName host;
                 bridge = [ifcfg.interface];
                 bridgeVLANs = [{
-                  PVID = host.config.vlan;
-                  EgressUntagged = host.config.vlan;
-                  VLAN = host.config.vlan;
+                  PVID = host.vlan;
+                  EgressUntagged = host.vlan;
+                  VLAN = host.vlan;
                 }];
               };
             }
