@@ -39,4 +39,14 @@ in
 
   make = (inputs@{ svcConfig, ... }: mkNamed (inputs.name or svcConfig.host.name) inputs);
   mkNamed = mkNamed;
+
+  nixosModule = { ... }:
+  {
+    environment.persistence."/nix/persist/foxden/services" = {
+      hideMounts = true;
+      directories = [
+        { directory = "/var/lib/private"; user = "nobody"; group = "nogroup"; mode = "u=rwx,g=,o="; }
+      ];
+    };
+  };
 }

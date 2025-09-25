@@ -129,7 +129,6 @@ in
       name = inputs.name or svcConfig.host.name;
 
       caddyStorageRoot = "/var/lib/foxden/caddy/${name}";
-      caddyPrivateStorageRoot = "/var/lib/private/foxden/caddy/${name}";
       caddyConfigRoot = "/etc/foxden/caddy/${name}";
 
       hostCfg = svcConfig.host;
@@ -183,13 +182,6 @@ in
           user = "nobody";
           group = "nogroup";
           mode = "0644";
-        };
-
-        environment.persistence."/nix/persist/foxden/services" = {
-          hideMounts = true;
-          directories = [
-            { directory = caddyPrivateStorageRoot; user = "nobody"; group = "nogroup"; mode = "u=rwx,g=,o="; }
-          ];
         };
 
         systemd.services.${serviceName} = {
