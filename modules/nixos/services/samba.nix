@@ -101,7 +101,6 @@ in
         serviceConfig = {
           BindPaths = smbPaths ++ svcConfig.sharePaths ++ [
             "/var/run/samba"
-            "/run/samba"
           ];
           BindReadOnlyPaths = [
             "/etc/samba"
