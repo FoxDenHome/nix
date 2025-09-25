@@ -11,7 +11,7 @@ let
     cmd = (eSA "${pkgs.oauth2-proxy}/bin/oauth2-proxy");
     secure = if svcConfig.tls then "true" else "false";
 
-    configFile = "/etc/foxden/oauth2-proxy/${name}.conf";
+    configFile = "${services.configDir serviceName}/${name}.conf";
     configFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" configFile;
   in
   (nixpkgs.lib.mkMerge [
@@ -124,7 +124,7 @@ in
       serviceName = "caddy-${name}";
 
       caddyStorageRoot = "/var/lib/foxden/caddy/${name}";
-      caddyConfigRoot = "/etc/foxden/caddy/${name}";
+      caddyConfigRoot = "${services.configDir serviceName}/${name}";
 
       hostCfg = svcConfig.host;
       hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.dns.name}.${hostCfg.dns.zone}";
