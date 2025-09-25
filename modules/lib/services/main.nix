@@ -5,6 +5,7 @@ let
   mkNamed = (svc: { svcConfig, config, ... }:
   let
     info = hosts.mkHostInfo svcConfig.host;
+    wantsAPIVFS = true;
   in
   {
     configDir = "/etc/foxden/services/${svc}";
@@ -12,7 +13,7 @@ let
 
     config = {
       systemd.services.${svc} = {
-        confinement.enable = true;
+        confinement.enable = false;
 
         unitConfig = {
           Requires = [ info.unit ];
@@ -23,8 +24,16 @@ let
         serviceConfig = {
           NetworkNamespacePath = info.namespace;
           DevicePolicy = "closed";
-          PrivateMounts = true;
           Restart = nixpkgs.lib.mkForce "always";
+
+          MountAPIVFS = wantsAPIVFS;
+          PrivateDevices = wantsAPIVFS;
+          PrivateTmp = wantsAPIVFS;
+          PrivateUsers = wantsAPIVFS;
+          ProtectControlGroups = wantsAPIVFS;
+          ProtectKernelModules = wantsAPIVFS;
+          ProtectKernelTunables = wantsAPIVFS;
+
           BindReadOnlyPaths = [
             "/run/systemd/notify"
             "/nix/store"
@@ -33,8 +42,6 @@ let
             "-/etc/localtime"
             "-/etc/passwd"
             "-/etc/group"
-            "-/etc/subuid"
-            "-/etc/subgid"
             "-/etc/pki/tls/certs"
             "-/etc/ssl/certs"
             "-/etc/static/pki/tls/certs"
