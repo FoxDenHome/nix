@@ -15,12 +15,12 @@
 
     # Otherwise, selected shells just won't work...
     systemd.tmpfiles.rules = [
-      "L /usr/bin/bash - - - - /run/current-system/sw/bin/bash"
-      "L /usr/bin/fish - - - - /run/current-system/sw/bin/fish"
-      "L /usr/bin/zsh - - - - /run/current-system/sw/bin/zsh"
-      "L /bin/bash - - - - /run/current-system/sw/bin/bash"
-      "L /bin/fish - - - - /run/current-system/sw/bin/fish"
-      "L /bin/zsh - - - - /run/current-system/sw/bin/zsh"
+      "L /usr/bin/bash - - - - ${pkgs.bash}/bin/bash"
+      "L /usr/bin/fish - - - - ${pkgs.fish}/bin/fish"
+      "L /usr/bin/zsh - - - - ${pkgs.zsh}/bin/zsh"
+      "L /bin/bash - - - - ${pkgs.bash}/bin/bash"
+      "L /bin/fish - - - - ${pkgs.fish}/bin/fish"
+      "L /bin/zsh - - - - ${pkgs.zsh}/bin/zsh"
     ];
 
     services.openssh = {
