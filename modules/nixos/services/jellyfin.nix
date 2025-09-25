@@ -17,7 +17,7 @@ in
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
-      inherit svcConfig pkgs config;
+      inherit svcConfig;
     }).config
     (servicesHttp.make {
       inherit svcConfig pkgs config;

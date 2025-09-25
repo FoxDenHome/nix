@@ -19,7 +19,7 @@ in
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge (
     (map (name: (services.make {
-      inherit svcConfig pkgs config;
+      inherit svcConfig;
       name = name;
       host = "samba";
     }).config) smbServices)
