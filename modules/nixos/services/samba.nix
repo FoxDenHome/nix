@@ -40,6 +40,8 @@ in
 
       services.samba.enable = true;
       services.samba.smbd.extraArgs = [ "--debug-stdout" ];
+      services.samba.nmbd.extraArgs = [ "--debug-stdout" ];
+      services.samba.winbindd.extraArgs = [ "--debug-stdout" ];
       services.samba.settings = {
         global = {
           # basic setup
