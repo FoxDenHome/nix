@@ -97,9 +97,6 @@ in
       };
 
       systemd.services = (nixpkgs.lib.attrsets.genAttrs smbServices (name: {
-        unitConfig = {
-          JoinsNamespaceOf = lib.mkIf (name != "samba-smbd") "samba-smbd.service";
-        };
         serviceConfig = {
           BindPaths = smbPaths ++ svcConfig.sharePaths ++ [
             "/run/samba"
