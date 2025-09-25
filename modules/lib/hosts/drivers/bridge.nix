@@ -1,4 +1,4 @@
-{ nixpkgs, ... } :
+{ nixpkgs, foxDenLib, ... } :
 let
   eSA = nixpkgs.lib.strings.escapeShellArg;
 in
@@ -8,7 +8,7 @@ in
   build = { ifcfg, hosts, ... } :
   let
     mkIfaceName = (name: let
-      host = hosts.getByName name;
+      host = foxDenLib.hosts.getByName name;
     in
       "vethbr${host.info.suffix}");
   in

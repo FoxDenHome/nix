@@ -1,10 +1,8 @@
 { nixpkgs, foxDenLib, ... }:
 let
-  hosts = foxDenLib.hosts;
-
   mkNamed = (svc: { svcConfig, config, ... }:
   let
-    host = hosts.getByName config svcConfig.host;
+    host = foxDenLib.hosts.getByName config svcConfig.host;
   in
   {
     configDir = "/etc/foxden/services/${svc}";
