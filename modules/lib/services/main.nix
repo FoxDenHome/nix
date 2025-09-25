@@ -26,7 +26,7 @@ let
           DevicePolicy = "closed";
           Restart = nixpkgs.lib.mkForce "always";
 
-          #MountAPIVFS = wantsAPIVFS;
+          MountAPIVFS = wantsAPIVFS;
           #PrivateTmp = wantsAPIVFS;
           #PrivateUsers = wantsAPIVFS;
           #ProtectControlGroups = wantsAPIVFS;
