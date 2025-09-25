@@ -102,6 +102,7 @@ in
           BindPaths = smbPaths ++ svcConfig.sharePaths;
           BindReadOnlyPaths = [
             "/etc/samba"
+            "/etc/static/samba"
           ];
           RuntimeDirectory = "samba";
         };
