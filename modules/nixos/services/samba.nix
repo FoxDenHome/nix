@@ -108,6 +108,7 @@ in
             "/etc/samba"
             "/etc/static/samba"
           ];
+          RuntimeDirectory = "samba";
         };
       }));
 
