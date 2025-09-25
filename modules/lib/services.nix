@@ -48,5 +48,11 @@ in
         { directory = "/var/lib/private"; user = "root"; group = "root"; mode = "u=rwx,g=,o="; }
       ];
     };
+
+    environment.etc."/etc/foxden/private" = {
+      user = "root";
+      group = "root";
+      mode = "0700";
+    };
   };
 }

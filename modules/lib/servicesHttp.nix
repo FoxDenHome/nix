@@ -129,7 +129,7 @@ in
       name = inputs.name or svcConfig.host.name;
 
       caddyStorageRoot = "/var/lib/foxden/caddy/${name}";
-      caddyConfigRoot = "/etc/foxden/caddy/${name}";
+      caddyConfigRoot = "/etc/foxden/private/caddy/${name}";
 
       hostCfg = svcConfig.host;
       hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.dns.name}.${hostCfg.dns.zone}";
@@ -181,7 +181,7 @@ in
           '';
           user = "nobody";
           group = "nogroup";
-          mode = "0644";
+          mode = "0600";
         };
 
         systemd.services.${serviceName} = {
@@ -189,10 +189,11 @@ in
           serviceConfig = {
             DynamicUser = true;
             StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" caddyStorageRoot;
-            ConfigurationDirectory = nixpkgs.lib.strings.removePrefix "/etc/" caddyConfigRoot;
+            ConfigurationDirectory = caddyFileEtc;
             Environment = [
               "XDG_CONFIG_HOME=${caddyStorageRoot}"
               "XDG_DATA_HOME=${caddyStorageRoot}"
+              "HOME=${caddyStorageRoot}"
             ];
             ExecStart = "${cmd} run --config ${eSA caddyFilePath}";
             ExecReload = "${cmd} reload --config ${eSA caddyFilePath}";
