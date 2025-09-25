@@ -26,12 +26,12 @@ let
           DevicePolicy = "closed";
           Restart = nixpkgs.lib.mkForce "always";
 
-          MountAPIVFS = wantsAPIVFS;
-          PrivateTmp = wantsAPIVFS;
+          #MountAPIVFS = wantsAPIVFS;
+          #PrivateTmp = wantsAPIVFS;
           #PrivateUsers = wantsAPIVFS;
-          ProtectControlGroups = wantsAPIVFS;
-          ProtectKernelModules = wantsAPIVFS;
-          ProtectKernelTunables = wantsAPIVFS;
+          #ProtectControlGroups = wantsAPIVFS;
+          #ProtectKernelModules = wantsAPIVFS;
+          #ProtectKernelTunables = wantsAPIVFS;
 
           BindReadOnlyPaths = [
             "/run/systemd/notify"
