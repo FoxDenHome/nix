@@ -99,13 +99,12 @@ in
           JoinsNamespaceOf = lib.mkIf (name != "samba-smbd") "samba-smbd.service";
         };
         serviceConfig = {
-          BindPaths = smbPaths ++ svcConfig.sharePaths ++ [
-            "/var/run/samba"
-          ];
+          BindPaths = smbPaths ++ svcConfig.sharePaths;
           BindReadOnlyPaths = [
             "/etc/samba"
             "/etc/static/samba"
           ];
+          RuntimeDirectory = "samba";
         };
       }));
 
