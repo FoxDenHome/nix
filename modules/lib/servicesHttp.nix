@@ -17,12 +17,6 @@ let
   (nixpkgs.lib.mkMerge [
     svc
     {
-      users.users.${serviceName} = {
-        isSystemUser = true;
-        group = serviceName;
-      };
-      users.groups.${serviceName} = {};
-
       environment.etc.${configFileEtc} = {
         text = ''
           http_address = "127.0.0.1:4180"
@@ -43,17 +37,17 @@ let
           client_secret = "${svcConfig.oAuth.clientSecret}"
           oidc_issuer_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}"
         '';
-        user = serviceName;
-        group = serviceName;
+        user = "root";
+        group = "root";
         mode = "0600";
       };
 
       systemd.services.${serviceName} = {
         restartTriggers = [ config.environment.etc.${configFileEtc}.text ];
         serviceConfig = {
-          ExecStart = "${cmd} --config=${eSA configFile}";
-          User = serviceName;
-          Group = serviceName;
+          DynamicUser = true;
+          LoadCredential = "oauth2-proxy.conf:${configFile}";
+          ExecStart = "${cmd} --config=\"\${CREDENTIALS_DIRECTORY}/oauth2-proxy.conf\"";
           Restart = "always";
         };
         wantedBy = ["multi-user.target"];
