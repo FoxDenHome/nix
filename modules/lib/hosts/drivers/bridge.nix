@@ -1,4 +1,4 @@
-{ nixpkgs, foxDenLib, ... } :
+{ nixpkgs, ... } :
 let
   eSA = nixpkgs.lib.strings.escapeShellArg;
 in
@@ -13,20 +13,20 @@ in
     config.systemd.network.networks =
       nixpkgs.lib.attrsets.listToAttrs (
         nixpkgs.lib.lists.flatten
-          (map (({ name, value }: [
+          (map ((host: [
             {
-              name = "60-host-${name}";
+              name = "60-host-${host.name}";
               value = {
-                name = mkIfaceName (foxDenLib.hosts.getByName config name);
+                name = mkIfaceName host;
                 bridge = [ifcfg.interface];
                 bridgeVLANs = [{
-                  PVID = value.vlan;
-                  EgressUntagged = value.vlan;
-                  VLAN = value.vlan;
+                  PVID = host.config.vlan;
+                  EgressUntagged = host.config.vlan;
+                  VLAN = host.config.vlan;
                 }];
               };
             }
-          ])) (nixpkgs.lib.attrsets.attrsToList hosts)));
+          ])) hosts));
 
     config.systemd.network.netdevs.${ifcfg.interface} = {
       netdevConfig = {

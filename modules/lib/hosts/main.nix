@@ -2,7 +2,6 @@
 let
   util = foxDenLib.util;
   eSA = nixpkgs.lib.strings.escapeShellArg;
-  mkHostSuffix = name: util.mkHash8 name;
 
   ifcfgRouteType = with nixpkgs.lib.types; submodule {
     options = {
@@ -53,16 +52,14 @@ let
     };
   };
 
-  mkHostInfo = (name: {
-    namespace = "/run/netns/host-${name}";
-    unit = "netns-host-${name}.service";
-    resolvConf = "/etc/foxden/hosts/resolv.conf";
-    suffix = mkHostSuffix name;
-  });
-
   getByName = (config: name: {
     inherit name;
-    info = mkHostInfo name;
+    info = {
+      namespace = "/run/netns/host-${name}";
+      unit = "netns-host-${name}.service";
+      resolvConf = "/etc/foxden/hosts/resolv.conf";
+      suffix = util.mkHash8 name;
+    };
     config = config.foxDen.hosts.hosts.${name};
   });
 in
@@ -71,7 +68,7 @@ in
 
   nixosModule = ({ config, pkgs, foxDenLib, ... }:
   let
-    hosts = config.foxDen.hosts.hosts;
+    hosts = map (getByName config) (nixpkgs.lib.attrsets.attrNames config.foxDen.hosts.hosts);
     ifcfg = config.foxDen.hosts.ifcfg;
 
     hostDriver = foxDenLib.hosts.drivers.${config.foxDen.hosts.driver};
@@ -162,15 +159,14 @@ in
           };
 
           # Configure each host's NetNS
-          services = (nixpkgs.lib.attrsets.listToAttrs (map ({ name, value }: let
-            host = getByName config name;
+          services = (nixpkgs.lib.attrsets.listToAttrs (map (host: let
             namespace = (nixpkgs.lib.strings.removePrefix "/run/netns/" host.info.namespace);
 
             ipCmd = eSA "${pkgs.iproute2}/bin/ip";
             ipInNsCmd = "${ipCmd} netns exec ${eSA namespace} ${ipCmd}";
 
-            mkServiceInterface = hostDriverConfig.serviceInterface or (name: host: "host-${mkHostSuffix name}");
-            serviceInterface = mkServiceInterface name value;
+            mkServiceInterface = hostDriverConfig.serviceInterface or (host: "host-${host.info.suffix}");
+            serviceInterface = mkServiceInterface host;
             driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface host; };
           in
           {
@@ -195,7 +191,7 @@ in
                 ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA namespace}" ]
                 ++ (map (addr:
                       "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
-                      value.addresses)
+                      host.config.addresses)
                 ++ [ "${ipInNsCmd} link set ${eSA serviceInterface} up" ]
                 ++ (map (route:
                       "${ipInNsCmd} route add ${eSA route.Destination} dev ${eSA serviceInterface}" + (if (route.Gateway or "") != "" then " via ${eSA route.Gateway}" else ""))
@@ -208,7 +204,7 @@ in
                   ];
               };
             };
-          }) (nixpkgs.lib.attrsets.attrsToList hosts)));
+          }) hosts));
         }
       ];
     };

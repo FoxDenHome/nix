@@ -33,10 +33,10 @@ in
         };
       };
     } // (nixpkgs.lib.attrsets.listToAttrs
-        (map (({ name, value }: {
-            name = "60-host-${name}";
+        (map ((host: {
+            name = "60-host-${host.name}";
             value = {
-              name = mkIfaceName (foxDenLib.hosts.getByName config name);
+              name = mkIfaceName host;
               networkConfig = {
                 DHCP = "no";
                 IPv6AcceptRA = "no";
@@ -46,9 +46,9 @@ in
               };
               routes = map (addr: {
                 Destination = addr;
-              }) value.addresses;
+              }) host.config.addresses;
             };
-          })) (nixpkgs.lib.attrsets.attrsToList hosts)));
+          })) hosts));
 
     execStart = ({ ipCmd, host, serviceInterface, ... }: let
       hostIface = mkIfaceName host;
