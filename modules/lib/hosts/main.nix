@@ -171,7 +171,7 @@ in
 
             mkServiceInterface = hostDriverConfig.serviceInterface or (name: host: "host-${mkHostSuffix name}");
             serviceInterface = mkServiceInterface name value;
-            driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface host; };
+            driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface host config; };
           in
           {
             name = (nixpkgs.lib.strings.removeSuffix ".service" host.info.unit);
