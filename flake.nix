@@ -21,6 +21,10 @@
 
     modParams = { inherit nixpkgs; inherit foxDenLib; };
 
+    tryEvalOrEmpty = (val: let
+      eval = (builtins.tryEval val);
+    in if eval.success then eval.value else {});
+
     mkModuleAttrSet = (dir: let
                         loadedMods = map (path: {
                           name = nixpkgs.lib.strings.removeSuffix ".nix" (mkRelPath dir path);
@@ -31,7 +35,7 @@
                           nested = (nixpkgs.lib.attrsets.updateManyAttrsByPath (map
                             ({ name, value }: {
                                 path = (nixpkgs.lib.strings.splitString "/" name);
-                                update = (old: value);
+                                update = old: (tryEvalOrEmpty old) // value;
                             })
                             loadedMods) {});
 

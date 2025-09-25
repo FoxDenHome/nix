@@ -1,7 +1,6 @@
 { foxDenLib, pkgs, lib, config, ... }:
 let
   services = foxDenLib.services;
-  servicesHttp = foxDenLib.servicesHttp;
 
   mkJellyfinDir = (dir: {
     directory = dir;
@@ -13,13 +12,13 @@ let
   svcConfig = config.foxDen.services.jellyfin;
 in
 {
-  options.foxDen.services.jellyfin = servicesHttp.mkOptions { svcName = "jellyfin"; name = "Jellyfin media server"; };
+  options.foxDen.services.jellyfin = services.http.mkOptions { svcName = "jellyfin"; name = "Jellyfin media server"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
       inherit svcConfig;
     }).config
-    (servicesHttp.make {
+    (services.http.make {
       inherit svcConfig pkgs config;
       target = "reverse_proxy http://localhost:8096";
     }).config

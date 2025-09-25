@@ -1,4 +1,4 @@
-{ nixpkgs, foxDenLib, pkgs, lib, config, ... }:
+{ nixpkgs, foxDenLib, lib, config, ... }:
 let
   services = foxDenLib.services;
   svcConfig = config.foxDen.services.samba;
