@@ -22,7 +22,7 @@ in
       inherit svcConfig pkgs config;
       name = name;
       host = "samba";
-    })) smbServices)
+    }).config) smbServices)
     ++ [
     {
       users.users.smbguest = {

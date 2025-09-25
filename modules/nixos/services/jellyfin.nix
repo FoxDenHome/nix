@@ -1,4 +1,4 @@
-{ nixpkgs, foxDenLib, pkgs, lib, config, ... }:
+{ foxDenLib, pkgs, lib, config, ... }:
 let
   services = foxDenLib.services;
   servicesHttp = foxDenLib.servicesHttp;
@@ -18,11 +18,11 @@ in
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
       inherit svcConfig pkgs config;
-    })
+    }).config
     (servicesHttp.make {
       inherit svcConfig pkgs config;
       target = "reverse_proxy http://localhost:8096";
-    })
+    }).config
     {
       services.jellyfin.enable = true;
       services.jellyfin.group = "share";

@@ -11,49 +11,51 @@ let
     cmd = (eSA "${pkgs.oauth2-proxy}/bin/oauth2-proxy");
     secure = if svcConfig.tls then "true" else "false";
 
-    configFile = "${services.configDir serviceName}/${name}.conf";
+    configFile = "${svc.configDir}/${name}.conf";
     configFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" configFile;
   in
-  (nixpkgs.lib.mkMerge [
-    svc
-    {
-      environment.etc.${configFileEtc} = {
-        text = ''
-          http_address = "127.0.0.1:4180"
-          reverse_proxy = true
-          provider = "oidc"
-          provider_display_name = "FoxDen"
-          code_challenge_method = "S256"
-          email_domains = ["*"]
-          scope = "openid email profile"
-          cookie_name = "_oauth2_proxy"
-          cookie_expire = "168h"
-          cookie_httponly = true
-          cookie_secure = ${secure}
-          skip_provider_button = true
+  {
+    config = (nixpkgs.lib.mkMerge [
+      svc.config
+      {
+        environment.etc.${configFileEtc} = {
+          text = ''
+            http_address = "127.0.0.1:4180"
+            reverse_proxy = true
+            provider = "oidc"
+            provider_display_name = "FoxDen"
+            code_challenge_method = "S256"
+            email_domains = ["*"]
+            scope = "openid email profile"
+            cookie_name = "_oauth2_proxy"
+            cookie_expire = "168h"
+            cookie_httponly = true
+            cookie_secure = ${secure}
+            skip_provider_button = true
 
-          cookie_secret = "CHANGE ME RIGHT "
-          client_id = "${svcConfig.oAuth.clientId}"
-          client_secret = "${svcConfig.oAuth.clientSecret}"
-          oidc_issuer_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}"
-        '';
-        user = "root";
-        group = "root";
-        mode = "0600";
-      };
-
-      systemd.services.${serviceName} = {
-        restartTriggers = [ config.environment.etc.${configFileEtc}.text ];
-        serviceConfig = {
-          DynamicUser = true;
-          LoadCredential = "oauth2-proxy.conf:${configFile}";
-          ExecStart = "${cmd} --config=\"\${CREDENTIALS_DIRECTORY}/oauth2-proxy.conf\"";
-          Restart = "always";
+            cookie_secret = "CHANGE ME RIGHT "
+            client_id = "${svcConfig.oAuth.clientId}"
+            client_secret = "${svcConfig.oAuth.clientSecret}"
+            oidc_issuer_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}"
+          '';
+          user = "root";
+          group = "root";
+          mode = "0600";
         };
-        wantedBy = ["multi-user.target"];
-      };
-    }
-  ]));
+
+        systemd.services.${serviceName} = {
+          restartTriggers = [ config.environment.etc.${configFileEtc}.text ];
+          serviceConfig = {
+            DynamicUser = true;
+            LoadCredential = "oauth2-proxy.conf:${configFile}";
+            ExecStart = "${cmd} --config=\"\${CREDENTIALS_DIRECTORY}/oauth2-proxy.conf\"";
+            Restart = "always";
+          };
+          wantedBy = ["multi-user.target"];
+        };
+      }
+    ]);
+  });
 
   mkCaddyInternalBypass = (handler: svcConfig: if svcConfig.oAuth.bypassInternal then ''
     @internal {
@@ -124,7 +126,7 @@ in
       serviceName = "caddy-${name}";
 
       caddyStorageRoot = "/var/lib/foxden/caddy/${name}";
-      caddyConfigRoot = "${services.configDir serviceName}/${name}";
+      caddyConfigRoot = "${svc.configDir}/${name}";
 
       hostCfg = svcConfig.host;
       hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${hostCfg.dns.name}.${hostCfg.dns.zone}";
@@ -142,59 +144,61 @@ in
 
       caddyFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" caddyFilePath;
     in
-    (nixpkgs.lib.mkMerge [
-      svc
-      (nixpkgs.lib.mkIf svcConfig.oAuth.enable (mkOauthProxy inputs))
-      {
-        environment.etc.${caddyFileEtc} = {
-          text = ''
-            {
-              storage file_system {
-                root ${caddyStorageRoot}
-              }
-              servers {
-                listener_wrappers {
-                  proxy_protocol {
-                    timeout 5s
-                    ${mkTrustedProxies "allow"}
-                  }
-                  tls
+    {
+      config = (nixpkgs.lib.mkMerge [
+        svc.config
+        (nixpkgs.lib.mkIf svcConfig.oAuth.enable (mkOauthProxy inputs).config)
+        {
+          environment.etc.${caddyFileEtc} = {
+            text = ''
+              {
+                storage file_system {
+                  root ${caddyStorageRoot}
                 }
-                trusted_proxies_strict
-                ${mkTrustedProxies "trusted_proxies static"}
+                servers {
+                  listener_wrappers {
+                    proxy_protocol {
+                      timeout 5s
+                      ${mkTrustedProxies "allow"}
+                    }
+                    tls
+                  }
+                  trusted_proxies_strict
+                  ${mkTrustedProxies "trusted_proxies static"}
+                }
               }
-            }
 
-            http:// {
-              # Required dummy empty section
-            }
+              http:// {
+                # Required dummy empty section
+              }
 
-            ${url} {
-              ${mkCaddyHandler target svcConfig}
-            }
-          '';
-          mode = "0600";
-        };
-
-        systemd.services.${serviceName} = {
-          restartTriggers = [ config.environment.etc.${caddyFileEtc}.text ];
-          serviceConfig = {
-            DynamicUser = true;
-            StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" caddyStorageRoot;
-            LoadCredential = "Caddyfile:${caddyFilePath}";
-            Environment = [
-              "XDG_CONFIG_HOME=${caddyStorageRoot}"
-              "XDG_DATA_HOME=${caddyStorageRoot}"
-              "HOME=${caddyStorageRoot}"
-            ];
-            ExecStart = "${cmd} run --config \"\${CREDENTIALS_DIRECTORY}/Caddyfile\"";
-            Restart = "always";
-            ReadWritePaths = [caddyStorageRoot];
-            ReadOnlyPaths = [caddyConfigRoot];
-            AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
+              ${url} {
+                ${mkCaddyHandler target svcConfig}
+              }
+            '';
+            mode = "0600";
           };
-          wantedBy = ["multi-user.target"];
-        };
-      }
-    ]));
+
+          systemd.services.${serviceName} = {
+            restartTriggers = [ config.environment.etc.${caddyFileEtc}.text ];
+            serviceConfig = {
+              DynamicUser = true;
+              StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" caddyStorageRoot;
+              LoadCredential = "Caddyfile:${caddyFilePath}";
+              Environment = [
+                "XDG_CONFIG_HOME=${caddyStorageRoot}"
+                "XDG_DATA_HOME=${caddyStorageRoot}"
+                "HOME=${caddyStorageRoot}"
+              ];
+              ExecStart = "${cmd} run --config \"\${CREDENTIALS_DIRECTORY}/Caddyfile\"";
+              Restart = "always";
+              ReadWritePaths = [caddyStorageRoot];
+              ReadOnlyPaths = [caddyConfigRoot];
+              AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
+            };
+            wantedBy = ["multi-user.target"];
+          };
+        }
+      ]);
+    });
 }
