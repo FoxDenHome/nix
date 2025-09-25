@@ -1,4 +1,4 @@
-{ nixpkgs, foxDenLib, lib, config, ... }:
+{ nixpkgs, pkgs, foxDenLib, lib, config, ... }:
 let
   services = foxDenLib.services;
   svcConfig = config.foxDen.services.samba;
@@ -26,7 +26,7 @@ in
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge (
     (map (name: (services.make {
-      inherit svcConfig;
+      inherit svcConfig pkgs config;
       name = name;
       host = "samba";
     }).config) smbServices)

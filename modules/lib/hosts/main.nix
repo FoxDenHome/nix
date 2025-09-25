@@ -72,6 +72,8 @@ in
     default = inputs.default or null;
   }));
 
+  mkNameservers = (config: config.foxDen.hosts.ifcfg.dns);
+
   nixosModule = ({ config, pkgs, foxDenLib, ... }:
   let
     hosts = config.foxDen.hosts.hosts;
