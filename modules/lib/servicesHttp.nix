@@ -179,9 +179,7 @@ in
               ${mkCaddyHandler target svcConfig}
             }
           '';
-          user = "nobody";
-          group = "nogroup";
-          mode = "0644";
+          mode = "0600";
         };
 
         systemd.services.${serviceName} = {
@@ -189,14 +187,14 @@ in
           serviceConfig = {
             DynamicUser = true;
             StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" caddyStorageRoot;
-            ConfigurationDirectory = nixpkgs.lib.strings.removePrefix "/etc/" caddyConfigRoot;
+            LoadCredential = "Caddyfile:${caddyFilePath}";
             Environment = [
               "XDG_CONFIG_HOME=${caddyStorageRoot}"
               "XDG_DATA_HOME=${caddyStorageRoot}"
               "HOME=${caddyStorageRoot}"
             ];
-            ExecStart = "${cmd} run --config ${eSA caddyFilePath}";
-            ExecReload = "${cmd} reload --config ${eSA caddyFilePath}";
+            ExecStart = "${cmd} run --config \${CREDENTIALS_DIRECTORY}/Caddyfile";
+            ExecReload = "${cmd} reload --config \${CREDENTIALS_DIRECTORY}/Caddyfile";
             Restart = "always";
             ReadWritePaths = [caddyStorageRoot];
             ReadOnlyPaths = [caddyConfigRoot];
