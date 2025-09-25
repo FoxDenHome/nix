@@ -103,7 +103,6 @@ in
           BindReadOnlyPaths = [
             "/etc/samba"
             "/etc/static/samba"
-            "/var/run"
           ];
           RuntimeDirectory = "samba:/var/run/samba";
         };
