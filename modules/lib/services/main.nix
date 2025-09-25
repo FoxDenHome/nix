@@ -27,7 +27,7 @@ let
           Restart = nixpkgs.lib.mkForce "always";
 
           MountAPIVFS = wantsAPIVFS;
-          #PrivateTmp = wantsAPIVFS;
+          PrivateTmp = wantsAPIVFS;
           #PrivateUsers = wantsAPIVFS;
           #ProtectControlGroups = wantsAPIVFS;
           #ProtectKernelModules = wantsAPIVFS;
