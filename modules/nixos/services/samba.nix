@@ -106,6 +106,7 @@ in
             "/var/run/samba"
           ];
           BindReadOnlyPaths = [
+            "/run/systemd/notify"
             "/etc/samba"
             "/etc/static/samba"
           ];
