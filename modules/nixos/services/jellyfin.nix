@@ -34,7 +34,7 @@ in
           config.services.jellyfin.logDir
         ];
 
-        TemporaryPaths = [
+        TemporaryFileSystem = [
           "/var/cache/fontconfig"
         ];
       };
