@@ -114,8 +114,7 @@ in
       };
 
       driver = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-        type = enum [ "bridge" "routed" ];
-        default = "bridge";
+        type = enum (nixpkgs.lib.attrsets.attrNames foxDenLib.hosts.drivers);
       };
 
       driverOpts = nixpkgs.lib.mkOption {
