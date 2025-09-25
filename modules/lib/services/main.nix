@@ -26,6 +26,7 @@ let
           PrivateMounts = true;
           Restart = nixpkgs.lib.mkForce "always";
           BindReadOnlyPaths = [
+            "/run/systemd/notify"
             "/nix/store"
             "-/etc/resolv.conf"
             "-/etc/nsswitch.conf"
