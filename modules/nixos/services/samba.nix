@@ -109,6 +109,7 @@ in
             "/etc/static/samba"
           ];
           PIDFile = nixpkgs.lib.mkForce "";
+          Type = nixpkgs.lib.mkForce "simple";
           RuntimeDirectory = "samba";
         };
       }));
