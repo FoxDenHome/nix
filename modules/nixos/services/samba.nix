@@ -98,6 +98,7 @@ in
 
       systemd.services = (nixpkgs.lib.attrsets.genAttrs smbServices (name: {
         serviceConfig = {
+          PrivateUsers = "identity";
           BindPaths = smbPaths ++ svcConfig.sharePaths ++ [
             "/run/samba"
             "/var/run/samba"
