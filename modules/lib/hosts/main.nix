@@ -163,18 +163,18 @@ in
 
           # Configure each host's NetNS
           services = (nixpkgs.lib.attrsets.listToAttrs (map ({ name, value }: let
-            info = mkHostInfo name;
-            namespace = (nixpkgs.lib.strings.removePrefix "/run/netns/" info.namespace);
+            host = getByName config name;
+            namespace = (nixpkgs.lib.strings.removePrefix "/run/netns/" host.info.namespace);
 
             ipCmd = eSA "${pkgs.iproute2}/bin/ip";
             ipInNsCmd = "${ipCmd} netns exec ${eSA namespace} ${ipCmd}";
 
             mkServiceInterface = hostDriverConfig.serviceInterface or (name: host: "host-${mkHostSuffix name}");
             serviceInterface = mkServiceInterface name value;
-            driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface; hostName = name; hostInfo = info; host = value; };
+            driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface host; };
           in
           {
-            name = (nixpkgs.lib.strings.removeSuffix ".service" info.unit);
+            name = (nixpkgs.lib.strings.removeSuffix ".service" host.info.unit);
             value = {
               description = "NetNS ${namespace}";
               unitConfig = {

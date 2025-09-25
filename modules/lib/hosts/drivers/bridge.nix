@@ -7,10 +7,7 @@ in
 
   build = { ifcfg, config, hosts, ... } :
   let
-    mkIfaceName = (name: let
-      host = foxDenLib.hosts.getByName config name;
-    in
-      "vethbr${host.info.suffix}");
+    mkIfaceName = (host: "vethbr${host.info.suffix}");
   in
   {
     config.systemd.network.networks =
@@ -20,7 +17,7 @@ in
             {
               name = "60-host-${name}";
               value = {
-                name = mkIfaceName name;
+                name = mkIfaceName (foxDenLib.hosts.getByName config name);
                 bridge = [ifcfg.interface];
                 bridgeVLANs = [{
                   PVID = value.vlan;
@@ -42,15 +39,15 @@ in
       };
     };
 
-    execStart = ({ ipCmd, hostName, serviceInterface, ... }: let
-      iface = mkIfaceName hostName;
+    execStart = ({ ipCmd, host, serviceInterface, ... }: let
+      iface = mkIfaceName host;
     in [
       "-${ipCmd} link del ${eSA iface}"
       "${ipCmd} link add ${eSA iface} type veth peer name ${eSA serviceInterface}"
     ]);
 
-    execStop = ({ ipCmd, hostName, ... }: [
-      "${ipCmd} link del ${eSA (mkIfaceName hostName)}"
+    execStop = ({ ipCmd, host, ... }: [
+      "${ipCmd} link del ${eSA (mkIfaceName host)}"
     ]);
   };
 }

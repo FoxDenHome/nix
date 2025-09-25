@@ -8,10 +8,7 @@ in
 
   build = { ifcfg, config, hosts, ... } :
   let
-    mkIfaceName = (name: let
-      host = foxDenLib.hosts.getByName config name;
-    in
-      "vethrt${host.info.suffix}");
+    mkIfaceName = (host: "vethrt${host.info.suffix}");
 
     routeHostAddrs = (map (addr: {
       Destination = (util.addHostCidr addr);
@@ -39,7 +36,7 @@ in
         (map (({ name, value }: {
             name = "60-host-${name}";
             value = {
-              name = (mkIfaceName name);
+              name = mkIfaceName (foxDenLib.hosts.getByName config name);
               networkConfig = {
                 DHCP = "no";
                 IPv6AcceptRA = "no";
@@ -53,15 +50,15 @@ in
             };
           })) (nixpkgs.lib.attrsets.attrsToList hosts)));
 
-    execStart = ({ ipCmd, hostName, serviceInterface, ... }: let
-      hostIface = mkIfaceName hostName;
+    execStart = ({ ipCmd, host, serviceInterface, ... }: let
+      hostIface = mkIfaceName host;
     in [
       "-${ipCmd} link del ${eSA hostIface}"
       "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA serviceInterface}"
     ]);
 
-    execStop = ({ ipCmd, hostName, ... }: [
-      "${ipCmd} link del ${eSA (mkIfaceName hostName)}"
+    execStop = ({ ipCmd, host, ... }: [
+      "${ipCmd} link del ${eSA (mkIfaceName host)}"
     ]);
 
     routes = routeHostAddrs ++ (nixpkgs.lib.flatten [
