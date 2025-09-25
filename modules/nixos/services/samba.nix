@@ -39,7 +39,7 @@ in
       users.groups.smbguest = {};
 
       services.samba.enable = true;
-      services.samba.smbd.extraArgs = [ "--debug-stdout" "-d" "9" ];
+      services.samba.smbd.extraArgs = [ "--debug-stdout" ];
       services.samba.settings = {
         global = {
           # basic setup
