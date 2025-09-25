@@ -40,6 +40,8 @@ in
   make = (inputs@{ svcConfig, ... }: mkNamed (inputs.name or svcConfig.host.name) inputs);
   mkNamed = mkNamed;
 
+  configDir = (svcName: "/etc/foxden/${svcName}");
+
   nixosModule = { ... }:
   {
     environment.persistence."/nix/persist/foxden/services" = {
