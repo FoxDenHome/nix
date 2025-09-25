@@ -19,13 +19,22 @@ let
         };
 
         serviceConfig = {
+          TemporaryFileSystem = ["/:ro"];
           NetworkNamespacePath = info.namespace;
           DevicePolicy = "closed";
           PrivateTmp = true;
           PrivateMounts = true;
-          ProtectSystem = "strict";
           ProtectHome = "tmpfs";
           Restart = nixpkgs.lib.mkForce "always";
+          BindReadOnlyPaths = [
+            "/nix/store"
+            "/etc/resolv.conf"
+            "/etc/nsswitch.conf"
+            "/etc/hosts"
+            "/etc/localtime"
+            "/etc/passwd"
+            "/etc/group"
+          ];
         };
       };
 
