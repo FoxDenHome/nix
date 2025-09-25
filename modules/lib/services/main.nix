@@ -33,6 +33,7 @@ let
             "-/etc/localtime"
             "-/etc/passwd"
             "-/etc/group"
+            "-/etc/pki/tls/certs"
           ];
         };
       };
