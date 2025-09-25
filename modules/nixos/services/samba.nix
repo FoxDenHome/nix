@@ -15,7 +15,16 @@ let
   ];
 in
 {
-  options.foxDen.services.samba = services.mkOptions { svcName = "samba"; name = "Samba for SMB"; };
+  options.foxDen.services.samba = lib.mkMerge [
+    (services.mkOptions { svcName = "samba"; name = "Samba for SMB"; })
+    {
+      sharePaths = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = "Directories to share over Samba (SMB)";
+      };
+    }
+  ];
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge (
     (map (name: (services.make {
@@ -91,7 +100,7 @@ in
           JoinsNamespaceOf = lib.mkIf (name != "samba-smbd") "samba-smbd.service";
         };
         serviceConfig = {
-          BindPaths = smbPaths;
+          BindPaths = smbPaths ++ svcConfig.sharePaths;
         };
       }));
 
