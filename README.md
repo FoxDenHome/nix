@@ -14,47 +14,53 @@
 - [x] Samba server
 - [ ] All server machines should be fully NixOS
 	- [ ] bengalfox
-		- [x] nas
-			- [x] samba
-			- [x] jellyfin
-			- [x] nasweb
-			- [x] deluge (TO DO: declarative config + mounts)
-			- [ ] nzbget
-		- [ ] restic
-		- [ ] rest-server
-		- [ ] kiwix
-		- [ ] mirror
-		- [ ] gitbackup
-		- [ ] e621dumper
-		- [ ] fadumper
-		- [ ] aurbuild
-		- [ ] ollama
-		- [ ] hashtopolis
-		- [ ] hashtopolis-agent
-		- [ ] owncast
+		- [ ] Pre migration
+			- [x] nas
+				- [x] samba
+				- [x] jellyfin
+				- [x] nasweb
+				- [x] deluge (TO DO: declarative config + mounts)
+				- [ ] nzbget
+			- [ ] restic
+			- [ ] rest-server
+			- [ ] kiwix
+			- [ ] mirror
+			- [ ] gitbackup
+			- [ ] e621dumper
+			- [ ] fadumper
+			- [ ] aurbuild
+		- [ ] Post migration
+			- [ ] ollama
+			- [ ] hashtopolis
+			- [ ] hashtopolis-agent
+			- [ ] owncast
 	- [ ] islandfox
-		- [ ] restic
-		- [ ] auth
-		- [ ] scrypted
-		- [ ] monitoring
-		- [ ] syncthing
-		- [ ] unifi-network
-		- [ ] foxcaves
-		- [ ] git
-		- [ ] gitbackup
-		- [ ] website
-		- [ ] minecraft
-		- [ ] darksignsonline
-		- [ ] affine
+		- [ ] Pre migration
+			- [ ] restic
+			- [ ] auth
+			- [ ] scrypted
+			- [ ] monitoring
+			- [ ] syncthing
+			- [ ] unifi-network
+			- [ ] homeassistant VM
+			- [ ] foxcaves
+			- [ ] git
+			- [ ] gitbackup
+			- [ ] website
+			- [ ] minecraft
+			- [ ] darksignsonline
+			- [ ] SpaceAge
+		- [ ] Post migration
+			- [ ] affine
 	- [ ] icefox
-		- [x] nas (see bengalfox)
-		- [ ] restic
-		- [ ] rest-server
-		- [ ] gitbackup
-		- [ ] syncthing
-		- [ ] xmpp
-		- [ ] mirror
-		- [ ] snirouter
+		- [ ] Pre migration
+			- [x] nas (see bengalfox)
+			- [ ] restic
+			- [ ] gitbackup
+			- [ ] syncthing
+			- [ ] xmpp
+			- [ ] mirror
+			- [ ] snirouter
 
 ## Goals (Post-MVP)
 
