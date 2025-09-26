@@ -30,7 +30,7 @@ let
   ipv6WithoutCidr = types.addCheck types.str (ipv6CidrCheck false);
   ipv6WithCidr = types.addCheck types.str (ipv6CidrCheck true);
   ipv4 = types.either ipv4WithoutCidr ipv4WithCidr;
-  ipv6 = ipv6Check;
+  ipv6 = types.addCheck types.str ipv6Check;
 in
 {
   ipv4WithoutCidr = ipv4WithoutCidr;
