@@ -41,7 +41,7 @@ let
             "passwd"
             "group"
             "pki/tls/certs"
-            "static/pki/tls/certs"
+            "ssl/certs"
           ];
         };
       };
