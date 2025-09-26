@@ -12,7 +12,7 @@
 	- [x] Basics
 	- [x] OAuth
 - [x] Samba server
-- [ ] All server machines should be fully NixOS
+- [ ] Systems
 	- [ ] bengalfox
 		- [ ] Pre migration
 			- [x] nas
