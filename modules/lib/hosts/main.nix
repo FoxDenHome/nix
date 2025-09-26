@@ -3,17 +3,6 @@ let
   util = foxDenLib.util;
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
-  ifcfgRouteType = with nixpkgs.lib.types; submodule {
-    options = {
-      Destination = nixpkgs.lib.mkOption {
-        type = str;
-      };
-      Gateway = nixpkgs.lib.mkOption {
-        type = str;
-      };
-    };
-  };
-
   hostType = with nixpkgs.lib.types; submodule {
     options = {
       dns = {
@@ -26,12 +15,12 @@ let
           default = "foxden.network";
         };
         ttl = nixpkgs.lib.mkOption {
-          type = int;
+          type = ints.positive;
           default = 3600;
         };
       };
       vlan = nixpkgs.lib.mkOption {
-        type = int;
+        type = ints.unsigned;
       };
       addresses = nixpkgs.lib.mkOption {
         type = listOf str;
@@ -42,12 +31,12 @@ let
   routeType = with nixpkgs.lib.types; submodule {
     options = {
       Destination = nixpkgs.lib.mkOption {
-        type = str;
-        default = "default";
+        type = nullOr foxDenLib.types.ip;
+        default = null;
       };
       Gateway = nixpkgs.lib.mkOption {
-        type = str;
-        default = "";
+        type = nullOr foxDenLib.types.ipWithoutCidr;
+        default = null;
       };
     };
   };
@@ -91,7 +80,7 @@ in
           default = [];
         };
         routes = nixpkgs.lib.mkOption {
-          type = listOf ifcfgRouteType;
+          type = listOf routeType;
           default = [];
         };
         interface = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
@@ -191,7 +180,7 @@ in
                       host.addresses)
                 ++ [ "${ipInNsCmd} link set ${eSA serviceInterface} up" ]
                 ++ (map (route:
-                      "${ipInNsCmd} route add ${eSA route.Destination} dev ${eSA serviceInterface}" + (if (route.Gateway or "") != "" then " via ${eSA route.Gateway}" else ""))
+                      "${ipInNsCmd} route add " + (if route.Destination then eSA route.Destination else "default") + " dev ${eSA serviceInterface}" + (if route.Gateway then " via ${eSA route.Gateway}" else ""))
                       netnsRoutes);
 
                 ExecStop =

@@ -104,8 +104,8 @@ in
 
   mkOptions = (inputs@{ ... } : with nixpkgs.lib.types; {
     hostPort = nixpkgs.lib.mkOption {
-      type = str;
-      default = "";
+      type = nullOr str; # TODO: Validation
+      default = null;
     };
     tls = nixpkgs.lib.mkEnableOption "TLS";
     oAuth = {
@@ -128,7 +128,7 @@ in
       caddyStorageRoot = "/var/lib/foxden/caddy/${name}";
 
       host = foxDenLib.hosts.getByName config svcConfig.host;
-      hostPort = if svcConfig.hostPort != "" then svcConfig.hostPort else "${host.dns.name}.${host.dns.zone}";
+      hostPort = if svcConfig.hostPort then svcConfig.hostPort else "${host.dns.name}.${host.dns.zone}";
       url = (if svcConfig.tls then "" else "http://") + hostPort;
 
       svc = services.mkNamed serviceName inputs;

@@ -15,7 +15,7 @@ let
         type = str;
       };
       ttl = lib.mkOption {
-        type = int;
+        type = ints.positive;
         default = defaultTtl;
       };
       horizon = lib.mkOption {
