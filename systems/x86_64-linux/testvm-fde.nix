@@ -105,7 +105,6 @@ in
     enable = true;
     host = "deluge";
     vpnInterface = delugeVPNName;
-    routes = [];
   };
 
   sops.secrets.delugeWireguardKey = {};
@@ -155,6 +154,7 @@ in
         "192.168.122.203/24"
         "fd00:dead:beef:122::203/64"
       ];
+      routes = [];
     };
   };
 
