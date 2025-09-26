@@ -100,7 +100,7 @@ in
   };
 
   sops.secrets.delugeWireguardKey = {};
-  networking.wireguard.interfaces.deluge = {
+  networking.wireguard.interfaces.wg-deluge = {
     mtu = 1280;
     ips = [ "10.1.2.3/32" ];
     privateKeyFile = config.sops.secrets.delugeWireguardKey.path;
@@ -129,6 +129,18 @@ in
         "192.168.122.202/24"
         "fd00:dead:beef:122::202/64"
       ];
+    };
+    deluge = {
+      dns = {
+        name = "deluge";
+        zone = "local.foxden.network";
+      };
+      vlan = 1;
+      addresses = [
+        "192.168.122.203/24"
+        "fd00:dead:beef:122::203/64"
+      ];
+      interfaces = [ "wg-deluge" ];
     };
   };
 

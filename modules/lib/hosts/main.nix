@@ -163,6 +163,8 @@ in
               description = "NetNS ${namespace}";
               unitConfig = {
                 StopWhenUnneeded = true;
+
+                After = [ "network-online.target" ];
               };
               serviceConfig = {
                 Type = "oneshot";
