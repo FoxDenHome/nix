@@ -39,9 +39,7 @@ in
 
       systemd.services.deluge.serviceConfig = {
         StateDirectory = "deluge";
-        serviceConfig = {
-          RestrictNetworkInterfaces = [ "lo" svcConfig.vpnInterface ];
-        };
+        RestrictNetworkInterfaces = [ "lo" svcConfig.vpnInterface ];
       };
 
       systemd.services.delugeweb.serviceConfig = {
