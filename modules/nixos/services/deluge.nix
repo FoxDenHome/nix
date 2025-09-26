@@ -12,12 +12,7 @@ let
   svcConfig = config.foxDen.services.deluge;
 in
 {
-  options.foxDen.services.deluge = {
-    vpnInterface = lib.mkOption {
-      type = lib.types.str;
-      description = "VPN interface";
-    };
-  } // services.http.mkOptions { svcName = "deluge"; name = "Deluge BitTorrent Client"; };
+  options.foxDen.services.deluge = services.http.mkOptions { svcName = "deluge"; name = "Deluge BitTorrent Client"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {

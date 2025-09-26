@@ -1,10 +1,7 @@
-{ modulesPath, foxDenLib, pkgs, config, ... }:
+{ modulesPath, pkgs, config, ... }:
 let
   ifcfg = config.foxDen.hosts.ifcfg;
   rootInterface = "enp1s0";
-
-  delugeVPNHost = foxDenLib.hosts.getByName config "deluge";
-  delugeVPNName = "wg-deluge";
 in
 {
   # These are set when you reinstall the system
@@ -107,29 +104,22 @@ in
   foxDen.services.deluge = {
     enable = config.foxDen.sops.available;
     host = "deluge";
-    vpnInterface = delugeVPNName;
   };
 
-  sops.secrets.delugeWireguardKey = config.lib.foxDen.sops.mkIfAvailable {};
-  networking.wireguard.interfaces.${delugeVPNName} = config.lib.foxDen.sops.mkIfAvailable {
-    mtu = 1280;
-    ips = [ "10.1.2.3/32" ];
-    privateKeyFile = config.sops.secrets.delugeWireguardKey.path;
-    interfaceNamespace = delugeVPNHost.namespace;
+  foxDen.services.wireguard."wg-deluge" = {
+    host = "deluge";
+    interface = {
+      ips = [ "10.1.2.3/32" ];
 
-    peers = [
-      {
-        allowedIPs = [ "0.0.0.0/0" "::/0" ];
-        endpoint = "10.99.99.99:51820";
-        persistentKeepalive = 25;
-        publicKey = "BJCvDOX+Mrf1oNtvA84RZB2i1gZ6YA01GpP2BCQDdiY=";
-      }
-    ];
-  };
-  systemd.services."wireguard-${delugeVPNName}".unitConfig = {
-    Requires = [ delugeVPNHost.unit ];
-    BindsTo = [ delugeVPNHost.unit ];
-    After = [ delugeVPNHost.unit ];
+      peers = [
+        {
+          allowedIPs = [ "0.0.0.0/0" "::/0" ];
+          endpoint = "10.99.99.99:51820";
+          persistentKeepalive = 25;
+          publicKey = "BJCvDOX+Mrf1oNtvA84RZB2i1gZ6YA01GpP2BCQDdiY=";
+        }
+      ];
+    };
   };
 
   foxDen.hosts.hosts = {
