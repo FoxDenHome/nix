@@ -8,7 +8,6 @@ let
       dns = {
         name = nixpkgs.lib.mkOption {
           type = str;
-          default = "";
         };
         zone = nixpkgs.lib.mkOption {
           type = str;
@@ -23,7 +22,7 @@ let
         type = ints.unsigned;
       };
       addresses = nixpkgs.lib.mkOption {
-        type = listOf str;
+        type = listOf foxDenLib.types.ip;
       };
     };
   };
@@ -73,10 +72,10 @@ in
 
       ifcfg = with nixpkgs.lib.types; {
         dns = nixpkgs.lib.mkOption {
-          type = listOf str;
+          type = listOf foxDenLib.types.ipWithoutCidr;
         };
         addresses = nixpkgs.lib.mkOption {
-          type = listOf str;
+          type = listOf foxDenLib.types.ip;
           default = [];
         };
         routes = nixpkgs.lib.mkOption {

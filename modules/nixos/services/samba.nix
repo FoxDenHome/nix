@@ -17,7 +17,7 @@ in
   options.foxDen.services.samba = (
     (services.mkOptions { svcName = "samba"; name = "Samba for SMB"; }) // {
       sharePaths = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
+        type = lib.types.listOf lib.types.path;
         default = [ ];
         description = "Directories to share over Samba (SMB)";
       };

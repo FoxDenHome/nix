@@ -97,7 +97,7 @@ in
   nixosModule = { ... }:
   {
     options.foxDen.services.trustedProxies = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-      type = listOf str;
+      type = listOf foxDenLib.types.ip;
       default = [];
     };
   };
