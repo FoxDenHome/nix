@@ -103,10 +103,6 @@ in
   };
 
   mkOptions = (inputs@{ ... } : with nixpkgs.lib.types; {
-    hostPort = nixpkgs.lib.mkOption {
-      type = nullOr foxDenLib.types.ipWithPort;
-      default = null;
-    };
     tls = nixpkgs.lib.mkEnableOption "TLS";
     oAuth = {
       enable = nixpkgs.lib.mkEnableOption "OAuth2 Proxy";
@@ -127,8 +123,11 @@ in
       caddyStorageRoot = "/var/lib/foxden/${name}";
 
       host = foxDenLib.hosts.getByName config svcConfig.host;
-      hostPort = if svcConfig.hostPort != null then svcConfig.hostPort else "${host.dns.name}.${host.dns.zone}";
-      url = (if svcConfig.tls then "" else "http://") + hostPort;
+      # TODO: If dns.name == "@" that means apex/root
+      matchPrefix = if svcConfig.tls then "" else "http://";
+      matchers = (map (iface: "${matchPrefix}${iface.dns.name}.${iface.dns.zone}")
+                    (nixpkgs.lib.filter (iface: iface.dns.name != "")
+                      (nixpkgs.lib.attrsets.attrValues host.interfaces)));
 
       svc = services.mkNamed name inputs;
       caddyFilePath = "${svc.configDir}/Caddyfile.${name}";
@@ -170,7 +169,7 @@ in
                 # Required dummy empty section
               }
 
-              ${url} {
+              ${builtins.concatStringsSep ", " matchers} {
                 # Custom config can be injected here
                 ${inputs.extraConfig or ""}
                 # Auto generated config below

@@ -62,10 +62,6 @@ let
     };
   };
 
-  getHostAddresses = (host: if host.interfaces != null then
-    nixpkgs.lib.flatten (map (iface: iface.addresses) host.interfaces)
-  else []);
-
   getByName = (config: name: let
     namespace = "host-${name}";
   in {
