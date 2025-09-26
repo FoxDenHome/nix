@@ -17,7 +17,7 @@
 		- [ ] nas
 			- [x] samba
 			- [x] jellyfin
-			- [ ] nasweb
+			- [x] nasweb
 			- [ ] deluge
 			- [ ] kiwix
 		- [ ] restic
