@@ -7,19 +7,19 @@
 	- [x] Usage of pre-existing SB keys (so we can re-use)
 - [x] Set up simple basic app/group with veth NIC
 - [x] Kanidm auth
-- [ ] wireguard tunnel and VPN enforcement (systemd's RestrictNetworkInterfaces?)
+- [x] wireguard tunnel and VPN enforcement (systemd's RestrictNetworkInterfaces?)
 - [x] HTTP(s) frontend service with OAuth toggle
 	- [x] Basics
 	- [x] OAuth
 - [x] Samba server
 - [ ] All server machines should be fully NixOS
 	- [ ] bengalfox
-		- [ ] nas
+		- [x] nas
 			- [x] samba
 			- [x] jellyfin
 			- [x] nasweb
-			- [ ] deluge
-			- [ ] kiwix
+			- [x] deluge
+		- [ ] kiwix
 		- [ ] restic
 		- [ ] mirror
 		- [ ] gitbackup
@@ -44,7 +44,7 @@
 		- [ ] darksignsonline
 		- [ ] affine
 	- [ ] icefox
-		- [ ] nas (see bengalfox)
+		- [x] nas (see bengalfox)
 		- [ ] gitbackup
 		- [ ] syncthing
 		- [ ] xmpp
