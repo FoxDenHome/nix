@@ -16,10 +16,12 @@ in
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
+      name = "jellyfin";
       inherit svcConfig pkgs config;
     }).config
     (services.http.make {
       inherit svcConfig pkgs config;
+      name = "caddy-jellyfin";
       target = "reverse_proxy http://127.0.0.1:8096";
     }).config
     {

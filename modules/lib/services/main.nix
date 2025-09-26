@@ -58,7 +58,7 @@ in
 
   mkEtcPaths = mkEtcPaths;
 
-  make = (inputs@{ svcConfig, ... }: mkNamed (inputs.name or svcConfig.host) inputs);
+  make = inputs: mkNamed inputs.name inputs;
   mkNamed = mkNamed;
 
   nixosModule = { ... }:
