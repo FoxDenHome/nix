@@ -15,7 +15,7 @@ in
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.http.make {
       inherit svcConfig pkgs config;
-      serviceName = "nasweb";
+      name = "nasweb";
       target = ''
         root * /nas
         file_server {

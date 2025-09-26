@@ -123,7 +123,7 @@ in
   make = (inputs@{ config, svcConfig, pkgs, target, ... }:
     let
       name = inputs.name or svcConfig.host;
-      serviceName = inputs.serviceName or "caddy-${name}";
+      serviceName = inputs.name or "caddy-${name}";
 
       caddyStorageRoot = "/var/lib/foxden/caddy/${name}";
 
