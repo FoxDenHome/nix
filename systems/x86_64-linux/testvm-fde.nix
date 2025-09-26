@@ -107,8 +107,8 @@ in
     vpnInterface = delugeVPNName;
   };
 
-  sops.secrets.delugeWireguardKey = {};
-  networking.wireguard.interfaces.${delugeVPNName} = {
+  sops.secrets.delugeWireguardKey = lib.mkIf config.foxDen.sops.available {};
+  networking.wireguard.interfaces.${delugeVPNName} = lib.mkIf config.foxDen.sops.available {
     mtu = 1280;
     ips = [ "10.1.2.3/32" ];
     privateKeyFile = config.sops.secrets.delugeWireguardKey.path;
