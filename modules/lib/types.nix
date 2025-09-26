@@ -55,7 +55,7 @@ in
     portValidTry = builtins.tryEval (port > 0 && port <= 65535);
     portValid = portValidTry.success && portValidTry.value;
 
-    ip = nixpkgs.lib.strings.removeSuffix "]" (nixpkgs.lib.strings.removePrefix "[" split);
+    ip = nixpkgs.lib.strings.removeSuffix "]" (nixpkgs.lib.strings.removePrefix "[" (builtins.elemAt split 0));
   in
     (nixpkgs.lib.lists.length split == 2) &&
     portValid &&
