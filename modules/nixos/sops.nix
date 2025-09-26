@@ -2,18 +2,19 @@
 let
   sharedSopsFile = ../../secrets/shared.yaml;
 
-  mkIfSops = lib.mkIf config.foxDen.sops.available;
+  mkIfAvailable = lib.mkIf config.lib.foxDen.sops.available;
 in
 {
   options.foxDen.sops.available = lib.mkEnableOption "Enable sops-nix usage";
 
   config = lib.mkMerge [
     {
-      lib.foxDen = {
-        inherit mkIfSops;
+      lib.foxDen.sops = {
+        inherit mkIfAvailable;
+        available = config.foxDen.sops.available or false;
       };
     }
-    (mkIfSops {
+    (mkIfAvailable {
       sops.secrets.rootPasswordHash = {
         neededForUsers = true;
       };
