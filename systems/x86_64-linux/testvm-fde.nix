@@ -112,8 +112,16 @@ in
     mtu = 1280;
     ips = [ "10.1.2.3/32" ];
     privateKeyFile = config.sops.secrets.delugeWireguardKey.path;
-    allowedIPsAsRoutes = false;
     interfaceNamespace = delugeVPNHost.namespace;
+
+    peers = {
+      dummy = {
+        allowedIps = [ "0.0.0.0/0" "::/0" ];
+        endpoint = "vpn.example.com:51820";
+        persistentKeepalive = 25;
+        publicKey = "BJCvDOX+Mrf1oNtvA84RZB2i1gZ6YA01GpP2BCQDdiY=";
+      };
+    };
   };
   systemd.services."wireguard-${delugeVPNName}".unitConfig = {
     Requires = [ delugeVPNHost.unit ];
