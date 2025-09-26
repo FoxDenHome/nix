@@ -24,10 +24,6 @@ let
       addresses = nixpkgs.lib.mkOption {
         type = listOf foxDenLib.types.ip;
       };
-      interfaces = nixpkgs.lib.mkOption {
-        type = listOf str;
-        default = [];
-      };
       routes = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
         type = nullOr (listOf routeType);
         default = null;
@@ -48,9 +44,12 @@ let
     };
   };
 
-  getByName = (config: name: {
+  getByName = (config: name: let
+    namespace = "host-${name}";
+  in {
     inherit name;
-    namespace = "/run/netns/host-${name}";
+    namespace = namespace;
+    namespacePath = "/run/netns/${namespace}";
     unit = "netns-host-${name}.service";
     resolvConf = "/etc/foxden/hosts/resolv.conf";
     suffix = util.mkHash8 name;
@@ -146,10 +145,8 @@ in
 
           # Configure each host's NetNS
           services = (nixpkgs.lib.attrsets.listToAttrs (map (host: let
-            namespace = (nixpkgs.lib.strings.removePrefix "/run/netns/" host.namespace);
-
             ipCmd = eSA "${pkgs.iproute2}/bin/ip";
-            ipInNsCmd = "${ipCmd} netns exec ${eSA namespace} ${ipCmd}";
+            ipInNsCmd = "${ipCmd} netns exec ${eSA host.namespace} ${ipCmd}";
 
             mkServiceInterface = hostDriverConfig.serviceInterface or (host: "host-${host.suffix}");
             serviceInterface = mkServiceInterface host;
@@ -160,28 +157,23 @@ in
           {
             name = (nixpkgs.lib.strings.removeSuffix ".service" host.unit);
             value = {
-              description = "NetNS ${namespace}";
+              description = "NetNS ${host.namespace}";
               unitConfig = {
-                StopWhenUnneeded = true;
-
-                After = [ "network-online.target" ];
+                After = [ "network-pre.target" ];
               };
               serviceConfig = {
                 Type = "oneshot";
                 RemainAfterExit = true;
 
                 ExecStart = [
-                  "-${ipCmd} netns del ${eSA namespace}"
-                  "${ipCmd} netns add ${eSA namespace}"
+                  "-${ipCmd} netns del ${eSA host.namespace}"
+                  "${ipCmd} netns add ${eSA host.namespace}"
                   "${ipInNsCmd} addr add 127.0.0.1/8 dev lo"
                   "${ipInNsCmd} addr add ::1/128 dev lo noprefixroute"
                   "${ipInNsCmd} link set lo up"
                 ]
-                ++ (map (iface:
-                      "${ipCmd} link set ${eSA iface} netns ${eSA namespace}")
-                      host.interfaces)
                 ++ (hostDriverConfig.execStart driverRunParams)
-                ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA namespace}" ]
+                ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA host.namespace}" ]
                 ++ (map (addr:
                       "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
                       host.addresses)
@@ -192,11 +184,8 @@ in
 
                 ExecStop =
                   (hostDriverConfig.execStop driverRunParams)
-                  ++ (map (iface:
-                        "${ipCmd} link set ${eSA iface} netns 1")
-                        host.interfaces)
                   ++ [
-                    "${ipCmd} netns del ${eSA namespace}"
+                    "${ipCmd} netns del ${eSA host.namespace}"
                   ];
               };
             };

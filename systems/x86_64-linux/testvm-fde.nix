@@ -1,7 +1,10 @@
-{ modulesPath, pkgs, config, ... }:
+{ modulesPath, foxDenLib, pkgs, config, ... }:
 let
   ifcfg = config.foxDen.hosts.ifcfg;
   rootInterface = "enp1s0";
+
+  delugeVPNHost = foxDenLib.hosts.getByName config "deluge";
+  delugeVPNName = "wg-deluge";
 in
 {
   system.stateVersion = "25.05";
@@ -101,15 +104,21 @@ in
   foxDen.services.deluge = {
     enable = true;
     host = "deluge";
-    vpnInterface = "wg-deluge";
+    vpnInterface = delugeVPNName
   };
 
   sops.secrets.delugeWireguardKey = {};
-  networking.wireguard.interfaces.wg-deluge = {
+  networking.wireguard.interfaces.${delugeVPNName} = {
     mtu = 1280;
     ips = [ "10.1.2.3/32" ];
     privateKeyFile = config.sops.secrets.delugeWireguardKey.path;
     allowedIPsAsRoutes = false;
+    interfaceNamespace = delugeVPNHost.namespace;
+  };
+  systemd.system."wireguard-${delugeVPNName}.service".unitConfig = {
+    Requires = [ delugeVPNHost.unit ];
+    BindsTo = [ delugeVPNHost.unit ];
+    After = [ delugeVPNHost.unit ];
   };
 
   foxDen.hosts.hosts = {
@@ -145,7 +154,6 @@ in
         "192.168.122.203/24"
         "fd00:dead:beef:122::203/64"
       ];
-      interfaces = [ "wg-deluge" ];
     };
   };
 

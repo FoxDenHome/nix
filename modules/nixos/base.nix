@@ -38,6 +38,7 @@
   users.groups.share.gid = 1001;
 
   networking.hostId = lib.mkDefault (foxDenLib.util.mkHash8 config.networking.hostName);
+  networking.wireguard.useNetworkd = false;
 
   environment.persistence."/nix/persist/system" = {
     hideMounts = true;

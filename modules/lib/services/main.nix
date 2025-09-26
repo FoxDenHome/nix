@@ -26,7 +26,7 @@ let
         };
 
         serviceConfig = {
-          NetworkNamespacePath = host.namespace;
+          NetworkNamespacePath = host.namespacePath;
           DevicePolicy = "closed";
           PrivateDevices = nixpkgs.lib.mkForce true;
           Restart = nixpkgs.lib.mkForce "always";
