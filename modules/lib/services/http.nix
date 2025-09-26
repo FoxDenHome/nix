@@ -192,7 +192,6 @@ in
               ];
               ExecStart = "${cmd} run --config \"\${CREDENTIALS_DIRECTORY}/Caddyfile\"";
               Restart = "always";
-              BindPaths = [caddyStorageRoot];
             };
             wantedBy = ["multi-user.target"];
           };
