@@ -102,7 +102,7 @@ in
   networking.wireguard.interfaces.deluge = {
     mtu = 1280;
     ips = [ "10.1.2.3/32" ];
-    privateKey = config.sops.secrets.delugeWireguardKey.path;
+    privateKeyFile = config.sops.secrets.delugeWireguardKey.path;
     allowedIPsAsRoutes = false;
   };
 
