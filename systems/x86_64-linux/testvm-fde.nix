@@ -98,6 +98,11 @@ in
     host = "samba";
     root = "/nix";
   };
+  foxDen.services.deluge = {
+    enable = true;
+    host = "deluge";
+    vpnInterface = "wg-deluge";
+  };
 
   sops.secrets.delugeWireguardKey = {};
   networking.wireguard.interfaces.wg-deluge = {

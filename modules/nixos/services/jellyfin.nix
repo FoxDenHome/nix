@@ -2,7 +2,7 @@
 let
   services = foxDenLib.services;
 
-  mkJellyfinDir = (dir: {
+  mkDir = (dir: {
     directory = dir;
     user = config.services.jellyfin.user;
     group = config.services.jellyfin.group;
@@ -43,10 +43,10 @@ in
       environment.persistence."/nix/persist/jellyfin" = {
         hideMounts = true;
         directories = [
-          (mkJellyfinDir config.services.jellyfin.cacheDir)
-          (mkJellyfinDir config.services.jellyfin.configDir)
-          (mkJellyfinDir config.services.jellyfin.dataDir)
-          (mkJellyfinDir config.services.jellyfin.logDir)
+          (mkDir config.services.jellyfin.cacheDir)
+          (mkDir config.services.jellyfin.configDir)
+          (mkDir config.services.jellyfin.dataDir)
+          (mkDir config.services.jellyfin.logDir)
         ];
       };
     }
