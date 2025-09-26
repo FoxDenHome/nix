@@ -18,7 +18,7 @@ let
 
   isIPv6 = nixpkgs.lib.strings.hasInfix ":";
 
-  removeIpCidr = (ip: builtins.elemAt (nixpkgs.lib.strings.splitString "/" ip) 0);
+  removeIPCidr = (ip: builtins.elemAt (nixpkgs.lib.strings.splitString "/" ip) 0);
 in
 {
   mkShortHash = mkShortHash;
@@ -29,8 +29,8 @@ in
   isIPv6 = isIPv6;
   isIPv4 = (ip: !isIPv6 ip);
 
-  removeIpCidr = removeIpCidr;
+  removeIPCidr = removeIPCidr;
   addHostCidr = (ipRaw: let
-    ip = removeIpCidr ipRaw;
+    ip = removeIPCidr ipRaw;
   in if (isIPv6 ip) then "${ip}/128" else "${ip}/32");
 }

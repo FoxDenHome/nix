@@ -2,13 +2,13 @@
 let
   types = nixpkgs.lib.types;
 
-  validIpv4Segment = (s: let n = nixpkgs.lib.strings.toIntBase10 s; in n >= 0 && n <= 255);
+  validIPv4Segment = (s: let n = nixpkgs.lib.strings.toIntBase10 s; in n >= 0 && n <= 255);
 
   ipv4Check = (ip: let
     cidrSplit = nixpkgs.lib.strings.splitString "/" ip;
     segments = nixpkgs.lib.strings.splitString "." (builtins.elemAt cidrSplit 0);
 
-    segmentsValidTry = builtins.tryEval (nixpkgs.lib.lists.all validIpv4Segment segments);
+    segmentsValidTry = builtins.tryEval (nixpkgs.lib.lists.all validIPv4Segment segments);
     segmentsValid = segmentsValidTry.success && segmentsValidTry.value;
 
     cidr = nixpkgs.lib.strings.toIntBase10 (builtins.elemAt cidrSplit 1);

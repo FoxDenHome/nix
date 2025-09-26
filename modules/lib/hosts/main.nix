@@ -115,7 +115,7 @@ in
               name = host.dns.name;
               type = if (util.isIPv6 addr) then "AAAA" else "A";
               ttl = host.dns.ttl;
-              value = util.removeIpCidr addr;
+              value = util.removeIPCidr addr;
               horizon = if (util.isPrivateIP addr) then "internal" else "external";
             });
           in
