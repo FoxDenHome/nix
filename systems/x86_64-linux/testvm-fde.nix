@@ -86,20 +86,20 @@ in
     enable = true;
     tls = false;
     host = "jellyfin";
-    oAuth = {
-      enable = true;
-      clientId = "nas-bengalfox";
-      clientSecret = "something funny";
-    };
   };
   foxDen.services.samba = {
     enable = true;
     host = "samba";
   };
   foxDen.services.nasweb = {
-    enable = true;
+    enable = config.foxDen.sops.available;
     host = "samba";
     root = "/nix";
+    oAuth = {
+      enable = true;
+      clientId = "nas-bengalfox";
+      clientSecret = "something funny";
+    };
   };
   foxDen.services.deluge = {
     enable = config.foxDen.sops.available;
