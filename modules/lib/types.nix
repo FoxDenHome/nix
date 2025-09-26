@@ -50,13 +50,17 @@ in
   ipWithoutCidr = types.either ipv4WithoutCidr ipv6WithoutCidr;
 
   ipWithPort = types.addCheck types.str (ipPort: let
-    split = builtins.match "^(\[[0-9a-fA-F:]+\]|[0-9.]+):(\d+)$" ipPort;
+    split = builtins.match "^(\\[[0-9a-fA-F:]+]|[0-9.]+):([0-9]+)$" ipPort;
+
     port = nixpkgs.lib.strings.toIntBase10 (builtins.elemAt split 1);
     portValidTry = builtins.tryEval (port > 0 && port <= 65535);
     portValid = portValidTry.success && portValidTry.value;
 
-    ip = nixpkgs.lib.strings.removeSuffix "]" (nixpkgs.lib.strings.removePrefix "[" (builtins.elemAt split 0));
+    ip = (nixpkgs.lib.strings.removeSuffix "]"
+          (nixpkgs.lib.strings.removePrefix "["
+            (builtins.elemAt split 0)));
   in
+    split != null &&
     (nixpkgs.lib.lists.length split == 2) &&
     portValid &&
     ((ipv4Check ip) || (ipv6Check ip))
