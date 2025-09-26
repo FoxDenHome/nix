@@ -5,31 +5,37 @@ let
   validIpv4Segment = (s: let n = nixpkgs.lib.strings.toIntBase10 s; in n >= 0 && n <= 255);
 
   ipv4Check = (ip: let
-    segments = nixpkgs.lib.strings.splitString "." ip;
-    allValid = builtins.tryEval (nixpkgs.lib.lists.all validIpv4Segment segments);
+    cidrSplit = nixpkgs.lib.strings.splitString "/" ip;
+    segments = nixpkgs.lib.strings.splitString "." (builtins.elemAt cidrSplit 0);
+
+    segmentsValidTry = builtins.tryEval (nixpkgs.lib.lists.all validIpv4Segment segments);
+    segmentsValid = segmentsValidTry.success && segmentsValidTry.value;
+
+    cidr = nixpkgs.lib.strings.toIntBase10 (builtins.elemAt cidrSplit 1);
+    cidrValidTry = builtins.tryEval (cidr >= 0 && cidr <= 32);
+    cidrValid = nixpkgs.lib.lists.length cidrSplit < 2 || (cidrValidTry.success && cidrValidTry.value);
   in
-    allValid.success && allValid.value && (nixpkgs.lib.lists.length segments == 4));
+    segmentsValid &&
+    cidrValid &&
+    (nixpkgs.lib.lists.length segments == 4) &&
+    (nixpkgs.lib.lists.length cidrSplit <= 2));
 
   ipv6Check = (ip: let
       ipv6 = nixpkgs.lib.network.ipv6.fromString ip;
     in
     (builtins.tryEval ipv6).success);
 
-  ipv6CidrCheck = (withCidr: ip: 
+  ipv6CidrCheck = (withCidr: ip:
     (ipv6Check ip) && (withCidr == (nixpkgs.lib.strings.hasInfix "/" ip)));
 
-  ipWithCidrCheck = (ipChecker: cidrMax: ipWithCidr: let
-    segments = nixpkgs.lib.strings.splitString "/" ipWithCidr;
-    ip = builtins.elemAt segments 0;
-    cidr = nixpkgs.lib.strings.toIntBase10 (builtins.elemAt segments 1);
-  in
-    (nixpkgs.lib.lists.length segments == 2) && cidr >= 0 && cidr <= cidrMax && (ipChecker ip));
+  ipv4CidrCheck = (withCidr: ip:
+    (ipv4Check ip) && (withCidr == (nixpkgs.lib.strings.hasInfix "/" ip)));
 
-  ipv4WithoutCidr = types.addCheck types.str ipv4Check;
-  ipv4WithCidr = types.addCheck types.str (ipWithCidrCheck ipv4Check 32);
+  ipv4WithoutCidr = types.addCheck types.str (ipv4CidrCheck false);
+  ipv4WithCidr = types.addCheck types.str (ipv4CidrCheck true);
   ipv6WithoutCidr = types.addCheck types.str (ipv6CidrCheck false);
   ipv6WithCidr = types.addCheck types.str (ipv6CidrCheck true);
-  ipv4 = types.either ipv4WithoutCidr ipv4WithCidr;
+  ipv4 = types.addCheck types.str ipv4Check;
   ipv6 = types.addCheck types.str ipv6Check;
 in
 {
