@@ -2,7 +2,7 @@
 let
   sharedSopsFile = ../../secrets/shared.yaml;
 
-  mkIfAvailable = lib.mkIf config.lib.foxDen.sops.available;
+  mkIfAvailable = lib.mkIf config.foxDen.sops.available;
 in
 {
   options.foxDen.sops.available = lib.mkEnableOption "Enable sops-nix usage";
@@ -11,7 +11,6 @@ in
     {
       lib.foxDen.sops = {
         inherit mkIfAvailable;
-        available = config.foxDen.sops.available or false;
       };
     }
     (mkIfAvailable {

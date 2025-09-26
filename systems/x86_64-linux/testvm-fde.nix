@@ -102,7 +102,7 @@ in
     root = "/nix";
   };
   foxDen.services.deluge = {
-    enable = true;
+    enable = config.foxDen.sops.available;
     host = "deluge";
     vpnInterface = delugeVPNName;
   };
