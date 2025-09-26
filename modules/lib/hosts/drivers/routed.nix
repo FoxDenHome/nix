@@ -15,8 +15,8 @@ in
     }) ifcfg.addresses);
 
     mkFirstGw = (predicate: gw: let
-      addr = nixpkgs.lib.lists.findFirst predicate "" ifcfg.addresses;
-    in if addr != "" then [{ Destination = (util.addHostCidr addr); Gateway = gw; }] else []);
+      addr = nixpkgs.lib.lists.findFirst predicate null ifcfg.addresses;
+    in if addr != null then [{ Destination = (util.addHostCidr addr); Gateway = gw; }] else []);
   in
   {
     config.systemd.network.networks = {

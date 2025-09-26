@@ -180,7 +180,7 @@ in
                       host.addresses)
                 ++ [ "${ipInNsCmd} link set ${eSA serviceInterface} up" ]
                 ++ (map (route:
-                      "${ipInNsCmd} route add " + (if route.Destination then eSA route.Destination else "default") + " dev ${eSA serviceInterface}" + (if route.Gateway then " via ${eSA route.Gateway}" else ""))
+                      "${ipInNsCmd} route add " + (if route.Destination != null then eSA route.Destination else "default") + " dev ${eSA serviceInterface}" + (if route.Gateway != null then " via ${eSA route.Gateway}" else ""))
                       netnsRoutes);
 
                 ExecStop =
