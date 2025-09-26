@@ -1,24 +1,33 @@
 { lib, config, ... } :
 let
   sharedSopsFile = ../../secrets/shared.yaml;
+
+  mkIfSops = lib.mkIf config.foxDen.sops.available;
 in
 {
   options.foxDen.sops.available = lib.mkEnableOption "Enable sops-nix usage";
 
-  config = lib.mkIf config.foxDen.sops.available {
-    sops.secrets.rootPasswordHash = {
-      neededForUsers = true;
-    };
-    
-    users.mutableUsers = false;
+  config = lib.mkMerge [
+    {
+      lib.foxDen = {
+        inherit mkIfSops;
+      };
+    }
+    (mkIfSops {
+      sops.secrets.rootPasswordHash = {
+        neededForUsers = true;
+      };
 
-    users.users.root.hashedPasswordFile = lib.mkIf config.foxDen.sops.available config.sops.secrets.rootPasswordHash.path;
+      users.mutableUsers = false;
 
-    nix.extraOptions = lib.mkIf config.foxDen.sops.available ''
-      !include ${config.sops.secrets.nixConfig.path}
-    '';
-    sops.secrets.nixConfig = lib.mkIf config.foxDen.sops.available {
-      sopsFile = sharedSopsFile;
-    };
-  };
+      users.users.root.hashedPasswordFile = config.sops.secrets.rootPasswordHash.path;
+
+      nix.extraOptions = ''
+        !include ${config.sops.secrets.nixConfig.path}
+      '';
+      sops.secrets.nixConfig = {
+        sopsFile = sharedSopsFile;
+      };
+    })
+  ];
 }
