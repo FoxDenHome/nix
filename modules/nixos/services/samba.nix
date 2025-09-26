@@ -8,7 +8,6 @@ let
   smbPaths = [
     "/var/log/samba"
     "/var/lib/samba"
-    "/var/lib/samba/private"
     "/var/cache/samba"
     "/var/lock/samba"
   ];
