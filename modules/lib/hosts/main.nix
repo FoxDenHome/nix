@@ -192,6 +192,9 @@ in
 
                 ExecStop =
                   (hostDriverConfig.execStop driverRunParams)
+                  ++ (map (iface:
+                        "${ipCmd} link set ${eSA iface} netns 1")
+                        host.interfaces)
                   ++ [
                     "${ipCmd} netns del ${eSA namespace}"
                   ];
