@@ -104,7 +104,7 @@ in
   foxDen.services.deluge = {
     enable = true;
     host = "deluge";
-    vpnInterface = delugeVPNName
+    vpnInterface = delugeVPNName;
   };
 
   sops.secrets.delugeWireguardKey = {};
