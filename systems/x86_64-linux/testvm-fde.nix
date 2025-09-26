@@ -117,7 +117,7 @@ in
     peers = [
       {
         allowedIPs = [ "0.0.0.0/0" "::/0" ];
-        endpoint = "vpn.example.com:51820";
+        endpoint = "10.99.99.99:51820";
         persistentKeepalive = 25;
         publicKey = "BJCvDOX+Mrf1oNtvA84RZB2i1gZ6YA01GpP2BCQDdiY=";
       }
