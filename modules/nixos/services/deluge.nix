@@ -45,7 +45,9 @@ in
       };
 
       systemd.services.delugeweb.serviceConfig = {
-
+        BindPaths = [
+          config.services.deluge.dataDir
+        ];
       };
 
       environment.persistence."/nix/persist/deluge" = {
