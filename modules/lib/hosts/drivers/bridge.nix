@@ -8,6 +8,7 @@ in
   driverOptsType = with nixpkgs.lib.types; submodule {
     vlan = nixpkgs.lib.mkOption {
       type = ints.unsigned;
+      default = 0;
     };
     bridge = nixpkgs.lib.mkOption {
       type = str;
