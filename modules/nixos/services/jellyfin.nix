@@ -26,16 +26,16 @@ in
       services.jellyfin.enable = true;
       services.jellyfin.group = "share";
 
+      systemd.services.jellyfin.confinement.packages = [
+        pkgs.fontconfig
+      ];
+
       systemd.services.jellyfin.serviceConfig = {
         BindPaths = [
           config.services.jellyfin.cacheDir
           config.services.jellyfin.configDir
           config.services.jellyfin.dataDir
           config.services.jellyfin.logDir
-        ];
-
-        TemporaryFileSystem = [
-          "/var/cache/fontconfig"
         ];
       };
 
