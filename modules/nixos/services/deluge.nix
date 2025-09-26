@@ -21,7 +21,7 @@ in
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
-      name = "deluge";
+      name = "deluged";
       inherit svcConfig pkgs config;
     }).config
     (services.make {
