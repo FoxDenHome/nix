@@ -115,7 +115,7 @@ in
     allowedIPsAsRoutes = false;
     interfaceNamespace = delugeVPNHost.namespace;
   };
-  systemd.services."wireguard-${delugeVPNName}.service".unitConfig = {
+  systemd.services."wireguard-${delugeVPNName}".unitConfig = {
     Requires = [ delugeVPNHost.unit ];
     BindsTo = [ delugeVPNHost.unit ];
     After = [ delugeVPNHost.unit ];
