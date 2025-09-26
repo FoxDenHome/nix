@@ -37,6 +37,10 @@ in
           config.services.jellyfin.dataDir
           config.services.jellyfin.logDir
         ];
+        BindReadOnlyPaths = [
+          "/etc/fonts"
+          "/etc/static/fonts"
+        ];
       };
 
       environment.persistence."/nix/persist/jellyfin" = {
