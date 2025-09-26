@@ -20,8 +20,9 @@
 			- [x] nasweb
 			- [x] deluge (TO DO: declarative config + mounts)
 			- [ ] nzbget
-		- [ ] kiwix
 		- [ ] restic
+		- [ ] rest-server
+		- [ ] kiwix
 		- [ ] mirror
 		- [ ] gitbackup
 		- [ ] e621dumper
@@ -32,6 +33,7 @@
 		- [ ] hashtopolis-agent
 		- [ ] owncast
 	- [ ] islandfox
+		- [ ] restic
 		- [ ] auth
 		- [ ] scrypted
 		- [ ] monitoring
@@ -46,12 +48,13 @@
 		- [ ] affine
 	- [ ] icefox
 		- [x] nas (see bengalfox)
+		- [ ] restic
+		- [ ] rest-server
 		- [ ] gitbackup
 		- [ ] syncthing
 		- [ ] xmpp
 		- [ ] mirror
 		- [ ] snirouter
-		- [ ] restic
 
 ## Goals (Post-MVP)
 
