@@ -36,10 +36,12 @@ in
     {
       services.deluge.enable = true;
       services.deluge.web.enable = true;
+      services.deluge.group = "share";
 
       systemd.services.deluged.serviceConfig = {
-        StateDirectory = "deluge";
-        RestrictNetworkInterfaces = [ "lo" svcConfig.vpnInterface ];
+        BindPaths = [
+          config.services.deluge.dataDir
+        ];
       };
 
       systemd.services.delugeweb.serviceConfig = {
@@ -49,6 +51,7 @@ in
       environment.persistence."/nix/persist/deluge" = {
         hideMounts = true;
         directories = [
+          (mkDir config.services.deluge.dataDir)
         ];
       };
     }
