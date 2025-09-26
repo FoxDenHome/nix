@@ -26,7 +26,7 @@ let
     (nixpkgs.lib.lists.length segments == 2) && cidr >= 0 && cidr <= cidrMax && (ipChecker ip));
 
   ipv4WithoutCidr = types.addCheck types.str ipv4Check;
-  ipv4WithCidr = ipWithCidrCheck ipv4Check 32;
+  ipv4WithCidr = types.addCheck types.str (ipWithCidrCheck ipv4Check 32);
   ipv6WithoutCidr = types.addCheck types.str (ipv6CidrCheck false);
   ipv6WithCidr = types.addCheck types.str (ipv6CidrCheck true);
   ipv4 = types.either ipv4WithoutCidr ipv4WithCidr;
