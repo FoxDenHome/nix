@@ -33,9 +33,8 @@ in
           config.services.jellyfin.dataDir
           config.services.jellyfin.logDir
         ];
-        BindReadOnlyPaths = [
-          "/etc/fonts"
-          "/etc/static/fonts"
+        BindReadOnlyPaths = foxDenLib.services.mkEtcPaths [
+          "fonts"
         ];
       };
 

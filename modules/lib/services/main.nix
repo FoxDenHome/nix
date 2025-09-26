@@ -1,5 +1,12 @@
 { nixpkgs, foxDenLib, ... }:
 let
+  mkEtcPaths = (paths: nixpkgs.lib.flatten (
+    map (path: [
+      ("-/etc/" + path)
+      ("-/etc/static/" + path)
+    ]) paths
+  ));
+
   mkNamed = (svc: { svcConfig, config, ... }:
   let
     host = foxDenLib.hosts.getByName config svcConfig.host;
@@ -28,14 +35,13 @@ let
             "/run/systemd/notify"
             "/nix/store"
             "${host.resolvConf}:/etc/resolv.conf"
-            "-/etc/hosts"
-            "-/etc/localtime"
-            "-/etc/passwd"
-            "-/etc/group"
-            "-/etc/pki/tls/certs"
-            "-/etc/ssl/certs"
-            "-/etc/static/pki/tls/certs"
-            "-/etc/static/ssl/certs"
+          ] ++ mkEtcPaths [
+            "hosts"
+            "localtime"
+            "passwd"
+            "group"
+            "pki/tls/certs"
+            "static/pki/tls/certs"
           ];
         };
       };
@@ -49,6 +55,8 @@ in
       type = nixpkgs.lib.types.str;
     };
   };
+
+  mkEtcPaths = mkEtcPaths;
 
   make = (inputs@{ svcConfig, ... }: mkNamed (inputs.name or svcConfig.host) inputs);
   mkNamed = mkNamed;
