@@ -99,7 +99,7 @@ in
     root = "/nix";
   };
 
-  networking.services.wireguard.deluge = {
+  networking.wireguard.interfaces.deluge = {
     mtu = 1280;
     ips = [ "10.1.2.3/32" ];
     allowedIPsAsRoutes = false;
