@@ -18,23 +18,16 @@
       "/usr/bin/fish"
       "/usr/bin/zsh"
       "/usr/bin/bash"
-      "/bin/fish"
-      "/bin/zsh"
-      "/bin/bash"
     ];
     systemd.tmpfiles.rules = [
       "L /usr/bin/bash - - - - ${pkgs.bash}/bin/bash"
       "L /usr/bin/fish - - - - ${pkgs.fish}/bin/fish"
       "L /usr/bin/zsh - - - - ${pkgs.zsh}/bin/zsh"
-      "L /bin/bash - - - - ${pkgs.bash}/bin/bash"
-      "L /bin/fish - - - - ${pkgs.fish}/bin/fish"
-      "L /bin/zsh - - - - ${pkgs.zsh}/bin/zsh"
     ];
 
     systemd.services.kanidm-unixd = {
       serviceConfig = {
         BindReadOnlyPaths = [
-          "-/bin"
           "-/usr/bin"
         ] ++ (foxDenLib.services.mkEtcPaths [
           "shells"
