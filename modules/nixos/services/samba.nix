@@ -107,6 +107,8 @@ in
           ] ++ foxDenLib.services.mkEtcPaths [
             "samba"
             "nsswitch.conf"
+          ] ++ [
+            "/var/lib/samba/private"
           ];
         };
       }));
@@ -117,7 +119,9 @@ in
 
       environment.persistence."/nix/persist/samba" = {
         hideMounts = true;
-        directories = smbPaths;
+        directories = smbPaths ++ [
+          { directory = "/var/lib/samba/private"; mode = "0700"; }
+        ];
       };
     }
   ]));
