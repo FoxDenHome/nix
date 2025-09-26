@@ -2,10 +2,11 @@
 let
   types = nixpkgs.lib.types;
 
+  validIpv4Segment = (s: let n = nixpkgs.lib.strings.toIntBase10 s; in n >= 0 && n <= 255);
+
   ipv4Check = (ip: let
     segments = nixpkgs.lib.strings.splitString "." ip;
-    validSegment = (s: let n = nixpkgs.lib.strings.toIntBase10 s; in n >= 0 && n <= 255);
-    allValid = builtins.tryEval (nixpkgs.lib.lists.all validSegment segments);
+    allValid = builtins.tryEval (nixpkgs.lib.lists.all validIpv4Segment segments);
   in
     allValid.success && allValid.value && (nixpkgs.lib.lists.length segments == 4));
 
