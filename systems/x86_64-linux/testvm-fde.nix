@@ -99,6 +99,12 @@ in
     root = "/nix";
   };
 
+  networking.services.wireguard.deluge = {
+    mtu = 1280;
+    ips = [ "10.1.2.3/32" ];
+    allowedIPsAsRoutes = false;
+  };
+
   foxDen.hosts.hosts = {
     jellyfin = {
       dns = {

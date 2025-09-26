@@ -24,6 +24,14 @@ let
       addresses = nixpkgs.lib.mkOption {
         type = listOf foxDenLib.types.ip;
       };
+      interfaces = nixpkgs.lib.mkOption {
+        type = listOf str;
+        default = [];
+      };
+      routes = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+        type = nullOr (listOf routeType);
+        default = null;
+      };
     };
   };
 
@@ -60,8 +68,6 @@ in
 
     hostDriverConfig = hostDriver.build
       { inherit ifcfg hosts pkgs config; driverOpts = config.foxDen.hosts.driverOpts; };
-
-    netnsRoutes = (hostDriverConfig.routes or ifcfg.routes) ++ config.foxDen.hosts.routes;
   in
   {
     options.foxDen.hosts = {
@@ -88,11 +94,6 @@ in
         network = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
           type = str;
         };
-      };
-
-      routes = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-        type = listOf routeType;
-        default = [];
       };
 
       driver = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
@@ -153,6 +154,8 @@ in
             mkServiceInterface = hostDriverConfig.serviceInterface or (host: "host-${host.suffix}");
             serviceInterface = mkServiceInterface host;
             driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface host; };
+
+            netnsRoutes = (hostDriverConfig.routes or ifcfg.routes) ++ (if host.routes != null then host.routes else ifcfg.routes);
           in
           {
             name = (nixpkgs.lib.strings.removeSuffix ".service" host.unit);
@@ -172,6 +175,9 @@ in
                   "${ipInNsCmd} addr add ::1/128 dev lo noprefixroute"
                   "${ipInNsCmd} link set lo up"
                 ]
+                ++ (map (iface:
+                      "${ipCmd} link set ${eSA iface} netns ${eSA namespace}")
+                      host.interfaces)
                 ++ (hostDriverConfig.execStart driverRunParams)
                 ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA namespace}" ]
                 ++ (map (addr:
