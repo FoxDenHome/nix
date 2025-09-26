@@ -18,7 +18,8 @@
 			- [x] samba
 			- [x] jellyfin
 			- [x] nasweb
-			- [x] deluge
+			- [x] deluge (TO DO: declarative config + mounts)
+			- [ ] nzbget
 		- [ ] kiwix
 		- [ ] restic
 		- [ ] mirror

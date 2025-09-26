@@ -124,7 +124,7 @@ in
     let
       name = inputs.name;
 
-      caddyStorageRoot = "/var/lib/foxden/caddy/${name}";
+      caddyStorageRoot = "/var/lib/foxden/${name}";
 
       host = foxDenLib.hosts.getByName config svcConfig.host;
       hostPort = if svcConfig.hostPort != null then svcConfig.hostPort else "${host.dns.name}.${host.dns.zone}";
