@@ -101,14 +101,13 @@ in
           BindPaths = smbPaths ++ svcConfig.sharePaths ++ [
             "/run/samba"
             "/var/run/samba"
+            "/var/lib/samba/private"
           ];
           BindReadOnlyPaths = [
             "-/var/run/nscd"
           ] ++ foxDenLib.services.mkEtcPaths [
             "samba"
             "nsswitch.conf"
-          ] ++ [
-            "/var/lib/samba/private"
           ];
         };
       }));
