@@ -25,16 +25,13 @@ let
     in
     (builtins.tryEval ipv6).success);
 
-  ipv6CidrCheck = (withCidr: ip:
-    (ipv6Check ip) && (withCidr == (nixpkgs.lib.strings.hasInfix "/" ip)));
+  ipCidrCheck = (withCidr: check: ip:
+    (check ip) && (withCidr == (nixpkgs.lib.strings.hasInfix "/" ip)));
 
-  ipv4CidrCheck = (withCidr: ip:
-    (ipv4Check ip) && (withCidr == (nixpkgs.lib.strings.hasInfix "/" ip)));
-
-  ipv4WithoutCidr = types.addCheck types.str (ipv4CidrCheck false);
-  ipv4WithCidr = types.addCheck types.str (ipv4CidrCheck true);
-  ipv6WithoutCidr = types.addCheck types.str (ipv6CidrCheck false);
-  ipv6WithCidr = types.addCheck types.str (ipv6CidrCheck true);
+  ipv4WithoutCidr = types.addCheck types.str (ipCidrCheck false ipv4Check);
+  ipv4WithCidr = types.addCheck types.str (ipCidrCheck true ipv4Check);
+  ipv6WithoutCidr = types.addCheck types.str (ipCidrCheck false ipv6Check);
+  ipv6WithCidr = types.addCheck types.str (ipCidrCheck true ipv6Check);
   ipv4 = types.addCheck types.str ipv4Check;
   ipv6 = types.addCheck types.str ipv6Check;
 in
