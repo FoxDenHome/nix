@@ -20,16 +20,18 @@ in
     config.systemd.network.networks =
       nixpkgs.lib.attrsets.listToAttrs (
         nixpkgs.lib.lists.flatten
-          (map ((iface: [
+          (map ((iface: let
+            vlan = iface.driverOpts.vlan;
+          in [
             {
               name = "60-vebr-${iface.host.name}-${iface.name}";
               value = {
                 name = mkIfaceName iface;
                 bridge = [iface.driverOpts.bridge];
-                bridgeVLANs = if (iface.vlan > 0) then [{
-                  PVID = iface.vlan;
-                  EgressUntagged = iface.vlan;
-                  VLAN = iface.vlan;
+                bridgeVLANs = if (vlan > 0) then [{
+                  PVID = vlan;
+                  EgressUntagged = vlan;
+                  VLAN = vlan;
                 }] else [];
               };
             }
