@@ -5,9 +5,9 @@ let
   ipv4Check = (ip: let
     segments = nixpkgs.lib.strings.splitString "." ip;
     validSegment = (s: let n = nixpkgs.lib.strings.toIntBase10 s; in n >= 0 && n <= 255);
-    allValid = nixpkgs.lib.lists.all validSegment segments;
+    allValid = builtins.tryEval nixpkgs.lib.lists.all validSegment segments;
   in
-    allValid && (nixpkgs.lib.lists.length segments == 4));
+    allValid.success && allValid.value && (nixpkgs.lib.lists.length segments == 4));
 
   ipv6Check = (ip: let
       ipv6 = nixpkgs.lib.network.ipv6.fromString ip;
