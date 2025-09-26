@@ -155,7 +155,7 @@ in
             serviceInterface = mkServiceInterface host;
             driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface host; };
 
-            netnsRoutes = (if host.routes != null then host.routes else ifcfg.routes) ++ (hostDriverConfig.routes or []);
+            netnsRoutes = (hostDriverConfig.routes or []) ++ (if host.routes != null then host.routes else ifcfg.routes);
           in
           {
             name = (nixpkgs.lib.strings.removeSuffix ".service" host.unit);
