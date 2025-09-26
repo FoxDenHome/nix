@@ -1,6 +1,6 @@
 # FoxDen Homelab Nix configuration
 
-## Goals (MVP)
+## Goals
 
 - [x] Set up basic NixOS machine template
 	- [x] Kernel with module signing, ZFS and signed UKI
@@ -34,6 +34,7 @@
 			- [ ] hashtopolis
 			- [ ] hashtopolis-agent
 			- [ ] owncast
+			- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
 	- [ ] islandfox
 		- [ ] Pre migration
 			- [ ] restic
@@ -61,10 +62,6 @@
 			- [ ] xmpp
 			- [ ] mirror
 			- [ ] snirouter
-
-## Goals (Post-MVP)
-
-- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
 
 ## Notes
 
