@@ -37,7 +37,7 @@ in
       };
     } // (nixpkgs.lib.attrsets.listToAttrs
         (map ((iface: {
-            name = "60-${iface.host.name}-${iface.name}";
+            name = "60-vert-${iface.host.name}-${iface.name}";
             value = {
               name = mkIfaceName iface;
               networkConfig = {

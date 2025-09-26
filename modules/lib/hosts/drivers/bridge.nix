@@ -21,15 +21,15 @@ in
         nixpkgs.lib.lists.flatten
           (map ((iface: [
             {
-              name = "60-host-${iface.name}";
+              name = "60-vebr-${iface.host.name}-${iface.name}";
               value = {
                 name = mkIfaceName iface.suffix;
                 bridge = [iface.driverOpts.interface];
-                bridgeVLANs = [{
+                bridgeVLANs = if (iface.vlan > 0) then [{
                   PVID = iface.vlan;
                   EgressUntagged = iface.vlan;
                   VLAN = iface.vlan;
-                }];
+                }] else [];
               };
             }
           ])) interfaces));
