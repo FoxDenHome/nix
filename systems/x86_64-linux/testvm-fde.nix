@@ -61,7 +61,7 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  foxDen.hosts.driver = "bridge";
+  #foxDen.hosts.driver = "bridge";
 
   systemd.network.networks."${ifcfg.network}" =
     {
@@ -124,47 +124,56 @@ in
 
   foxDen.hosts.hosts = {
     jellyfin = {
-      dns = {
-        name = "jellyfin";
-        zone = "local.foxden.network";
+      interfaces.ext = {
+        driver = "bridge";
+        driverOpts.bridge = "br-default";
+        dns = {
+          name = "jellyfin";
+          zone = "local.foxden.network";
+        };
+        addresses = [
+          "192.168.122.201/24"
+          "fd00:dead:beef:122::201/64"
+        ];
       };
-      vlan = 1;
-      addresses = [
-        "192.168.122.201/24"
-        "fd00:dead:beef:122::201/64"
-      ];
     };
     samba = {
-      dns = {
-        name = "samba";
-        zone = "local.foxden.network";
+      interfaces.ext = {
+        driver = "bridge";
+        driverOpts.bridge = "br-default";
+        dns = {
+          name = "samba";
+          zone = "local.foxden.network";
+        };
+        addresses = [
+          "192.168.122.202/24"
+          "fd00:dead:beef:122::202/64"
+        ];
       };
-      vlan = 1;
-      addresses = [
-        "192.168.122.202/24"
-        "fd00:dead:beef:122::202/64"
-      ];
     };
     deluge = {
-      dns = {
-        name = "deluge";
-        zone = "local.foxden.network";
+      interfaces.ext = {
+        driver = "bridge";
+        driverOpts.bridge = "br-default";
+        dns = {
+          name = "deluge";
+          zone = "local.foxden.network";
+        };
+        addresses = [
+          "192.168.122.203/24"
+          "fd00:dead:beef:122::203/64"
+        ];
+        routes = [
+          {
+            Destination = "10.0.0.0/8";
+            Gateway = "192.168.122.1";
+          }
+          {
+            Destination = "192.168.0.0/16";
+            Gateway = "192.168.122.1";
+          }
+        ];
       };
-      vlan = 1;
-      addresses = [
-        "192.168.122.203/24"
-        "fd00:dead:beef:122::203/64"
-      ];
-      routes = [
-        {
-          Destination = "10.0.0.0/8";
-          Gateway = "192.168.122.1";
-        }
-        {
-          Destination = "192.168.0.0/16";
-          Gateway = "192.168.122.1";
-        }
-      ];
     };
   };
 

@@ -2,51 +2,66 @@
 let
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
-  mkIfaceName = (host: "vethbr${host.suffix}");
+  mkIfaceName = (iface: "vebr${iface.suffix}");
 in
 {
-  driverOptsType = with nixpkgs.lib.types; submodule { };
+  driverOptsType = with nixpkgs.lib.types; submodule {
+    vlan = nixpkgs.lib.mkOption {
+      type = ints.unsigned;
+    };
+    bridge = nixpkgs.lib.mkOption {
+      type = str;
+    };
+  };
 
-  build = { ifcfg, config, hosts, ... } :
+  build = { interfaces, ... } :
   {
     config.systemd.network.networks =
       nixpkgs.lib.attrsets.listToAttrs (
         nixpkgs.lib.lists.flatten
-          (map ((host: [
+          (map ((iface: [
             {
-              name = "60-host-${host.name}";
+              name = "60-host-${iface.name}";
               value = {
-                name = mkIfaceName host;
-                bridge = [ifcfg.interface];
+                name = mkIfaceName iface.suffix;
+                bridge = [iface.driverOpts.interface];
                 bridgeVLANs = [{
-                  PVID = host.vlan;
-                  EgressUntagged = host.vlan;
-                  VLAN = host.vlan;
+                  PVID = iface.vlan;
+                  EgressUntagged = iface.vlan;
+                  VLAN = iface.vlan;
                 }];
               };
             }
-          ])) hosts));
+          ])) interfaces));
 
-    config.systemd.network.netdevs.${ifcfg.interface} = {
-      netdevConfig = {
-        Name = ifcfg.interface;
-        Kind = "bridge";
-      };
+    config.systemd.network.netdevs =
+      nixpkgs.lib.attrsets.listToAttrs (
+        nixpkgs.lib.lists.flatten
+          (map ((iface: [
+            {
+              name = iface.driverOpts.bridge;
+              value = {
+                netdevConfig = {
+                  Name = iface.driverOpts.bridge;
+                  Kind = "bridge";
+                };
 
-      bridgeConfig = {
-        VLANFiltering = true;
-      };
-    };
-
-    execStart = ({ ipCmd, host, serviceInterface, ... }: let
-      iface = mkIfaceName host;
-    in [
-      "-${ipCmd} link del ${eSA iface}"
-      "${ipCmd} link add ${eSA iface} type veth peer name ${eSA serviceInterface}"
-    ]);
-
-    execStop = ({ ipCmd, host, ... }: [
-      "${ipCmd} link del ${eSA (mkIfaceName host)}"
-    ]);
+                bridgeConfig = {
+                  VLANFiltering = true;
+                };
+              };
+            }
+          ])) interfaces));
   };
+
+  execStart = ({ ipCmd, interface, serviceInterface, ... }: let
+    iface = mkIfaceName interface;
+  in [
+    "-${ipCmd} link del ${eSA iface}"
+    "${ipCmd} link add ${eSA iface} type veth peer name ${eSA serviceInterface}"
+  ]);
+
+  execStop = ({ ipCmd, interface, ... }: [
+    "${ipCmd} link del ${eSA (mkIfaceName interface)}"
+  ]);
 }

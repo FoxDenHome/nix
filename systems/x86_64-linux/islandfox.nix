@@ -8,7 +8,7 @@
 
   system.stateVersion = "25.05";
 
-  foxDen.hosts.driver = "bridge";
+  #foxDen.hosts.driver = "bridge";
 
   # TODO: Most of this file
 }

@@ -3,11 +3,19 @@ let
   util = foxDenLib.util;
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
-  hostType = with nixpkgs.lib.types; submodule {
+  interfaceType = with nixpkgs.lib.types; submodule {
     options = {
+      driver = nixpkgs.lib.mkOption {
+        type = enum (nixpkgs.lib.attrsets.attrNames foxDenLib.hosts.drivers);
+      };
+      driverOpts = nixpkgs.lib.mkOption {
+        type = attrsOf anything; # TODO: Host driver schema
+        default = {};
+      };
       dns = {
         name = nixpkgs.lib.mkOption {
           type = str;
+          default = "";
         };
         zone = nixpkgs.lib.mkOption {
           type = str;
@@ -18,13 +26,10 @@ let
           default = 3600;
         };
       };
-      vlan = nixpkgs.lib.mkOption {
-        type = ints.unsigned;
-      };
       addresses = nixpkgs.lib.mkOption {
         type = listOf foxDenLib.types.ip;
       };
-      routes = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
+      routes = nixpkgs.lib.mkOption {
         type = nullOr (listOf routeType);
         default = null;
       };
@@ -43,6 +48,23 @@ let
       };
     };
   };
+
+  hostType = with nixpkgs.lib.types; submodule {
+    options = {
+      interfaces = nixpkgs.lib.mkOption {
+        type = attrsOf interfaceType;
+      };
+      cloneRoutes = nixpkgs.lib.mkOption {
+        type = bool;
+        default = true;
+        description = "Whether to clone the main interface routes into this host's namespace";
+      };
+    };
+  };
+
+  getHostAddresses = (host: if host.interfaces != null then
+    nixpkgs.lib.flatten (map (iface: iface.addresses) host.interfaces)
+  else []);
 
   getByName = (config: name: let
     namespace = "host-${name}";
@@ -63,10 +85,8 @@ in
     hosts = map (getByName config) (nixpkgs.lib.attrsets.attrNames config.foxDen.hosts.hosts);
     ifcfg = config.foxDen.hosts.ifcfg;
 
-    hostDriver = foxDenLib.hosts.drivers.${config.foxDen.hosts.driver};
-
-    hostDriverConfig = hostDriver.build
-      { inherit ifcfg hosts pkgs config; driverOpts = config.foxDen.hosts.driverOpts; };
+    mapIfaces = (host: map ({ name, value }: value // { inherit host name; suffix = util.mkHash8 (host.name + "|" + name); }) (nixpkgs.lib.attrsets.attrsToList host.interfaces));
+    interfaces = nixpkgs.lib.flatten (map mapIfaces hosts);
   in
   {
     options.foxDen.hosts = {
@@ -94,15 +114,6 @@ in
           type = str;
         };
       };
-
-      driver = with nixpkgs.lib.types; nixpkgs.lib.mkOption {
-        type = enum (nixpkgs.lib.attrsets.attrNames foxDenLib.hosts.drivers);
-      };
-
-      driverOpts = nixpkgs.lib.mkOption {
-        type = hostDriver.driverOptsType;
-        default = {};
-      };
     };
 
     config = {
@@ -119,7 +130,7 @@ in
               horizon = if (util.isPrivateIP addr) then "internal" else "external";
             });
           in
-          (map mkRecord host.addresses))
+          (map mkRecord (getHostAddresses host)))
         hosts);
 
       environment.etc."foxden/hosts/resolv.conf".text = ''
@@ -127,9 +138,12 @@ in
         ${nixpkgs.lib.concatMapStrings (ns: "nameserver ${ns}\n") config.foxDen.hosts.ifcfg.dns}
       '';
 
-      systemd = nixpkgs.lib.mkMerge [
-        hostDriverConfig.config.systemd
-        {
+      systemd = nixpkgs.lib.mkMerge (
+        (map ({ name, value } : (value.build {
+          interfaces = (nixpkgs.lib.filter (iface: iface.driver == name) interfaces);
+          inherit ifcfg;
+        }).config.systemd) (nixpkgs.lib.attrsets.attrsToList foxDenLib.hosts.drivers))
+        ++ [{
           # Configure host/primary network/bridge
           network.networks."${config.foxDen.hosts.ifcfg.network}" = {
             name = ifcfg.interface;
@@ -148,11 +162,22 @@ in
             ipCmd = eSA "${pkgs.iproute2}/bin/ip";
             ipInNsCmd = "${ipCmd} netns exec ${eSA host.namespace} ${ipCmd}";
 
-            mkServiceInterface = hostDriverConfig.serviceInterface or (host: "host-${host.suffix}");
-            serviceInterface = mkServiceInterface host;
-            driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface host; };
+            renderRoute = (dev: route: "${ipInNsCmd} route add " + (if route.Destination != null then eSA route.Destination else "default") + (if route.Gateway != null then " via ${eSA route.Gateway}" else " dev ${eSA dev}"));
 
-            netnsRoutes = (hostDriverConfig.routes or []) ++ (if host.routes != null then host.routes else ifcfg.routes);
+            mkInterfaceStartConfig = (interface: let
+              ifaceDriver = foxDenLib.hosts.drivers.${interface.driver};
+              serviceInterface = (ifaceDriver.serviceInterface or (interface: "host${interface.suffix}")) interface;
+              ifaceRoutes = ((ifaceDriver.routes or (interface: [])) interface) ++ (if interface.routes != null then interface.routes else []);
+              driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface interface; };
+            in
+              (ifaceDriver.execStart driverRunParams)
+                ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA host.namespace}" ]
+                ++ (map (addr:
+                      "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
+                      interface.addresses)
+                ++ [ "${ipInNsCmd} link set ${eSA serviceInterface} up" ]
+                ++ (map (renderRoute serviceInterface) ifaceRoutes)
+            );
           in
           {
             name = (nixpkgs.lib.strings.removeSuffix ".service" host.unit);
@@ -172,26 +197,17 @@ in
                   "${ipInNsCmd} addr add ::1/128 dev lo noprefixroute"
                   "${ipInNsCmd} link set lo up"
                 ]
-                ++ (hostDriverConfig.execStart driverRunParams)
-                ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA host.namespace}" ]
-                ++ (map (addr:
-                      "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
-                      host.addresses)
-                ++ [ "${ipInNsCmd} link set ${eSA serviceInterface} up" ]
-                ++ (map (route:
-                      "${ipInNsCmd} route add " + (if route.Destination != null then eSA route.Destination else "default") + " dev ${eSA serviceInterface}" + (if route.Gateway != null then " via ${eSA route.Gateway}" else ""))
-                      netnsRoutes);
+                ++ (nixpkgs.lib.flatten (map mkInterfaceStartConfig (nixpkgs.lib.filter (iface: iface.host.name == host.name) interfaces)))
+                ++ (map (renderRoute "lo") (if host.cloneRoutes then ifcfg.routes else []));
 
-                ExecStop =
-                  (hostDriverConfig.execStop driverRunParams)
-                  ++ [
-                    "${ipCmd} netns del ${eSA host.namespace}"
-                  ];
+                ExecStop = [ # TODO: Re-implement interface shutdown
+                  "${ipCmd} netns del ${eSA host.namespace}"
+                ];
               };
             };
           }) hosts));
         }
-      ];
+      ]);
     };
   });
 }

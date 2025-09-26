@@ -43,7 +43,7 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  foxDen.hosts.driver = "bridge";
+  #foxDen.hosts.driver = "bridge";
 
   systemd.network.networks."${ifcfg.network}" =
     {

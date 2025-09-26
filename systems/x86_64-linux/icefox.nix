@@ -8,7 +8,7 @@
 
   system.stateVersion = "25.05";
 
-  foxDen.hosts.driver = "routed";
+  #foxDen.hosts.driver = "routed";
 
   # TODO: Most of this file
 }

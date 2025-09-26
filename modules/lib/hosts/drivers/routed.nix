@@ -3,21 +3,24 @@ let
   util = foxDenLib.util;
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
-  mkIfaceName = (host: "vethrt${host.suffix}");
+  mkIfaceName = (interface: "vert${interface.suffix}");
+
+  routeHostAddrs = (ifcfg: (map (addr: {
+    Destination = (util.addHostCidr addr);
+  }) ifcfg.addresses));
+
+  mkFirstGw = (ifcfg: predicate: gw: let
+    addr = nixpkgs.lib.lists.findFirst predicate null ifcfg.addresses;
+  in if addr != null then [{ Destination = (util.addHostCidr addr); Gateway = gw; }] else []);
 in
 {
-  driverOptsType = with nixpkgs.lib.types; submodule { };
+  driverOptsType = with nixpkgs.lib.types; submodule {
+    network = nixpkgs.lib.mkOption {
+      type = str;
+    };
+  };
 
-  build = { ifcfg, config, hosts, ... } :
-  let
-    routeHostAddrs = (map (addr: {
-      Destination = (util.addHostCidr addr);
-    }) ifcfg.addresses);
-
-    mkFirstGw = (predicate: gw: let
-      addr = nixpkgs.lib.lists.findFirst predicate null ifcfg.addresses;
-    in if addr != null then [{ Destination = (util.addHostCidr addr); Gateway = gw; }] else []);
-  in
+  build = { ifcfg, interfaces, ... } :
   {
     config.systemd.network.networks = {
       "${ifcfg.network}" = {
@@ -29,14 +32,14 @@ in
 
           IPv6ProxyNDPAddress = (nixpkgs.lib.filter util.isIPv6
             (nixpkgs.lib.flatten
-              (map (host: host.addresses) hosts)));
+              (map (iface: iface.addresses) interfaces)));
         };
       };
     } // (nixpkgs.lib.attrsets.listToAttrs
-        (map ((host: {
-            name = "60-host-${host.name}";
+        (map ((iface: {
+            name = "60-${iface.host.name}-${iface.name}";
             value = {
-              name = mkIfaceName host;
+              name = mkIfaceName iface;
               networkConfig = {
                 DHCP = "no";
                 IPv6AcceptRA = "no";
@@ -46,24 +49,26 @@ in
               };
               routes = map (addr: {
                 Destination = addr;
-              }) host.addresses;
+              }) iface.addresses;
             };
-          })) hosts));
-
-    execStart = ({ ipCmd, host, serviceInterface, ... }: let
-      hostIface = mkIfaceName host;
-    in [
-      "-${ipCmd} link del ${eSA hostIface}"
-      "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA serviceInterface}"
-    ]);
-
-    execStop = ({ ipCmd, host, ... }: [
-      "${ipCmd} link del ${eSA (mkIfaceName host)}"
-    ]);
-
-    routes = routeHostAddrs ++ (nixpkgs.lib.flatten [
-      (mkFirstGw util.isIPv4 "0.0.0.0/0")
-      (mkFirstGw util.isIPv6 "::/0")
-    ]);
+          })) interfaces));
   };
+
+  execStart = ({ ipCmd, interface, serviceInterface, ... }: let
+    hostIface = mkIfaceName interface;
+  in [
+    "-${ipCmd} link del ${eSA hostIface}"
+    "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA serviceInterface}"
+  ]);
+
+  execStop = ({ ipCmd, interface, ... }: [
+    "${ipCmd} link del ${eSA (mkIfaceName interface)}"
+  ]);
+
+  routes = ({ config, ... }: let
+    ifcfg = config.foxDen.hosts.ifcfg;
+  in (routeHostAddrs ifcfg) ++ (nixpkgs.lib.flatten [
+    (mkFirstGw ifcfg util.isIPv4 "0.0.0.0/0")
+    (mkFirstGw ifcfg util.isIPv6 "::/0")
+  ]));
 }
