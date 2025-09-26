@@ -42,5 +42,5 @@ in
 
   ip = types.either ipv4 ipv6;
   ipWithCidr = types.either ipv4WithCidr ipv6WithCidr;
-  ipWithoutCidr = types.either ipv4WithoutCidr types.ipv6WithoutCidr;
+  ipWithoutCidr = types.either ipv4WithoutCidr ipv6WithoutCidr;
 }
