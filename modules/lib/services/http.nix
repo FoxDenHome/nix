@@ -171,6 +171,9 @@ in
               }
 
               ${url} {
+                # Custom config can be injected here
+                ${inputs.extraConfig or ""}
+                # Auto generated config below
                 ${mkCaddyHandler target svcConfig}
               }
             '';
