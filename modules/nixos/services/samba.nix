@@ -120,7 +120,7 @@ in
       environment.persistence."/nix/persist/samba" = {
         hideMounts = true;
         directories = smbPaths ++ [
-          { directory = "/var/lib/samba/private"; mode = "0700"; }
+          { directory = "/var/lib/samba/private"; user = "root"; group = "root"; mode = "u=rwx,g=,o="; }
         ];
       };
     }
