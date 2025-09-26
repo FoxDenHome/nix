@@ -93,6 +93,11 @@ in
     enable = true;
     host = "samba";
   };
+  foxDen.services.nasweb = {
+    enable = true;
+    host = "samba";
+    root = "/nix";
+  };
 
   foxDen.hosts.hosts = {
     jellyfin = {

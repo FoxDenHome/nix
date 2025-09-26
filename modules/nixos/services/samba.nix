@@ -15,7 +15,7 @@ let
 in
 {
   options.foxDen.services.samba = (
-    (services.mkOptions { svcName = "samba"; name = "Samba for SMB"; }) // {
+    (services.mkOptions { svcName = "samba"; name = "Samba, for SMB"; }) // {
       sharePaths = lib.mkOption {
         type = lib.types.listOf lib.types.path;
         default = [ ];
