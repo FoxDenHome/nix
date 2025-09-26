@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... } :
+{ pkgs, lib, config, foxDenLib, ... } :
 {
   options.foxDen.kanidm.login = lib.mkOption {
     type = lib.types.bool;
@@ -33,7 +33,12 @@
 
     systemd.services.kanidm-unixd = {
       serviceConfig = {
-        BindReadOnlyPaths = [ "-/bin" "-/usr/bin" ];
+        BindReadOnlyPaths = [
+          "-/bin"
+          "-/usr/bin"
+        ] ++ (foxDenLib.services.mkEtcPaths [
+          "shells"
+        ]);
       };
     };
     # END: Fix "normal" shells
