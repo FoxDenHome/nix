@@ -105,6 +105,7 @@ in
     enable = true;
     host = "deluge";
     vpnInterface = delugeVPNName;
+    routes = [];
   };
 
   sops.secrets.delugeWireguardKey = {};
