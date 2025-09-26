@@ -2,14 +2,14 @@
 let
   util = foxDenLib.util;
   eSA = nixpkgs.lib.strings.escapeShellArg;
+
+  mkIfaceName = (host: "vethrt${host.suffix}");
 in
 {
   driverOptsType = with nixpkgs.lib.types; submodule { };
 
   build = { ifcfg, config, hosts, ... } :
   let
-    mkIfaceName = (host: "vethrt${host.suffix}");
-
     routeHostAddrs = (map (addr: {
       Destination = (util.addHostCidr addr);
     }) ifcfg.addresses);

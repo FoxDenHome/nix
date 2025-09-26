@@ -1,14 +1,13 @@
 { nixpkgs, ... } :
 let
   eSA = nixpkgs.lib.strings.escapeShellArg;
+
+  mkIfaceName = (host: "vethbr${host.suffix}");
 in
 {
   driverOptsType = with nixpkgs.lib.types; submodule { };
 
   build = { ifcfg, config, hosts, ... } :
-  let
-    mkIfaceName = (host: "vethbr${host.suffix}");
-  in
   {
     config.systemd.network.networks =
       nixpkgs.lib.attrsets.listToAttrs (
