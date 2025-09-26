@@ -102,6 +102,7 @@ in
   networking.wireguard.interfaces.deluge = {
     mtu = 1280;
     ips = [ "10.1.2.3/32" ];
+    privateKey = "yCUzJX5Tm4yL2nSkopGZHrlYEzZVHQ1dAAe9aKusqUI="; # lul
     allowedIPsAsRoutes = false;
   };
 
