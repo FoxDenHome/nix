@@ -21,7 +21,7 @@ in
       nixpkgs.lib.attrsets.listToAttrs (
         nixpkgs.lib.lists.flatten
           (map ((iface: let
-            vlan = iface.driverOpts.vlan;
+            vlan = iface.driverOpts.vlan or 0;
           in [
             {
               name = "60-vebr-${iface.host.name}-${iface.name}";
