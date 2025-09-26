@@ -23,7 +23,7 @@ in
             {
               name = "60-vebr-${iface.host.name}-${iface.name}";
               value = {
-                name = mkIfaceName iface.suffix;
+                name = mkIfaceName iface;
                 bridge = [iface.driverOpts.interface];
                 bridgeVLANs = if (iface.vlan > 0) then [{
                   PVID = iface.vlan;
