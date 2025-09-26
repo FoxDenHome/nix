@@ -26,10 +26,6 @@ in
       services.jellyfin.enable = true;
       services.jellyfin.group = "share";
 
-      systemd.services.jellyfin.confinement.packages = [
-        pkgs.fontconfig
-      ];
-
       systemd.services.jellyfin.serviceConfig = {
         BindPaths = [
           config.services.jellyfin.cacheDir
