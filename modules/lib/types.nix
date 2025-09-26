@@ -18,12 +18,14 @@ let
     segmentsValid &&
     cidrValid &&
     (nixpkgs.lib.lists.length segments == 4) &&
-    (nixpkgs.lib.lists.length cidrSplit <= 2));
+    (nixpkgs.lib.lists.length cidrSplit <= 2)
+  );
 
   ipv6Check = (ip: let
       ipv6 = nixpkgs.lib.network.ipv6.fromString ip;
-    in
-    (builtins.tryEval ipv6).success);
+  in
+    (builtins.tryEval ipv6).success
+  );
 
   ipCidrCheck = (withCidr: check: ip:
     (check ip) && (withCidr == (nixpkgs.lib.strings.hasInfix "/" ip)));
@@ -46,4 +48,15 @@ in
   ip = types.either ipv4 ipv6;
   ipWithCidr = types.either ipv4WithCidr ipv6WithCidr;
   ipWithoutCidr = types.either ipv4WithoutCidr ipv6WithoutCidr;
+
+  ipWithPort = types.addCheck types.str (ipPort: let
+    split = builtins.match "^(\[([0-9a-fA-F:]+)\]|[0-9.]+):(\d+)$" ipPort;
+    port = nixpkgs.lib.strings.toIntBase10 (builtins.elemAt split 1);
+    portValidTry = builtins.tryEval (port > 0 && port <= 65535);
+    portValid = portValidTry.success && portValidTry.value;
+  in
+    (nixpkgs.lib.lists.length split == 2) &&
+    portValid &&
+    ((ipv4Check (builtins.elemAt split 1)) || (ipv6Check (builtins.elemAt split 1)))
+  );
 }

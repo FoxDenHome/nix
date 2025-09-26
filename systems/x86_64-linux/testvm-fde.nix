@@ -88,6 +88,7 @@ in
       clientId = "nas-bengalfox";
       clientSecret = "something funny";
     };
+    hostPort = "127.0.0.1:1313";
   };
   foxDen.services.samba = {
     enable = true;

@@ -104,7 +104,7 @@ in
 
   mkOptions = (inputs@{ ... } : with nixpkgs.lib.types; {
     hostPort = nixpkgs.lib.mkOption {
-      type = nullOr str; # TODO: Validation
+      type = nullOr foxDenLib.types.ipWithPort;
       default = null;
     };
     tls = nixpkgs.lib.mkEnableOption "TLS";
