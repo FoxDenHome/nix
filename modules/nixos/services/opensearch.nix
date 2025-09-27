@@ -61,6 +61,27 @@ let
     '';
   });
 
+  secCfg."nodes_dn.yml" = (pkgs.writeTextFile {
+    name = "nodes_dn.yml";
+    text = ''
+      ---
+      _meta:
+        type: "nodesdn"
+        config_version: 2
+    '';
+  });
+
+
+  secCfg."tenants.yml" = (pkgs.writeTextFile {
+    name = "tenants.yml";
+    text = ''
+      ---
+      _meta:
+        type: "tenants"
+        config_version: 2
+    '';
+  });
+
   secCfg."roles.yml" = (pkgs.writeTextFile {
     name = "/var/lib/opensearch/config/opensearch-security/roles.yml";
     text = ''
