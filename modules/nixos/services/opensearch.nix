@@ -23,7 +23,8 @@ in
 
       services.opensearch.settings = {
         "plugins.security.disabled" = false;
-        "plugins.security.ssl.transport.keystore_filepath" = "/var/run/opensearch/keystore";
+        "plugins.security.ssl.transport.server.pemcert_filepath" = "/keys/opensearch.pem";
+        "plugins.security.ssl.transport.client.pemcert_filepath" = "/keys/opensearch.pem";
 
         "http.xff.enabled" = true;
         "http.xff.internalProxies" = "127.0.0.1";
@@ -37,6 +38,8 @@ in
         "authc.proxy_auth_domain.authentication_backend.type" = "noop";
       };
 
+      # openssl req -x509 -newkey rsa:2048 -keyout opensearch.pem -out opensearch.pem -sha256 -days 36500 -nodes -subj '/CN=opensearch'
+
       systemd.services.opensearch-uds = {
         serviceConfig = {
           DynamicUser = true;
@@ -47,8 +50,16 @@ in
         wantedBy = ["multi-user.target"];
       };
 
+      systemd.services.opensearch = {
+        serviceConfig = {
+          TemporaryFileSystem = [ "/keys" ];
+          ExecStartPre = ["${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /keys/opensearch.pem -out /keys/opensearch.pem -sha256 -days 36500 -nodes -subj '/CN=opensearch'"];
+        };
+      };
+
       environment.systemPackages = [
         udsProxyPkg
+        pkgs.openssl
       ];
     }
   ]);
