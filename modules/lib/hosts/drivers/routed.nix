@@ -25,7 +25,6 @@ in
         (map (iface: {
           name = "${iface.driverOpts.network}";
           value = {
-            name = mkIfaceName iface;
             networkConfig = {
               IPv4Forwarding = true;
               IPv6Forwarding = true;
