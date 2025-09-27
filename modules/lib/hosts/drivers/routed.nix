@@ -21,10 +21,9 @@ in
 
   build = { interfaces, ... } :
   {
-    config.systemd.network.networks = (nixpkgs.lib.attrsets.listToAttrs
+    config.systemd.network.networks = nixpkgs.lib.mkMerge (
         (map (iface: {
-          name = "${iface.driverOpts.network}";
-          value = {
+          "${iface.driverOpts.network}" = {
             networkConfig = {
               IPv4Forwarding = true;
               IPv6Forwarding = true;
@@ -34,24 +33,26 @@ in
               IPv6ProxyNDPAddress = iface.addresses;
             };
           };
-        }) interfaces))
-        // (nixpkgs.lib.attrsets.listToAttrs
-        (map (iface: {
-            name = "60-vert-${iface.host.name}-${iface.name}";
-            value = {
-              name = mkIfaceName iface;
-              networkConfig = {
-                DHCP = "no";
-                IPv6AcceptRA = "no";
-                LinkLocalAddressing = "no";
-                IPv4Forwarding = true;
-                IPv6Forwarding = true;
+        }) interfaces) ++
+        [
+          (nixpkgs.lib.attrsets.listToAttrs
+          (map (iface: {
+              name = "60-vert-${iface.host.name}-${iface.name}";
+              value = {
+                name = mkIfaceName iface;
+                networkConfig = {
+                  DHCP = "no";
+                  IPv6AcceptRA = "no";
+                  LinkLocalAddressing = "no";
+                  IPv4Forwarding = true;
+                  IPv6Forwarding = true;
+                };
+                routes = map (addr: {
+                  Destination = addr;
+                }) iface.addresses;
               };
-              routes = map (addr: {
-                Destination = addr;
-              }) iface.addresses;
-            };
-          }) interfaces));
+            }) interfaces))
+        ]);
   };
 
   execStart = ({ ipCmd, interface, serviceInterface, ... }: let
