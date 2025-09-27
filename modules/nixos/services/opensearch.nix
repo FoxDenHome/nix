@@ -82,16 +82,6 @@ let
         type: "rolesmapping"
         config_version: 2
 
-      own_index:
-        reserved: false
-        hidden: false
-        backend_roles: []
-        hosts: []
-        users:
-        - "*"
-        and_backend_roles: []
-        description: "Allow full access to an index named like the username"
-
       fadumper:
         reserved: false
         hidden: false
