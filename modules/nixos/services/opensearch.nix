@@ -61,27 +61,6 @@ let
     '';
   });
 
-  secCfg."nodes_dn.yml" = (pkgs.writeTextFile {
-    name = "nodes_dn.yml";
-    text = ''
-      ---
-      _meta:
-        type: "nodesdn"
-        config_version: 2
-    '';
-  });
-
-
-  secCfg."tenants.yml" = (pkgs.writeTextFile {
-    name = "tenants.yml";
-    text = ''
-      ---
-      _meta:
-        type: "tenants"
-        config_version: 2
-    '';
-  });
-
   secCfg."roles.yml" = (pkgs.writeTextFile {
     name = "/var/lib/opensearch/config/opensearch-security/roles.yml";
     text = ''
@@ -127,6 +106,46 @@ let
         - "*"
         and_backend_roles: []
         description: "Allow full access to an index named like the username"
+    '';
+  });
+
+  secCfg."nodes_dn.yml" = (pkgs.writeTextFile {
+    name = "nodes_dn.yml";
+    text = ''
+      ---
+      _meta:
+        type: "nodesdn"
+        config_version: 2
+    '';
+  });
+
+  secCfg."action_groups.yml" = (pkgs.writeTextFile {
+    name = "action_groups.yml";
+    text = ''
+      ---
+      _meta:
+        type: "actiongroups"
+        config_version: 2
+    '';
+  });
+
+  secCfg."tenants.yml" = (pkgs.writeTextFile {
+    name = "tenants.yml";
+    text = ''
+      ---
+      _meta:
+        type: "tenants"
+        config_version: 2
+    '';
+  });
+
+  secCfg."whitelist.yml" = (pkgs.writeTextFile {
+    name = "whitelist.yml";
+    text = ''
+      ---
+      _meta:
+        type: "whitelist"
+        config_version: 2
     '';
   });
 in
