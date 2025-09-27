@@ -83,7 +83,7 @@ let
         config_version: 2
 
       admin:
-        reserved: true
+        reserved: false
         hidden: false
         backend_roles: []
         hosts: []
