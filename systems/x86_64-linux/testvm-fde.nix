@@ -102,8 +102,105 @@ in
   foxDen.services.opensearch.enable = true;
   foxDen.services.opensearch.host = "opensearch";
 
+  foxDen.services.jellyfin = {
+    enable = true;
+    tls = false;
+    host = "jellyfin";
+  };
+  foxDen.services.samba = {
+    enable = true;
+    host = "samba";
+  };
+  foxDen.services.nasweb = {
+    enable = config.foxDen.sops.available;
+    host = "samba";
+    root = "/nix";
+    oAuth = {
+      enable = true;
+      clientId = "nas-bengalfox";
+      clientSecret = "something funny";
+    };
+  };
+  foxDen.services.deluge = {
+    enable = config.foxDen.sops.available;
+    host = "deluge";
+  };
+
+  foxDen.services.wireguard."wg-deluge" = {
+    host = "deluge";
+    interface = {
+      ips = [ "10.1.2.3/32" ];
+
+      peers = [
+        {
+          allowedIPs = [ "0.0.0.0/0" "::/0" ];
+          endpoint = "10.99.99.99:51820";
+          persistentKeepalive = 25;
+          publicKey = "BJCvDOX+Mrf1oNtvA84RZB2i1gZ6YA01GpP2BCQDdiY=";
+        }
+      ];
+    };
+  };
+
   foxDen.hosts.hosts = {
     opensearch.interfaces = {};
+    jellyfin = {
+      nameservers = ifcfg.nameservers;
+      interfaces.ext = {
+        driver = "bridge";
+        driverOpts.bridge = "br-default";
+        dns = {
+          name = "jellyfin";
+          zone = "local.foxden.network";
+        };
+        addresses = [
+          "192.168.122.201/24"
+          "fd00:dead:beef:122::201/64"
+        ];
+        routes = ifcfg.routes;
+      };
+    };
+    samba = {
+      nameservers = ifcfg.nameservers;
+      interfaces.ext = {
+        driver = "bridge";
+        driverOpts.bridge = "br-default";
+        dns = {
+          name = "samba";
+          zone = "local.foxden.network";
+        };
+        addresses = [
+          "192.168.122.202/24"
+          "fd00:dead:beef:122::202/64"
+        ];
+        routes = ifcfg.routes;
+      };
+    };
+    deluge = {
+      nameservers = ifcfg.nameservers;
+      interfaces.ext = {
+        driver = "bridge";
+        driverOpts.bridge = "br-default";
+        dns = {
+          name = "deluge";
+          zone = "local.foxden.network";
+        };
+        addresses = [
+          "192.168.122.203/24"
+          "fd00:dead:beef:122::203/64"
+        ];
+        routes = [
+          {
+            Destination = "10.0.0.0/8";
+            Gateway = "192.168.122.1";
+          }
+          {
+            Destination = "192.168.0.0/16";
+            Gateway = "192.168.122.1";
+          }
+        ];
+      };
+    };
   };
 
   systemd.services."getty@tty1" = {
