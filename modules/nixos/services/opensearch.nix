@@ -183,7 +183,7 @@ in
           DynamicUser = true;
           Type = "simple";
           RuntimeDirectory = "opensearch-uds";
-          ExecStart = ["${udsProxyPkg}/bin/uds-proxy -socket /run/opensearch-uds/opensearch.sock -socket-mode 0777 -force-remote-host 127.0.0.1:9200"];
+          ExecStart = ["${udsProxyPkg}/bin/uds-proxy -socket /run/opensearch-uds/opensearch.sock -socket-mode 0777 -remote-https -insecure-skip-verify -force-remote-host 127.0.0.1:9200"];
         };
         wantedBy = ["multi-user.target"];
       };
