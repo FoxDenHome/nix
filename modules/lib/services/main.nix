@@ -33,7 +33,6 @@ let
 
           BindReadOnlyPaths = [
             "/run/systemd/notify"
-            "/nix/store"
             "${host.resolvConf}:/etc/resolv.conf"
           ] ++ mkEtcPaths [
             "hosts"
