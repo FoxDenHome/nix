@@ -48,6 +48,70 @@ in
                   type: noop
       '';
 
+      environment.etc."opensearch/security/internal_users.yml".text = ''
+        ---
+        _meta:
+          type: "internalusers"
+          config_version: 2
+
+        root:
+          hash: ""
+          roles:
+          - admin
+          reserved: true
+          description: "r00t"
+
+        doridian:
+          hash: ""
+          roles:
+          - own_index
+          - fadumper
+          reserved: false
+          description: "foxes"
+      '';
+
+      environment.etc."opensearch/security/roles_mapping.yml".text = ''
+        ---
+        _meta:
+          type: "rolesmapping"
+          config_version: 2
+
+        own_index:
+          reserved: false
+          hidden: false
+          backend_roles: []
+          hosts: []
+          users:
+          - "*"
+          and_backend_roles: []
+          description: "Allow full access to an index named like the username"
+      '';
+
+      environment.etc."opensearch/security/roless.yml".text = ''
+        ---
+        _meta:
+          type: "roles"
+          config_version: 2
+
+        fadumper:
+          reserved: false
+          hidden: false
+          index_permissions:
+          - index_patterns:
+            - "fadumper_*"
+            allowed_actions:
+            - "*"
+
+        e621dumper:
+          reserved: false
+          hidden: false
+          index_permissions:
+          - index_patterns:
+            - "e621dumper_*"
+            allowed_actions:
+            - "*"
+      '';
+
       services.opensearch.settings = {
         "plugins.security.disabled" = false;
         "plugins.security.ssl.transport.pemkey_filepath" = "/var/lib/opensearch/config/opensearch.key";
@@ -72,10 +136,10 @@ in
           ExecStartPre = [
             "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /var/lib/opensearch/config/opensearch.key -out /var/lib/opensearch/config/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
             "${pkgs.coreutils}/bin/mkdir -p /var/lib/opensearch/config/opensearch-security"
-            "${pkgs.coreutils}/bin/rm -f /var/lib/opensearch/config/opensearch-security/config.yml"
-            "${pkgs.coreutils}/bin/cp /etc/opensearch/security/config.yml /var/lib/opensearch/config/opensearch-security/config.yml"
+            "${pkgs.coreutils}/bin/rm -f /var/lib/opensearch/config/opensearch-security/*.yml"
+            "${pkgs.coreutils}/bin/cp /etc/opensearch/security/*.yml /var/lib/opensearch/config/opensearch-security/"
             "${pkgs.coreutils}/bin/chmod 700 /var/lib/opensearch/config/opensearch-security"
-            "${pkgs.coreutils}/bin/chmod 600 /var/lib/opensearch/config/opensearch-security/config.yml"
+            "${pkgs.coreutils}/bin/chmod 600 /var/lib/opensearch/config/opensearch-security/*.yml"
           ];
 
           ExecStartPost = [ "" ];
