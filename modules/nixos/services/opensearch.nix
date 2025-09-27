@@ -30,7 +30,7 @@ let
                 challenge: false
                 config:
                   user_header: "x-auth-user"
-                  roles_header: "x-auth-group"
+                  roles_header: "x-auth-roles"
               authentication_backend:
                 type: noop
     '';
