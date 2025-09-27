@@ -114,7 +114,7 @@ in
 
       services.opensearch.settings = {
         "plugins.security.disabled" = false;
-        "plugins.securirty.authcz.admin_dn" = [ "CN=opensearch" ];
+        "plugins.security.authcz.admin_dn" = [ "CN=opensearch" ];
         "plugins.security.ssl.transport.pemkey_filepath" = "/var/lib/opensearch/config/opensearch.key";
         "plugins.security.ssl.transport.pemcert_filepath" = "/var/lib/opensearch/config/opensearch.crt";
         "plugins.security.ssl.transport.pemtrustedcas_filepath" = "/var/lib/opensearch/config/opensearch.crt";
