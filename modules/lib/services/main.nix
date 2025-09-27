@@ -19,7 +19,7 @@ let
       systemd.services.${svc} = {
         confinement.enable = true;
         confinement.packages = [
-          pkgs.nss-cacert
+          pkgs.cacert
         ];
 
         unitConfig = {
