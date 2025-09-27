@@ -138,10 +138,12 @@ in
           pkgs.curl
           pkgs.bash
           pkgs.gnused
+          pkgs.jdk21_headless
         ];
 
         path = [
           pkgs.which
+          pkgs.jdk21_headless
         ];
 
         serviceConfig = {
