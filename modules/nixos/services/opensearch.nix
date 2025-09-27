@@ -134,10 +134,12 @@ in
       systemd.services.opensearch = {
         confinement.packages = [
           pkgs.which
+          pkgs.coreutils
+          pkgs.curl
+          pkgs.bash
         ];
-
         serviceConfig = {
-          BindReadOnlyPaths = [ "/run/current-system/sw/bin" ] ++ foxDenLib.services.mkEtcPaths [ "opensearch" ];
+          BindReadOnlyPaths = foxDenLib.services.mkEtcPaths [ "opensearch" ];
 
           ExecStartPre = [
             "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /var/lib/opensearch/config/opensearch.key -out /var/lib/opensearch/config/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
@@ -148,6 +150,16 @@ in
 
           ExecStartPost = [
             ""
+            (pkgs.writeShellScript "opensearch-start-post-foxden" ''
+              set -o errexit -o pipefail -o nounset -o errtrace
+              shopt -s inherit_errexit
+
+              # Make sure opensearch is up and running before dependents
+              # are started
+              while ! ${pkgs.curl}/bin/curl --insecure -sS -f https://127.0.0.1:9200 2>/dev/null; do
+                sleep 1
+              done
+            '')
             "${pkgs.bash}/bin/bash ${pkgs.opensearch}/plugins/opensearch-security/tools/securityadmin.sh -icl -nhnv -cacert /var/lib/opensearch/config/opensearch.crt -cert /var/lib/opensearch/config/opensearch.crt -key /var/lib/opensearch/config/opensearch.key -cd /var/lib/opensearch/config/opensearch-security"
           ];
         };
