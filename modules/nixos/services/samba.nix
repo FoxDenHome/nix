@@ -38,9 +38,9 @@ in
       users.groups.smbguest = {};
 
       services.samba.enable = true;
-      services.samba.smbd.extraArgs = [ "--debug-stdout" "--configfile=\"\${CREDENTIALS_DIRECTORY}/smb.conf\"" ];
-      services.samba.nmbd.extraArgs = [ "--debug-stdout" "--configfile=\"\${CREDENTIALS_DIRECTORY}/smb.conf\"" ];
-      services.samba.winbindd.extraArgs = [ "--debug-stdout" "--configfile=\"\${CREDENTIALS_DIRECTORY}/smb.conf\"" ];
+      services.samba.smbd.extraArgs = [ "--debug-stdout" "--configfile=\${CREDENTIALS_DIRECTORY}/smb.conf" ];
+      services.samba.nmbd.extraArgs = [ "--debug-stdout" "--configfile=\${CREDENTIALS_DIRECTORY}/smb.conf" ];
+      services.samba.winbindd.extraArgs = [ "--debug-stdout" "--configfile=\${CREDENTIALS_DIRECTORY}/smb.conf" ];
       services.samba.settings = {
         global = {
           # basic setup
