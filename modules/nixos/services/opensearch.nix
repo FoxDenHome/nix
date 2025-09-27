@@ -164,20 +164,7 @@ in
 
               # Make sure opensearch is up and running before dependents
               # are started
-              while ! ${pkgs.curl}/bin/curl -sS http://127.0.0.1:9200 2>/dev/null; do
-                sleep 1
-              done
-              ls -la /run/current-system/sw || true
-              echo $PATH
-            '')
-            "${pkgs.bash}/bin/bash ${pkgs.opensearch}/plugins/opensearch-security/tools/securityadmin.sh -icl -nhnv -cacert /var/lib/opensearch/config/opensearch.crt -cert /var/lib/opensearch/config/opensearch.crt -key /var/lib/opensearch/config/opensearch.key -cd /var/lib/opensearch/config/opensearch-security"
-            (pkgs.writeShellScript "opensearch-start-post-foxden" ''
-              set -o errexit -o pipefail -o nounset -o errtrace
-              shopt -s inherit_errexit
-
-              # Make sure opensearch is up and running before dependents
-              # are started
-              while ! ${pkgs.curl}/bin/curl -sS -f http://127.0.0.1:9200 2>/dev/null; do
+              while ! ${pkgs.bash}/bin/bash ${pkgs.opensearch}/plugins/opensearch-security/tools/securityadmin.sh -icl -nhnv -cacert /var/lib/opensearch/config/opensearch.crt -cert /var/lib/opensearch/config/opensearch.crt -key /var/lib/opensearch/config/opensearch.key -cd /var/lib/opensearch/config/opensearch-security; do
                 sleep 1
               done
             '')
