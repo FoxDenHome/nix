@@ -3,6 +3,8 @@ let
   services = foxDenLib.services;
 
   svcConfig = config.foxDen.services.opensearch;
+
+  udsProxyPkg = uds-proxy.packages.${config.nixpkgs.hostPlatform.system}.default;
 in
 {
   options.foxDen.services.opensearch = services.mkOptions { svcName = "opensearch"; name = "OpenSearch"; };
@@ -12,11 +14,22 @@ in
       name = "opensearch";
       inherit svcConfig pkgs config;
     }).config
+    (services.make {
+      name = "opensearch-uds";
+      inherit svcConfig pkgs config;
+    }).config
     {
       services.opensearch.enable = true;
 
+      systemd.services.opensearch-uds = {
+        serviceConfig = {
+          RuntimeDirectory = "opensearch";
+          ExecStart = ["${udsProxyPkg}/bin/uds-proxy -socket /run/opensearch/opensearch.sock -socket-mode 0777 -force-remote-host 127.0.0.1:9200"];
+        };
+      };
+
       environment.systemPackages = [
-        uds-proxy.packages.${config.nixpkgs.hostPlatform.system}.default
+        udsProxyPkg
       ];
     }
   ]);
