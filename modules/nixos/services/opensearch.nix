@@ -25,6 +25,7 @@ in
         "plugins.security.disabled" = false;
         "plugins.security.ssl.transport.pemkey_filepath" = "/keys/opensearch.key";
         "plugins.security.ssl.transport.pemcert_filepath" = "/keys/opensearch.crt";
+        "plugins.security.ssl.transport.pemtrustedcas_filepath" = "/keys/opensearch.crt";
 
         "http.xff.enabled" = true;
         "http.xff.internalProxies" = "127.0.0.1";
