@@ -21,97 +21,6 @@ in
     {
       services.opensearch.enable = true;
 
-      environment.etc."opensearch/security/config.yml".text = ''
-        ---
-        _meta:
-          type: "config"
-          config_version: 2
-
-        config:
-          dynamic:
-            http:
-              xff:
-                enabled: true
-                internalProxies: '127.0.0.1'
-            authc:
-              proxy_auth_domain:
-                http_enabled: true
-                transport_enabled: true
-                order: 0
-                http_authenticator:
-                  type: proxy
-                  challenge: false
-                  config:
-                    user_header: "x-auth-user"
-                    roles_header: "x-auth-group"
-                authentication_backend:
-                  type: noop
-      '';
-
-      environment.etc."opensearch/security/internal_users.yml".text = ''
-        ---
-        _meta:
-          type: "internalusers"
-          config_version: 2
-
-        root:
-          hash: ""
-          roles:
-          - admin
-          reserved: true
-          description: "r00t"
-
-        doridian:
-          hash: ""
-          roles:
-          - own_index
-          - fadumper
-          reserved: false
-          description: "foxes"
-      '';
-
-      environment.etc."opensearch/security/roles_mapping.yml".text = ''
-        ---
-        _meta:
-          type: "rolesmapping"
-          config_version: 2
-
-        own_index:
-          reserved: false
-          hidden: false
-          backend_roles: []
-          hosts: []
-          users:
-          - "*"
-          and_backend_roles: []
-          description: "Allow full access to an index named like the username"
-      '';
-
-      environment.etc."opensearch/security/roless.yml".text = ''
-        ---
-        _meta:
-          type: "roles"
-          config_version: 2
-
-        fadumper:
-          reserved: false
-          hidden: false
-          index_permissions:
-          - index_patterns:
-            - "fadumper_*"
-            allowed_actions:
-            - "*"
-
-        e621dumper:
-          reserved: false
-          hidden: false
-          index_permissions:
-          - index_patterns:
-            - "e621dumper_*"
-            allowed_actions:
-            - "*"
-      '';
-
       services.opensearch.settings = {
         "plugins.security.disabled" = false;
         "plugins.security.authcz.admin_dn" = [ "CN=opensearch" ];
@@ -156,9 +65,105 @@ in
 
           ExecStartPre = [
             "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /var/lib/opensearch/config/opensearch.key -out /var/lib/opensearch/config/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
-            "${pkgs.coreutils}/bin/rm -rf /var/lib/opensearch/config/opensearch-security"
-            "${pkgs.coreutils}/bin/cp --remove-destination -L -r /etc/opensearch/security /var/lib/opensearch/config/opensearch-security"
-            "${pkgs.coreutils}/bin/chmod -R 700 /var/lib/opensearch/config/opensearch-security"
+            (pkgs.writeTextFile {
+              name = "/var/lib/opensearch/config/opensearch-security/config.yml";
+              text = ''
+                ---
+                _meta:
+                  type: "config"
+                  config_version: 2
+
+                config:
+                  dynamic:
+                    http:
+                      xff:
+                        enabled: true
+                        internalProxies: '127.0.0.1'
+                    authc:
+                      proxy_auth_domain:
+                        http_enabled: true
+                        transport_enabled: true
+                        order: 0
+                        http_authenticator:
+                          type: proxy
+                          challenge: false
+                          config:
+                            user_header: "x-auth-user"
+                            roles_header: "x-auth-group"
+                        authentication_backend:
+                          type: noop
+              '';
+            })
+            (pkgs.writeTextFile {
+              name = "/var/lib/opensearch/config/opensearch-security/internal_users.yml";
+              text = ''
+                ---
+                _meta:
+                  type: "internalusers"
+                  config_version: 2
+
+                root:
+                  hash: ""
+                  roles:
+                  - admin
+                  reserved: true
+                  description: "r00t"
+
+                doridian:
+                  hash: ""
+                  roles:
+                  - own_index
+                  - fadumper
+                  reserved: false
+                  description: "foxes"
+              '';
+            })
+            (pkgs.writeTextFile {
+              name = "/var/lib/opensearch/config/opensearch-security/roles.yml";
+              text = ''
+                ---
+                _meta:
+                  type: "roles"
+                  config_version: 2
+
+                fadumper:
+                  reserved: false
+                  hidden: false
+                  index_permissions:
+                  - index_patterns:
+                    - "fadumper_*"
+                    allowed_actions:
+                    - "*"
+
+                e621dumper:
+                  reserved: false
+                  hidden: false
+                  index_permissions:
+                  - index_patterns:
+                    - "e621dumper_*"
+                    allowed_actions:
+                    - "*"
+              '';
+            })
+            (pkgs.writeTextFile {
+              name = "/var/lib/opensearch/config/opensearch-security/roles_mapping.yml";
+              text = ''
+                ---
+                _meta:
+                  type: "rolesmapping"
+                  config_version: 2
+
+                own_index:
+                  reserved: false
+                  hidden: false
+                  backend_roles: []
+                  hosts: []
+                  users:
+                  - "*"
+                  and_backend_roles: []
+                  description: "Allow full access to an index named like the username"
+              '';
+            })
           ];
 
           ExecStartPost = [
