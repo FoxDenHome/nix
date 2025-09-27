@@ -157,7 +157,7 @@ in
           ExecStartPre = [
             "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /var/lib/opensearch/config/opensearch.key -out /var/lib/opensearch/config/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
             "${pkgs.coreutils}/bin/rm -rf /var/lib/opensearch/config/opensearch-security"
-            "${pkgs.coreutils}/bin/cp --remove-destination -r /etc/opensearch/security /var/lib/opensearch/config/opensearch-security"
+            "${pkgs.coreutils}/bin/cp --remove-destination -r /etc/static/opensearch/security /var/lib/opensearch/config/opensearch-security"
             "${pkgs.coreutils}/bin/chmod -R 700 /var/lib/opensearch/config/opensearch-security"
           ];
 
