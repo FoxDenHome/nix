@@ -1,4 +1,4 @@
-{ foxDenLib, pkgs, lib, config, ... }:
+{ foxDenLib, uds-proxy, nixpkgs, pkgs, lib, config, ... }:
 let
   services = foxDenLib.services;
 
@@ -15,8 +15,8 @@ in
     {
       services.opensearch.enable = true;
 
-      environment.systemPackages = with pkgs; [
-        uds-proxy
+      environment.systemPackages = [
+        uds-proxy.packages.${nixpkgs.hostPlatform}.default
       ];
     }
   ]);
