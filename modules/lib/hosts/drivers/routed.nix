@@ -1,17 +1,16 @@
-{ nixpkgs, foxDenLib, ... } :
+{ nixpkgs, ... } :
 let
-  util = foxDenLib.util;
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
   mkIfaceName = (interface: "vert${interface.suffix}");
 
-  routeHostAddrs = (ifcfg: (map (addr: {
-    Destination = (util.addHostCidr addr);
-  }) ifcfg.addresses));
+  # routeHostAddrs = (ifcfg: (map (addr: {
+  #   Destination = (util.addHostCidr addr);
+  # }) ifcfg.addresses));
 
-  mkFirstGw = (ifcfg: predicate: gw: let
-    addr = nixpkgs.lib.lists.findFirst predicate null ifcfg.addresses;
-  in if addr != null then [{ Destination = (util.addHostCidr addr); Gateway = gw; }] else []);
+  # mkFirstGw = (ifcfg: predicate: gw: let
+  #   addr = nixpkgs.lib.lists.findFirst predicate null ifcfg.addresses;
+  # in if addr != null then [{ Destination = (util.addHostCidr addr); Gateway = gw; }] else []);
 in
 {
   driverOptsType = with nixpkgs.lib.types; submodule {
@@ -20,7 +19,7 @@ in
     };
   };
 
-  build = { ifcfg, interfaces, ... } :
+  build = { interfaces, ... } :
   {
     config.systemd.network.networks = (nixpkgs.lib.attrsets.listToAttrs
         (map ((iface: {
@@ -67,10 +66,10 @@ in
     "${ipCmd} link del ${eSA (mkIfaceName interface)}"
   ]);
 
-  routes = ({ config, ... }: let
-    ifcfg = config.foxDen.hosts.ifcfg;
-  in (routeHostAddrs ifcfg) ++ (nixpkgs.lib.flatten [
-    (mkFirstGw ifcfg util.isIPv4 "0.0.0.0/0")
-    (mkFirstGw ifcfg util.isIPv6 "::/0")
-  ]));
+  # routes = ({ config, ... }: let
+  #   ifcfg = config.foxDen.hosts.ifcfg;
+  # in (routeHostAddrs ifcfg) ++ (nixpkgs.lib.flatten [
+  #   (mkFirstGw ifcfg util.isIPv4 "0.0.0.0/0")
+  #   (mkFirstGw ifcfg util.isIPv6 "::/0")
+  # ]));
 }
