@@ -22,6 +22,8 @@ in
       services.opensearch.enable = true;
 
       services.opensearch.settings = {
+        "plugins.security.disabled" = false;
+
         "http.xff.enabled" = true;
         "http.xff.internalProxies" = "127.0.0.1";
 
