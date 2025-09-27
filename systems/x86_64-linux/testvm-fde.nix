@@ -169,7 +169,7 @@ in
           "192.168.122.202/24"
           "fd00:dead:beef:122::202/64"
         ];
-        routes = ifcfg.routes;
+        #routes = ifcfg.routes;
       };
     };
     deluge = {
