@@ -157,13 +157,9 @@ in
       interfaces.int = {
         driver = "bridge";
         driverOpts.bridge = "br-int";
-        dns = {
-          name = "jellyfin";
-          zone = "local.foxden.network";
-        };
         addresses = [
-          "192.168.122.201/24"
-          "fd00:dead:beef:122::201/64"
+          "192.168.122.100/24"
+          "fd00:dead:beef:122::100/64"
         ];
       };
     };
