@@ -18,6 +18,9 @@ let
     config = {
       systemd.services.${svc} = {
         confinement.enable = true;
+        confinement.packages = [
+          nixpkgs.pkgs.nss-cacert
+        ];
 
         unitConfig = {
           Requires = [ host.unit ];
