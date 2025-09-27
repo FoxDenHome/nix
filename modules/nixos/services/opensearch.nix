@@ -88,7 +88,7 @@ let
         backend_roles: []
         hosts: []
         users:
-        - "admin"
+        - "root"
         and_backend_roles: []
 
       fadumper:
