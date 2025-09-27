@@ -12,10 +12,6 @@ let
         type = attrsOf anything; # TODO: Host driver schema
         default = {};
       };
-      nameservers = nixpkgs.lib.mkOption {
-        type = listOf str;
-        default = [];
-      };
       dns = {
         name = nixpkgs.lib.mkOption {
           type = str;
@@ -57,6 +53,10 @@ let
     options = {
       interfaces = nixpkgs.lib.mkOption {
         type = attrsOf interfaceType;
+      };
+      nameservers = nixpkgs.lib.mkOption {
+        type = listOf str;
+        default = [];
       };
       cloneRoutes = nixpkgs.lib.mkOption {
         type = bool;
