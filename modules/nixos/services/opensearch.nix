@@ -43,21 +43,6 @@ let
       _meta:
         type: "internalusers"
         config_version: 2
-
-      root:
-        hash: ""
-        backend_roles:
-        - admin
-        reserved: true
-        description: "r00t"
-
-      doridian:
-        hash: ""
-        backend_roles:
-        - own_index
-        - fadumper
-        reserved: false
-        description: "foxes"
     '';
   });
 
@@ -106,6 +91,24 @@ let
         - "*"
         and_backend_roles: []
         description: "Allow full access to an index named like the username"
+
+      fadumper:
+        reserved: false
+        hidden: false
+        backend_roles: []
+        hosts: []
+        users:
+        - "fadumper"
+        and_backend_roles: []
+
+      e621dumper:
+        reserved: false
+        hidden: false
+        backend_roles: []
+        hosts: []
+        users:
+        - "e621dumper"
+        and_backend_roles: []
     '';
   });
 
