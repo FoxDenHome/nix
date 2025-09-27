@@ -43,8 +43,8 @@ in
         serviceConfig = {
           DynamicUser = true;
           Type = "simple";
-          RuntimeDirectory = "opensearch";
-          ExecStart = ["${udsProxyPkg}/bin/uds-proxy -socket /run/opensearch/opensearch.sock -socket-mode 0777 -force-remote-host 127.0.0.1:9200"];
+          RuntimeDirectory = "opensearch-uds";
+          ExecStart = ["${udsProxyPkg}/bin/uds-proxy -socket /run/opensearch-uds/opensearch.sock -socket-mode 0777 -force-remote-host 127.0.0.1:9200"];
         };
         wantedBy = ["multi-user.target"];
       };
@@ -52,12 +52,12 @@ in
       systemd.services.opensearch = {
         serviceConfig = {
           ExecStartPre = [
-            "+${pkgs.coreutils}/bin/mkdir -p /keys"
-            "+${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /keys/opensearch.key -out /keys/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
-            "+${pkgs.coreutils}/bin/chmod -R 555 /keys"
+            "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /run/opensearch/opensearch.key -out /run/opensearch/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
           ];
 
           ExecStartPost = [ "" ];
+
+          RuntimeDirectory = "opensearch";
         };
       };
 
