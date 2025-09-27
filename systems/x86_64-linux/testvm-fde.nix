@@ -1,6 +1,18 @@
 { modulesPath, pkgs, config, ... }:
 let
-  ifcfg = config.foxDen.hosts.ifcfg;
+  ifcfg = {
+    addresses = [
+      "192.168.122.200/24"
+      "fd00:dead:beef:122::200/64"
+    ];
+    routes = [
+      { Destination = "0.0.0.0/0"; Gateway = "192.168.122.1"; }
+      { Destination = "::/0"; Gateway = "fd00:dead:beef:122::1"; }
+    ];
+    nameservers = [ "8.8.8.8" ];
+    interface = "br-default";
+  };
+
   rootInterface = "enp1s0";
 in
 {
@@ -13,19 +25,6 @@ in
   system.stateVersion = "25.05";
 
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
-
-  foxDen.hosts.ifcfg = {
-    addresses = [
-      "192.168.122.200/24"
-      "fd00:dead:beef:122::200/64"
-    ];
-    routes = [
-      { Destination = "0.0.0.0/0"; Gateway = "192.168.122.1"; }
-      { Destination = "::/0"; Gateway = "fd00:dead:beef:122::1"; }
-    ];
-    dns = [ "8.8.8.8" ];
-    interface = "br-default";
-  };
 
   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "sr_mod" "virtio_blk" ];
   boot.initrd.kernelModules = [ ];
@@ -61,16 +60,34 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  #foxDen.hosts.driver = "bridge";
+  systemd.network.networks."30-${ifcfg.interface}" = {
+    name = ifcfg.interface;
+    routes = ifcfg.routes;
+    address = ifcfg.addresses;
+    dns = ifcfg.nameservers;
 
-  systemd.network.networks."${ifcfg.network}" =
-    {
-      # bridgeVLANs = [{
-      #   PVID = 2;
-      #   EgressUntagged = 2;
-      #   VLAN = "1-10";
-      # }];
+    networkConfig = {
+      DHCP = "no";
+      IPv6AcceptRA = false;
     };
+
+    # bridgeVLANs = [{
+    #   PVID = 2;
+    #   EgressUntagged = 2;
+    #   VLAN = "1-10";
+    # }];
+  };
+
+  systemd.network.netdevs."${ifcfg.interface}" = {
+    netdevConfig = {
+      Name = ifcfg.interface;
+      Kind = "bridge";
+    };
+
+    bridgeConfig = {
+      VLANFiltering = true;
+    };
+  };
 
   systemd.network.networks."40-${ifcfg.interface}-${rootInterface}" = {
       name = rootInterface;
@@ -124,6 +141,7 @@ in
 
   foxDen.hosts.hosts = {
     jellyfin = {
+      nameservers = ifcfg.nameservers;
       interfaces.ext = {
         driver = "bridge";
         driverOpts.bridge = "br-default";
@@ -136,8 +154,21 @@ in
           "fd00:dead:beef:122::201/64"
         ];
       };
+      interfaces.int = {
+        driver = "bridge";
+        driverOpts.bridge = "br-int";
+        dns = {
+          name = "jellyfin";
+          zone = "local.foxden.network";
+        };
+        addresses = [
+          "192.168.122.201/24"
+          "fd00:dead:beef:122::201/64"
+        ];
+      };
     };
     samba = {
+      nameservers = ifcfg.nameservers;
       interfaces.ext = {
         driver = "bridge";
         driverOpts.bridge = "br-default";
@@ -152,6 +183,7 @@ in
       };
     };
     deluge = {
+      nameservers = ifcfg.nameservers;
       interfaces.ext = {
         driver = "bridge";
         driverOpts.bridge = "br-default";

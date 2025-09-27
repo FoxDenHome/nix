@@ -36,25 +36,6 @@ in
               };
             }
           ])) interfaces));
-
-    config.systemd.network.netdevs =
-      nixpkgs.lib.attrsets.listToAttrs (
-        nixpkgs.lib.lists.flatten
-          (map ((iface: [
-            {
-              name = iface.driverOpts.bridge;
-              value = {
-                netdevConfig = {
-                  Name = iface.driverOpts.bridge;
-                  Kind = "bridge";
-                };
-
-                bridgeConfig = {
-                  VLANFiltering = true;
-                };
-              };
-            }
-          ])) interfaces));
   };
 
   execStart = ({ ipCmd, interface, serviceInterface, ... }: let
