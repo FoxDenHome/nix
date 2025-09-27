@@ -23,9 +23,9 @@ in
 
       services.opensearch.settings = {
         "plugins.security.disabled" = false;
-        "plugins.security.ssl.transport.pemkey_filepath" = "/run/opensearch/opensearch.key";
-        "plugins.security.ssl.transport.pemcert_filepath" = "/run/opensearch/opensearch.crt";
-        "plugins.security.ssl.transport.pemtrustedcas_filepath" = "/run/opensearch/opensearch.crt";
+        "plugins.security.ssl.transport.pemkey_filepath" = "/var/lib/opensearch/config/opensearch.key";
+        "plugins.security.ssl.transport.pemcert_filepath" = "/var/lib/opensearch/config/opensearch.crt";
+        "plugins.security.ssl.transport.pemtrustedcas_filepath" = "/var/lib/opensearch/config/opensearch.crt";
 
         "http.xff.enabled" = true;
         "http.xff.internalProxies" = "127.0.0.1";
@@ -52,12 +52,10 @@ in
       systemd.services.opensearch = {
         serviceConfig = {
           ExecStartPre = [
-            "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /run/opensearch/opensearch.key -out /run/opensearch/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
+            "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /var/lib/opensearch/config/opensearch.key -out /var/lib/opensearch/config/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
           ];
 
           ExecStartPost = [ "" ];
-
-          RuntimeDirectory = "opensearch";
         };
       };
 
