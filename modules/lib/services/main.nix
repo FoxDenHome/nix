@@ -36,6 +36,7 @@ let
 
           BindReadOnlyPaths = [
             "/run/systemd/notify"
+            "-/var/run/nscd"
             "${host.resolvConf}:/etc/resolv.conf"
           ] ++ mkEtcPaths [
             "hosts"
@@ -44,6 +45,7 @@ let
             "group"
             "pki/tls/certs"
             "ssl/certs"
+            "nsswitch.conf"
           ];
         };
       };

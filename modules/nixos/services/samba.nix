@@ -104,11 +104,6 @@ in
             "/var/run/samba"
             "/var/lib/samba/private"
           ];
-          BindReadOnlyPaths = [
-            "-/var/run/nscd"
-          ] ++ foxDenLib.services.mkEtcPaths [
-            "nsswitch.conf"
-          ];
         };
       }));
 
