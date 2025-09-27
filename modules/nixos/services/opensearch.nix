@@ -23,10 +23,8 @@ in
 
       services.opensearch.settings = {
         "plugins.security.disabled" = false;
-        "plugins.security.ssl.transport.server.pemkey_filepath" = "/keys/opensearch.key";
-        "plugins.security.ssl.transport.server.pemcert_filepath" = "/keys/opensearch.crt";
-        "plugins.security.ssl.transport.client.pemkey_filepath" = "/keys/opensearch.key";
-        "plugins.security.ssl.transport.client.pemcert_filepath" = "/keys/opensearch.crt";
+        "plugins.security.ssl.transport.pemkey_filepath" = "/keys/opensearch.key";
+        "plugins.security.ssl.transport.pemcert_filepath" = "/keys/opensearch.crt";
 
         "http.xff.enabled" = true;
         "http.xff.internalProxies" = "127.0.0.1";
