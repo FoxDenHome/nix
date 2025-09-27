@@ -46,14 +46,14 @@ let
 
       root:
         hash: ""
-        roles:
+        backend_roles:
         - admin
         reserved: true
         description: "r00t"
 
       doridian:
         hash: ""
-        roles:
+        backend_roles:
         - own_index
         - fadumper
         reserved: false
