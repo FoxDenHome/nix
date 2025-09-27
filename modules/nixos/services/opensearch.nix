@@ -27,16 +27,16 @@ in
         "plugins.security.ssl.transport.pemcert_filepath" = "/var/lib/opensearch/config/opensearch.crt";
         "plugins.security.ssl.transport.pemtrustedcas_filepath" = "/var/lib/opensearch/config/opensearch.crt";
 
-        "dynamic.http.xff.enabled" = true;
-        "dynamic.http.xff.internalProxies" = "127.0.0.1";
+        "config.dynamic.http.xff.enabled" = true;
+        "config.dynamic.http.xff.internalProxies" = "127.0.0.1";
 
-        "dynamic.authc.proxy_auth_domain.http_enabled" = true;
-        "dynamic.authc.proxy_auth_domain.transport_enabled" = true;
-        "dynamic.authc.proxy_auth_domain.order" = 0;
-        "dynamic.authc.proxy_auth_domain.http_authenticator.type" = "proxy";
-        "dynamic.authc.proxy_auth_domain.http_authenticator.challenge" = false;
-        "dynamic.authc.proxy_auth_domain.http_authenticator.config.user_header" = "x-auth-user";
-        "dynamic.authc.proxy_auth_domain.authentication_backend.type" = "noop";
+        "config.dynamic.authc.proxy_auth_domain.http_enabled" = true;
+        "config.dynamic.authc.proxy_auth_domain.transport_enabled" = true;
+        "config.dynamic.authc.proxy_auth_domain.order" = 0;
+        "config.dynamic.authc.proxy_auth_domain.http_authenticator.type" = "proxy";
+        "config.dynamic.authc.proxy_auth_domain.http_authenticator.challenge" = false;
+        "config.dynamic.authc.proxy_auth_domain.http_authenticator.config.user_header" = "x-auth-user";
+        "config.dynamic.authc.proxy_auth_domain.authentication_backend.type" = "noop";
       };
 
       systemd.services.opensearch-uds = {
