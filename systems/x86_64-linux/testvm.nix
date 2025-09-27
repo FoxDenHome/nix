@@ -1,14 +1,6 @@
-{ modulesPath, config, ... }:
+{ modulesPath, ... }:
 let
-  ifcfg = config.foxDen.hosts.ifcfg;
-  rootInterface = "enp1s0";
-in
-{
-  system.stateVersion = "25.05";
-
-  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
-
-  foxDen.hosts.ifcfg = {
+  ifcfg = {
     addresses = [
       "192.168.122.200/24"
       "fd00:dead:beef:122::200/64"
@@ -20,6 +12,13 @@ in
     dns = [ "8.8.8.8" ];
     interface = "br-default";
   };
+
+  rootInterface = "enp1s0";
+in
+{
+  system.stateVersion = "25.05";
+
+  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "sr_mod" "virtio_blk" ];
   boot.initrd.kernelModules = [ ];
@@ -43,16 +42,34 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  #foxDen.hosts.driver = "bridge";
+  systemd.network.networks."30-${ifcfg.interface}" = {
+    name = ifcfg.interface;
+    routes = ifcfg.routes;
+    address = ifcfg.addresses;
+    dns = ifcfg.nameservers;
 
-  systemd.network.networks."${ifcfg.network}" =
-    {
-      # bridgeVLANs = [{
-      #   PVID = 2;
-      #   EgressUntagged = 2;
-      #   VLAN = "1-10";
-      # }];
+    networkConfig = {
+      DHCP = "no";
+      IPv6AcceptRA = false;
     };
+
+    # bridgeVLANs = [{
+    #   PVID = 2;
+    #   EgressUntagged = 2;
+    #   VLAN = "1-10";
+    # }];
+  };
+
+  systemd.network.netdevs."${ifcfg.interface}" = {
+    netdevConfig = {
+      Name = ifcfg.interface;
+      Kind = "bridge";
+    };
+
+    bridgeConfig = {
+      VLANFiltering = true;
+    };
+  };
 
   systemd.network.networks."40-${ifcfg.interface}-${rootInterface}" = {
       name = rootInterface;

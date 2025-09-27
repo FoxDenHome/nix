@@ -22,20 +22,22 @@ in
 
   build = { ifcfg, interfaces, ... } :
   {
-    config.systemd.network.networks = {
-      "${ifcfg.network}" = {
-        networkConfig = {
-          IPv4Forwarding = true;
-          IPv6Forwarding = true;
-          IPv4ProxyARP = true;
-          IPv6ProxyNDP = true;
+    config.systemd.network.networks = (nixpkgs.lib.attrsets.listToAttrs
+        (map ((iface: {
+          name = "${iface.driverOpts.network}";
+          value = {
+            name = mkIfaceName iface;
+            networkConfig = {
+              IPv4Forwarding = true;
+              IPv6Forwarding = true;
+              IPv4ProxyARP = true;
+              IPv6ProxyNDP = true;
 
-          IPv6ProxyNDPAddress = (nixpkgs.lib.filter util.isIPv6
-            (nixpkgs.lib.flatten
-              (map (iface: iface.addresses) interfaces)));
-        };
-      };
-    } // (nixpkgs.lib.attrsets.listToAttrs
+              IPv6ProxyNDPAddress = iface.addresses;
+            };
+          };
+        })) interfaces))
+        // (nixpkgs.lib.attrsets.listToAttrs
         (map ((iface: {
             name = "60-vert-${iface.host.name}-${iface.name}";
             value = {
