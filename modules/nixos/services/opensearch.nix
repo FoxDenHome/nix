@@ -82,8 +82,8 @@ let
         type: "rolesmapping"
         config_version: 2
 
-      admin:
-        reserved: false
+      all_access:
+        reserved: true
         hidden: false
         backend_roles: []
         hosts: []
