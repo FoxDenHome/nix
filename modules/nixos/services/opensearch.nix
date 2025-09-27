@@ -21,6 +21,19 @@ in
     {
       services.opensearch.enable = true;
 
+      services.opensearch.settings = {
+        "http.xff.enabled" = true;
+        "http.xff.internalProxies" = "127.0.0.1";
+
+        "authc.proxy_auth_domain.http_enabled" = true;
+        "authc.proxy_auth_domain.transport_enabled" = true;
+        "authc.proxy_auth_domain.order" = 0;
+        "authc.proxy_auth_domain.http_authenticator.type" = "proxy";
+        "authc.proxy_auth_domain.http_authenticator.challenge" = false;
+        "authc.proxy_auth_domain.http_authenticator.config.user_header" = "x-auth-user";
+        "authc.proxy_auth_domain.authentication_backend.type" = "noop";
+      };
+
       systemd.services.opensearch-uds = {
         serviceConfig = {
           DynamicUser = true;
