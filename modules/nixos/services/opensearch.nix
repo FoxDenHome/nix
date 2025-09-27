@@ -56,6 +56,7 @@ in
             "${pkgs.coreutils}/bin/ls -la / /keys"
           ];
           ExecStart = [
+            ""
             "${pkgs.coreutils}/bin/ls -la / /keys"
           ];
         };
