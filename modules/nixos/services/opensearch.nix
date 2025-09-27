@@ -14,6 +14,10 @@ in
     }).config
     {
       services.opensearch.enable = true;
+
+      environment.systemPackages = with pkgs; [
+        uds-proxy
+      ];
     }
   ]);
 }

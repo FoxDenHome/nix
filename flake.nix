@@ -2,15 +2,21 @@
   description = "FoxDen NixOS config";
 
   inputs = {
-    lanzaboote.url = "github:nix-community/lanzaboote";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     impermanence.url = "github:nix-community/impermanence";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
+
+    lanzaboote.url = "github:nix-community/lanzaboote";
+    lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
+
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    uds-proxy.url = "github:Doridian/uds-proxy";
+    uds-proxy.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { nixpkgs, sops-nix, impermanence, lanzaboote, ... }:
+  outputs = { nixpkgs, uds-proxy, sops-nix, impermanence, lanzaboote, ... }:
   let
     isNixFile = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
 
@@ -72,7 +78,7 @@
       name = hostname;
       value = nixpkgs.lib.nixosSystem {
         system = systemArch;
-        specialArgs = { inherit nixpkgs; inherit foxDenLib; };
+        specialArgs = { inherit nixpkgs foxDenLib uds-proxy; };
         modules = [
           ({ ... }: {
             networking.hostName = hostname;
