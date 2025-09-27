@@ -137,6 +137,7 @@ in
           pkgs.coreutils
           pkgs.curl
           pkgs.bash
+          pkgs.sed
         ];
         serviceConfig = {
           BindReadOnlyPaths = foxDenLib.services.mkEtcPaths [ "opensearch" ];
