@@ -159,8 +159,8 @@ in
     samba = {
       nameservers = ifcfg.nameservers;
       interfaces.ext = {
-        driver = "bridge";
-        driverOpts.bridge = "br-default";
+        driver = "routed";
+        driverOpts.network = "30-${ifcfg.interface}";
         dns = {
           name = "samba";
           zone = "local.foxden.network";
