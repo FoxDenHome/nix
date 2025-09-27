@@ -23,8 +23,8 @@ in
 
       services.opensearch.settings = {
         "plugins.security.disabled" = false;
-        "plugins.security.ssl.transport.server.pemcert_filepath" = "/tmp/opensearch.pem";
-        "plugins.security.ssl.transport.client.pemcert_filepath" = "/tmp/opensearch.pem";
+        "plugins.security.ssl.transport.server.pemcert_filepath" = "/keys/opensearch.pem";
+        "plugins.security.ssl.transport.client.pemcert_filepath" = "/keys/opensearch.pem";
 
         "http.xff.enabled" = true;
         "http.xff.internalProxies" = "127.0.0.1";
@@ -50,7 +50,10 @@ in
 
       systemd.services.opensearch = {
         serviceConfig = {
-          ExecStartPre = ["${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /tmp/opensearch.pem -out /tmp/opensearch.pem -sha256 -days 36500 -nodes -subj '/CN=opensearch'"];
+          ExecStartPre = [
+            "${pkgs.coreutils}/bin/mkdir -p /keys"
+            "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /keys/opensearch.pem -out /keys/opensearch.pem -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
+          ];
         };
       };
 
