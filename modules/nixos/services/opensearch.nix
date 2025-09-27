@@ -67,10 +67,12 @@ in
 
       systemd.services.opensearch = {
         serviceConfig = {
+          BindReadOnlyPaths = foxDenLib.services.mkEtcPaths "opensearch";
+
           ExecStartPre = [
             "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /var/lib/opensearch/config/opensearch.key -out /var/lib/opensearch/config/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
             "${pkgs.coreutils}/bin/mkdir -p /var/lib/opensearch/config/opensearch-security"
-            "+${pkgs.coreutils}/bin/cp /etc/opensearch/security/config.yml /var/lib/opensearch/config/opensearch-security/config.yml"
+            "${pkgs.coreutils}/bin/cp /etc/opensearch/security/config.yml /var/lib/opensearch/config/opensearch-security/config.yml"
           ];
 
           ExecStartPost = [ "" ];
