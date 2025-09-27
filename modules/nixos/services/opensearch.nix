@@ -181,6 +181,7 @@ in
       systemd.services.opensearch-uds = {
         serviceConfig = {
           DynamicUser = true;
+          PrivateUsers = "identity";
           Type = "simple";
           RuntimeDirectory = "opensearch-uds";
           ExecStart = ["${udsProxyPkg}/bin/uds-proxy -socket /run/opensearch-uds/opensearch.sock -socket-mode 0777 -remote-https -insecure-skip-verify -force-remote-host 127.0.0.1:9200"];
@@ -202,8 +203,6 @@ in
           pkgs.which
           pkgs.jdk21_headless
         ];
-
-        # /var/lib/opensearch/config/opensearch-security/
 
         serviceConfig = {
           BindReadOnlyPaths = foxDenLib.services.mkEtcPaths [ "opensearch" ];
