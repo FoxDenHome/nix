@@ -23,6 +23,7 @@ in
 
       services.opensearch.settings = {
         "plugins.security.disabled" = false;
+        "plugins.security.ssl.transport.keystore_filepath" = "/var/run/opensearch/keystore";
 
         "http.xff.enabled" = true;
         "http.xff.internalProxies" = "127.0.0.1";
