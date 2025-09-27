@@ -137,11 +137,10 @@ in
 
           ExecStartPre = [
             "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /var/lib/opensearch/config/opensearch.key -out /var/lib/opensearch/config/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
-            "${pkgs.coreutils}/bin/mkdir -p /var/lib/opensearch/config/opensearch-security"
-            "${pkgs.coreutils}/bin/rm -f /var/lib/opensearch/config/opensearch-security/*.yml"
-            "${pkgs.coreutils}/bin/cp /etc/opensearch/security/*.yml /var/lib/opensearch/config/opensearch-security/"
+            "${pkgs.coreutils}/bin/rm -rf /var/lib/opensearch/config/opensearch-security"
+            "${pkgs.coreutils}/bin/cp --remove-destination -r /etc/opensearch/security /var/lib/opensearch/config/opensearch-security"
+            "${pkgs.coreutils}/bin/chmod -R 600 /var/lib/opensearch/config/opensearch-security"
             "${pkgs.coreutils}/bin/chmod 700 /var/lib/opensearch/config/opensearch-security"
-            "${pkgs.coreutils}/bin/chmod 600 /var/lib/opensearch/config/opensearch-security/*.yml"
           ];
 
           ExecStartPost = [ "${pkgs.bash}/bin/bash ${pkgs.opensearch}/plugins/opensearch-security/tools/securityadmin.sh -icl -nhnv -cacert /var/lib/opensearch/config/opensearch.crt -cert /var/lib/opensearch/config/opensearch.crt -key /var/lib/opensearch/config/opensearch.key -cd /var/lib/opensearch/config/opensearch-security" ];
