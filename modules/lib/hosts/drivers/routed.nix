@@ -22,7 +22,7 @@ in
   build = { interfaces, ... } :
   {
     config.systemd.network.networks = (nixpkgs.lib.attrsets.listToAttrs
-        (map ((iface: {
+        (map (iface: {
           name = "${iface.driverOpts.network}";
           value = {
             name = mkIfaceName iface;
@@ -35,9 +35,9 @@ in
               IPv6ProxyNDPAddress = iface.addresses;
             };
           };
-        })) interfaces))
+        }) interfaces))
         // (nixpkgs.lib.attrsets.listToAttrs
-        (map ((iface: {
+        (map (iface: {
             name = "60-vert-${iface.host.name}-${iface.name}";
             value = {
               name = mkIfaceName iface;
@@ -52,7 +52,7 @@ in
                 Destination = addr;
               }) iface.addresses;
             };
-          })) interfaces));
+          }) interfaces));
   };
 
   execStart = ({ ipCmd, interface, serviceInterface, ... }: let
