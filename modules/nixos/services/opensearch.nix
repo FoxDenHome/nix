@@ -23,8 +23,10 @@ in
 
       services.opensearch.settings = {
         "plugins.security.disabled" = false;
-        "plugins.security.ssl.transport.server.pemcert_filepath" = "/keys/opensearch.pem";
-        "plugins.security.ssl.transport.client.pemcert_filepath" = "/keys/opensearch.pem";
+        "plugins.security.ssl.transport.server.pemkey_filepath" = "/keys/opensearch.key";
+        "plugins.security.ssl.transport.server.pemcert_filepath" = "/keys/opensearch.crt";
+        "plugins.security.ssl.transport.client.pemkey_filepath" = "/keys/opensearch.key";
+        "plugins.security.ssl.transport.client.pemcert_filepath" = "/keys/opensearch.crt";
 
         "http.xff.enabled" = true;
         "http.xff.internalProxies" = "127.0.0.1";
@@ -52,12 +54,7 @@ in
         serviceConfig = {
           ExecStartPre = [
             "+${pkgs.coreutils}/bin/mkdir -p /keys"
-            "+${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /keys/opensearch.pem -out /keys/opensearch.pem -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
-            "${pkgs.coreutils}/bin/ls -la / /keys"
-          ];
-          ExecStart = [
-            ""
-            "${pkgs.coreutils}/bin/ls -la / /keys"
+            "+${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /keys/opensearch.key -out /keys/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
           ];
         };
       };
