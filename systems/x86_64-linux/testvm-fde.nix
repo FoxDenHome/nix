@@ -143,8 +143,8 @@ in
     jellyfin = {
       nameservers = ifcfg.nameservers;
       interfaces.ext = {
-        driver = "routed";
-        driverOpts.network = "30-${ifcfg.interface}";
+        driver = "bridge";
+        driverOpts.bridge = "br-default";
         dns = {
           name = "jellyfin";
           zone = "local.foxden.network";
@@ -153,14 +153,14 @@ in
           "192.168.122.201/24"
           "fd00:dead:beef:122::201/64"
         ];
-        #routes = ifcfg.routes;
+        routes = ifcfg.routes;
       };
     };
     samba = {
       nameservers = ifcfg.nameservers;
       interfaces.ext = {
-        driver = "routed";
-        driverOpts.network = "30-${ifcfg.interface}";
+        driver = "bridge";
+        driverOpts.bridge = "br-default";
         dns = {
           name = "samba";
           zone = "local.foxden.network";
@@ -169,7 +169,7 @@ in
           "192.168.122.202/24"
           "fd00:dead:beef:122::202/64"
         ];
-        #routes = ifcfg.routes;
+        routes = ifcfg.routes;
       };
     };
     deluge = {
