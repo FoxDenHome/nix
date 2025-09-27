@@ -114,9 +114,11 @@ in
 
       services.opensearch.settings = {
         "plugins.security.disabled" = false;
+        "plugins.securirty.authcz.admin_dn" = [ "CN=opensearch" ];
         "plugins.security.ssl.transport.pemkey_filepath" = "/var/lib/opensearch/config/opensearch.key";
         "plugins.security.ssl.transport.pemcert_filepath" = "/var/lib/opensearch/config/opensearch.crt";
         "plugins.security.ssl.transport.pemtrustedcas_filepath" = "/var/lib/opensearch/config/opensearch.crt";
+        "transport.ssl.enforce_hostname_verification" = false;
       };
 
       systemd.services.opensearch-uds = {
@@ -142,13 +144,14 @@ in
             "${pkgs.coreutils}/bin/chmod 600 /var/lib/opensearch/config/opensearch-security/*.yml"
           ];
 
-          ExecStartPost = [ "" ];
+          ExecStartPost = [ "${pkgs.bash}/bin/bash ${pkgs.opensearch}/plugins/opensearch-security/tools/securityadmin.sh -icl -nhnv -cacert /var/lib/opensearch/config/opensearch.crt -cert /var/lib/opensearch/config/opensearch.crt -key /var/lib/opensearch/config/opensearch.key -cd /var/lib/opensearch/config/opensearch-security" ];
         };
       };
 
       environment.systemPackages = [
         udsProxyPkg
         pkgs.openssl
+        pkgs.bash
       ];
     }
   ]);
