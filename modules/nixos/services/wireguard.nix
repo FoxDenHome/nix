@@ -14,6 +14,7 @@ in
 {
   options.foxDen.services.wireguard = with lib.types; lib.mkOption {
     type = attrsOf wireguardType;
+    default = {};
   };
 
   config.environment.persistence."/nix/persist/wireguard" = {
