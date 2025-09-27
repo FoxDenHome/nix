@@ -127,7 +127,6 @@ in
             mkInterfaceStartConfig = (interface: let
               ifaceDriver = foxDenLib.hosts.drivers.${interface.driver};
               serviceInterface = (ifaceDriver.serviceInterface or (interface: "host${interface.suffix}")) interface;
-              ifaceRoutes = ((ifaceDriver.routes or (interface: [])) interface) ++ interface.routes;
               driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface interface; };
             in
               (ifaceDriver.execStart driverRunParams)
@@ -136,7 +135,7 @@ in
                       "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
                       interface.addresses)
                 ++ [ "${ipInNsCmd} link set ${eSA serviceInterface} up" ]
-                ++ (map (renderRoute serviceInterface) ifaceRoutes)
+                ++ (map (renderRoute serviceInterface) interface.routes)
             );
           in
           {
