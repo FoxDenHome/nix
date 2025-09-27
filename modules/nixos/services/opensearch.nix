@@ -116,6 +116,9 @@ in
         "plugins.security.disabled" = false;
         "plugins.security.authcz.admin_dn" = [ "CN=opensearch" ];
         "plugins.security.ssl.http.enabled" = true;
+        "plugins.security.ssl.http.pemkey_filepath" = "/var/lib/opensearch/config/opensearch.key";
+        "plugins.security.ssl.http.pemcert_filepath" = "/var/lib/opensearch/config/opensearch.crt";
+        "plugins.security.ssl.http.pemtrustedcas_filepath" = "/var/lib/opensearch/config/opensearch.crt";
         "plugins.security.ssl.transport.enabled" = true;
         "plugins.security.ssl.transport.pemkey_filepath" = "/var/lib/opensearch/config/opensearch.key";
         "plugins.security.ssl.transport.pemcert_filepath" = "/var/lib/opensearch/config/opensearch.crt";
