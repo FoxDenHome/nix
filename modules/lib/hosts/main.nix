@@ -31,7 +31,7 @@ let
       };
       routes = nixpkgs.lib.mkOption {
         type = nullOr (listOf routeType);
-        default = null;
+        default = [];
       };
     };
   };
@@ -58,11 +58,6 @@ let
         type = listOf str;
         default = [];
       };
-      cloneRoutes = nixpkgs.lib.mkOption {
-        type = bool;
-        default = true;
-        description = "Whether to clone the main interface routes into this host's namespace";
-      };
     };
   };
 
@@ -83,8 +78,6 @@ in
   nixosModule = ({ config, pkgs, foxDenLib, ... }:
   let
     hosts = map (getByName config) (nixpkgs.lib.attrsets.attrNames config.foxDen.hosts.hosts);
-    ifcfg = config.foxDen.hosts.ifcfg;
-
     mapIfaces = (host: map ({ name, value }: value // { inherit host name; suffix = util.mkHash8 (host.name + "|" + name); }) (nixpkgs.lib.attrsets.attrsToList host.interfaces));
     interfaces = nixpkgs.lib.flatten (map mapIfaces hosts);
   in
@@ -122,7 +115,6 @@ in
       systemd = nixpkgs.lib.mkMerge (
         (map ({ name, value } : (value.build {
           interfaces = (nixpkgs.lib.filter (iface: iface.driver == name) interfaces);
-          inherit ifcfg;
         }).config.systemd) (nixpkgs.lib.attrsets.attrsToList foxDenLib.hosts.drivers))
         ++ [{
           # Configure each host's NetNS
@@ -135,7 +127,7 @@ in
             mkInterfaceStartConfig = (interface: let
               ifaceDriver = foxDenLib.hosts.drivers.${interface.driver};
               serviceInterface = (ifaceDriver.serviceInterface or (interface: "host${interface.suffix}")) interface;
-              ifaceRoutes = ((ifaceDriver.routes or (interface: [])) interface) ++ (if interface.routes != null then interface.routes else []);
+              ifaceRoutes = ((ifaceDriver.routes or (interface: [])) interface) ++ interface.routes;
               driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface interface; };
             in
               (ifaceDriver.execStart driverRunParams)
@@ -165,8 +157,7 @@ in
                   "${ipInNsCmd} addr add ::1/128 dev lo noprefixroute"
                   "${ipInNsCmd} link set lo up"
                 ]
-                ++ (nixpkgs.lib.flatten (map mkInterfaceStartConfig (nixpkgs.lib.filter (iface: iface.host.name == host.name) interfaces)))
-                ++ (map (renderRoute "lo") (if host.cloneRoutes then ifcfg.routes else []));
+                ++ (nixpkgs.lib.flatten (map mkInterfaceStartConfig (nixpkgs.lib.filter (iface: iface.host.name == host.name) interfaces)));
 
                 ExecStop = [ # TODO: Re-implement interface shutdown
                   "${ipCmd} netns del ${eSA host.namespace}"

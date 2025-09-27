@@ -153,6 +153,7 @@ in
           "192.168.122.201/24"
           "fd00:dead:beef:122::201/64"
         ];
+        routes = ifcfg.routes;
       };
       interfaces.int = {
         driver = "bridge";
@@ -176,6 +177,7 @@ in
           "192.168.122.202/24"
           "fd00:dead:beef:122::202/64"
         ];
+        routes = ifcfg.routes;
       };
     };
     deluge = {
