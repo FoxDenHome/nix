@@ -21,22 +21,38 @@ in
     {
       services.opensearch.enable = true;
 
+      environment.etc."opensearch/security/config.yml".text = ''
+        ---
+        _meta:
+          type: "config"
+          config_version: 2
+
+        config:
+          dynamic:
+            http:
+              xff:
+                enabled: true
+                internalProxies: '127.0.0.1'
+            authc:
+              proxy_auth_domain:
+                http_enabled: true
+                transport_enabled: true
+                order: 0
+                http_authenticator:
+                  type: proxy
+                  challenge: false
+                  config:
+                    user_header: "x-auth-user"
+                    roles_header: "x-auth-group"
+                authentication_backend:
+                  type: noop
+      '';
+
       services.opensearch.settings = {
         "plugins.security.disabled" = false;
         "plugins.security.ssl.transport.pemkey_filepath" = "/var/lib/opensearch/config/opensearch.key";
         "plugins.security.ssl.transport.pemcert_filepath" = "/var/lib/opensearch/config/opensearch.crt";
         "plugins.security.ssl.transport.pemtrustedcas_filepath" = "/var/lib/opensearch/config/opensearch.crt";
-
-        "config.dynamic.http.xff.enabled" = true;
-        "config.dynamic.http.xff.internalProxies" = "127.0.0.1";
-
-        "config.dynamic.authc.proxy_auth_domain.http_enabled" = true;
-        "config.dynamic.authc.proxy_auth_domain.transport_enabled" = true;
-        "config.dynamic.authc.proxy_auth_domain.order" = 0;
-        "config.dynamic.authc.proxy_auth_domain.http_authenticator.type" = "proxy";
-        "config.dynamic.authc.proxy_auth_domain.http_authenticator.challenge" = false;
-        "config.dynamic.authc.proxy_auth_domain.http_authenticator.config.user_header" = "x-auth-user";
-        "config.dynamic.authc.proxy_auth_domain.authentication_backend.type" = "noop";
       };
 
       systemd.services.opensearch-uds = {
@@ -53,6 +69,8 @@ in
         serviceConfig = {
           ExecStartPre = [
             "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /var/lib/opensearch/config/opensearch.key -out /var/lib/opensearch/config/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
+            "${pkgs.coreutils}/bin/mkdir -p /var/lib/opensearch/config/opensearch-security"
+            "${pkgs.coreutils}/bin/cp /etc/opensearch/security/config.yml /var/lib/opensearch/config/opensearch-security/config.yml"
           ];
 
           ExecStartPost = [ "" ];
