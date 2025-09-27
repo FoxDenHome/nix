@@ -139,6 +139,11 @@ in
           pkgs.bash
           pkgs.gnused
         ];
+
+        path = [
+          pkgs.which
+        ];
+
         serviceConfig = {
           BindReadOnlyPaths = foxDenLib.services.mkEtcPaths [ "opensearch" ];
 
