@@ -132,6 +132,10 @@ in
       };
 
       systemd.services.opensearch = {
+        confinement.packages = [
+          pkgs.which
+        ];
+
         serviceConfig = {
           BindReadOnlyPaths = foxDenLib.services.mkEtcPaths [ "opensearch" ];
 
