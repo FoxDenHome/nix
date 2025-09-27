@@ -16,7 +16,7 @@ in
       services.opensearch.enable = true;
 
       environment.systemPackages = [
-        uds-proxy.packages.${config.nixpkgs.hostPlatform}.default
+        uds-proxy.packages.${config.nixpkgs.hostPlatform.system}.default
       ];
     }
   ]);
