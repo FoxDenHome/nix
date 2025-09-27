@@ -7,7 +7,7 @@ let
     ]) paths
   ));
 
-  mkNamed = (svc: { svcConfig, config, ... }:
+  mkNamed = (svc: { svcConfig, pkgs, config, ... }:
   let
     host = foxDenLib.hosts.getByName config svcConfig.host;
   in
@@ -19,7 +19,7 @@ let
       systemd.services.${svc} = {
         confinement.enable = true;
         confinement.packages = [
-          nixpkgs.pkgs.nss-cacert
+          pkgs.nss-cacert
         ];
 
         unitConfig = {
