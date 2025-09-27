@@ -28,6 +28,7 @@ in
           RuntimeDirectory = "opensearch";
           ExecStart = ["${udsProxyPkg}/bin/uds-proxy -socket /run/opensearch/opensearch.sock -socket-mode 0777 -force-remote-host 127.0.0.1:9200"];
         };
+        wantedBy = ["multi-user.target"];
       };
 
       environment.systemPackages = [
