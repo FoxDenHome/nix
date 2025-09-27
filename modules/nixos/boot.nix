@@ -6,6 +6,8 @@
     security.audit.enable = false;
     security.apparmor.enable = true;
 
+    security.lsm = [ "lockdown" "integrity" ];
+
     boot = {
       initrd.systemd.enable = true;
 
