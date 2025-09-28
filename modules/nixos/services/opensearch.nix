@@ -66,7 +66,7 @@ let
       hidden = false;
       index_permissions = [
         {
-          index_patterns = svcConfig.users.${user}.indices;
+          index_patterns = user.indexPatterns;
           allowed_actions = [ "*" ];
         }
       ];
