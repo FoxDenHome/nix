@@ -173,6 +173,11 @@ in
           pkgs.jdk21_headless
         ];
 
+        unitConfig = {
+          Requires = [ "opensearch-uds" ];
+          After = [ "opensearch-uds" ];
+        };
+
         serviceConfig = {
           BindReadOnlyPaths = foxDenLib.services.mkEtcPaths [ "opensearch" ];
 
