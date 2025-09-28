@@ -87,55 +87,21 @@ let
       and_backend_roles = [ ];
     }) svcConfig.users)));
 
-  secCfg."internal_users.yml" = (pkgs.writeTextFile {
-    name = "internal_users.yml";
+  writeEmptyYaml = (name: type: pkgs.writeTextFile {
+    name = name;
     text = ''
       ---
       _meta:
-        type: "internalusers"
+        type: "${type}"
         config_version: 2
     '';
   });
 
-  secCfg."nodes_dn.yml" = (pkgs.writeTextFile {
-    name = "nodes_dn.yml";
-    text = ''
-      ---
-      _meta:
-        type: "nodesdn"
-        config_version: 2
-    '';
-  });
-
-  secCfg."action_groups.yml" = (pkgs.writeTextFile {
-    name = "action_groups.yml";
-    text = ''
-      ---
-      _meta:
-        type: "actiongroups"
-        config_version: 2
-    '';
-  });
-
-  secCfg."tenants.yml" = (pkgs.writeTextFile {
-    name = "tenants.yml";
-    text = ''
-      ---
-      _meta:
-        type: "tenants"
-        config_version: 2
-    '';
-  });
-
-  secCfg."whitelist.yml" = (pkgs.writeTextFile {
-    name = "whitelist.yml";
-    text = ''
-      ---
-      _meta:
-        type: "whitelist"
-        config_version: 2
-    '';
-  });
+  secCfg."internal_users.yml" = writeEmptyYaml "internal_users.yml" "internalusers";
+  secCfg."nodes_dn.yml" = writeEmptyYaml "nodes_dn.yml" "nodesdn";
+  secCfg."action_groups.yml" = writeEmptyYaml "action_groups.yml" "actiongroups";
+  secCfg."tenants.yml" = writeEmptyYaml "tenants.yml" "tenants";
+  secCfg."whitelist.yml" = writeEmptyYaml "whitelist.yml" "whitelist";
 in
 {
   options.foxDen.services.opensearch = services.mkOptions { svcName = "opensearch"; name = "OpenSearch"; } // {
