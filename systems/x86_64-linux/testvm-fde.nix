@@ -99,14 +99,7 @@ in
       # }];
   };
 
-  foxDen.services.opensearch = {
-    enable = true;
-    users = {
-      deluge = {
-        indexPatterns = [ "deluge_*" ];
-      };
-    };
-  };
+  foxDen.services.fadumper.enable = true;
 
   foxDen.services.jellyfin = {
     enable = true;

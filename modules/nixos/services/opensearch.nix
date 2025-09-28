@@ -114,6 +114,11 @@ in
     users = with lib.types; lib.mkOption {
       type = attrsOf userType;
     };
+    services = with lib.types; submodule {
+      type = listOf str;
+      default = [ ];
+      description = "List of services connecting to OpenSearch";
+    };
   };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
@@ -153,6 +158,7 @@ in
           PrivateUsers = "identity";
           Type = "simple";
           RuntimeDirectory = "opensearch-uds";
+          RuntimeDirectoryPreserve = "yes";
           ExecStart = ["${udsProxyPkg}/bin/uds-proxy -socket /run/opensearch-uds/opensearch.sock -socket-mode 0777 -remote-https -insecure-skip-verify -force-remote-host 127.0.0.1:9200"];
         };
         wantedBy = ["multi-user.target"];
@@ -172,11 +178,6 @@ in
           pkgs.which
           pkgs.jdk21_headless
         ];
-
-        unitConfig = {
-          Requires = [ "opensearch-uds" ];
-          After = [ "opensearch-uds" ];
-        };
 
         serviceConfig = {
           BindReadOnlyPaths = foxDenLib.services.mkEtcPaths [ "opensearch" ];
@@ -209,5 +210,20 @@ in
         pkgs.bash
       ];
     }
-  ]);
+  ] ++ (map (svc: {
+    systemd.services.${svc} = {
+      unitConfig = {
+        Requires = [ "opensearch" "opensearch-uds" ];
+        After = [ "opensearch" "opensearch-uds" ];
+      };
+      serviceConfig = {
+        BindReadOnlyPaths = [
+          "/run/opensearch-uds"
+        ];
+        Environment = [
+          "ES_UNIX_SOCKET_PATH=/run/opensearch-uds/opensearch.sock"
+        ];
+      };
+    };
+  }) svcConfig.services));
 }

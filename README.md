@@ -21,14 +21,13 @@
 				- [x] jellyfin
 				- [x] nasweb
 				- [x] deluge (TO DO: declarative config + mounts)
-				- [ ] nzbget
+			- [ ] e621dumper
+			- [ ] fadumper
 			- [ ] restic
 			- [ ] rest-server
 			- [ ] kiwix
 			- [ ] mirror
 			- [ ] gitbackup
-			- [ ] e621dumper
-			- [ ] fadumper
 			- [ ] aurbuild
 		- [ ] Post migration
 			- [ ] ollama
@@ -36,6 +35,8 @@
 			- [ ] hashtopolis-agent
 			- [ ] owncast
 			- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
+			- [ ] nas
+				- [ ] nzbget
 	- [ ] islandfox
 		- [ ] Pre migration
 			- [ ] restic
