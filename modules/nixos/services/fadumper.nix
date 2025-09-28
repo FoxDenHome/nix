@@ -65,7 +65,6 @@ in
 
           Environment = [
             "DOWNLOAD_PATH=${svcConfig.dataDir}"
-            "ES_URL=http://127.0.0.1:9200"
           ];
         };
 
