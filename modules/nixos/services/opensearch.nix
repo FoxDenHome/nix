@@ -100,6 +100,15 @@ let
         - "root"
         and_backend_roles: []
 
+      deluge:
+        reserved: false
+        hidden: false
+        backend_roles: []
+        hosts: []
+        users:
+        - "deluge"
+        and_backend_roles: []
+
       fadumper:
         reserved: false
         hidden: false
