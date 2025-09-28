@@ -100,6 +100,7 @@ in
   };
 
   foxDen.services.fadumper.enable = true;
+  foxDen.services.fadumper.host = "fadumper";
 
   foxDen.services.jellyfin = {
     enable = true;
@@ -140,7 +141,23 @@ in
       ];
     };
   };
-
+ ++ (map (svc: {
+    systemd.services.${svc} = {
+      unitConfig = {
+        Requires = [ "opensearch" "opensearch-uds" ];
+        After = [ "opensearch" "opensearch-uds" ];
+      };
+      serviceConfig = {
+        BindReadOnlyPaths = [
+          "/run/opensearch-uds"
+        ];
+        Environment = [
+          "ES_UNIX_SOCKET_PATH=/run/opensearch-uds/opensearch.sock"
+        ];
+      };
+    };
+  }) svcConfig.services)
+  
   foxDen.hosts.hosts = {
     jellyfin = {
       nameservers = ifcfg.nameservers;
@@ -197,6 +214,22 @@ in
             Gateway = "192.168.122.1";
           }
         ];
+      };
+      fadumper = {
+        nameservers = ifcfg.nameservers;
+        interfaces.ext = {
+          driver = "bridge";
+          driverOpts.bridge = "br-default";
+          dns = {
+            name = "fadumper";
+            zone = "local.foxden.network";
+          };
+          addresses = [
+            "192.168.122.203/24"
+            "fd00:dead:beef:122::203/64"
+          ];
+          routes = ifcfg.routes;
+        };
       };
     };
   };
