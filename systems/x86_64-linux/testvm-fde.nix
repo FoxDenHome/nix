@@ -101,6 +101,11 @@ in
 
   foxDen.services.opensearch = {
     enable = true;
+    users = {
+      deluge = {
+        indices = [ "deluge_*" ];
+      };
+    };
   };
 
   foxDen.services.jellyfin = {
