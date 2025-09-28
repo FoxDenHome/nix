@@ -37,11 +37,23 @@ in
       };
       foxDen.services.opensearch.services = [ "fadumper-api" "fadumper-refresh" ];
 
+      users.users.fadumper = {
+        isSystemUser = true;
+        description = "FADumper service user";
+        group = "fadumper";
+      };
+      user.groups.fadumper = {
+        isSystemGroup = true;
+      };
+
       systemd.services.fadumper-api = {
         serviceConfig = {
           BindPaths = [
             svcConfig.dataDir
           ];
+
+          User = "fadumper";
+          Group = "fadumper";
           
           Type = "simple";
           ExecStart = [ "${pkgs.nodejs_24}/bin/node ./dist/api/index.js" ];
@@ -66,6 +78,9 @@ in
           BindPaths = [
             svcConfig.dataDir
           ];
+
+          User = "fadumper";
+          Group = "fadumper";
           
           Type = "simple";
           ExecStart = [ "./looper.sh" ];
