@@ -42,9 +42,7 @@ in
         description = "FADumper service user";
         group = "fadumper";
       };
-      users.groups.fadumper = {
-        isSystemGroup = true;
-      };
+      users.groups.fadumper = {};
 
       systemd.services.fadumper-api = {
         serviceConfig = {
