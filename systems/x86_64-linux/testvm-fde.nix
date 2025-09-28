@@ -99,8 +99,9 @@ in
       # }];
   };
 
-  foxDen.services.opensearch.enable = true;
-  foxDen.services.opensearch.host = "opensearch";
+  foxDen.services.opensearch = {
+    enable = true;
+  };
 
   foxDen.services.jellyfin = {
     enable = true;

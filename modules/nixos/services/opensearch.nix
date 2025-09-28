@@ -6,6 +6,14 @@ let
 
   udsProxyPkg = uds-proxy.packages.${config.nixpkgs.hostPlatform.system}.default;
 
+  userType = with lib.types; submodule {
+    options = {
+      indexPatterns = lib.mkOption {
+        type = listOf str;
+      };
+    };
+  };
+
   secCfg."config.yml" = (pkgs.writeTextFile {
     name = "config.yml";
     text = ''
@@ -46,42 +54,24 @@ let
     '';
   });
 
-  secCfg."roles.yml" = (pkgs.writeTextFile {
-    name = "/var/lib/opensearch/config/opensearch-security/roles.yml";
-    text = ''
-      ---
-      _meta:
-        type: "roles"
-        config_version: 2
-
-      deluge:
-        reserved: false
-        hidden: false
-        index_permissions:
-        - index_patterns:
-          - "deluge_*"
-          allowed_actions:
-          - "*"
-
-      fadumper:
-        reserved: false
-        hidden: false
-        index_permissions:
-        - index_patterns:
-          - "fadumper_*"
-          allowed_actions:
-          - "*"
-
-      e621dumper:
-        reserved: false
-        hidden: false
-        index_permissions:
-        - index_patterns:
-          - "e621dumper_*"
-          allowed_actions:
-          - "*"
-    '';
-  });
+  secCfg."roles.yml" = (pkgs.writers.writeYAML
+    "roles.yml"
+    ({
+      _meta = {
+        type = "roles";
+        config_version = 2;
+      };
+    } // lib.attrsets.mapAttrs (name: user: {
+      reserved = false;
+      hidden = false;
+      index_permissions = [
+        {
+          index_patterns = svcConfig.users.${user}.indices;
+          allowed_actions = [ "*" ];
+        }
+      ];
+      tenant_permissions = [];
+    })));
 
   secCfg."roles_mapping.yml" = (pkgs.writeTextFile {
     name = "roles_mapping.yml";
@@ -170,7 +160,11 @@ let
   });
 in
 {
-  options.foxDen.services.opensearch = services.mkOptions { svcName = "opensearch"; name = "OpenSearch"; };
+  options.foxDen.services.opensearch = services.mkOptions { svcName = "opensearch"; name = "OpenSearch"; } // {
+    users = with lib.types; lib.mkOption {
+      type = attrsOf userType;
+    };
+  };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
@@ -182,6 +176,7 @@ in
       inherit svcConfig pkgs config;
     }).config
     {
+      foxDen.services.opensearch.host = "opensearch";
       services.opensearch.enable = true;
 
       foxDen.hosts.hosts = {
