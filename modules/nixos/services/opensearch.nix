@@ -157,6 +157,10 @@ in
       };
 
       systemd.services.opensearch-uds = {
+        description = "OpenSearch UDS Proxy";
+        after = [ "opensearch.service" ];
+        wants = [ "opensearch.service" ];
+
         serviceConfig = {
           DynamicUser = true;
           PrivateUsers = "identity";
@@ -167,6 +171,11 @@ in
         };
 
         wantedBy = [ "multi-user.target" "opensearch.target" ];
+      };
+
+      systemd.targets.opensearch = {
+        description = "OpenSearch Service";
+        wants = [ ];
       };
 
       systemd.services.opensearch = {
@@ -197,6 +206,7 @@ in
         description = "OpenSearch Security Admin Initialization";
         after = [ "opensearch.service" ];
         wants = [ "opensearch.service" ];
+
         serviceConfig = {
           DynamicUser = true;
           Type = "oneshot";
