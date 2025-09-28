@@ -179,6 +179,10 @@ in
       };
 
       systemd.services.opensearch = {
+        confinement.packages = [
+          pkgs.gnused
+        ];
+
         serviceConfig = {
           ExecStartPre = [
             "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /var/lib/opensearch/config/opensearch.key -out /var/lib/opensearch/config/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
