@@ -44,16 +44,6 @@ let
     '';
   });
 
-  secCfg."internal_users.yml" = (pkgs.writeTextFile {
-    name = "internal_users.yml";
-    text = ''
-      ---
-      _meta:
-        type: "internalusers"
-        config_version: 2
-    '';
-  });
-
   secCfg."roles.yml" = (pkgs.writers.writeYAML
     "roles.yml"
     ({
@@ -73,49 +63,37 @@ let
       tenant_permissions = [];
     }) svcConfig.users)));
 
-  secCfg."roles_mapping.yml" = (pkgs.writeTextFile {
-    name = "roles_mapping.yml";
+  secCfg."roles_mapping.yml" = (pkgs.writers.writeYAML
+    "roles_mapping.yml"
+    ({
+      _meta = {
+        type = "rolesmapping";
+        config_version = 2;
+      };
+      all_access = {
+        reserved = true;
+        hidden = false;
+        backend_roles = [ ];
+        hosts = [ ];
+        users = [ "root" ];
+        and_backend_roles = [ ];
+      };
+    } // (lib.attrsets.mapAttrs (name: user: {
+      reserved = false;
+      hidden = false;
+      backend_roles = [ ];
+      hosts = [ ];
+      users = [ name ];
+      and_backend_roles = [ ];
+    }) svcConfig.users)));
+
+  secCfg."internal_users.yml" = (pkgs.writeTextFile {
+    name = "internal_users.yml";
     text = ''
       ---
       _meta:
-        type: "rolesmapping"
+        type: "internalusers"
         config_version: 2
-
-      all_access:
-        reserved: true
-        hidden: false
-        backend_roles: []
-        hosts: []
-        users:
-        - "root"
-        and_backend_roles: []
-
-      deluge:
-        reserved: false
-        hidden: false
-        backend_roles: []
-        hosts: []
-        users:
-        - "deluge"
-        and_backend_roles: []
-
-      fadumper:
-        reserved: false
-        hidden: false
-        backend_roles: []
-        hosts: []
-        users:
-        - "fadumper"
-        and_backend_roles: []
-
-      e621dumper:
-        reserved: false
-        hidden: false
-        backend_roles: []
-        hosts: []
-        users:
-        - "e621dumper"
-        and_backend_roles: []
     '';
   });
 
