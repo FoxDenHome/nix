@@ -46,6 +46,7 @@ in
           Type = "simple";
           ExecStart = [ "${pkgs.nodejs_24}/bin/node ./dist/api/index.js" ];
           WorkingDirectory = faDumperDir;
+          StateDirectory = "fadumper";
 
           Environment = [
             "DOWNLOAD_PATH=${svcConfig.dataDir}"
@@ -69,6 +70,7 @@ in
           Type = "simple";
           ExecStart = [ "./looper.sh" ];
           WorkingDirectory = faDumperDir;
+          StateDirectory = "fadumper";
 
           Environment = [
             "DOWNLOAD_PATH=${svcConfig.dataDir}"
