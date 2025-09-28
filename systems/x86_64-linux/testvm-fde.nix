@@ -199,21 +199,21 @@ in
           }
         ];
       };
-      fadumper = {
-        nameservers = ifcfg.nameservers;
-        interfaces.ext = {
-          driver = "bridge";
-          driverOpts.bridge = "br-default";
-          dns = {
-            name = "fadumper";
-            zone = "local.foxden.network";
-          };
-          addresses = [
-            "192.168.122.203/24"
-            "fd00:dead:beef:122::203/64"
-          ];
-          routes = ifcfg.routes;
+    };
+    fadumper = {
+      nameservers = ifcfg.nameservers;
+      interfaces.ext = {
+        driver = "bridge";
+        driverOpts.bridge = "br-default";
+        dns = {
+          name = "fadumper";
+          zone = "local.foxden.network";
         };
+        addresses = [
+          "192.168.122.203/24"
+          "fd00:dead:beef:122::203/64"
+        ];
+        routes = ifcfg.routes;
       };
     };
   };
