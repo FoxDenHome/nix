@@ -46,7 +46,6 @@ in
 
       systemd.services.fadumper-api = {
         confinement.packages = [
-          pkgs.nodejs_24
           faDumperPkg
         ];
         path = [ pkgs.nodejs_24 ];
@@ -74,7 +73,6 @@ in
 
       systemd.services.fadumper-refresh = {
         confinement.packages = [
-          pkgs.nodejs_24
           faDumperPkg
         ];
         path = [ pkgs.nodejs_24 ];
