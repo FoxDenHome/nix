@@ -14,39 +14,46 @@ let
     };
   };
 
-  secCfg."config.yml" = (pkgs.writeTextFile {
-    name = "config.yml";
-    text = ''
-      ---
-      _meta:
-        type: "config"
-        config_version: 2
-
-      config:
-        dynamic:
-          http:
-            xff:
-              enabled: true
-              internalProxies: '127.0.0.1'
-          authc:
-            proxy_auth_domain:
-              http_enabled: true
-              transport_enabled: true
-              order: 0
-              http_authenticator:
-                type: proxy
-                challenge: false
-                config:
-                  user_header: "x-auth-user"
-                  roles_header: "x-auth-roles"
-              authentication_backend:
-                type: noop
-    '';
-  });
+  secCfg."config.yml" = (pkgs.writers.writeYAML
+    "config.yml"
+    {
+      _meta = {
+        type = "config";
+        config_version = 2;
+      };
+      config = {
+        dynamic = {
+          http = {
+            xff = {
+              enabled = true;
+              internalProxies = "127.0.0.1";
+            };
+          };
+          authc = {
+            proxy_auth_domain = {
+              http_enabled = true;
+              transport_enabled = true;
+              order = 0;
+              http_authenticator = {
+                type = "proxy";
+                challenge = false;
+                config = {
+                  user_header = "x-auth-user";
+                  roles_header = "x-auth-roles";
+                };
+              };
+              authentication_backend = {
+                type = "noop";
+              };
+            };
+          };
+        };
+      };
+    });
 
   secCfg."roles.yml" = (pkgs.writers.writeYAML
     "roles.yml"
-    ({
+    {
       _meta = {
         type = "roles";
         config_version = 2;
@@ -61,11 +68,11 @@ let
         }
       ];
       tenant_permissions = [];
-    }) svcConfig.users)));
+    }) svcConfig.users));
 
   secCfg."roles_mapping.yml" = (pkgs.writers.writeYAML
     "roles_mapping.yml"
-    ({
+    {
       _meta = {
         type = "rolesmapping";
         config_version = 2;
@@ -85,17 +92,16 @@ let
       hosts = [ ];
       users = [ name ];
       and_backend_roles = [ ];
-    }) svcConfig.users)));
+    }) svcConfig.users));
 
-  writeEmptyYaml = (name: type: pkgs.writeTextFile {
-    name = name;
-    text = ''
-      ---
-      _meta:
-        type: "${type}"
-        config_version: 2
-    '';
-  });
+  writeEmptyYaml = (name: type: pkgs.writers.writeYAML
+    name
+    {
+      _meta = {
+        type = type;
+        config_version = 2;
+      };
+    });
 
   secCfg."internal_users.yml" = writeEmptyYaml "internal_users.yml" "internalusers";
   secCfg."nodes_dn.yml" = writeEmptyYaml "nodes_dn.yml" "nodesdn";
