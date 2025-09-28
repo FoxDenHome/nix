@@ -114,7 +114,7 @@ in
     users = with lib.types; lib.mkOption {
       type = attrsOf userType;
     };
-    services = with lib.types; submodule {
+    services = with lib.types; lib.mkOption {
       type = listOf str;
       default = [ ];
       description = "List of services connecting to OpenSearch";
