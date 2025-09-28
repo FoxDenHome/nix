@@ -45,9 +45,6 @@ in
       users.groups.fadumper = {};
 
       systemd.services.fadumper-api = {
-        confinement.packages = [
-          pkgs.nodejs_24
-        ];
         path = [ pkgs.nodejs_24 ];
 
         serviceConfig = {
@@ -72,9 +69,6 @@ in
       };
 
       systemd.services.fadumper-refresh = {
-        confinement.packages = [
-          pkgs.nodejs_24
-        ];
         path = [ pkgs.nodejs_24 ];
 
         serviceConfig = {
