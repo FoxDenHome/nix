@@ -175,7 +175,6 @@ in
 
       systemd.targets.opensearch = {
         description = "OpenSearch Service";
-        wants = [ ];
       };
 
       systemd.services.opensearch = {
@@ -211,7 +210,7 @@ in
 
         description = "OpenSearch Security Admin Initialization";
         after = [ "opensearch.service" ];
-        wants = [ "opensearch.service" ];
+        requires = [ "opensearch.service" ];
 
         serviceConfig = {
           DynamicUser = true;
@@ -249,10 +248,8 @@ in
     }
     {
       systemd.services = lib.attrsets.genAttrs svcConfig.services (svc: {
-        unitConfig = {
-          Requires = [ "opensearch.target" ];
-          After = [ "opensearch.target" ];
-        };
+        requires = [ "opensearch.target" ];
+        after = [ "opensearch.target" ];
         serviceConfig = {
           BindReadOnlyPaths = [
             "/run/opensearch-uds"
