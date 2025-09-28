@@ -143,7 +143,6 @@ in
   };
 
   foxDen.hosts.hosts = {
-    opensearch.interfaces = {};
     jellyfin = {
       nameservers = ifcfg.nameservers;
       interfaces.ext = {

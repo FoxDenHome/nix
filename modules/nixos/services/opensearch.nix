@@ -54,6 +54,15 @@ let
         type: "roles"
         config_version: 2
 
+      deluge:
+        reserved: false
+        hidden: false
+        index_permissions:
+        - index_patterns:
+          - "deluge_*"
+          allowed_actions:
+          - "*"
+
       fadumper:
         reserved: false
         hidden: false
@@ -165,6 +174,10 @@ in
     }).config
     {
       services.opensearch.enable = true;
+
+      foxDen.hosts.hosts = {
+        opensearch.interfaces = {};
+      };
 
       services.opensearch.settings = {
         "plugins.security.disabled" = false;
