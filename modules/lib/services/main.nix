@@ -32,6 +32,7 @@ let
           NetworkNamespacePath = host.namespacePath;
           DevicePolicy = "closed";
           PrivateDevices = nixpkgs.lib.mkForce true;
+          ProtectProc = "invisible";
           Restart = nixpkgs.lib.mkForce "always";
 
           BindReadOnlyPaths = [
