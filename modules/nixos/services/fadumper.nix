@@ -42,7 +42,7 @@ in
         description = "FADumper service user";
         group = "fadumper";
       };
-      user.groups.fadumper = {
+      users.groups.fadumper = {
         isSystemGroup = true;
       };
 
