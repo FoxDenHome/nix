@@ -179,6 +179,18 @@ in
       };
 
       systemd.services.opensearch = {
+        serviceConfig = {
+          ExecStartPre = [
+            "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /var/lib/opensearch/config/opensearch.key -out /var/lib/opensearch/config/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
+          ];
+
+          ExecStartPost = [ "" ];
+        };
+
+        wantedBy = [ "opensearch.target" ];
+      };
+
+      systemd.services.opensearch-security = {
         confinement.packages = [
           pkgs.which
           pkgs.coreutils
@@ -193,18 +205,6 @@ in
           pkgs.jdk21_headless
         ];
 
-        serviceConfig = {
-          ExecStartPre = [
-            "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /var/lib/opensearch/config/opensearch.key -out /var/lib/opensearch/config/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
-          ];
-
-          ExecStartPost = [ "" ];
-        };
-
-        wantedBy = [ "opensearch.target" ];
-      };
-
-      systemd.services.opensearch-security = {
         description = "OpenSearch Security Admin Initialization";
         after = [ "opensearch.service" ];
         wants = [ "opensearch.service" ];
