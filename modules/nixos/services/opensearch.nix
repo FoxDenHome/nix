@@ -210,9 +210,8 @@ in
         pkgs.bash
       ];
     }
-  ]
-  ++ (map (svc: {
-      systemd.services.${svc} = {
+    {
+      systemd.services = lib.attrsets.genAttrs svcConfig.services (svc: {
         unitConfig = {
           Requires = [ "opensearch" "opensearch-uds" ];
           After = [ "opensearch" "opensearch-uds" ];
@@ -225,6 +224,7 @@ in
             "ES_UNIX_SOCKET_PATH=/run/opensearch-uds/opensearch.sock"
           ];
         };
-      };
-    }) svcConfig.services));
+      });
+    }
+  ]);
 }
