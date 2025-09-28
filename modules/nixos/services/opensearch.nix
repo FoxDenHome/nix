@@ -130,6 +130,10 @@ in
       name = "opensearch-uds";
       inherit svcConfig pkgs config;
     }).config
+    (services.make {
+      name = "opensearch-security";
+      inherit svcConfig pkgs config;
+    }).config
     {
       foxDen.services.opensearch.host = "opensearch";
       services.opensearch.enable = true;
@@ -161,7 +165,8 @@ in
           RuntimeDirectoryPreserve = "yes";
           ExecStart = ["${udsProxyPkg}/bin/uds-proxy -socket /run/opensearch-uds/opensearch.sock -socket-mode 0777 -remote-https -insecure-skip-verify -force-remote-host 127.0.0.1:9200"];
         };
-        wantedBy = ["multi-user.target"];
+
+        wantedBy = [ "multi-user.target" "opensearch.target" ];
       };
 
       systemd.services.opensearch = {
@@ -180,28 +185,43 @@ in
         ];
 
         serviceConfig = {
-          BindReadOnlyPaths = foxDenLib.services.mkEtcPaths [ "opensearch" ];
-
           ExecStartPre = [
             "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /var/lib/opensearch/config/opensearch.key -out /var/lib/opensearch/config/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
-          ]
-          ++ (lib.attrsets.mapAttrsToList (name: file: "${pkgs.coreutils}/bin/cp ${file} /var/lib/opensearch/config/opensearch-security/${name}") secCfg)
-          ++ (map (name: "${pkgs.coreutils}/bin/chmod 600 /var/lib/opensearch/config/opensearch-security/${name}") (lib.attrsets.attrNames secCfg));
+          ];
+        };
 
-          ExecStartPost = [
-            ""
-            (pkgs.writeShellScript "opensearch-start-post-foxden" ''
+        wantedBy = [ "opensearch.target" ];
+      };
+
+      systemd.services.opensearch-security = {
+        description = "OpenSearch Security Admin Initialization";
+        after = [ "opensearch.service" ];
+        wants = [ "opensearch.service" ];
+        serviceConfig = {
+          DynamicUser = true;
+          Type = "oneshot";
+          RemainAfterExit = true;
+          StateDirectory = "opensearch";
+          ExecStart =
+           (lib.attrsets.mapAttrsToList (name: file: "${pkgs.coreutils}/bin/cp ${file} /var/lib/opensearch/config/opensearch-security/${name}") secCfg)
+            ++ (map (name: "${pkgs.coreutils}/bin/chmod 600 /var/lib/opensearch/config/opensearch-security/${name}") (lib.attrsets.attrNames secCfg))
+            ++ [(pkgs.writeShellScript "opensearch-start-post-foxden" ''
               set -o errexit -o pipefail -o nounset -o errtrace
               shopt -s inherit_errexit
 
-              # Make sure opensearch is up and running before dependents
-              # are started
-              while ! ${pkgs.bash}/bin/bash ${pkgs.opensearch}/plugins/opensearch-security/tools/securityadmin.sh -icl -nhnv -cacert /var/lib/opensearch/config/opensearch.crt -cert /var/lib/opensearch/config/opensearch.crt -key /var/lib/opensearch/config/opensearch.key -cd /var/lib/opensearch/config/opensearch-security; do
+              while ! ${pkgs.bash}/bin/bash ${pkgs.opensearch}/plugins/opensearch-security/tools/securityadmin.sh \
+                  -icl \
+                  -nhnv \
+                  -cacert /var/lib/opensearch/config/opensearch.crt \
+                  -cert /var/lib/opensearch/config/opensearch.crt \
+                  -key /var/lib/opensearch/config/opensearch.key \
+                  -cd /var/lib/opensearch/config/opensearch-security; do
                 sleep 1
               done
             '')
           ];
         };
+        wantedBy = [ "multi-user.target" "opensearch.target" ];
       };
 
       environment.systemPackages = [
@@ -213,8 +233,8 @@ in
     {
       systemd.services = lib.attrsets.genAttrs svcConfig.services (svc: {
         unitConfig = {
-          Requires = [ "opensearch.service" "opensearch-uds.service" ];
-          After = [ "opensearch.service" "opensearch-uds.service" ];
+          Requires = [ "opensearch.target" ];
+          After = [ "opensearch.target" ];
         };
         serviceConfig = {
           BindReadOnlyPaths = [
