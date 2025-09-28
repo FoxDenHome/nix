@@ -61,7 +61,7 @@ let
         type = "roles";
         config_version = 2;
       };
-    } // lib.attrsets.mapAttrs (name: user: {
+    } // (lib.attrsets.mapAttrs (name: user: {
       reserved = false;
       hidden = false;
       index_permissions = [
@@ -71,7 +71,7 @@ let
         }
       ];
       tenant_permissions = [];
-    })));
+    }) svcConfig.users)));
 
   secCfg."roles_mapping.yml" = (pkgs.writeTextFile {
     name = "roles_mapping.yml";
