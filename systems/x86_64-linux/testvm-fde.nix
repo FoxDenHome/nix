@@ -103,7 +103,7 @@ in
     enable = true;
     users = {
       deluge = {
-        indices = [ "deluge_*" ];
+        indexPatterns = [ "deluge_*" ];
       };
     };
   };
