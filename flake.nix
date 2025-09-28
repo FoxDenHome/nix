@@ -14,9 +14,13 @@
 
     uds-proxy.url = "github:Doridian/uds-proxy";
     uds-proxy.inputs.nixpkgs.follows = "nixpkgs";
+    fadumper.url = "github:Doridian/fadumper";
+    fadumper.inputs.nixpkgs.follows = "nixpkgs";
+    e621dumper.url = "github:FoxDenHome/e621dumper";
+    e621dumper.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { nixpkgs, uds-proxy, sops-nix, impermanence, lanzaboote, ... }:
+  outputs = { nixpkgs, uds-proxy, fadumper, e621dumper, sops-nix, impermanence, lanzaboote, ... }:
   let
     isNixFile = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
 
@@ -78,7 +82,7 @@
       name = hostname;
       value = nixpkgs.lib.nixosSystem {
         system = systemArch;
-        specialArgs = { inherit nixpkgs foxDenLib uds-proxy; };
+        specialArgs = { inherit nixpkgs foxDenLib uds-proxy e621dumper fadumper; };
         modules = [
           ({ ... }: {
             networking.hostName = hostname;
