@@ -12,7 +12,7 @@
 	- [x] Basics
 	- [x] OAuth
 - [x] Samba server
-- [ ] OpenSearch with authentication
+- [x] OpenSearch with authentication
 - [ ] Systems
 	- [ ] bengalfox
 		- [ ] Pre migration
