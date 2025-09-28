@@ -213,8 +213,8 @@ in
     {
       systemd.services = lib.attrsets.genAttrs svcConfig.services (svc: {
         unitConfig = {
-          Requires = [ "opensearch" "opensearch-uds" ];
-          After = [ "opensearch" "opensearch-uds" ];
+          Requires = [ "opensearch.service" "opensearch-uds.service" ];
+          After = [ "opensearch.service" "opensearch-uds.service" ];
         };
         serviceConfig = {
           BindReadOnlyPaths = [
