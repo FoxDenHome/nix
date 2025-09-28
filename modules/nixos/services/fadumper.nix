@@ -65,6 +65,7 @@ in
 
           Environment = [
             "DOWNLOAD_PATH=${svcConfig.dataDir}"
+            "HOST=0.0.0.0"
           ];
         };
 
