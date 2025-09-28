@@ -210,5 +210,21 @@ in
         pkgs.bash
       ];
     }
-  ]);
+  ]
+  ++ (map (svc: {
+      systemd.services.${svc} = {
+        unitConfig = {
+          Requires = [ "opensearch" "opensearch-uds" ];
+          After = [ "opensearch" "opensearch-uds" ];
+        };
+        serviceConfig = {
+          BindReadOnlyPaths = [
+            "/run/opensearch-uds"
+          ];
+          Environment = [
+            "ES_UNIX_SOCKET_PATH=/run/opensearch-uds/opensearch.sock"
+          ];
+        };
+      };
+    }) svcConfig.services));
 }
