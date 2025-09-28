@@ -33,7 +33,7 @@ let
           DevicePolicy = "closed";
           PrivateDevices = nixpkgs.lib.mkForce true;
           ProtectProc = "invisible";
-          Restart = nixpkgs.lib.mkForce (if config.systemd.services.${svc}.serviceConfig.Type != "oneshot" then "always" else "on-failure");
+          Restart = nixpkgs.lib.mkDefault "always";
 
           BindReadOnlyPaths = [
             "/run/systemd/notify"
