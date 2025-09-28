@@ -202,6 +202,7 @@ in
           Type = "oneshot";
           RemainAfterExit = true;
           StateDirectory = "opensearch";
+          Restart = "on-failure";
           ExecStart =
            (lib.attrsets.mapAttrsToList (name: file: "${pkgs.coreutils}/bin/cp ${file} /var/lib/opensearch/config/opensearch-security/${name}") secCfg)
             ++ (map (name: "${pkgs.coreutils}/bin/chmod 600 /var/lib/opensearch/config/opensearch-security/${name}") (lib.attrsets.attrNames secCfg))
