@@ -53,7 +53,7 @@ let
 
   secCfg."roles.yml" = (pkgs.writers.writeYAML
     "roles.yml"
-    {
+    ({
       _meta = {
         type = "roles";
         config_version = 2;
@@ -68,11 +68,11 @@ let
         }
       ];
       tenant_permissions = [];
-    }) svcConfig.users));
+    }) svcConfig.users)));
 
   secCfg."roles_mapping.yml" = (pkgs.writers.writeYAML
     "roles_mapping.yml"
-    {
+    ({
       _meta = {
         type = "rolesmapping";
         config_version = 2;
@@ -92,7 +92,7 @@ let
       hosts = [ ];
       users = [ name ];
       and_backend_roles = [ ];
-    }) svcConfig.users));
+    }) svcConfig.users)));
 
   writeEmptyYaml = (name: type: pkgs.writers.writeYAML
     name
