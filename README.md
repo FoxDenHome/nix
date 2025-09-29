@@ -39,7 +39,7 @@
 				- [ ] nzbget
 	- [ ] islandfox
 		- [ ] Pre migration
-			- [ ] restic
+			- [x] restic
 			- [ ] auth
 			- [ ] scrypted
 			- [ ] monitoring
@@ -58,7 +58,7 @@
 	- [ ] icefox
 		- [ ] Pre migration
 			- [x] nas (see bengalfox)
-			- [ ] restic
+			- [x] restic
 			- [ ] gitbackup
 			- [ ] syncthing
 			- [ ] xmpp
