@@ -2,13 +2,6 @@
 let
   services = foxDenLib.services;
 
-  mkDir = (dir: {
-    directory = dir;
-    user = "restic";
-    group = "restic";
-    mode = "u=rwx,g=,o=";
-  });
-
   svcConfig = config.foxDen.services.restic-server;
 
   defaultDataDir = "/var/lib/restic";

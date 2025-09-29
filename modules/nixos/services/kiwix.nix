@@ -2,13 +2,6 @@
 let
   services = foxDenLib.services;
 
-  mkDir = (dir: {
-    directory = dir;
-    user = "kiwix";
-    group = "kiwix";
-    mode = "u=rwx,g=,o=";
-  });
-
   svcConfig = config.foxDen.services.kiwix;
 
   defaultDataDir = "/var/lib/kiwix";
