@@ -62,9 +62,9 @@
 			- [x] rest-server
 			- [ ] gitbackup
 			- [ ] syncthing
-			- [ ] xmpp
 			- [ ] mirror
 			- [ ] snirouter
+			- [ ] xmpp
 
 ## Notes
 
