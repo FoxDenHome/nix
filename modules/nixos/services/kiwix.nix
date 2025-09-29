@@ -58,6 +58,8 @@ in
 
           StateDirectory = ifDefaultData "kiwix";
         };
+
+        wantedBy = [ "multi-user.target" ];
       };
 
       environment.persistence."/nix/persist/kiwix" = ifDefaultData {
