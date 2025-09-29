@@ -14,7 +14,7 @@ let
   backupmgrPkg = backupmgr.packages.${config.nixpkgs.hostPlatform.system}.default;
 in
 {
-  options.foxDen.services.backupmgr.enable = lib.mkEnabledOption "backupmgr";
+  options.foxDen.services.backupmgr.enable = lib.mkEnableOption "backupmgr";
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     {
       environment.systemPackages = [
