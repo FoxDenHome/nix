@@ -18,9 +18,11 @@
     fadumper.inputs.nixpkgs.follows = "nixpkgs";
     e621dumper.url = "github:FoxDenHome/e621dumper";
     e621dumper.inputs.nixpkgs.follows = "nixpkgs";
+    backupmgr.url = "github:FoxDenHome/backupmgr";
+    backupmgr.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { nixpkgs, uds-proxy, fadumper, e621dumper, sops-nix, impermanence, lanzaboote, ... }:
+  outputs = { nixpkgs, uds-proxy, fadumper, e621dumper, backupmgr, sops-nix, impermanence, lanzaboote, ... }:
   let
     isNixFile = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
 
@@ -82,7 +84,7 @@
       name = hostname;
       value = nixpkgs.lib.nixosSystem {
         system = systemArch;
-        specialArgs = { inherit nixpkgs foxDenLib uds-proxy e621dumper fadumper; };
+        specialArgs = { inherit nixpkgs foxDenLib uds-proxy e621dumper fadumper backupmgr; };
         modules = [
           ({ ... }: {
             networking.hostName = hostname;
