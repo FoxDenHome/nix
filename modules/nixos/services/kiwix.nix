@@ -27,10 +27,6 @@ in
       target = "reverse_proxy http://127.0.0.1:8080";
     }).config
     {
-      environment.systemPackages = [
-        pkgs.kiwix-tools
-      ];
-
       users.users.kiwix = {
         isSystemUser = true;
         description = "kiwix service user";
@@ -47,7 +43,7 @@ in
           User = "kiwix";
           Group = "kiwix";
 
-          ExecStart = [ "${pkgs.bash}/bin/bash -c 'exec ${pkgs.kiwix-tools}/bin/kiwix-serve --port=8080 *.zim'" ];
+          ExecStart = [ "${pkgs.bash}/bin/bash -c 'exec ${pkgs.kiwix-tools}/bin/kiwix-serve --address=127.0.0.1 --port=8080 *.zim'" ];
           WorkingDirectory = svcConfig.dataDir;
 
           StateDirectory = ifDefaultData "kiwix";

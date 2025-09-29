@@ -239,12 +239,6 @@ in
         };
         wantedBy = [ "multi-user.target" "opensearch.target" ];
       };
-
-      environment.systemPackages = [
-        udsProxyPkg
-        pkgs.openssl
-        pkgs.bash
-      ];
     }
     {
       systemd.services = lib.attrsets.genAttrs svcConfig.services (svc: {

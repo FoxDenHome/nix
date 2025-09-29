@@ -116,8 +116,6 @@ in
         };
       };
 
-      environment.systemPackages = [ e621DumperPkg ];
-
       environment.persistence."/nix/persist/e621dumper" = ifDefaultData {
         hideMounts = true;
         directories = [

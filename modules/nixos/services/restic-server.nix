@@ -27,8 +27,11 @@ in
       target = "reverse_proxy http://127.0.0.1:8000";
     }).config
     {
-      services.restic.server.enable = true;
-      services.restic.server.dataDir = svcConfig.dataDir;
+      services.restic.server = {
+        enable = true;
+        dataDir = svcConfig.dataDir;
+        privateRepos = true;
+      };
 
       systemd.services.restic-rest-server = {
         serviceConfig = {

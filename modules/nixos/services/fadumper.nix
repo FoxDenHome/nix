@@ -116,8 +116,6 @@ in
         };
       };
 
-      environment.systemPackages = [ faDumperPkg ];
-
       environment.persistence."/nix/persist/fadumper" = ifDefaultData {
         hideMounts = true;
         directories = [
