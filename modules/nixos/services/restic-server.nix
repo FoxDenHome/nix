@@ -35,9 +35,8 @@ in
     }).config
     {
       services.restic.server.enable = true;
+      services.restic.server.dataDir = svcConfig.dataDir;
 
-      services.restic.server.dataDir = config.foxDen.services.restic-server.dataDir;
-      
       systemd.services.restic-rest-server = {
         serviceConfig = {
           BindPaths = [
