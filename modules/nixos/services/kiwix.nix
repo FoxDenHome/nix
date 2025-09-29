@@ -48,6 +48,7 @@ in
           Group = "kiwix";
 
           ExecStart = [ "${pkgs.kiwix-tools}/bin/kiwix-serve --port=8080 *.zim" ];
+          WorkingDirectory = svcConfig.dataDir;
 
           StateDirectory = ifDefaultData "kiwix";
         };
