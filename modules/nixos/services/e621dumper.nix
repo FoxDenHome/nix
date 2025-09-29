@@ -8,7 +8,7 @@ let
   e621DumperDir = "${e621DumperPkg}/lib/node_modules/e621dumper";
 
   defaultDataDir = "/var/lib/e621dumper";
-  ifDefaultData = lib.mkIf (config.foxDen.services.fadumper.dataDir == defaultDataDir);
+  ifDefaultData = lib.mkIf (config.foxDen.services.e621dumper.dataDir == defaultDataDir);
 in
 {
   options.foxDen.services.e621dumper = {
