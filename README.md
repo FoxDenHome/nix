@@ -21,8 +21,8 @@
 				- [x] jellyfin
 				- [x] nasweb
 				- [x] deluge (TO DO: declarative config + mounts)
-			- [ ] e621dumper
-			- [ ] fadumper
+			- [x] e621dumper
+			- [x] fadumper
 			- [ ] restic
 			- [ ] rest-server
 			- [ ] kiwix
