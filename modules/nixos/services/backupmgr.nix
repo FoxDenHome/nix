@@ -1,14 +1,5 @@
-{ foxDenLib, backupmgr, pkgs, lib, config, ... }:
+{ backupmgr, pkgs, lib, config, ... }:
 let
-  services = foxDenLib.services;
-
-  mkDir = (dir: {
-    directory = dir;
-    user = "root";
-    group = "root";
-    mode = "u=rwx,g=,o=";
-  });
-
   svcConfig = config.foxDen.services.backupmgr;
 
   backupmgrPkg = backupmgr.packages.${config.nixpkgs.hostPlatform.system}.default;
