@@ -1,52 +1,52 @@
-{ foxDenLib, pkgs, lib, config, fadumper, ... }:
+{ foxDenLib, pkgs, lib, config, e621dumper, ... }:
 let
   services = foxDenLib.services;
 
-  svcConfig = config.foxDen.services.fadumper;
+  svcConfig = config.foxDen.services.e621dumper;
 
-  faDumperPkg = fadumper.packages.${config.nixpkgs.hostPlatform.system}.default;
-  faDumperDir = "${faDumperPkg}/lib/node_modules/fadumper";
+  e621DumperPkg = e621dumper.packages.${config.nixpkgs.hostPlatform.system}.default;
+  e621DumperDir = "${e621DumperPkg}/lib/node_modules/e621dumper";
 in
 {
-  options.foxDen.services.fadumper = {
+  options.foxDen.services.e621dumper = {
     dataDir = lib.mkOption {
       type = lib.types.path;
-      default = "/var/lib/fadumper";
-      description = "Directory to store FADumper data";
+      default = "/var/lib/e621dumper";
+      description = "Directory to store e621Dumper data";
     };
-  } // (services.http.mkOptions { svcName = "fadumper"; name = "FADumper"; });
+  } // (services.http.mkOptions { svcName = "e621dumper"; name = "e621Dumper"; });
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
-      name = "fadumper-api";
+      name = "e621dumper-api";
       inherit svcConfig pkgs config;
     }).config
     (services.make {
-      name = "fadumper-refresh";
+      name = "e621dumper-refresh";
       inherit svcConfig pkgs config;
     }).config
     (services.http.make {
       inherit svcConfig pkgs config;
-      name = "caddy-fadumper-api";
+      name = "caddy-e621dumper-api";
       target = "reverse_proxy http://127.0.0.1:8001";
     }).config
     {
       foxDen.services.opensearch.enable = true;
-      foxDen.services.opensearch.users.fadumper = {
-        indexPatterns = [ "fadumper_*" ];
+      foxDen.services.opensearch.users.e621dumper = {
+        indexPatterns = [ "e621dumper_*" ];
       };
-      foxDen.services.opensearch.services = [ "fadumper-api" "fadumper-refresh" ];
+      foxDen.services.opensearch.services = [ "e621dumper-api" "e621dumper-refresh" ];
 
-      users.users.fadumper = {
+      users.users.e621dumper = {
         isSystemUser = true;
-        description = "FADumper service user";
-        group = "fadumper";
+        description = "e621Dumper service user";
+        group = "e621dumper";
       };
-      users.groups.fadumper = {};
+      users.groups.e621dumper = {};
 
-      systemd.services.fadumper-api = {
+      systemd.services.e621dumper-api = {
         confinement.packages = [
-          faDumperPkg
+          e621DumperPkg
         ];
         path = [ pkgs.nodejs_24 ];
 
@@ -55,13 +55,13 @@ in
             svcConfig.dataDir
           ];
 
-          User = "fadumper";
-          Group = "fadumper";
+          User = "e621dumper";
+          Group = "e621dumper";
           
           Type = "simple";
           ExecStart = [ "${pkgs.nodejs_24}/bin/node ./dist/api/index.js" ];
-          WorkingDirectory = faDumperDir;
-          StateDirectory = "fadumper";
+          WorkingDirectory = e621DumperDir;
+          StateDirectory = "e621dumper";
 
           Environment = [
             "DOWNLOAD_PATH=${svcConfig.dataDir}"
@@ -73,9 +73,9 @@ in
         wantedBy = ["multi-user.target"];
       };
 
-      systemd.services.fadumper-refresh = {
+      systemd.services.e621dumper-refresh = {
         confinement.packages = [
-          faDumperPkg
+          e621DumperPkg
         ];
         path = [ pkgs.nodejs_24 ];
 
@@ -84,13 +84,13 @@ in
             svcConfig.dataDir
           ];
 
-          User = "fadumper";
-          Group = "fadumper";
+          User = "e621dumper";
+          Group = "e621dumper";
           
           Type = "simple";
           ExecStart = [ "./looper.sh" ];
-          WorkingDirectory = faDumperDir;
-          StateDirectory = "fadumper";
+          WorkingDirectory = e621DumperDir;
+          StateDirectory = "e621dumper";
 
           Environment = [
             "DOWNLOAD_PATH=${svcConfig.dataDir}"
@@ -98,7 +98,7 @@ in
         };
       };
 
-      environment.systemPackages = [ faDumperPkg ];
+      environment.systemPackages = [ e621DumperPkg ];
     }
   ]);
 }
