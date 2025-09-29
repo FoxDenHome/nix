@@ -23,7 +23,7 @@
 				- [x] deluge (TO DO: declarative config + mounts)
 			- [x] e621dumper
 			- [x] fadumper
-			- [ ] restic
+			- [x] restic
 			- [ ] rest-server
 			- [ ] kiwix
 			- [ ] mirror
