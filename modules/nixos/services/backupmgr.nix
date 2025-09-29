@@ -30,7 +30,7 @@ in
         serviceConfig = {
           Type = "simple";
           Restart = "no";
-          ExecStart = [ "${backupmgrPkg}/bin/backupmgr" "--mode=backup" ];
+          ExecStart = [ "${backupmgrPkg}/bin/backupmgr --mode=backup" ];
         };
       };
 
@@ -49,7 +49,7 @@ in
         serviceConfig = {
           Type = "simple";
           Restart = "no";
-          ExecStart = [ "${backupmgrPkg}/bin/backupmgr" "--mode=prune" ];
+          ExecStart = [ "${backupmgrPkg}/bin/backupmgr --mode=prune" ];
         };
       };
 
