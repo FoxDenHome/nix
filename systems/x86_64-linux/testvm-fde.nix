@@ -99,7 +99,8 @@ in
       # }];
   };
 
-  foxDen.services.backupmgr.enable = false;
+  foxDen.services.restic-server.enable = true;
+  foxDen.services.restic-server.host = "dummy";
 
   foxDen.services.jellyfin = {
     enable = true;
@@ -199,13 +200,13 @@ in
         ];
       };
     };
-    fadumper = {
+    dummy = {
       nameservers = ifcfg.nameservers;
       interfaces.ext = {
         driver = "bridge";
         driverOpts.bridge = "br-default";
         dns = {
-          name = "fadumper";
+          name = "dummy";
           zone = "local.foxden.network";
         };
         addresses = [
