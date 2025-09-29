@@ -99,9 +99,6 @@ in
       # }];
   };
 
-  foxDen.services.restic-server.enable = true;
-  foxDen.services.restic-server.host = "dummy";
-
   foxDen.services.jellyfin = {
     enable = true;
     tls = false;
