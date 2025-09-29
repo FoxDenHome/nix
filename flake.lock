@@ -23,11 +23,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1759030492,
-        "narHash": "sha256-yl8gTmqyz+Hj2Tgk7Hg8s/DcWMXB7z6OR12U7cbAI90=",
+        "lastModified": 1759115467,
+        "narHash": "sha256-gEi/FjzC+YyczsgXLOd6qt4Lnhu541bx2nGEbIH6Efw=",
         "owner": "FoxDenHome",
         "repo": "e621dumper",
-        "rev": "fa1e7855c4450e223359e8ac42e7e3fca078ebe6",
+        "rev": "faf16861f58630c14deb8df1b44b2ce604a4aab3",
         "type": "github"
       },
       "original": {
@@ -44,11 +44,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1759030606,
-        "narHash": "sha256-Wubzay/4Lial0xBpqx5LeZUcDUZ808gOBQNUdQzBTU8=",
+        "lastModified": 1759114986,
+        "narHash": "sha256-BTghU5pYFW3lYEhixmV9hO7yLfdiOte6v46Ov3rFpgM=",
         "owner": "Doridian",
         "repo": "fadumper",
-        "rev": "3aee60185b7b7e751fd6201ce5162adffe4e2bf0",
+        "rev": "a582b2ea65b1c090e5ce5eb9dbd242eba31bc398",
         "type": "github"
       },
       "original": {
