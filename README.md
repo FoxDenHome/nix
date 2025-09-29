@@ -24,7 +24,7 @@
 			- [x] e621dumper
 			- [x] fadumper
 			- [x] restic
-			- [ ] rest-server
+			- [x] rest-server
 			- [ ] kiwix
 			- [ ] mirror
 			- [ ] gitbackup
@@ -59,6 +59,7 @@
 		- [ ] Pre migration
 			- [x] nas (see bengalfox)
 			- [x] restic
+			- [x] rest-server
 			- [ ] gitbackup
 			- [ ] syncthing
 			- [ ] xmpp
