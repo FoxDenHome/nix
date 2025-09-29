@@ -99,6 +99,13 @@ in
       };
 
       environment.systemPackages = [ faDumperPkg ];
+
+      environment.persistence."/nix/persist/fadumper" = {
+        hideMounts = true;
+        directories = [
+          { directory = "/var/lib/fadumper"; user = "fadumper"; group = "fadumper"; mode = "u=rwx,g=,o="; }
+        ];
+      };
     }
   ]);
 }

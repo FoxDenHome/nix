@@ -99,6 +99,13 @@ in
       };
 
       environment.systemPackages = [ e621DumperPkg ];
+
+      environment.persistence."/nix/persist/e621dumper" = {
+        hideMounts = true;
+        directories = [
+          { directory = "/var/lib/e621dumper"; user = "e621dumper"; group = "e621dumper"; mode = "u=rwx,g=,o="; }
+        ];
+      };
     }
   ]);
 }
