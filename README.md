@@ -61,9 +61,9 @@
 			- [x] restic
 			- [x] rest-server
 			- [x] kiwix
+			- [ ] mirror
 			- [ ] gitbackup
 			- [ ] syncthing
-			- [ ] mirror
 			- [ ] snirouter
 			- [ ] xmpp
 
