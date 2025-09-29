@@ -99,6 +99,8 @@ in
       # }];
   };
 
+  foxDen.services.backupmgr.enable = true;
+
   foxDen.services.jellyfin = {
     enable = true;
     tls = false;
