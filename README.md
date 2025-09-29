@@ -25,7 +25,7 @@
 			- [x] fadumper
 			- [x] restic
 			- [x] rest-server
-			- [ ] kiwix
+			- [x] kiwix
 			- [ ] mirror
 			- [ ] gitbackup
 			- [ ] aurbuild
@@ -60,6 +60,7 @@
 			- [x] nas (see bengalfox)
 			- [x] restic
 			- [x] rest-server
+			- [x] kiwix
 			- [ ] gitbackup
 			- [ ] syncthing
 			- [ ] mirror
