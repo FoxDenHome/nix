@@ -107,6 +107,15 @@ in
         };
       };
 
+      systemd.timers.e621Dumper-refresh = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnCalendar = "daily";
+          AccuracySec = "12h";
+          Persistent = true;
+        };
+      };
+
       environment.systemPackages = [ e621DumperPkg ];
 
       environment.persistence."/nix/persist/e621dumper" = ifDefaultData {

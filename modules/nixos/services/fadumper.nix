@@ -107,6 +107,15 @@ in
         };
       };
 
+      systemd.timers.fadumper-refresh = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnCalendar = "daily";
+          AccuracySec = "12h";
+          Persistent = true;
+        };
+      };
+
       environment.systemPackages = [ faDumperPkg ];
 
       environment.persistence."/nix/persist/fadumper" = ifDefaultData {
