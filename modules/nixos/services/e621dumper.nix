@@ -47,6 +47,8 @@ in
       };
       users.groups.e621dumper = {};
 
+      sops.secrets.e621dumper = config.lib.foxDen.sops.mkIfAvailable {};
+
       systemd.services.e621dumper-api = {
         confinement.packages = [
           e621DumperPkg
@@ -60,7 +62,9 @@ in
 
           User = "e621dumper";
           Group = "e621dumper";
-          
+
+          EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.e621dumper.path;
+
           Type = "simple";
           ExecStart = [ "${pkgs.nodejs_24}/bin/node ./dist/api/index.js" ];
           WorkingDirectory = e621DumperDir;
@@ -89,6 +93,8 @@ in
 
           User = "e621dumper";
           Group = "e621dumper";
+
+          EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.e621dumper.path;
           
           Type = "simple";
           ExecStart = [ "./looper.sh" ];

@@ -47,6 +47,8 @@ in
       };
       users.groups.fadumper = {};
 
+      sops.secrets.fadumper = config.lib.foxDen.sops.mkIfAvailable {};
+
       systemd.services.fadumper-api = {
         confinement.packages = [
           faDumperPkg
@@ -60,7 +62,9 @@ in
 
           User = "fadumper";
           Group = "fadumper";
-          
+
+          EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.fadumper.path;
+
           Type = "simple";
           ExecStart = [ "${pkgs.nodejs_24}/bin/node ./dist/api/index.js" ];
           WorkingDirectory = faDumperDir;
@@ -89,7 +93,9 @@ in
 
           User = "fadumper";
           Group = "fadumper";
-          
+
+          EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.fadumper.path;
+
           Type = "simple";
           ExecStart = [ "./looper.sh" ];
           WorkingDirectory = faDumperDir;
