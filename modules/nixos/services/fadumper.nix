@@ -6,12 +6,15 @@ let
 
   faDumperPkg = fadumper.packages.${config.nixpkgs.hostPlatform.system}.default;
   faDumperDir = "${faDumperPkg}/lib/node_modules/fadumper";
+
+  defaultDataDir = "/var/lib/fadumper";
+  ifDefaultData = lib.mkIf (config.foxDen.services.fadumper.dataDir == defaultDataDir);
 in
 {
   options.foxDen.services.fadumper = {
     dataDir = lib.mkOption {
       type = lib.types.path;
-      default = "/var/lib/fadumper";
+      default = defaultDataDir;
       description = "Directory to store FADumper data";
     };
   } // (services.http.mkOptions { svcName = "fadumper"; name = "FADumper"; });
@@ -61,7 +64,7 @@ in
           Type = "simple";
           ExecStart = [ "${pkgs.nodejs_24}/bin/node ./dist/api/index.js" ];
           WorkingDirectory = faDumperDir;
-          StateDirectory = "fadumper";
+          StateDirectory = ifDefaultData "fadumper";
 
           Environment = [
             "DOWNLOAD_PATH=${svcConfig.dataDir}"
@@ -90,7 +93,7 @@ in
           Type = "simple";
           ExecStart = [ "./looper.sh" ];
           WorkingDirectory = faDumperDir;
-          StateDirectory = "fadumper";
+          StateDirectory = ifDefaultData "fadumper";
 
           Environment = [
             "DOWNLOAD_PATH=${svcConfig.dataDir}"
@@ -100,10 +103,10 @@ in
 
       environment.systemPackages = [ faDumperPkg ];
 
-      environment.persistence."/nix/persist/fadumper" = {
+      environment.persistence."/nix/persist/fadumper" = ifDefaultData {
         hideMounts = true;
         directories = [
-          { directory = "/var/lib/fadumper"; user = "fadumper"; group = "fadumper"; mode = "u=rwx,g=,o="; }
+          { directory = defaultDataDir; user = "fadumper"; group = "fadumper"; mode = "u=rwx,g=,o="; }
         ];
       };
     }

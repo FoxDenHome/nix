@@ -6,12 +6,15 @@ let
 
   e621DumperPkg = e621dumper.packages.${config.nixpkgs.hostPlatform.system}.default;
   e621DumperDir = "${e621DumperPkg}/lib/node_modules/e621dumper";
+
+  defaultDataDir = "/var/lib/e621dumper";
+  ifDefaultData = lib.mkIf (config.foxDen.services.fadumper.dataDir == defaultDataDir);
 in
 {
   options.foxDen.services.e621dumper = {
     dataDir = lib.mkOption {
       type = lib.types.path;
-      default = "/var/lib/e621dumper";
+      default = defaultDataDir;
       description = "Directory to store e621Dumper data";
     };
   } // (services.http.mkOptions { svcName = "e621dumper"; name = "e621Dumper"; });
@@ -61,7 +64,7 @@ in
           Type = "simple";
           ExecStart = [ "${pkgs.nodejs_24}/bin/node ./dist/api/index.js" ];
           WorkingDirectory = e621DumperDir;
-          StateDirectory = "e621dumper";
+          StateDirectory = ifDefaultData "e621dumper";
 
           Environment = [
             "DOWNLOAD_PATH=${svcConfig.dataDir}"
@@ -90,7 +93,7 @@ in
           Type = "simple";
           ExecStart = [ "./looper.sh" ];
           WorkingDirectory = e621DumperDir;
-          StateDirectory = "e621dumper";
+          StateDirectory = ifDefaultData "e621dumper";
 
           Environment = [
             "DOWNLOAD_PATH=${svcConfig.dataDir}"
@@ -100,10 +103,10 @@ in
 
       environment.systemPackages = [ e621DumperPkg ];
 
-      environment.persistence."/nix/persist/e621dumper" = {
+      environment.persistence."/nix/persist/e621dumper" = ifDefaultData {
         hideMounts = true;
         directories = [
-          { directory = "/var/lib/e621dumper"; user = "e621dumper"; group = "e621dumper"; mode = "u=rwx,g=,o="; }
+          { directory = defaultDataDir; user = "e621dumper"; group = "e621dumper"; mode = "u=rwx,g=,o="; }
         ];
       };
     }
