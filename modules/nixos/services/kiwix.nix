@@ -47,7 +47,7 @@ in
           User = "kiwix";
           Group = "kiwix";
 
-          ExecStart = [ "${pkgs.kiwix-tools}/bin/kiwix-serve --port=8080 *.zim" ];
+          ExecStart = [ "${pkgs.bash}/bin/bash -c 'exec ${pkgs.kiwix-tools}/bin/kiwix-serve --port=8080 *.zim'" ];
           WorkingDirectory = svcConfig.dataDir;
 
           StateDirectory = ifDefaultData "kiwix";
