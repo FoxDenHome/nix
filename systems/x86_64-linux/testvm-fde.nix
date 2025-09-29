@@ -99,8 +99,10 @@ in
       # }];
   };
 
-  foxDen.services.fadumper.enable = true;
+  foxDen.services.fadumper.enable = false;
   foxDen.services.fadumper.host = "fadumper";
+  foxDen.services.e621dumper.enable = false;
+  foxDen.services.e621dumper.host = "fadumper";
 
   foxDen.services.jellyfin = {
     enable = true;
