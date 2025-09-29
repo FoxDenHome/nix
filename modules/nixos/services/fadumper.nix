@@ -97,7 +97,7 @@ in
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.fadumper.path;
 
           Type = "simple";
-          ExecStart = [ "./looper.sh" ];
+          ExecStart = [ "${pkgs.bash}/bin/bash ./looper.sh" ];
           WorkingDirectory = faDumperDir;
           StateDirectory = ifDefaultData "fadumper";
 
