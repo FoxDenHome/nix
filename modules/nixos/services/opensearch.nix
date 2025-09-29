@@ -255,8 +255,8 @@ in
             "/run/opensearch-uds"
           ];
           Environment = [
-            "ES_UNIX_SOCKET_PATH=/run/opensearch-uds/opensearch.sock"
-            "ES_URL=http://127.0.0.1:9200"
+            "OS_UNIX_SOCKET_PATH=/run/opensearch-uds/opensearch.sock"
+            "OS_URL=http://127.0.0.1:9200"
           ];
         };
       });

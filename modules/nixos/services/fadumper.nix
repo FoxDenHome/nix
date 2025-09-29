@@ -33,7 +33,7 @@ in
     {
       foxDen.services.opensearch.enable = true;
       foxDen.services.opensearch.users.fadumper = {
-        indexPatterns = [ "fa_*" ];
+        indexPatterns = [ "fadumper_*" ];
       };
       foxDen.services.opensearch.services = [ "fadumper-api" "fadumper-refresh" ];
 
