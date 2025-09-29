@@ -126,6 +126,11 @@ in
     host = "deluge";
   };
 
+  foxDen.services.kiwix = {
+    enable = true;
+    host = "dummy";
+  };
+
   foxDen.services.wireguard."wg-deluge" = {
     host = "deluge";
     interface = {
