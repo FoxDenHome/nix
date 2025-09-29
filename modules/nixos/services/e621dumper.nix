@@ -53,7 +53,6 @@ in
         confinement.packages = [
           e621DumperPkg
         ];
-        path = [ pkgs.nodejs_24 ];
 
         serviceConfig = {
           BindPaths = [
@@ -83,6 +82,7 @@ in
       systemd.services.e621dumper-refresh = {
         confinement.packages = [
           e621DumperPkg
+          pkgs.nodejs_24
         ];
         path = [ pkgs.nodejs_24 ];
 

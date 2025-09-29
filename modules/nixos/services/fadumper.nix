@@ -53,7 +53,6 @@ in
         confinement.packages = [
           faDumperPkg
         ];
-        path = [ pkgs.nodejs_24 ];
 
         serviceConfig = {
           BindPaths = [
@@ -83,6 +82,7 @@ in
       systemd.services.fadumper-refresh = {
         confinement.packages = [
           faDumperPkg
+          pkgs.nodejs_24
         ];
         path = [ pkgs.nodejs_24 ];
 
