@@ -12,10 +12,16 @@ let
   svcConfig = config.foxDen.services.restic-server;
 
   defaultDataDir = "/var/lib/restic";
-  ifDefaultData = lib.mkIf (config.services.restic.server.dataDir == defaultDataDir);
+  ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
 in
 {
-  options.foxDen.services.restic-server = services.http.mkOptions { svcName = "restic-server"; name = "Restic Backup Server"; };
+  options.foxDen.services.restic-server = {
+    dataDir = lib.mkOption {
+      type = lib.types.path;
+      default = defaultDataDir;
+      description = "Directory to store restic-server data";
+    };
+  } // (services.http.mkOptions { svcName = "restic-server"; name = "Restic Backup Server"; });
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
@@ -29,9 +35,15 @@ in
     }).config
     {
       services.restic.server.enable = true;
+
+      services.restic.server.dataDir = config.foxDen.services.restic-server.dataDir;
       
       systemd.services.restic-rest-server = {
         serviceConfig = {
+          BindPaths = [
+            svcConfig.dataDir
+          ];
+
           StateDirectory = ifDefaultData "restic";
         };
       };
