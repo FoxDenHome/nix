@@ -175,6 +175,7 @@ in
 
                 serviceConfig = {
                   Type = "oneshot";
+                  Restart = "on-failure";
 
                   BindPaths = [
                     "${svcConfig.dataDir}/${name}:/data"
