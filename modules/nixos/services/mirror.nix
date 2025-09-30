@@ -1,4 +1,4 @@
-{ foxDenLib, pkgs, lib, config, ... }:
+{ foxDenLib, nginx-mirror, pkgs, lib, config, ... }:
 let
   services = foxDenLib.services;
 
@@ -6,6 +6,8 @@ let
 
   defaultDataDir = "/var/lib/mirror";
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
+
+  nginxPkg = nginx-mirror.packages.${config.nixpkgs.hostPlatform.system}.default;
 in
 {
   options.foxDen.services.mirror = {
@@ -18,7 +20,7 @@ in
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
-      name = "nginx-mirror";
+      name = "mirror";
       inherit svcConfig pkgs config;
     }).config
     {
@@ -38,8 +40,8 @@ in
           User = "mirror";
           Group = "mirror";
 
-          ExecStart = [ "${pkgs.nginx}/bin/nginx -g 'daemon off;' -c /etc/foxden/mirror/nginx.conf" ];
-          WorkingDirectory = svcConfig.dataDir;
+          ExecStart = [ "${pkgs.nginx}/bin/nginx -g 'daemon off;' -c ${nginxPkg}/conf/nginx.conf" ];
+          WorkingDirectory = "${nginxPkg}/conf";
 
           StateDirectory = ifDefaultData "mirror";
         };
@@ -47,19 +49,10 @@ in
         wantedBy = [ "multi-user.target" ];
       };
 
-      environment.etc."foxden/mirror/nginx.conf" = {
-        text = ''
-          
-        '';
-        user = "root";
-        group = "root";
-        mode = "u=rw,g=r,o=";
-      };
-
-      environment.persistence."/nix/persist/kiwix" = ifDefaultData {
+      environment.persistence."/nix/persist/mirror" = ifDefaultData {
         hideMounts = true;
         directories = [
-          { directory = defaultDataDir; user = "kiwix"; group = "kiwix"; mode = "u=rwx,g=,o="; }
+          { directory = defaultDataDir; user = "mirror"; group = "mirror"; mode = "u=rwx,g=,o="; }
         ];
       };
     }

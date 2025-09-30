@@ -123,7 +123,7 @@ in
     host = "deluge";
   };
 
-  foxDen.services.kiwix = {
+  foxDen.services.mirror = {
     enable = true;
     host = "dummy";
   };
