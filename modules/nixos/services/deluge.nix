@@ -47,6 +47,8 @@ in
           ExecStart = [
             "${pkgs.coreutils}/bin/mkdir -p /var/lib/deluge/downloads"
           ];
+          User = config.services.deluge.user;
+          Group = config.services.deluge.group;
           Type = "oneshot";
           RemainAfterExit = true;
         };
