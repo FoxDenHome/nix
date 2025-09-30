@@ -65,7 +65,6 @@ in
     {
       users.users.mirror = {
         isSystemUser = true;
-        description = "mirror service user";
         group = "mirror";
       };
       users.groups.mirror = {};

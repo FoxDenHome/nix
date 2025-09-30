@@ -60,7 +60,6 @@ in
 
       users.users.aurbuild = {
         isSystemUser = true;
-        description = "AUR build service user";
         group = "aurbuild";
         home = "/home/aur"; # This is for inside the container
       };
