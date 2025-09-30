@@ -3,7 +3,7 @@ let
   services = foxDenLib.services;
 
   svcConfig = config.foxDen.services.mirror;
-  hostCfg = foxDenLib.hosts.getByName svcConfig.host;
+  hostCfg = foxDenLib.hosts.getByName config svcConfig.host;
 
   defaultDataDir = "/var/lib/mirror";
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
@@ -32,6 +32,8 @@ in
       type = lib.types.str;
     };
   } // (services.http.mkOptions { svcName = "mirror"; name = "Mirror server"; });
+
+  # TODO: Auto-add CNAMEs
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
