@@ -3,6 +3,7 @@ let
   services = foxDenLib.services;
 
   svcConfig = config.foxDen.services.mirror;
+  hostCfg = foxDenLib.hosts.getByName svcConfig.host;
 
   defaultDataDir = "/var/lib/mirror";
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
@@ -16,7 +17,7 @@ let
     ];
   };
 
-  svcDomain = "${svcConfig.host.dns.name}.${svcConfig.host.dns.zone}";
+  svcDomain = "${hostCfg.dns.name}.${hostCfg.dns.zone}";
   svcRootDomain = lib.strings.removePrefix "mirror." svcDomain;
 in
 {
