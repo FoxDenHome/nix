@@ -134,7 +134,7 @@ in
   };
 
   foxDen.services.aurbuild = {
-    enable = true;
+    enable = false;
     host = "dummy";
     packages = [ "dimland-git" ];
   };
