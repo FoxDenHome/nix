@@ -23,6 +23,11 @@ in
       };
     }).config
     {
+      services.pcscd.enable = true;
+      programs.gpg.scdaemonSettings = {
+        disable-ccid = true;
+        pcsc-shared = true;
+      };
       sops.secrets.aurbuildGpgPin = config.lib.foxDen.sops.mkIfAvailable {};
     }
   ];
