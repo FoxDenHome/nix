@@ -2,6 +2,8 @@
 let
   svcConfig = config.foxDen.services.aurbuild;
   mirrorCfg = config.foxDen.services.mirror;
+
+  packagesTxt = pkgs.writers.writeText "packages.txt" (lib.concatStringsSep "\n" (svcConfig.packages ++ [ "" ]));
 in
 {
   options.foxDen.services.aurbuild = {
@@ -19,7 +21,7 @@ in
       oci = {
         image = "ghcr.io/doridian/aurbuild/aurbuild:latest";
         volumes = [
-          "/etc/foxden/aurbuild/packages.txt:/aur/packages.txt:ro"
+          "${packagesTxt}:/aur/packages.txt:ro"
           (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets.aurbuildGpgPin.path}:/gpg/pin:ro")
           "aurbuild_cache_${nixpkgs.hostPlatform}:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${nixpkgs.hostPlatform}:/aur/repo"
@@ -30,8 +32,6 @@ in
       };
     }).config
     {
-      environment.etc."foxden/aurbuild/packages.txt".text = lib.concatStringsSep "\n" (svcConfig.packages ++ [ "" ]);
-
       services.pcscd.enable = true;
       programs.gpg.scdaemonSettings = {
         disable-ccid = true;
