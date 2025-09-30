@@ -32,7 +32,7 @@ in
           "${mirrorCfg.dataDir}/foxdenaur/${builderArch}:/aur/repo"
         ];
         extraOptions = [
-          "--mount type=tmpfs,tmpfs-size=128M,destination=/aur/tmp"
+          "--mount=type=tmpfs,tmpfs-size=128M,destination=/aur/tmp"
         ];
         environment = {
           "GPG_KEY_ID" = "45B097915F67C9D68C19E5747B0F7660EAEC8D49";
