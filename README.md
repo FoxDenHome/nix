@@ -26,7 +26,7 @@
 			- [x] restic
 			- [x] rest-server
 			- [x] kiwix
-			- [ ] mirror
+			- [x] mirror
 			- [ ] gitbackup
 			- [ ] aurbuild
 		- [ ] Post migration
@@ -61,7 +61,7 @@
 			- [x] restic
 			- [x] rest-server
 			- [x] kiwix
-			- [ ] mirror
+			- [x] mirror
 			- [ ] gitbackup
 			- [ ] syncthing
 			- [ ] snirouter
