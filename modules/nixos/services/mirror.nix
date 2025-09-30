@@ -194,9 +194,9 @@ in
                   ExecStart = [
                     "${pkgs.bash}/bin/bash ${mirrorPkg}/refresh/loop.sh"
                   ];
-
-                  wantedBy = [ "multi-user.target" ];
                 };
+
+                wantedBy = [ "multi-user.target" ];
               }
               (services.make {
                 name = svcName;
