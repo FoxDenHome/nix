@@ -32,7 +32,7 @@ let
         };
 
         serviceConfig = {
-          NetworkNamespacePath = nixpkgs.lib.mkIf (svcConfig.host != "") host.namespace;
+          NetworkNamespacePath = nixpkgs.lib.mkIf (svcConfig.host != "") host.namespacePath;
           DevicePolicy = "closed";
           PrivateDevices = nixpkgs.lib.mkForce true;
           ProtectProc = "invisible";
