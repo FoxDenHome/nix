@@ -133,9 +133,9 @@ in
     };
   };
 
-  foxDen.services.gitbackup = {
-    enable = false;
-    host = "";
+  foxDen.services.aurbuild = {
+    enable = true;
+    host = "dummy";
   };
 
   foxDen.services.wireguard."wg-deluge" = {
