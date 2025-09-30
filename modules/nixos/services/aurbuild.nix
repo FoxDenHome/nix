@@ -31,7 +31,9 @@ in
         };
       };
       systemd = {
-        ExecStartPre = [ "${pkgs.coreutils}/bin/mkdir -p ${mirrorCfg.dataDir}/foxdenaur/x86_64" ];
+        serviceConfig = {
+          ExecStartPre = [ "${pkgs.coreutils}/bin/mkdir -p ${mirrorCfg.dataDir}/foxdenaur/x86_64" ];
+        };
       };
     }).config
     {
