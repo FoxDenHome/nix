@@ -32,15 +32,23 @@ in
       users.groups.mirror = {};
 
       systemd.services.mirror = {
+        confinement.packages = [
+          nginxPkg
+          pkgs.nginx.njs
+        ];
+
         serviceConfig = {
           BindPaths = [
             svcConfig.dataDir
           ];
 
+          PrivateUsers = false; # needed for the capabilities sadly
+          AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
+
           User = "mirror";
           Group = "mirror";
 
-          ExecStart = [ "${pkgs.nginx}/bin/nginx -g 'daemon off;' -c ${nginxPkg}/lib/node_modules/mirrorweb/conf/nginx.conf" ];
+          ExecStart = [ "${pkgs.nginx}/bin/nginx -g 'daemon off;' -c ./nginx.conf" ];
           WorkingDirectory = "${nginxPkg}/lib/node_modules/mirrorweb/conf";
 
           StateDirectory = ifDefaultData "mirror";
