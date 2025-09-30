@@ -135,6 +135,7 @@ in
 
   foxDen.services.gitbackup = {
     enable = true;
+    host = "";
   };
 
   foxDen.services.wireguard."wg-deluge" = {

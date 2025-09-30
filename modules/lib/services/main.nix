@@ -10,6 +10,9 @@ let
   mkNamed = (svc: { svcConfig, pkgs, config, ... }:
   let
     host = foxDenLib.hosts.getByName config svcConfig.host;
+
+    dependency = if svcConfig.host != "" then [ host.unit ] else [];
+    resolvConf = if svcConfig.host != "" then "${host.resolvConf}:/etc/resolv.conf" else "/etc/resolv.conf";
   in
   {
     configDir = "/etc/foxden/services/${svc}";
@@ -23,13 +26,13 @@ let
         ];
 
         unitConfig = {
-          Requires = [ host.unit ];
-          BindsTo = [ host.unit ];
-          After = [ host.unit ];
+          Requires = dependency;
+          BindsTo = dependency;
+          After = dependency;
         };
 
         serviceConfig = {
-          NetworkNamespacePath = host.namespacePath;
+          NetworkNamespacePath = nixpkgs.lib.mkIf (svcConfig.host != "") host.namespace;
           DevicePolicy = "closed";
           PrivateDevices = nixpkgs.lib.mkForce true;
           ProtectProc = "invisible";
@@ -37,7 +40,7 @@ let
 
           BindReadOnlyPaths = [
             "/run/systemd/notify"
-            "${host.resolvConf}:/etc/resolv.conf"
+            "${resolvConf}:/etc/resolv.conf"
           ] ++ mkEtcPaths [
             "hosts"
             "localtime"
