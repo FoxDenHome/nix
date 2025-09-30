@@ -4,7 +4,13 @@ let
   mirrorCfg = config.foxDen.services.mirror;
 in
 {
-  options.foxDen.services.aurbuild = foxDenLib.services.oci.mkOptions { svcName = "aurbuild"; name = "AUR build service"; };
+  options.foxDen.services.aurbuild = {
+    packages = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = "Which packages to build";
+    };
+  } // (foxDenLib.services.oci.mkOptions { svcName = "aurbuild"; name = "AUR build service"; });
 
   config = lib.mkMerge [
     (foxDenLib.services.oci.make {
@@ -13,6 +19,7 @@ in
       oci = {
         image = "ghcr.io/doridian/aurbuild/aurbuild:latest";
         volumes = [
+          "/etc/foxden/aurbuild/packages.txt:/aur/packages.txt:ro"
           (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets.aurbuildGpgPin.path}:/gpg/pin:ro")
           "aurbuild_cache_${nixpkgs.hostPlatform}:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${nixpkgs.hostPlatform}:/aur/repo"
@@ -23,6 +30,8 @@ in
       };
     }).config
     {
+      environment.etc."foxden/aurbuild/packages.txt".text = lib.concatStringsSep "\n" (svcConfig.packages ++ [ "" ]);
+
       services.pcscd.enable = true;
       programs.gpg.scdaemonSettings = {
         disable-ccid = true;
