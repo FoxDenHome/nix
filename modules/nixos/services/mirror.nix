@@ -116,6 +116,9 @@ in
             "${svcConfig.dataDir}:/data"
           ];
 
+          PrivateUsers = false; # needed for the capabilities sadly
+          AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
+
           LoadCredential = "rsyncd.conf:/etc/foxden/mirror/rsyncd.conf";
 
           ExecStart = [ "${pkgs.rsync}/bin/rsync --daemon --no-detach --config=\${CREDENTIALS_DIRECTORY}/rsyncd.conf" ];
