@@ -1,14 +1,13 @@
 { foxDenLib, nixpkgs, ... }:
 let
-    mkNamed = (svc: inputs@{ image, oci, svcConfig, pkgs, config, ... }: (foxDenLib.services.mkNamed svc inputs) // (let
+    mkNamed = (svc: inputs@{ oci, svcConfig, pkgs, config, ... }: (foxDenLib.services.mkNamed svc inputs) // (let
       host = foxDenLib.hosts.getByName config svcConfig.host;
     in {
       config.sops.secrets.aurbuildGpgPin = config.lib.foxDen.sops.mkIfAvailable {};
 
       config.virtualisation.oci-containers.containers."${svc}" = nixpkgs.lib.mkMerge [
         {
-          image = image;
-          autoStart = true;
+          autoStart = nixpkgs.lib.mkDefault true;
           networks = [ "ns:${host.namespacePath}" ];
         }
         oci
