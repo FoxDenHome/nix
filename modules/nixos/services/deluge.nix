@@ -12,7 +12,13 @@ let
   svcConfig = config.foxDen.services.deluge;
 in
 {
-  options.foxDen.services.deluge = services.http.mkOptions { svcName = "deluge"; name = "Deluge BitTorrent Client"; };
+  options.foxDen.services.deluge = {
+    downloadsDir = lib.mkOption {
+      type = lib.types.path;
+      default = "/var/lib/deluge/downloads";
+      description = "Directory to store Deluge downloads";
+    };
+  } // (services.http.mkOptions { svcName = "deluge"; name = "Deluge BitTorrent Client"; });
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
@@ -36,12 +42,14 @@ in
       systemd.services.deluged.serviceConfig = {
         BindPaths = [
           config.services.deluge.dataDir
+          "${svcConfig.downloadsDir}:/downloads"
         ];
       };
 
       systemd.services.delugeweb.serviceConfig = {
         BindPaths = [
           config.services.deluge.dataDir
+          "${svcConfig.downloadsDir}:/downloads"
         ];
       };
 
