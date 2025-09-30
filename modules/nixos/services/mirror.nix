@@ -16,6 +16,10 @@ in
       default = defaultDataDir;
       description = "Directory to store mirror data";
     };
+
+    archMirrorId = lib.mkOption {
+      type = lib.types.str;
+    };
   } // (services.http.mkOptions { svcName = "mirror"; name = "Mirror server"; });
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
