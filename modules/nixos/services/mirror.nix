@@ -62,6 +62,12 @@ in
       name = "mirror-rsyncd";
       inherit svcConfig pkgs config;
     }).config
+    (
+        map ({ name, value } : (services.make {
+          name = "mirror-sync-${name}";
+          inherit svcConfig pkgs config;
+        }).config.systemd.services) (lib.attrsets.attrsToList svcConfig.sources)
+    )
     {
       users.users.mirror = {
         isSystemUser = true;
@@ -154,11 +160,23 @@ in
           wantedBy = [ "multi-user.target" ];
         };
       }  // (lib.attrsets.listToAttrs (
-        map ({ name, value } : {
-          name = "mirror-sync-${name}";
+        map ({ name, value } : let
+          svcName = "mirror-sync-${name}";
+        in {
+          name = svcName;
           
           value = {
-            path = [ pkgs.bash ];
+            confinement.packages = [
+              pkgs.bash
+              pkgs.curl
+              pkgs.rsync
+            ];
+
+            path = [
+              pkgs.bash
+              pkgs.curl
+              pkgs.rsync
+            ];
 
             serviceConfig = {
               Type = "oneshot";
@@ -178,7 +196,10 @@ in
               ];
             };
           };
-        }) (lib.attrsets.attrsToList svcConfig.sources)
+        } // (services.make {
+          name = svcName;
+          inherit svcConfig pkgs config;
+        }).config.systemd.services.${svcName}) (lib.attrsets.attrsToList svcConfig.sources)
       ));
 
       environment.persistence."/nix/persist/mirror" = {
