@@ -9,7 +9,7 @@ let
 
   mirrorPkg = nginx-mirror.packages.${config.nixpkgs.hostPlatform.system}.default;
 
-  nginxPkg = pkgs.nginxStable.override {
+  nginxPkg = pkgs.nginxQuic.override {
     modules = [
       pkgs.nginxModules.njs
     ];
