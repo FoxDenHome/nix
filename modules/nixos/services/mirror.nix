@@ -176,7 +176,8 @@ in
                 ];
 
                 serviceConfig = {
-                  Type = "simple";
+                  Type = "oneshot";
+                  Restart = "no";
 
                   User = "mirror";
                   Group = "mirror";
@@ -192,17 +193,31 @@ in
                   ];
 
                   ExecStart = [
-                    "${pkgs.bash}/bin/bash ${mirrorPkg}/refresh/loop.sh"
+                    "${pkgs.bash}/bin/bash ${mirrorPkg}/refresh/run.sh"
                   ];
                 };
-
-                wantedBy = [ "multi-user.target" ];
               }
               (services.make {
                 name = svcName;
                 inherit svcConfig pkgs config;
               }).config.systemd.services.${svcName}
             ];
+          }
+        ) (lib.attrsets.attrsToList svcConfig.sources)
+      ));
+
+      systemd.timers = (lib.attrsets.listToAttrs (
+        map ({ name, value } : let
+          svcName = "mirror-sync-${name}";
+        in {
+            name = svcName;
+            value = {
+              wantedBy = [ "timers.target" ];
+              timerConfig = {
+                OnCalendar = "hourly";
+                Persistent = true;
+              };
+            };
           }
         ) (lib.attrsets.attrsToList svcConfig.sources)
       ));

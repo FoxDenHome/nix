@@ -3,8 +3,6 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  # TODO: Loop via systemd timer
-
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
