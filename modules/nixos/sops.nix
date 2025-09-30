@@ -3,6 +3,7 @@ let
   sharedSopsFile = ../../secrets/shared.yaml;
 
   mkIfAvailable = lib.mkIf config.foxDen.sops.available;
+  mkGithubTokenPath = mkIfAvailable config.sops.secrets.githubTokenEnv.path;
 in
 {
   options.foxDen.sops.available = lib.mkEnableOption "Enable sops-nix usage";
@@ -10,12 +11,16 @@ in
   config = lib.mkMerge [
     {
       lib.foxDen.sops = {
-        inherit mkIfAvailable;
+        inherit mkIfAvailable mkGithubTokenPath;
       };
     }
     (mkIfAvailable {
       sops.secrets.rootPasswordHash = {
         neededForUsers = true;
+      };
+
+      sops.secrets.githubTokenEnv = {
+        sopsFile = sharedSopsFile;
       };
 
       users.mutableUsers = false;
