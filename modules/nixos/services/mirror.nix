@@ -62,12 +62,6 @@ in
       name = "mirror-rsyncd";
       inherit svcConfig pkgs config;
     }).config
-    (
-        map ({ name, value } : (services.make {
-          name = "mirror-sync-${name}";
-          inherit svcConfig pkgs config;
-        }).config.systemd.services) (lib.attrsets.attrsToList svcConfig.sources)
-    )
     {
       users.users.mirror = {
         isSystemUser = true;
@@ -162,7 +156,7 @@ in
       }  // (lib.attrsets.listToAttrs (
         map ({ name, value } : let
           svcName = "mirror-sync-${name}";
-        in
+        in lib.mkMerge [
           {
             name = svcName;
             
@@ -197,12 +191,12 @@ in
                 ];
               };
             };
-          } //
+          }
           ((services.make {
             name = svcName;
             inherit svcConfig pkgs config;
           }).config.systemd.services.${svcName})
-        ) (lib.attrsets.attrsToList svcConfig.sources)
+        ]) (lib.attrsets.attrsToList svcConfig.sources)
       ));
 
       environment.persistence."/nix/persist/mirror" = {
