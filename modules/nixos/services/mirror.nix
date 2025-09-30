@@ -165,12 +165,14 @@ in
                   pkgs.bash
                   pkgs.curl
                   pkgs.rsync
+                  pkgs.coreutils
                 ];
 
                 path = [
                   pkgs.bash
                   pkgs.curl
                   pkgs.rsync
+                  pkgs.coreutils
                 ];
 
                 serviceConfig = {
