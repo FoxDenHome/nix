@@ -51,12 +51,12 @@ in
       # };
       sops.secrets.aurbuildGpgPin = config.lib.foxDen.sops.mkIfAvailable {};
 
-      user.users.aurbuild = {
+      users.users.aurbuild = {
         isSystemUser = true;
         description = "AUR build service user";
         group = "aurbuild";
       };
-      user.groups.aurbuild = {};
+      users.groups.aurbuild = {};
     }
   ];
 }
