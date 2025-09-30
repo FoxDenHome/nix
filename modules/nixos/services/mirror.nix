@@ -66,7 +66,10 @@ in
           User = "mirror";
           Group = "mirror";
 
-          ExecStartPre = [ "${pkgs.nodejs_24}/bin/node /njs/lib/util/renderconf.js" ];
+          ExecStartPre = [
+            "${pkgs.coreutils}/bin/mkdir -p /var/lib/mirror/ssl"
+            "${pkgs.nodejs_24}/bin/node /njs/lib/util/renderconf.js"
+          ];
           ExecStart = [ "${nginxPkg}/bin/nginx -g 'daemon off;' -p /tmp/ngxconf -c nginx.conf" ];
 
           StateDirectory = ifDefaultData "mirror";
