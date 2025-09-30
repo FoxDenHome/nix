@@ -37,6 +37,7 @@ in
         serviceConfig = {
           DynamicUser = true;
           Type = "oneshot";
+          Restart = "no";
 
           Environment = [
             "GITHUB_ORGANIZATIONS=foxCaves,FoxDenHome,FoxBukkit,MoonHack,PawNode,SpaceAgeMP,WSVPN"
