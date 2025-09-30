@@ -16,7 +16,6 @@ let
   in
   {
     configDir = "/etc/foxden/services/${svc}";
-    # oci.networks = [ "ns:${info.namespace}" ]; # TODO: Test
 
     config = {
       systemd.services.${svc} = {

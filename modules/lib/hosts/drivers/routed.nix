@@ -52,8 +52,4 @@ in
     "-${ipCmd} link del ${eSA hostIface}"
     "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA serviceInterface}"
   ]);
-
-  execStop = ({ ipCmd, interface, ... }: [
-    "${ipCmd} link del ${eSA (mkIfaceName interface)}"
-  ]);
 }

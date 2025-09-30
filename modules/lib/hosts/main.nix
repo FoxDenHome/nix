@@ -158,7 +158,7 @@ in
                 ]
                 ++ (nixpkgs.lib.flatten (map mkInterfaceStartConfig (nixpkgs.lib.filter (iface: iface.host.name == host.name) interfaces)));
 
-                ExecStop = [ # TODO: Re-implement interface shutdown
+                ExecStop = [
                   "${ipCmd} netns del ${eSA host.namespace}"
                 ];
               };
