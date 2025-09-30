@@ -5,4 +5,6 @@
       "/var/lib/containers"
     ];
   };
+
+  virtualisation.oci-containers.backend = "podman";
 }

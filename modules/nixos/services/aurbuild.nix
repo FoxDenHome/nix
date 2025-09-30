@@ -19,6 +19,10 @@ in
           "aurbuild_cache:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${nixpkgs.hostPlatform}:/aur/repo"
         ];
+
+        environment = {
+          "GPG_KEY_ID" = "45B097915F67C9D68C19E5747B0F7660EAEC8D49";
+        };
       };
     }
   ]);
