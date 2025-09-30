@@ -52,8 +52,7 @@ in
       };
 
       systemd.services.deluge-pre = {
-        wantedBy = [ "multi-user.target" "deluged.service" "delugeweb.service" ];
-        before = [ "deluged.service" "delugeweb.service" ];
+        wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
           LoadCredential = "auth:${config.sops.secrets.delugeAuthFile.path}";
@@ -72,18 +71,34 @@ in
         };
       };
 
-      systemd.services.deluged.serviceConfig = {
-        BindPaths = [
-          config.services.deluge.dataDir
-          "${svcConfig.downloadsDir}:/downloads"
-        ];
+      systemd.services.deluged = {
+        unitConfig = {
+          Requires = [ "deluge-pre.service" ];
+          BindsTo = [ "deluge-pre.service" ];
+          After = [ "deluge-pre.service" ];
+        };
+
+        serviceConfig = {
+          BindPaths = [
+            config.services.deluge.dataDir
+            "${svcConfig.downloadsDir}:/downloads"
+          ];
+        };
       };
 
-      systemd.services.delugeweb.serviceConfig = {
-        BindPaths = [
-          config.services.deluge.dataDir
-          "${svcConfig.downloadsDir}:/downloads"
-        ];
+      systemd.services.delugeweb = {
+        unitConfig = {
+          Requires = [ "deluge-pre.service" ];
+          BindsTo = [ "deluge-pre.service" ];
+          After = [ "deluge-pre.service" ];
+        };
+
+        serviceConfig = {
+          BindPaths = [
+            config.services.deluge.dataDir
+            "${svcConfig.downloadsDir}:/downloads"
+          ];
+        };
       };
 
       environment.persistence."/nix/persist/deluge" = {
