@@ -133,6 +133,10 @@ in
     };
   };
 
+  foxDen.services.gitbackup = {
+    enabled = true;
+  };
+
   foxDen.services.wireguard."wg-deluge" = {
     host = "deluge";
     interface = {
