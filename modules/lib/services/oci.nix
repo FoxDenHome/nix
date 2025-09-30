@@ -8,9 +8,9 @@ let
         autoStart = true;
         networks = [ "ns:${host.namespacePath}" ];
 
-        environment = [
-          "GPG_KEY_ID=45B097915F67C9D68C19E5747B0F7660EAEC8D49"
-        ];
+        environment = {
+          "GPG_KEY_ID" = "45B097915F67C9D68C19E5747B0F7660EAEC8D49";
+        };
       };
 
       config.systemd.services."podman-${svc}" = {
