@@ -8,17 +8,17 @@ in
 
   config = (foxDenLib.services.oci.make {
       inherit pkgs config svcConfig;
+      name = "aurbuild";
       oci = {
         image = "ghcr.io/doridian/aurbuild/aurbuild:latest";
         volumes = config.lib.foxDen.sops.mkIfAvailable [
           "${config.sops.secrets.aurbuildGpgPin.path}:/gpg/pin:ro"
-          "aurbuild_cache:/aur/cache"
+          "aurbuild_cache_${nixpkgs.hostPlatform}:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${nixpkgs.hostPlatform}:/aur/repo"
         ];
         environment = {
           "GPG_KEY_ID" = "45B097915F67C9D68C19E5747B0F7660EAEC8D49";
         };
       };
-      name = "aurbuild";
     }).config;
 }
