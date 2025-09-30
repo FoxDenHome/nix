@@ -127,6 +127,10 @@ in
     enable = true;
     host = "dummy";
     archMirrorId = "foxden";
+    sources.archlinux = {
+      rsyncUrl = "rsync://mirror.foxden.network/archlinux/";
+      forceSync = true;
+    };
   };
 
   foxDen.services.wireguard."wg-deluge" = {

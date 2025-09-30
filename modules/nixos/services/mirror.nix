@@ -17,6 +17,22 @@ let
 
   svcDomain = "${primaryInterface.dns.name}.${primaryInterface.dns.zone}";
   svcRootDomain = lib.strings.removePrefix "mirror." svcDomain;
+
+  sourceType = with lib.types; submodule {
+    options = {
+      rsyncUrl = nixpkgs.lib.mkOption {
+        type = str;
+      };
+      httpsUrl = nixpkgs.lib.mkOption {
+        type = str;
+        default = "";
+      };
+      forceSync = nixpkgs.lib.mkOption {
+        type = bool;
+        default = false;
+      };
+    };
+  };
 in
 {
   options.foxDen.services.mirror = {
@@ -28,6 +44,10 @@ in
 
     archMirrorId = lib.mkOption {
       type = lib.types.str;
+    };
+
+    sources = lib.mkOption {
+      type = lib.types.attrsOf sourceType;
     };
   } // (services.http.mkOptions { svcName = "mirror"; name = "Mirror server"; });
 
@@ -49,41 +69,6 @@ in
         group = "mirror";
       };
       users.groups.mirror = {};
-
-      systemd.services.mirror-nginx = {
-        confinement.packages = [
-          mirrorPkg
-        ];
-
-        serviceConfig = {
-          BindReadOnlyPaths = [
-            "${mirrorPkg}:/njs"
-            "${svcConfig.dataDir}:/data"
-          ];
-
-          PrivateUsers = false; # needed for the capabilities sadly
-          AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
-
-          Environment = [
-            "ROOT_DOMAIN=${svcRootDomain}"
-            "ARCH_MIRROR_ID=${svcConfig.archMirrorId}"
-            "RESOLVERS=${lib.strings.concatStringsSep " " hostCfg.nameservers}"
-          ];
-
-          User = "mirror";
-          Group = "mirror";
-
-          ExecStartPre = [
-            "${pkgs.coreutils}/bin/mkdir -p /var/lib/mirror/ssl ${svcConfig.dataDir}"
-            "${pkgs.nodejs_24}/bin/node /njs/lib/util/renderconf.js"
-          ];
-          ExecStart = [ "${nginxPkg}/bin/nginx -g 'daemon off;' -p /tmp/ngxconf -c nginx.conf" ];
-
-          StateDirectory = "mirror";
-        };
-
-        wantedBy = [ "multi-user.target" ];
-      };
 
       environment.etc."foxden/mirror/rsyncd.conf" = {
         text = ''
@@ -109,28 +94,91 @@ in
         '';
       };
 
-      systemd.services.mirror-rsyncd = {
-        restartTriggers = [ config.environment.etc."foxden/mirror/rsyncd.conf".text ];
-        serviceConfig = {
-          BindReadOnlyPaths = [
-            "${svcConfig.dataDir}:/data"
+      systemd.services = {
+        mirror-nginx = {
+          confinement.packages = [
+            mirrorPkg
           ];
 
-          PrivateUsers = false; # needed for the capabilities sadly
-          AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
+          serviceConfig = {
+            BindReadOnlyPaths = [
+              "${mirrorPkg}:/njs"
+              "${svcConfig.dataDir}:/data"
+            ];
 
-          LoadCredential = "rsyncd.conf:/etc/foxden/mirror/rsyncd.conf";
+            PrivateUsers = false; # needed for the capabilities sadly
+            AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
 
-          ExecStart = [ "${pkgs.rsync}/bin/rsync --daemon --no-detach --config=\${CREDENTIALS_DIRECTORY}/rsyncd.conf" ];
+            Environment = [
+              "ROOT_DOMAIN=${svcRootDomain}"
+              "ARCH_MIRROR_ID=${svcConfig.archMirrorId}"
+              "RESOLVERS=${lib.strings.concatStringsSep " " hostCfg.nameservers}"
+            ];
 
-          User = "mirror";
-          Group = "mirror";
+            User = "mirror";
+            Group = "mirror";
 
-          StateDirectory = "mirror";
+            ExecStartPre = [
+              "${pkgs.coreutils}/bin/mkdir -p /var/lib/mirror/ssl ${svcConfig.dataDir}"
+              "${pkgs.nodejs_24}/bin/node /njs/lib/util/renderconf.js"
+            ];
+            ExecStart = [ "${nginxPkg}/bin/nginx -g 'daemon off;' -p /tmp/ngxconf -c nginx.conf" ];
+
+            StateDirectory = "mirror";
+          };
+
+          wantedBy = [ "multi-user.target" ];
         };
 
-        wantedBy = [ "multi-user.target" ];
-      };
+        mirror-rsyncd = {
+          restartTriggers = [ config.environment.etc."foxden/mirror/rsyncd.conf".text ];
+
+          serviceConfig = {
+            BindReadOnlyPaths = [
+              "${svcConfig.dataDir}:/data"
+            ];
+
+            PrivateUsers = false; # needed for the capabilities sadly
+            AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
+
+            LoadCredential = "rsyncd.conf:/etc/foxden/mirror/rsyncd.conf";
+
+            ExecStart = [ "${pkgs.rsync}/bin/rsync --daemon --no-detach --config=\${CREDENTIALS_DIRECTORY}/rsyncd.conf" ];
+
+            User = "mirror";
+            Group = "mirror";
+
+            StateDirectory = "mirror";
+          };
+
+          wantedBy = [ "multi-user.target" ];
+        };
+      }  // (lib.attrsets.listToAttrs (
+        map ({ name, value } : {
+          name = "mirror-sync-${name}";
+          value = {
+            serviceConfig = {
+              Type = "oneshot";
+
+              BindPaths = [
+                "${svcConfig.dataDir}/${name}:/data"
+              ];
+
+              Environment = [
+                "MIRROR_SOURCE_RSYNC=${value.rsyncUrl}"
+                "MIRROR_SOURCE_HTTPS=${value.httpsUrl}"
+                "MIRROR_FORCE_SYNC=${toString value.forceSync}"
+              ];
+
+              ExecStart = [
+                "${mirrorPkg}/refresh/loop.sh"
+              ];
+            };
+
+            wantedBy = [ "multi-user.target" ];
+          };
+        }) (lib.attrsets.attrsToList svcConfig.sources)
+      ));
 
       environment.persistence."/nix/persist/mirror" = {
         hideMounts = true;
