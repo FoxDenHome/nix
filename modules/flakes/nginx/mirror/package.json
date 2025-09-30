@@ -6,7 +6,7 @@
   "author": "Doridian",
   "type": "module",
   "scripts": {
-    "build": "rimraf lib && tsc && node ./lib/util/renderconf.js"
+    "build": "rimraf lib && tsc"
   },
   "devDependencies": {
     "njs-types": "^0.9.1",
