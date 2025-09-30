@@ -126,6 +126,7 @@ in
   foxDen.services.mirror = {
     enable = true;
     host = "dummy";
+    archMirrorId = "foxden";
   };
 
   foxDen.services.wireguard."wg-deluge" = {
