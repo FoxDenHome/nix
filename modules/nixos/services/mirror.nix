@@ -8,6 +8,7 @@ let
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
 
   mirrorPkg = nginx-mirror.packages.${config.nixpkgs.hostPlatform.system}.default;
+  nginxDir = "${mirrorPkg}/lib/node_modules/mirrorweb/conf";
 
   nginxPkg = pkgs.nginxQuic.override {
     modules = [
@@ -58,7 +59,8 @@ in
           User = "mirror";
           Group = "mirror";
 
-          ExecStart = [ "${nginxPkg}/bin/nginx -g 'daemon off;' -p '${mirrorPkg}/lib/node_modules/mirrorweb/conf' -c 'nginx.conf'" ];
+          ExecStart = [ "${nginxPkg}/bin/nginx -g 'daemon off;' -p '${nginxDir}' -c 'nginx.conf'" ];
+          WorkingDirectory = nginxDir;
 
           StateDirectory = ifDefaultData "mirror";
         };
