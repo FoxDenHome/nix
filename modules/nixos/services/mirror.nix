@@ -12,6 +12,7 @@ let
   nginxPkg = pkgs.nginxQuic.override {
     modules = [
       pkgs.nginxModules.njs
+      pkgs.nginxModules.fancyindex
     ];
   };
 in
