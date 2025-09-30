@@ -42,7 +42,9 @@
                   mkdir -p $out
                   ls -la ./lib/node_modules
                   cp -r lib/node_modules/mirrorweb/* $out/
+                  chmod 755 $out/lib
                   cp acme.js $out/lib/acme.js
+                  chmod 555 $out/lib
                 '';
               });
         };
