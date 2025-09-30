@@ -1,6 +1,6 @@
 { ... }:
 {
-  config.services.podman.autoUpdate.enable = true;
+  services.podman.autoUpdate.enable = true;
 
   environment.persistence."/nix/persist/oci" = {
     directories = [
