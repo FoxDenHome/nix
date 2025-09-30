@@ -26,6 +26,7 @@ in
           "${packagesTxt}:/aur/packages.txt:ro"
           "/etc/passwd:/etc/passwd:ro"
           "/etc/group:/etc/group:ro"
+          "/run/pcscd:/run/pcscd:ro"
           (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets.aurbuildGpgPin.path}:/gpg/pin:ro")
           "aurbuild_cache_${builderArch}:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${builderArch}:/aur/repo"
