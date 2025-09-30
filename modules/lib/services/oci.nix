@@ -1,4 +1,4 @@
-{ nixpkgs, foxDenLib, ... }:
+{ foxDenLib, ... }:
 let
     mkNamed = (svc: inputs@{ image, svcConfig, pkgs, config, ... }: (foxDenLib.services.mkNamed svc inputs) // (let
       host = foxDenLib.hosts.getByName config svcConfig.host;
