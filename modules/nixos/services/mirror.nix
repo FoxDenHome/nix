@@ -118,6 +118,7 @@ in
           ++ [
             "${svcConfig.dataDir}:/data"
           ];
+
           ExecStart = [ "${pkgs.rsync}/bin/rsync --daemon --no-detach --config=/etc/foxden/mirror/rsyncd.conf" ];
 
           User = "mirror";
@@ -132,6 +133,7 @@ in
       environment.persistence."/nix/persist/mirror" = {
         hideMounts = true;
         directories = [
+          { directory = "/var/lib/mirror/data"; user = "mirror"; group = "mirror"; mode = "u=rwx,g=,o="; }
           { directory = "/var/lib/mirror"; user = "mirror"; group = "mirror"; mode = "u=rwx,g=,o="; }
         ];
       };
