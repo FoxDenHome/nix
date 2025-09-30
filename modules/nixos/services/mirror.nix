@@ -8,7 +8,6 @@ let
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
 
   mirrorPkg = nginx-mirror.packages.${config.nixpkgs.hostPlatform.system}.default;
-  nginxDir = "${mirrorPkg}/lib/node_modules/mirrorweb";
 
   nginxPkg = pkgs.nginxQuic.override {
     modules = [
@@ -53,7 +52,7 @@ in
             svcConfig.dataDir
           ];
           BindReadOnlyPaths = [
-            "${nginxDir}:/njs"
+            "${mirrorPkg}:/njs"
           ];
 
           PrivateUsers = false; # needed for the capabilities sadly
