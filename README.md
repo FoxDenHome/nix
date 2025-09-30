@@ -27,7 +27,7 @@
 			- [x] rest-server
 			- [x] kiwix
 			- [x] mirror
-			- [ ] gitbackup
+			- [x] gitbackup
 			- [ ] aurbuild
 		- [ ] Post migration
 			- [ ] ollama
@@ -48,7 +48,7 @@
 			- [ ] homeassistant VM
 			- [ ] foxcaves
 			- [ ] git
-			- [ ] gitbackup
+			- [x] gitbackup
 			- [ ] website
 			- [ ] minecraft
 			- [ ] darksignsonline
@@ -62,7 +62,7 @@
 			- [x] rest-server
 			- [x] kiwix
 			- [x] mirror
-			- [ ] gitbackup
+			- [x] gitbackup
 			- [ ] syncthing
 			- [ ] snirouter
 			- [ ] xmpp
