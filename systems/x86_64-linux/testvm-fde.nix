@@ -127,8 +127,8 @@ in
     enable = false;
     host = "dummy";
     archMirrorId = "foxden";
-    sources.archlinux = {
-      rsyncUrl = "rsync://mirror.foxden.network/archlinux/";
+    sources.foxdenaur = {
+      rsyncUrl = "rsync://mirror.foxden.network/foxdenaur/";
       forceSync = true;
     };
   };
