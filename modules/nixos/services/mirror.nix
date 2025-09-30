@@ -15,6 +15,9 @@ let
       pkgs.nginxModules.fancyindex
     ];
   };
+
+  svcDomain = "${svcConfig.host.dns.name}.${svcConfig.host.dns.zone}";
+  svcRootDomain = lib.strings.removePrefix "mirror." svcDomain;
 in
 {
   options.foxDen.services.mirror = {
@@ -59,8 +62,8 @@ in
           AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
 
           Environment = [
-            "ROOT_DOMAIN=local.foxden.network"
-            "ARCH_MIRROR_ID=foxden"
+            "ROOT_DOMAIN=${svcRootDomain}"
+            "ARCH_MIRROR_ID=${svcConfig.archMirrorId}"
           ];
 
           User = "mirror";
