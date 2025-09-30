@@ -110,6 +110,7 @@ in
       };
 
       systemd.services.mirror-rsyncd = {
+        restartTriggers = [ config.environment.etc."foxden/mirror/rsyncd.conf".text ];
         serviceConfig = {
           BindReadOnlyPaths = [
             "${svcConfig.dataDir}:/data"
