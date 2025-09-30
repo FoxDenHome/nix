@@ -5,6 +5,7 @@ let
     in {
       config.virtualisation.oci-containers.containers."${svc}" = {
         image = image;
+        autoUpdate = true;
         autoStart = true;
         networks = [ "ns:${host.namespacePath}" ];
       };
