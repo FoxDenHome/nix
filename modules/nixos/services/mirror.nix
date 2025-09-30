@@ -68,6 +68,7 @@ in
           Environment = [
             "ROOT_DOMAIN=${svcRootDomain}"
             "ARCH_MIRROR_ID=${svcConfig.archMirrorId}"
+            "RESOLVERS=${lib.strings.concatStringsSep " " hostCfg.nameservers}"
           ];
 
           User = "mirror";

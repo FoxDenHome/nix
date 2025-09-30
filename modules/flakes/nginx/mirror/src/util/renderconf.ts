@@ -7,6 +7,7 @@ async function main() {
         const content = await fs.promises.readFile(`/njs/conf/${file}`);
         const rendered = content.toString()
                             .replace(/__ROOT_DOMAIN__/g, process.env.ROOT_DOMAIN ?? 'mirror.local.foxden.network')
+                            .replace(/__RESOLVERS__/g, process.env.RESOLVERS ?? '127.0.0.1')
                             .replace(/__ARCH_MIRROR_ID__/g, process.env.ARCH_MIRROR_ID ?? 'archlinux');
         await fs.promises.writeFile(`/tmp/ngxconf/${file}`, rendered);
     }
