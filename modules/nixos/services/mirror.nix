@@ -8,7 +8,7 @@ let
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
 
   mirrorPkg = nginx-mirror.packages.${config.nixpkgs.hostPlatform.system}.default;
-  nginxDir = "${mirrorPkg}/lib/node_modules/mirrorweb/conf";
+  nginxDir = "${mirrorPkg}/lib/node_modules/mirrorweb";
 
   nginxPkg = pkgs.nginxQuic.override {
     modules = [
@@ -52,6 +52,9 @@ in
           BindPaths = [
             svcConfig.dataDir
           ];
+          BindReadOnlyPaths = [
+            "${nginxDir}:/njs"
+          ];
 
           PrivateUsers = false; # needed for the capabilities sadly
           AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
@@ -59,8 +62,7 @@ in
           User = "mirror";
           Group = "mirror";
 
-          ExecStart = [ "${nginxPkg}/bin/nginx -g 'daemon off;' -p '${nginxDir}' -c 'nginx.conf'" ];
-          WorkingDirectory = nginxDir;
+          ExecStart = [ "${nginxPkg}/bin/nginx -g 'daemon off;' -p /njs/conf -c nginx.conf" ];
 
           StateDirectory = ifDefaultData "mirror";
         };
