@@ -8,6 +8,14 @@ let
         autoStart = true;
         networks = [ "ns:${host.namespacePath}" ];
       };
+
+      systemnd.services."podman-${svc}" = {
+        unitConfig = {
+          Requires = [ host.unit ];
+          BindsTo = [ host.unit ];
+          After = [ host.unit ];
+        };
+      };
     }));
 in
 {
