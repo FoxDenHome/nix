@@ -1,6 +1,6 @@
 { foxDenLib, nixpkgs, ... }:
 let
-    mkNamed = (svc: inputs@{ oci, svcConfig, pkgs, config, ... }: (foxDenLib.services.mkNamed svc inputs) // (let
+    mkNamed = (svc: inputs@{ oci, systemd, svcConfig, pkgs, config, ... }: (foxDenLib.services.mkNamed svc inputs) // (let
       host = foxDenLib.hosts.getByName config svcConfig.host;
     in {
       config.sops.secrets.aurbuildGpgPin = config.lib.foxDen.sops.mkIfAvailable {};
@@ -14,13 +14,16 @@ let
         oci
       ];
 
-      config.systemd.services."podman-${svc}" = {
-        unitConfig = {
-          Requires = [ host.unit ];
-          BindsTo = [ host.unit ];
-          After = [ host.unit ];
-        };
-      };
+      config.systemd.services."podman-${svc}" = nixpkgs.lib.mkMerge [
+        {
+          unitConfig = {
+            Requires = [ host.unit ];
+            BindsTo = [ host.unit ];
+            After = [ host.unit ];
+          };
+        }
+        systemd
+      ];
     }));
 in
 {

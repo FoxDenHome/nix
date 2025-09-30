@@ -23,12 +23,15 @@ in
         volumes = [
           "${packagesTxt}:/aur/packages.txt:ro"
           (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets.aurbuildGpgPin.path}:/gpg/pin:ro")
-          "aurbuild_cache_${config.nixpkgs.hostPlatform.system}:/aur/cache"
-          "${mirrorCfg.dataDir}/foxdenaur/${config.nixpkgs.hostPlatform.system}:/aur/repo"
+          "aurbuild_cache_x86_64:/aur/cache"
+          "${mirrorCfg.dataDir}/foxdenaur/x86_64:/aur/repo"
         ];
         environment = {
           "GPG_KEY_ID" = "45B097915F67C9D68C19E5747B0F7660EAEC8D49";
         };
+      };
+      systemd = {
+        ExecStartPre = [ "${pkgs.coreutils}/bin/mkdir -p ${mirrorCfg.dataDir}/foxdenaur/x86_64" ];
       };
     }).config
     {

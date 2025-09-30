@@ -44,6 +44,7 @@ in
           config.services.deluge.dataDir
           "${svcConfig.downloadsDir}:/downloads"
         ];
+        ExecStartPre = [ "${pkgs.coreutils}/bin/mkdir -p ${svcConfig.downloadsDir}" ];
       };
 
       systemd.services.delugeweb.serviceConfig = {
