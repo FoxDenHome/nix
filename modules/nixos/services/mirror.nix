@@ -7,7 +7,13 @@ let
   defaultDataDir = "/var/lib/mirror";
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
 
-  nginxPkg = nginx-mirror.packages.${config.nixpkgs.hostPlatform.system}.default;
+  mirrorPkg = nginx-mirror.packages.${config.nixpkgs.hostPlatform.system}.default;
+
+  nginxPkg = pkgs.nginxStable.override {
+    modules = [
+      pkgs.nginxModules.njs
+    ];
+  };
 in
 {
   options.foxDen.services.mirror = {
@@ -37,8 +43,7 @@ in
 
       systemd.services.mirror = {
         confinement.packages = [
-          nginxPkg
-          pkgs.nginxModules.njs
+          mirrorPkg
         ];
 
         serviceConfig = {
@@ -52,7 +57,7 @@ in
           User = "mirror";
           Group = "mirror";
 
-          ExecStart = [ "${pkgs.nginx}/bin/nginx -g 'daemon off;' -c ${nginxPkg}/lib/node_modules/mirrorweb/conf/nginx.conf" ];
+          ExecStart = [ "${nginxPkg}/bin/nginx -g 'daemon off;' -c ${mirrorPkg}/lib/node_modules/mirrorweb/conf/nginx.conf" ];
 
           StateDirectory = ifDefaultData "mirror";
         };
