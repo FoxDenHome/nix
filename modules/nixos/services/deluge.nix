@@ -47,7 +47,7 @@ in
         };
         declarative = true;
         group = "share";
-        authFile = "/run/credentials/auth-file.cfg";
+        authFile = "/run/credentials/deluged.service/auth";
       };
 
       systemd.services.deluge-pre = {
@@ -71,7 +71,7 @@ in
           "${svcConfig.downloadsDir}:/downloads"
         ];
 
-        LoadCredentials = "auth-file.cfg:${config.sops.secrets.delugeAuthFile.path}";
+        LoadCredential = "auth:${config.sops.secrets.delugeAuthFile.path}";
       };
 
       systemd.services.delugeweb.serviceConfig = {
