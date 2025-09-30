@@ -20,7 +20,7 @@
 				- [x] samba
 				- [x] jellyfin
 				- [x] nasweb
-				- [x] deluge (TO DO: declarative config + mounts)
+				- [x] deluge (TODO: declarative config + mounts)
 			- [x] e621dumper
 			- [x] fadumper
 			- [x] restic
@@ -28,7 +28,7 @@
 			- [x] kiwix
 			- [x] mirror
 			- [x] gitbackup
-			- [ ] aurbuild
+			- [x] aurbuild (TODO: Passthru YubiKey)
 		- [ ] Post migration
 			- [ ] ollama
 			- [ ] hashtopolis
