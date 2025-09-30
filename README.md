@@ -20,7 +20,7 @@
 				- [x] samba
 				- [x] jellyfin
 				- [x] nasweb
-				- [x] deluge (TODO: declarative config + mounts)
+				- [x] deluge (TODO: declarative config)
 			- [x] e621dumper
 			- [x] fadumper
 			- [x] restic
