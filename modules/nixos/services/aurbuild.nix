@@ -47,6 +47,7 @@ in
     }).config
     {
       services.pcscd.enable = true;
+      # Home-Manager
       # programs.gpg.scdaemonSettings = {
       #   disable-ccid = true;
       #   pcsc-shared = true;
@@ -57,7 +58,7 @@ in
         isSystemUser = true;
         description = "AUR build service user";
         group = "aurbuild";
-        home = "/home/aur";
+        home = "/home/aur"; # This is for inside the container
       };
       users.groups.aurbuild = {};
     }
