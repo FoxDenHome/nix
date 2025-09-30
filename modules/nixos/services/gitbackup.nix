@@ -4,7 +4,7 @@ let
 
   svcConfig = config.foxDen.services.gitbackup;
 
-  defaultDataDir = "/var/lib/gitbackup";
+  defaultDataDir = "/var/lib/private/gitbackup";
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
 
   gitbackupPkg = gitbackup.packages.${config.nixpkgs.hostPlatform.system}.default;
