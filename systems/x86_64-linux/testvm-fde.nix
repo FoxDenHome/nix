@@ -134,7 +134,7 @@ in
   };
 
   foxDen.services.gitbackup = {
-    enable = false;
+    enable = true;
     host = "";
   };
 

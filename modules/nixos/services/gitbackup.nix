@@ -36,7 +36,7 @@ in
 
         serviceConfig = {
           DynamicUser = true;
-          Type = "simple";
+          Type = "oneshot";
 
           Environment = [
             "GITHUB_ORGANIZATIONS=foxCaves,FoxDenHome,FoxBukkit,MoonHack,PawNode,SpaceAgeMP,WSVPN"
@@ -49,12 +49,18 @@ in
             "${svcConfig.dataDir}"
           ];
 
-          ExecStart = [ "${gitbackupPkg}/bin/gitbackup-loop" ]; # TODO: systemd timer
+          ExecStart = [ "${gitbackupPkg}/bin/gitbackup-single" ];
 
           StateDirectory = ifDefaultData "gitbackup";
         };
+      };
 
-        wantedBy = [ "multi-user.target" ];
+      systemd.timers.gitbackup = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnStartupSec = "5m";
+          OnUnitInactiveSec = "1h";
+        };
       };
     }
   ]);

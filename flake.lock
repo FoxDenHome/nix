@@ -234,11 +234,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1759208007,
-        "narHash": "sha256-1UXlErvHkV/K219J7qUpfhYpwUF5HojHpGDLiku22Rk=",
+        "lastModified": 1759209174,
+        "narHash": "sha256-j4iPccV6NriXCuCiR3UjTJRLfnSqU1BSAEByYAXosU0=",
         "owner": "Doridian",
         "repo": "gitbackup",
-        "rev": "904f959c38da7240752aaf29808ce1e1218aa94a",
+        "rev": "7bed1582828ef66551d2db78dfa7ba98244f15a4",
         "type": "github"
       },
       "original": {
