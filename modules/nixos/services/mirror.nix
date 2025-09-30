@@ -89,7 +89,7 @@ in
         text = ''
           use chroot = no
           max connections = 128
-          log file = /dev/stdout
+          log file = /proc/self/fd/1
           pid file = /tmp/rsyncd.pid
           lock file = /tmp/rsyncd.lock
           read only = yes
