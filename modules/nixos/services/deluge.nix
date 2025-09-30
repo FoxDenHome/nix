@@ -49,7 +49,7 @@ in
           ];
           Type = "oneshot";
           RemainAfterExit = true;
-        }
+        };
       };
 
       systemd.services.deluged.serviceConfig = {
