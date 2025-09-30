@@ -27,7 +27,7 @@ while :; do
 
     echo '[LOOP] Running ./sync.sh'
     ecode=0
-    ./sync.sh || ecode=$?
+    bash ./sync.sh || ecode=$?
     echo "[LOOP] Sync completed with code: ${ecode}"
 
     date '+%s' > "${LASTPULL_BASE}"

@@ -156,7 +156,10 @@ in
       }  // (lib.attrsets.listToAttrs (
         map ({ name, value } : {
           name = "mirror-sync-${name}";
+          
           value = {
+            path = [ pkgs.bash ];
+
             serviceConfig = {
               Type = "oneshot";
 
@@ -171,11 +174,9 @@ in
               ];
 
               ExecStart = [
-                "${mirrorPkg}/refresh/loop.sh"
+                "${pkgs.bash}/bin/bash ${mirrorPkg}/refresh/loop.sh"
               ];
             };
-
-            wantedBy = [ "multi-user.target" ];
           };
         }) (lib.attrsets.attrsToList svcConfig.sources)
       ));
