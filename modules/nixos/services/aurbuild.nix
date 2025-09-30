@@ -3,7 +3,7 @@ let
   svcConfig = config.foxDen.services.aurbuild;
 in
 {
-  options.foxDen.services.aurbuild.enable = lib.mkEnableOption "aurbuild";
+  options.foxDen.services.aurbuild.enable = foxDenLib.oci.mkOptions { svcName = "aurbuild"; name = "AUR Build Service"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (foxDenLib.oci.mkNamed "aurbuild" {

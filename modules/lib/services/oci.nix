@@ -12,7 +12,7 @@ let
     }));
 in
 {
-  mkOptions = foxDenLib.services.mkOption // (with nixpkgs.lib.types; {
+  mkOptions = inputs: (foxDenLib.services.mkOption inputs) // (with nixpkgs.lib.types; {
     image = nixpkgs.lib.mkOption {
       type = str;
     };
