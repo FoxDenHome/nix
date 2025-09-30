@@ -156,47 +156,48 @@ in
       }  // (lib.attrsets.listToAttrs (
         map ({ name, value } : let
           svcName = "mirror-sync-${name}";
-        in lib.mkMerge [
-          {
+        in {
             name = svcName;
             
-            value = {
-              confinement.packages = [
-                pkgs.bash
-                pkgs.curl
-                pkgs.rsync
-              ];
-
-              path = [
-                pkgs.bash
-                pkgs.curl
-                pkgs.rsync
-              ];
-
-              serviceConfig = {
-                Type = "oneshot";
-
-                BindPaths = [
-                  "${svcConfig.dataDir}/${name}:/data"
+            value = lib.mkMerge [
+              {
+                confinement.packages = [
+                  pkgs.bash
+                  pkgs.curl
+                  pkgs.rsync
                 ];
 
-                Environment = [
-                  "MIRROR_SOURCE_RSYNC=${value.rsyncUrl}"
-                  "MIRROR_SOURCE_HTTPS=${value.httpsUrl}"
-                  "MIRROR_FORCE_SYNC=${toString value.forceSync}"
+                path = [
+                  pkgs.bash
+                  pkgs.curl
+                  pkgs.rsync
                 ];
 
-                ExecStart = [
-                  "${pkgs.bash}/bin/bash ${mirrorPkg}/refresh/loop.sh"
-                ];
-              };
-            };
+                serviceConfig = {
+                  Type = "oneshot";
+
+                  BindPaths = [
+                    "${svcConfig.dataDir}/${name}:/data"
+                  ];
+
+                  Environment = [
+                    "MIRROR_SOURCE_RSYNC=${value.rsyncUrl}"
+                    "MIRROR_SOURCE_HTTPS=${value.httpsUrl}"
+                    "MIRROR_FORCE_SYNC=${toString value.forceSync}"
+                  ];
+
+                  ExecStart = [
+                    "${pkgs.bash}/bin/bash ${mirrorPkg}/refresh/loop.sh"
+                  ];
+                };
+              }
+              (services.make {
+                name = svcName;
+                inherit svcConfig pkgs config;
+              }).config.systemd.services.${svcName}
+            ];
           }
-          ((services.make {
-            name = svcName;
-            inherit svcConfig pkgs config;
-          }).config.systemd.services.${svcName})
-        ]) (lib.attrsets.attrsToList svcConfig.sources)
+        ) (lib.attrsets.attrsToList svcConfig.sources)
       ));
 
       environment.persistence."/nix/persist/mirror" = {
