@@ -162,7 +162,8 @@ in
       }  // (lib.attrsets.listToAttrs (
         map ({ name, value } : let
           svcName = "mirror-sync-${name}";
-        in {
+        in lib.mkMerge [
+        {
           name = svcName;
           
           value = {
@@ -196,10 +197,12 @@ in
               ];
             };
           };
-        } // (services.make {
+        }
+        ((services.make {
           name = svcName;
           inherit svcConfig pkgs config;
-        }).config.systemd.services.${svcName}) (lib.attrsets.attrsToList svcConfig.sources)
+        }).config.systemd.services.${svcName})
+      ]) (lib.attrsets.attrsToList svcConfig.sources)
       ));
 
       environment.persistence."/nix/persist/mirror" = {
