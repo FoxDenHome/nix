@@ -58,10 +58,16 @@ in
           PrivateUsers = false; # needed for the capabilities sadly
           AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
 
+          Environment = [
+            "ROOT_DOMAIN=local.foxden.network"
+            "ARCH_MIRROR_ID=foxden"
+          ];
+
           User = "mirror";
           Group = "mirror";
 
-          ExecStart = [ "${nginxPkg}/bin/nginx -g 'daemon off;' -p /njs/conf -c nginx.conf" ];
+          ExecStartPre = [ "${pkgs.nodejs_24} /njs/lib/util/renderconf.js" ];
+          ExecStart = [ "${nginxPkg}/bin/nginx -g 'daemon off;' -p /tmp/ngxconf -c nginx.conf" ];
 
           StateDirectory = ifDefaultData "mirror";
         };
