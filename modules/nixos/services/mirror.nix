@@ -34,7 +34,6 @@ in
       systemd.services.mirror = {
         confinement.packages = [
           nginxPkg
-          pkgs.nginx.njs
         ];
 
         serviceConfig = {
