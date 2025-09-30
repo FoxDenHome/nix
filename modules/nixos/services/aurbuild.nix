@@ -57,6 +57,7 @@ in
         isSystemUser = true;
         description = "AUR build service user";
         group = "aurbuild";
+        home = "/home/aur";
       };
       users.groups.aurbuild = {};
     }
