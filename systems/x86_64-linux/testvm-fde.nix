@@ -136,6 +136,7 @@ in
   foxDen.services.aurbuild = {
     enable = true;
     host = "dummy";
+    packages = [ "dimland-git" ];
   };
 
   foxDen.services.wireguard."wg-deluge" = {
