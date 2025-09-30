@@ -4,7 +4,7 @@ let
 
   svcConfig = config.foxDen.services.gitbackup;
 
-  defaultDataDir = "/var/lib/private/gitbackup";
+  defaultDataDir = "/var/lib/gitbackup";
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
   ifNotDefaultData = lib.mkIf (svcConfig.dataDir != defaultDataDir);
 
