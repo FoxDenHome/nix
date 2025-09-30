@@ -49,7 +49,7 @@ in
             "${svcConfig.dataDir}"
           ];
 
-          ExecStart = [ "${gitbackupPkg}/bin/gitbackup-loop" ];
+          ExecStart = [ "${gitbackupPkg}/bin/gitbackup-loop" ]; # TODO: systemd timer
 
           StateDirectory = ifDefaultData "gitbackup";
         };
