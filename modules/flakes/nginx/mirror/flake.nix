@@ -14,7 +14,7 @@
             pname = "js";
             version = "1.0.0";
             src = ./.;
-            npmDepsHash = "sha256-m1SqAS7GCsBGBt2tG/AySWHWk1tHc1ZJvB/yleV6P24=";
+            npmDepsHash = "sha256-yxrgmvzT498a7VoWzaJHcHzYiQJAaqDE1UwmrK2xba8=";
           };
         };
       });
