@@ -134,7 +134,7 @@ in
   };
 
   foxDen.services.gitbackup = {
-    enabled = true;
+    enable = true;
   };
 
   foxDen.services.wireguard."wg-deluge" = {
