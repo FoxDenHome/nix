@@ -112,14 +112,13 @@ in
 
       systemd.services.mirror-rsyncd = {
         serviceConfig = {
-          BindReadOnlyPaths = (foxDenLib.services.mkEtcPaths [
-            "foxden/mirror"
-          ])
-          ++ [
+          BindReadOnlyPaths = [
             "${svcConfig.dataDir}:/data"
           ];
 
-          ExecStart = [ "${pkgs.rsync}/bin/rsync --daemon --no-detach --config=/etc/foxden/mirror/rsyncd.conf" ];
+          LoadCredential = "rsyncd.conf:/etc/foxden/mirror/rsyncd.conf";
+
+          ExecStart = [ "${pkgs.rsync}/bin/rsync --daemon --no-detach --config=\${CREDENTIALS_DIRECTORY}/rsyncd.conf" ];
 
           User = "mirror";
           Group = "mirror";
