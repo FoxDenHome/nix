@@ -3,7 +3,7 @@ let
     mkNamed = (svc: inputs@{ svcConfig, pkgs, config, ... }: (foxDenLib.services.mkNamed svc inputs) // (let
       host = foxDenLib.hosts.getByName config svcConfig.host;
     in {
-      config.virtualization.oci-containers.containers."${svc}" = {
+      config.virtualisation.oci-containers.containers."${svc}" = {
         image = svcConfig.image;
         autoStart = true;
         restartPolicy = "always";
