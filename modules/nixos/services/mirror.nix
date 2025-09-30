@@ -58,7 +58,7 @@ in
           User = "mirror";
           Group = "mirror";
 
-          ExecStart = [ "${nginxPkg}/bin/nginx -g 'daemon off;' -c ${mirrorPkg}/lib/node_modules/mirrorweb/conf/nginx.conf" ];
+          ExecStart = [ "${nginxPkg}/bin/nginx -g 'daemon off;' -p '${mirrorPkg}/lib/node_modules/mirrorweb/conf' -c 'nginx.conf'" ];
 
           StateDirectory = ifDefaultData "mirror";
         };
