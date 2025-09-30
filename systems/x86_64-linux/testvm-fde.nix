@@ -128,7 +128,7 @@ in
     host = "dummy";
     archMirrorId = "foxden";
     sources.foxdenaur = {
-      rsyncUrl = "rsync://mirror.foxden.network/foxdenaur/";
+      rsyncUrl = "rsync://mirror.doridian.net/foxdenaur/";
       forceSync = true;
     };
   };
