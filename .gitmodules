@@ -1,3 +1,0 @@
-[submodule "modules/flakes/nginx/mirror/njs"]
-	path = modules/flakes/nginx/mirror/njs
-	url = https://github.com/nginx/njs.git
