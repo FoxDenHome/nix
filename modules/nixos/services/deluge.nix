@@ -35,9 +35,20 @@ in
       target = "reverse_proxy http://127.0.0.1:8112";
     }).config
     {
-      services.deluge.enable = true;
-      services.deluge.web.enable = true;
-      services.deluge.group = "share";
+      sops.secrets.delugeAuthFile = config.lib.foxDen.sops.mkIfAvailable {};
+
+      services.deluge = {
+        enable = true;
+        web = {
+          enable = true;
+        };
+        config = {
+          download_location = "/downloads";
+        };
+        declarative = true;
+        group = "share";
+        authFile = "/run/credentials/auth-file.cfg";
+      };
 
       systemd.services.deluge-pre = {
         wantedBy = [ "multi-user.target" "deluged.service" "delugeweb.service" ];
@@ -59,6 +70,8 @@ in
           config.services.deluge.dataDir
           "${svcConfig.downloadsDir}:/downloads"
         ];
+
+        LoadCredentials = "auth-file.cfg:${config.sops.secrets.delugeAuthFile.path}";
       };
 
       systemd.services.delugeweb.serviceConfig = {
