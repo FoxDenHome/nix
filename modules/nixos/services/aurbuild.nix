@@ -30,8 +30,8 @@ in
         ];
         environment = {
           "GPG_KEY_ID" = "45B097915F67C9D68C19E5747B0F7660EAEC8D49";
-          "PUID=${config.users.users.aurbuild.uid}"
-          "PGID=${config.users.groups.aurbuild.gid}"
+          "PUID" = builtins.toString config.users.users.aurbuild.uid;
+          "PGID" = builtins.toString config.users.groups.aurbuild.gid;
         };
       };
       systemd = {
