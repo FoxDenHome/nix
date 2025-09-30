@@ -1,0 +1,126 @@
+/* Core */
+body {
+  background-color: black;
+  color: fuchsia;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 2.5em;
+}
+
+/* Links */
+a {
+  color: fuchsia;
+}
+a span {
+  vertical-align: middle;
+}
+a:visited {
+  color: purple;
+}
+a:hover {
+  color: white;
+}
+
+a:has(span.icon) {
+  text-decoration: none;
+}
+a:has(span.icon) span.text {
+  text-decoration: underline;
+}
+a span.icon {
+  filter: invert(14%) sepia(72%) saturate(6393%) hue-rotate(297deg) brightness(123%) contrast(114%);
+}
+a:visited span.icon {
+  filter: invert(11%) sepia(73%) saturate(7165%) hue-rotate(296deg) brightness(68%) contrast(106%);
+}
+a:hover span.icon {
+  filter: invert(100%);
+}
+
+/* Icons */
+span.icon-directory {
+  background-image: url(directory.svg);
+}
+span.icon-file {
+  background-image: url(file.svg);
+}
+span.icon-arrow-up {
+  background-image: url(arrow-down.svg);
+  rotate: 180deg;
+}
+span.icon-arrow-down {
+  background-image: url(arrow-down.svg);
+}
+
+span.icon {
+  background-size: contain;
+  width: 24pt;
+  height: 24pt;
+  display: inline-block;
+}
+
+span.icon-small {
+  width: 20pt;
+  height: 20pt;
+}
+
+/* Header and heading */
+.header-bottom {
+  margin-bottom: 0px;
+}
+.header {
+  border: 0.1em solid purple;
+  padding: 1.5em;
+  margin-bottom: 2em;
+  background-color: #160016;
+}
+h1 {
+  margin-top: 0px;
+  text-align: center;
+}
+h1 a {
+  text-decoration: none;
+  color: fuchsia;
+}
+h1 a:visited {
+  color: fuchsia;
+}
+h1 a:hover {
+  color: white;
+}
+
+h1.pwd {
+  text-align: start;
+}
+
+/* File table */
+table {
+  width: 100%;
+}
+.numeric-cell {
+  text-align: right;
+}
+
+th {
+  padding-bottom: 0.3em;
+  text-align: start;
+  border-bottom: 1px solid #500050;
+}
+th a {
+  text-decoration: none;
+}
+
+td {
+  padding-top: 0.3em;
+}
+td a {
+  width: 100%;
+  display: block;
+  user-select: text;
+}
+th a span.text {
+  padding-right: 4pt;
+}
+th.numeric-cell a span.text {
+  padding-left: 4pt;
+  padding-right: 0;
+}

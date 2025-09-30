@@ -1,0 +1,15 @@
+{
+  "name": "mirrorweb",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Doridian",
+  "type": "module",
+  "scripts": {
+    "build": "rimraf lib && tsc"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.1",
+    "typescript": "^5.8.3"
+  }
+}

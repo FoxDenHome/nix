@@ -1,0 +1,41 @@
+[[/etc/nginx/js/templates/header_pre.html]]
+      <h1><a href="https://doridian.net">Doridian's</a> Arch Linux mirror</h1>
+      <h2>General info</h2>
+      <p>This is a mirror of the Arch Linux package repositories.</p>
+      <p>
+        It is updated <strong>every hour</strong> from the
+        <a href="https://archlinux.org/mirrors/{{$ARCH_MIRROR_ID}}/">{{$ARCH_MIRROR_ID}} mirror</a>.
+      </p>
+      <p>
+        For any questions about this mirror, contact me at:
+        archlinux[at]doridian&lt;dot&gt;net
+      </p>
+      <h2>Access methods</h2>
+      <ul>
+        <li>
+          HTTPS:
+          <a href="https://archlinux.{{$ROOT_DOMAIN}}/">https://archlinux.{{$ROOT_DOMAIN}}/</a>
+        </li>
+        <li>
+          rsync:
+          <a href="rsync://archlinux.{{$ROOT_DOMAIN}}/archlinux/">rsync://archlinux.{{$ROOT_DOMAIN}}/archlinux/</a>
+        </li>
+      </ul>
+      <h2>Quick links</h2>
+      <ul class="header-bottom">
+        <li><a href="/iso/latest/">ISOs directory</a></li>
+        <li><a href="/iso/latest/archlinux-x86_64.iso">Download ISO</a></li>
+        <li><a href="/images/latest/">Images directory</a></li>
+        <li>
+          <a href="/images/latest/Arch-Linux-x86_64-basic.qcow2"
+            >Download basic qcow2 image</a
+          >
+        </li>
+        <li>
+          <a href="/images/latest/Arch-Linux-x86_64-cloudimg.qcow2"
+            >Download cloudimg qcow2 image</a
+          >
+        </li>
+        <li><a href="/">Root directory</a></li>
+      </ul>
+[[/etc/nginx/js/templates/header_post.html]]
