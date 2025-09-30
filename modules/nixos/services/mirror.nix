@@ -20,14 +20,14 @@ let
 
   sourceType = with lib.types; submodule {
     options = {
-      rsyncUrl = nixpkgs.lib.mkOption {
+      rsyncUrl = lib.mkOption {
         type = str;
       };
-      httpsUrl = nixpkgs.lib.mkOption {
+      httpsUrl = lib.mkOption {
         type = str;
         default = "";
       };
-      forceSync = nixpkgs.lib.mkOption {
+      forceSync = lib.mkOption {
         type = bool;
         default = false;
       };
