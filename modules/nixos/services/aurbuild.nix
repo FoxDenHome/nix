@@ -24,15 +24,16 @@ in
         image = "ghcr.io/doridian/aurbuild/aurbuild:latest";
         volumes = [
           "${packagesTxt}:/aur/packages.txt:ro"
+          "/etc/passwd:/etc/passwd:ro"
+          "/etc/group:/etc/group:ro"
           (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets.aurbuildGpgPin.path}:/gpg/pin:ro")
           "aurbuild_cache_${builderArch}:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${builderArch}:/aur/repo"
         ];
         environment = {
           "GPG_KEY_ID" = "45B097915F67C9D68C19E5747B0F7660EAEC8D49";
-        };
-        podman = {
-          user = "aurbuild";
+          "PUSER" = "aurbuild";
+          "PGROUP" = "aurbuild";
         };
       };
       systemd = {
