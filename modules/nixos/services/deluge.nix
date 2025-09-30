@@ -42,12 +42,13 @@ in
         web = {
           enable = true;
         };
+        dataDir = "/var/lib/deluge";
         config = {
           download_location = "/downloads";
         };
         declarative = true;
         group = "share";
-        authFile = "/run/credentials/deluged.service/auth";
+        authFile = "/var/lib/deluge/auth";
       };
 
       systemd.services.deluge-pre = {
@@ -55,11 +56,16 @@ in
         before = [ "deluged.service" "delugeweb.service" ];
 
         serviceConfig = {
+          LoadCredential = "auth:${config.sops.secrets.delugeAuthFile.path}";
+
           ExecStart = [
             "${pkgs.coreutils}/bin/mkdir -p /var/lib/deluge/downloads"
+            "${pkgs.coreutils}/bin/cp \${CREDENTIALS_DIRECTORY}/auth /var/lib/deluge/auth"
           ];
+
           User = config.services.deluge.user;
           Group = config.services.deluge.group;
+
           Type = "oneshot";
           RemainAfterExit = true;
         };
@@ -70,8 +76,6 @@ in
           config.services.deluge.dataDir
           "${svcConfig.downloadsDir}:/downloads"
         ];
-
-        LoadCredential = "auth:${config.sops.secrets.delugeAuthFile.path}";
       };
 
       systemd.services.delugeweb.serviceConfig = {
