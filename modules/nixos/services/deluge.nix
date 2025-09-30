@@ -39,12 +39,24 @@ in
       services.deluge.web.enable = true;
       services.deluge.group = "share";
 
+      systemd.services.deluge-pre = {
+        wantedBy = [ "multi-user.target" "deluged.service" "delugeweb.service" ];
+        before = [ "deluged.service" "delugeweb.service" ];
+
+        serviceConfig = {
+          ExecStart = [
+            "${pkgs.coreutils}/bin/mkdir -p /var/lib/deluge/downloads"
+          ];
+          Type = "oneshot";
+          RemainAfterExit = true;
+        }
+      };
+
       systemd.services.deluged.serviceConfig = {
         BindPaths = [
           config.services.deluge.dataDir
           "${svcConfig.downloadsDir}:/downloads"
         ];
-        ExecStartPre = [ "${pkgs.coreutils}/bin/mkdir -p ${svcConfig.downloadsDir}" ];
       };
 
       systemd.services.delugeweb.serviceConfig = {
