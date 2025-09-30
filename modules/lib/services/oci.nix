@@ -8,6 +8,7 @@ let
       config.virtualisation.oci-containers.containers."${svc}" = nixpkgs.lib.mkMerge [
         {
           autoStart = nixpkgs.lib.mkDefault true;
+          pull = nixpkgs.lib.mkDefault "always";
           networks = [ "ns:${host.namespacePath}" ];
         }
         oci

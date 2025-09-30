@@ -4,15 +4,16 @@ let
   mirrorCfg = config.foxDen.services.mirror;
 in
 {
-  options.foxDen.services.aurbuild = foxDenLib.services.oci.mkOptions { svcName = "aurbuild"; name = "AUR Build Service"; };
+  options.foxDen.services.aurbuild = foxDenLib.services.oci.mkOptions { svcName = "aurbuild"; name = "AUR build service"; };
 
-  config = (foxDenLib.services.oci.make {
+  config = lib.mkMerge [
+    (foxDenLib.services.oci.make {
       inherit pkgs config svcConfig;
       name = "aurbuild";
       oci = {
         image = "ghcr.io/doridian/aurbuild/aurbuild:latest";
-        volumes = config.lib.foxDen.sops.mkIfAvailable [
-          "${config.sops.secrets.aurbuildGpgPin.path}:/gpg/pin:ro"
+        volumes = [
+          (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets.aurbuildGpgPin.path}:/gpg/pin:ro")
           "aurbuild_cache_${nixpkgs.hostPlatform}:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${nixpkgs.hostPlatform}:/aur/repo"
         ];
@@ -20,5 +21,9 @@ in
           "GPG_KEY_ID" = "45B097915F67C9D68C19E5747B0F7660EAEC8D49";
         };
       };
-    }).config;
+    }).config
+    {
+      sops.secrets.aurbuildGpgPin = config.lib.foxDen.sops.mkIfAvailable {};
+    }
+  ];
 }
