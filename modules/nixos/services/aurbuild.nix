@@ -4,6 +4,8 @@ let
   mirrorCfg = config.foxDen.services.mirror;
 
   packagesTxt = pkgs.writers.writeText "packages.txt" (lib.concatStringsSep "\n" (svcConfig.packages ++ [ "" ]));
+
+  builderArch = "x86_64";
 in
 {
   options.foxDen.services.aurbuild = {
@@ -23,16 +25,21 @@ in
         volumes = [
           "${packagesTxt}:/aur/packages.txt:ro"
           (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets.aurbuildGpgPin.path}:/gpg/pin:ro")
-          "aurbuild_cache_x86_64:/aur/cache"
-          "${mirrorCfg.dataDir}/foxdenaur/x86_64:/aur/repo"
+          "aurbuild_cache_${builderArch}:/aur/cache"
+          "${mirrorCfg.dataDir}/foxdenaur/${builderArch}:/aur/repo"
         ];
         environment = {
           "GPG_KEY_ID" = "45B097915F67C9D68C19E5747B0F7660EAEC8D49";
+          "PUID=${config.users.users.aurbuild.uid}"
+          "PGID=${config.users.groups.aurbuild.gid}"
         };
       };
       systemd = {
         serviceConfig = {
-          ExecStartPre = [ "${pkgs.coreutils}/bin/mkdir -p ${mirrorCfg.dataDir}/foxdenaur/x86_64" ];
+          ExecStartPre = [
+            "${pkgs.coreutils}/bin/mkdir -p ${mirrorCfg.dataDir}/foxdenaur/${builderArch}"
+            "${pkgs.coreutils}/bin/chown aurbuild:aurbuild ${mirrorCfg.dataDir}/foxdenaur/${builderArch}"
+          ];
         };
       };
     }).config
@@ -43,6 +50,13 @@ in
       #   pcsc-shared = true;
       # };
       sops.secrets.aurbuildGpgPin = config.lib.foxDen.sops.mkIfAvailable {};
+
+      user.users.aurbuild = {
+        isSystemUser = true;
+        description = "AUR build service user";
+        group = "aurbuild";
+      };
+      user.groups.aurbuild = {};
     }
   ];
 }
