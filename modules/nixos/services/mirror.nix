@@ -176,8 +176,10 @@ in
                 ];
 
                 serviceConfig = {
-                  Type = "oneshot";
-                  Restart = "on-failure";
+                  Type = "simple";
+
+                  User = "mirror";
+                  Group = "mirror";
 
                   BindPaths = [
                     "${svcConfig.dataDir}/${name}:/data"
@@ -192,6 +194,8 @@ in
                   ExecStart = [
                     "${pkgs.bash}/bin/bash ${mirrorPkg}/refresh/loop.sh"
                   ];
+
+                  wantedBy = [ "multi-user.target" ];
                 };
               }
               (services.make {
