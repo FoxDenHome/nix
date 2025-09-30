@@ -124,7 +124,7 @@ in
   };
 
   foxDen.services.mirror = {
-    enable = true;
+    enable = false;
     host = "dummy";
     archMirrorId = "foxden";
     sources.foxdenaur = {
