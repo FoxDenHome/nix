@@ -6,7 +6,7 @@ in
   options.foxDen.services.aurbuild.enable = lib.mkEnableOption "aurbuild";
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
-    (foxDenLib.services.mkNamed "aurbuild" {
+    (foxDenLib.oci.mkNamed "aurbuild" {
       inherit pkgs config svcConfig;
       image = "ghcr.io/doridian/aurbuild/aurbuild:latest";
       name = "aurbuild";
