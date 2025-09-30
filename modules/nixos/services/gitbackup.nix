@@ -6,6 +6,7 @@ let
 
   defaultDataDir = "/var/lib/private/gitbackup";
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
+  ifNotDefaultData = lib.mkIf (svcConfig.dataDir != defaultDataDir);
 
   gitbackupPkg = gitbackup.packages.${config.nixpkgs.hostPlatform.system}.default;
 in
@@ -39,13 +40,13 @@ in
 
           Environment = [
             "GITHUB_ORGANIZATIONS=foxCaves,FoxDenHome,FoxBukkit,MoonHack,PawNode,SpaceAgeMP,WSVPN"
-            "BACKUP_ROOT=/data"
+            "BACKUP_ROOT=${svcConfig.dataDir}"
           ];
 
           EnvironmentFile = config.lib.foxDen.sops.mkGithubTokenPath;
 
-          BindPaths = [
-            "${svcConfig.dataDir}:/data"
+          BindPaths = ifNotDefaultData [
+            "${svcConfig.dataDir}"
           ];
 
           ExecStart = [ "${gitbackupPkg}/bin/gitbackup-loop" ];
