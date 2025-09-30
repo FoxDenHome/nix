@@ -16,7 +16,7 @@ in
     };
   } // (foxDenLib.services.oci.mkOptions { svcName = "aurbuild"; name = "AUR build service"; });
 
-  config = lib.mkMerge [
+  config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (foxDenLib.services.oci.make {
       inherit pkgs config svcConfig;
       name = "aurbuild";
@@ -66,5 +66,5 @@ in
       };
       users.groups.aurbuild = {};
     }
-  ];
+  ]);
 }
