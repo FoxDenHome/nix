@@ -12,7 +12,7 @@ let
     host = foxDenLib.hosts.getByName config svcConfig.host;
 
     dependency = if svcConfig.host != "" then [ host.unit ] else [];
-    resolvConf = if svcConfig.host != "" then "${host.resolvConf}:/etc/resolv.conf" else "/etc/resolv.conf";
+    resolvConf = if svcConfig.host != "" then host.resolvConf else "/etc/resolv.conf";
   in
   {
     configDir = "/etc/foxden/services/${svc}";
