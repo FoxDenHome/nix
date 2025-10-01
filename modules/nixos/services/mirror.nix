@@ -103,6 +103,7 @@ in
 
           serviceConfig = {
             BindReadOnlyPaths = [
+              "/etc/foxden/nginx-proxies.conf:/etc/nginx/proxies.conf:ro"
               "${mirrorPkg}:/njs"
               "${svcConfig.dataDir}:/data"
             ];
