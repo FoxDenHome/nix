@@ -93,11 +93,11 @@ in
     mapIfaces = (host: map ({ name, value }: value // { inherit host name; suffix = util.mkHash8 (host.name + "|" + name); }) (nixpkgs.lib.attrsets.attrsToList host.interfaces));
     interfaces = nixpkgs.lib.flatten (map mapIfaces hosts);
 
-    ifaceHasV4 = (iface: nixpkgs.lib.any (addr: util.isIPv4 addr) iface.addresses);
-    ifaceHasV6 = (iface: nixpkgs.lib.any (addr: util.isIPv6 addr) iface.addresses);
+    ifaceHasV4 = (iface: nixpkgs.lib.any util.isIPv4 iface.addresses);
+    ifaceHasV6 = (iface: nixpkgs.lib.any util.isIPv6 iface.addresses);
 
-    ifaceHasInternal = (iface: nixpkgs.lib.any (addr: util.isPrivateIP addr) iface.addresses);
-    ifaceHasExternal = (iface: nixpkgs.lib.any (addr: addr: !(util.isPrivateIP addr)) iface.addresses);
+    ifaceHasInternal = (iface: nixpkgs.lib.any util.isPrivateIP iface.addresses);
+    ifaceHasExternal = (iface: nixpkgs.lib.any (addr: !(util.isPrivateIP addr)) iface.addresses);
 
     mkIfaceDynDnsOne = (iface: check: type: value: if (check iface) then [
       {
