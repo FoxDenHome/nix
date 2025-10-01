@@ -18,7 +18,7 @@
       loader.systemd-boot.enable = lib.mkForce false;
       lanzaboote = {
         enable = true;
-        pkiBundle = lib.mkIf config.foxDen.boot.secure "/etc/secureboot";
+        pkiBundle = if config.foxDen.boot.secure then "/etc/secureboot" else null;
       };
     };
 
