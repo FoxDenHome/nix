@@ -16,7 +16,6 @@ let
     ];
   };
 
-  svcDomain = foxDenLib.global.dns.mkHost primaryInterface.dns;
   svcRootName = if (primaryInterface.dns.name == "mirror") then "@" else (lib.strings.removePrefix "mirror." primaryInterface.dns.name);
   svcRootDomain = foxDenLib.global.dns.mkHost {
     zone = primaryInterface.dns.zone;
@@ -66,13 +65,6 @@ in
       inherit svcConfig pkgs config;
     }).config
     {
-      foxDen.hosts.hosts.${svcConfig.host}.interfaces.${primaryInterfaceName} = {
-        dns.cnames = [
-          (if svcRootName == "@" then "cachyos" else "cachyos.${svcRootName}")
-          (if svcRootName == "@" then "archlinux" else "archlinux.${svcRootName}")
-        ];
-      };
-
       users.users.mirror = {
         isSystemUser = true;
         group = "mirror";
