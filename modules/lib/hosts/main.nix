@@ -25,6 +25,14 @@ let
           type = ints.positive;
           default = 3600;
         };
+        dynDns = nixpkgs.lib.mkOption {
+          type = bool;
+          default = false;
+        };
+        dynDnsTtl = nixpkgs.lib.mkOption {
+          type = nullOr ints.positive;
+          default = 300;
+        };
       };
       addresses = nixpkgs.lib.mkOption {
         type = listOf foxDenLib.types.ip;
@@ -80,6 +88,26 @@ in
     hosts = map (getByName config) (nixpkgs.lib.attrsets.attrNames config.foxDen.hosts.hosts);
     mapIfaces = (host: map ({ name, value }: value // { inherit host name; suffix = util.mkHash8 (host.name + "|" + name); }) (nixpkgs.lib.attrsets.attrsToList host.interfaces));
     interfaces = nixpkgs.lib.flatten (map mapIfaces hosts);
+
+    ifaceHasV4 = (iface: nixpkgs.lib.any (addr: util.isIPv4 addr) iface.addresses);
+    ifaceHasV6 = (iface: nixpkgs.lib.any (addr: util.isIPv6 addr) iface.addresses);
+
+    mkIfaceDynDnsOne = (iface: check: type: value: if (check iface) then [
+      {
+        zone = iface.dns.zone;
+        name = iface.dns.name;
+        type = type;
+        ttl = iface.dns.dynDnsTtl;
+        value = value;
+        dynDns = true;
+        horizon = "external";
+      }
+    ] else []);
+
+    mkIfaceDynDns = (iface: if iface.dns.dynDns then
+      (mkIfaceDynDnsOne iface ifaceHasV4 "A" "127.0.0.1") ++
+      (mkIfaceDynDnsOne iface ifaceHasV6 "AAAA" "fe80::1")
+    else []);
   in
   {
     options.foxDen.hosts = with nixpkgs.lib.types; {
@@ -101,7 +129,7 @@ in
               horizon = if (util.isPrivateIP addr) then "internal" else "external";
             });
           in
-          (map mkRecord iface))
+          ((map mkRecord iface.addresses) ++ (mkIfaceDynDns iface)))
         interfaces);
 
       environment.etc = nixpkgs.lib.listToAttrs (map (host: {

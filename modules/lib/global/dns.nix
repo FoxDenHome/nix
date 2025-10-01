@@ -4,7 +4,6 @@ let
   globalConfig = foxDenLib.global.config;
 
   defaultTtl = 3600;
-  dynDnsTtl = 5;
 
   dnsRecordType = with lib.types; submodule {
     options = {
@@ -24,15 +23,20 @@ let
         type = ints.positive;
         default = defaultTtl;
       };
+      dynDns = lib.mkOption {
+        type = bool;
+        default = false;
+      };
       horizon = lib.mkOption {
         type = str;
       };
     };
   };
+
+  horizonWildcard = "*";
 in
 {
   defaultTtl = defaultTtl;
-  dynDnsTtl = dynDnsTtl;
 
   nixosModule = { ... } : {
     options.foxDen.dns.records = with lib.types; lib.mkOption {
@@ -41,14 +45,19 @@ in
     };
   };
 
+  horizonWildcard = horizonWildcard;
+
   mkRecords = (nixosConfigurations: let
     records = (globalConfig.getList ["foxDen" "dns" "records"] nixosConfigurations);
-    horizons = nixpkgs.lib.lists.uniqueStrings (map (record: record.horizon) records);
+    horizons = nixpkgs.lib.filter (horizon: horizon != horizonWildcard)
+                (nixpkgs.lib.lists.uniqueStrings (map (record: record.horizon) records));
     zones = nixpkgs.lib.lists.uniqueStrings (map (record: record.zone) records);
   in
   (nixpkgs.lib.attrsets.genAttrs horizons (horizon:
     nixpkgs.lib.attrsets.genAttrs zones (zone:
-      nixpkgs.lib.filter (record: record.horizon == horizon && record.zone == zone) records
+      nixpkgs.lib.filter (record:
+        (record.horizon == horizon || record.horizon == horizonWildcard) && record.zone == zone)
+        records
     )
   )));
 }

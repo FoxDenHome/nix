@@ -16,6 +16,7 @@ let
   };
 
   svcDomain = "${primaryInterface.dns.name}.${primaryInterface.dns.zone}";
+  svcRootName = if (primaryInterface.dns.name == "mirror") then "" else ("."+(lib.strings.removePrefix "mirror." primaryInterface.dns.name));
   svcRootDomain = lib.strings.removePrefix "mirror." svcDomain;
 
   sourceType = with lib.types; submodule {
@@ -63,6 +64,25 @@ in
       inherit svcConfig pkgs config;
     }).config
     {
+      foxDen.dns.records = [
+        {
+          zone = primaryInterface.dns.zone;
+          name = "archlinux${svcRootName}";
+          type = "CNAME";
+          ttl = primaryInterface.dns.ttl;
+          value = svcDomain+".";
+          horizon = "*";
+        }
+        {
+          zone = primaryInterface.dns.zone;
+          name = "cachyos${svcRootName}";
+          type = "CNAME";
+          ttl = primaryInterface.dns.ttl;
+          value = svcDomain+".";
+          horizon = "*";
+        }
+      ];
+
       users.users.mirror = {
         isSystemUser = true;
         group = "mirror";

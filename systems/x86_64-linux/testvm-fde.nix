@@ -164,6 +164,7 @@ in
         dns = {
           name = "jellyfin";
           zone = "local.foxden.network";
+          dynDns = true;
         };
         addresses = [
           "192.168.122.201/24"
