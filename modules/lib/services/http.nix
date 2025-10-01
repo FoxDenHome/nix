@@ -123,9 +123,8 @@ in
       caddyStorageRoot = "/var/lib/foxden/${name}";
 
       host = foxDenLib.hosts.getByName config svcConfig.host;
-      # TODO: If dns.name == "@" that means apex/root
       matchPrefix = if svcConfig.tls then "" else "http://";
-      matchers = (map (iface: "${matchPrefix}${iface.dns.name}.${iface.dns.zone}")
+      matchers = (map (iface: "${matchPrefix}${foxDenLib.global.dns.mkHost iface.dns}")
                     (nixpkgs.lib.filter (iface: iface.dns.name != "")
                       (nixpkgs.lib.attrsets.attrValues host.interfaces)));
 

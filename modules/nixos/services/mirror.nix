@@ -15,9 +15,12 @@ let
     ];
   };
 
-  svcDomain = "${primaryInterface.dns.name}.${primaryInterface.dns.zone}";
-  svcRootName = if (primaryInterface.dns.name == "mirror") then "" else ("."+(lib.strings.removePrefix "mirror." primaryInterface.dns.name));
-  svcRootDomain = lib.strings.removePrefix "mirror." svcDomain;
+  svcDomain = foxDenLib.global.dns.mkHost primaryInterface.dns;
+  svcRootName = if (primaryInterface.dns.name == "mirror") then "@" else (lib.strings.removePrefix "mirror." primaryInterface.dns.name);
+  svcRootDomain = foxDenLib.global.dns.mkHost {
+    zone = primaryInterface.dns.zone;
+    name = svcRootName;
+  };
 
   sourceType = with lib.types; submodule {
     options = {
@@ -52,8 +55,6 @@ in
     };
   } // (services.http.mkOptions { svcName = "mirror"; name = "Mirror server"; });
 
-  # TODO: Auto-add CNAMEs
-
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
       name = "mirror-nginx";
@@ -67,18 +68,18 @@ in
       foxDen.dns.records = [
         {
           zone = primaryInterface.dns.zone;
-          name = "archlinux${svcRootName}";
+          name = if svcRootName == "@" then "archlinux" else "archlinux.${svcRootName}";
           type = "CNAME";
           ttl = primaryInterface.dns.ttl;
-          value = svcDomain+".";
+          value = "${svcDomain}.";
           horizon = "*";
         }
         {
           zone = primaryInterface.dns.zone;
-          name = "cachyos${svcRootName}";
+          name = if svcRootName == "@" then "cachyos" else "cachyos.${svcRootName}";
           type = "CNAME";
           ttl = primaryInterface.dns.ttl;
-          value = svcDomain+".";
+          value = "${svcDomain}.";
           horizon = "*";
         }
       ];
