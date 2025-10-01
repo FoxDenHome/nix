@@ -9,7 +9,7 @@ let
       { Destination = "0.0.0.0/0"; Gateway = "192.168.122.1"; }
       { Destination = "::/0"; Gateway = "fd00:dead:beef:122::1"; }
     ];
-    dns = [ "8.8.8.8" ];
+    nameservers = [ "8.8.8.8" ];
     interface = "br-default";
   };
 
