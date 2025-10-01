@@ -28,12 +28,10 @@ let
         default = false;
       };
       horizon = lib.mkOption {
-        type = str;
+        type = enum [ "internal" "external" ];
       };
     };
   };
-
-  horizonWildcard = "*";
 in
 {
   defaultTtl = defaultTtl;
@@ -45,20 +43,17 @@ in
     };
   };
 
-  horizonWildcard = horizonWildcard;
-
   mkHost = (record: if record.name == "@" then record.zone else "${record.name}.${record.zone}");
 
   mkRecords = (nixosConfigurations: let
-    records = (globalConfig.getList ["foxDen" "dns" "records"] nixosConfigurations);
-    horizons = nixpkgs.lib.filter (horizon: horizon != horizonWildcard)
-                (nixpkgs.lib.lists.uniqueStrings (map (record: record.horizon) records));
+    records = globalConfig.getList ["foxDen" "dns" "records"] nixosConfigurations;
+    horizons = nixpkgs.lib.lists.uniqueStrings (map (record: record.horizon) records);
     zones = nixpkgs.lib.lists.uniqueStrings (map (record: record.zone) records);
   in
   (nixpkgs.lib.attrsets.genAttrs horizons (horizon:
     nixpkgs.lib.attrsets.genAttrs zones (zone:
       nixpkgs.lib.filter (record:
-        (record.horizon == horizon || record.horizon == horizonWildcard) && record.zone == zone)
+        record.horizon == horizon && record.zone == zone)
         records
     )
   )));

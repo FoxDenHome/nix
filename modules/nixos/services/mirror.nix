@@ -4,7 +4,8 @@ let
 
   svcConfig = config.foxDen.services.mirror;
   hostCfg = foxDenLib.hosts.getByName config svcConfig.host;
-  primaryInterface = lib.lists.head (lib.attrsets.attrValues hostCfg.interfaces);
+  primaryInterfaceName = lib.lists.head (lib.attrsets.attrNames hostCfg.interfaces);
+  primaryInterface = hostCfg.interfaces.${primaryInterfaceName};
 
   mirrorPkg = nginx-mirror.packages.${config.nixpkgs.hostPlatform.system}.default;
 
@@ -65,24 +66,12 @@ in
       inherit svcConfig pkgs config;
     }).config
     {
-      foxDen.dns.records = [
-        {
-          zone = primaryInterface.dns.zone;
-          name = if svcRootName == "@" then "archlinux" else "archlinux.${svcRootName}";
-          type = "CNAME";
-          ttl = primaryInterface.dns.ttl;
-          value = "${svcDomain}.";
-          horizon = "*";
-        }
-        {
-          zone = primaryInterface.dns.zone;
-          name = if svcRootName == "@" then "cachyos" else "cachyos.${svcRootName}";
-          type = "CNAME";
-          ttl = primaryInterface.dns.ttl;
-          value = "${svcDomain}.";
-          horizon = "*";
-        }
-      ];
+      foxDen.hosts.hosts.${host}.interfaces.${primaryInterfaceName} = {
+        dns.cnames = [
+          (if svcRootName == "@" then "cachyos" else "cachyos.${svcRootName}")
+          (if svcRootName == "@" then "archlinux" else "archlinux.${svcRootName}")
+        ];
+      };
 
       users.users.mirror = {
         isSystemUser = true;
