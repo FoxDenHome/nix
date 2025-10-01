@@ -15,10 +15,10 @@
       kernelParams = ["module.sig_enforce=1" "lockdown=integrity"];
       # "audit=1" "audit_backlog_limit=256"
 
-      loader.systemd-boot.enable = lib.mkIf config.foxDen.boot.secure (lib.mkForce false);
-      lanzaboote = lib.mkIf config.foxDen.boot.secure {
+      loader.systemd-boot.enable = lib.mkForce false;
+      lanzaboote = {
         enable = true;
-        pkiBundle = "/etc/secureboot";
+        pkiBundle = lib.mkIf config.foxDen.boot.secure "/etc/secureboot";
       };
     };
 
