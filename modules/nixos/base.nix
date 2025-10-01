@@ -18,6 +18,7 @@
     gptfdisk
     mdadm
     openssl
+    ssh-to-age
     unixtools.netstat
     wget
     xfsprogs

@@ -16,6 +16,8 @@ let
   rootInterface = "enp1s0";
 in
 {
+  foxDen.sops.available = true;
+
   system.stateVersion = "25.05";
 
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
