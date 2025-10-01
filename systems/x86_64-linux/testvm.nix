@@ -1,4 +1,4 @@
-{ modulesPath, pkgs, ... }:
+{ modulesPath, pkgs, config, ... }:
 let
   ifcfg = {
     addresses = [
