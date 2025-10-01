@@ -116,14 +116,14 @@ in
       (mkIfaceDynDnsOne iface ifaceHasV6 "AAAA" "fe80::1")
     else []);
 
-    mkIfaceCname = (iface: check: horizon: if (check iface) then map (iface.dns.cnames) (cname: {
+    mkIfaceCname = (iface: check: horizon: if (check iface) then (map (cname: {
       zone = iface.dns.zone;
       name = cname;
       type = "CNAME";
       ttl = iface.dns.ttl;
       value = foxDenLib.global.dns.mkHost iface.dns;
       horizon = horizon;
-    }) else []);
+    }) iface.dns.cnames) else []);
   in
   {
     options.foxDen.hosts = with nixpkgs.lib.types; {

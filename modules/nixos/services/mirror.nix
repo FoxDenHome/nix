@@ -66,7 +66,7 @@ in
       inherit svcConfig pkgs config;
     }).config
     {
-      foxDen.hosts.hosts.${host}.interfaces.${primaryInterfaceName} = {
+      foxDen.hosts.hosts.${svcConfig.host}.interfaces.${primaryInterfaceName} = {
         dns.cnames = [
           (if svcRootName == "@" then "cachyos" else "cachyos.${svcRootName}")
           (if svcRootName == "@" then "archlinux" else "archlinux.${svcRootName}")
