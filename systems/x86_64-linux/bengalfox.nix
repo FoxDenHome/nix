@@ -2,8 +2,8 @@
 let
   ifcfg = {
     addresses = [
-      "10.2.11.1/16"
-      "fd2c:f4cb:63be:2::b01/64"
+      "10.2.10.9/16"
+      "fd2c:f4cb:63be:2::a09/64"
     ];
     routes = [
       { Destination = "0.0.0.0/0"; Gateway = "10.2.0.1"; }
@@ -55,6 +55,8 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
+  # TODO: ZFS stuff
+
   systemd.network.networks."30-${ifcfg.interface}" = {
     name = ifcfg.interface;
     routes = ifcfg.routes;
@@ -94,9 +96,120 @@ in
       # }];
   };
 
-  foxDen.hosts.hosts = {
+  services.deluge.config.outgoing_interface = "wg-deluge";
+
+  foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
+    trustedProxies = [
+      "10.1.0.0/23"
+      "10.2.0.0/23"
+      "10.3.0.0/23"
+      "10.4.0.0/23"
+      "10.5.0.0/23"
+      "10.6.0.0/23"
+      "10.7.0.0/23"
+      "10.8.0.0/23"
+      "10.9.0.0/23"
+    ];
+
+    wireguard."wg-deluge" = {
+      host = "deluge";
+      interface = {
+        ips = [ "10.64.17.204/32" ];
+        peers = [
+          {
+            allowedIPs = [ "0.0.0.0/0" "::/0" ];
+            endpoint = "23.234.81.127:51820";
+            persistentKeepalive = 25;
+            publicKey = "G6+A375GVmuFCAtvwgx3SWCWhrMvdQ+cboXQ8zp2ang=";
+          }
+        ];
+      };
+    };
+
+    aurbuild.enable = true;
+    backupmgr.enable = true;
+    deluge = {
+      enable = true;
+      host = "deluge";
+      enableCaddy = false;
+    };
+    e621dumper = {
+      enable = true;
+      host = "e621dumper";
+      tls = true;
+      oAuth = {
+        enable = true;
+        clientId = "e621dumper"; # TODO: Secrets
+        bypassInternal = true;
+      };
+    };
+    fadumper = {
+      enable = true;
+      host = "fadumper";
+      tls = true;
+      oAuth = {
+        enable = true;
+        clientId = "fadumper"; # TODO: Secrets
+        bypassInternal = true;
+      };
+    };
+    gitbackup.enable = true; # TODO: Secrets
+    jellyfin = {
+      enable = true;
+      host = "jellyfin";
+      tls = true;
+    };
+    kiwix = {
+      enable = true;
+      host = "kiwix";
+      tls = true;
+      oAuth = {
+        enable = true;
+        clientId = "kiwix-bengalfox"; # TODO: Secrets
+        bypassInternal = true;
+      };
+    };
+    mirror = {
+      enable = true;
+      host = "mirror";
+      tls = true;
+    };
+    nasweb = {
+      host = "nas";
+      enable = true;
+      tls = true;
+      oAuth = {
+        enable = true;
+        clientId = "nas-bengalfox"; # TODO: Secrets
+        bypassInternal = true;
+      };
+    };
+    restic-server = {
+      enable = true;
+      host = "restic"; # TODO: Mount the old volume in
+      tls = true;
+    };
+    samba = {
+      enable = true;
+      host = "nas";
+    };
+  };
+
+  foxDen.hosts.hosts = let
+    driver = "bridge";
+    mkDriverOpts = (vlan : {
+      bridge = ifcfg.interface;
+      vlan = vlan;
+    });
+    driverOpts = mkDriverOpts 2;
+    nameservers = ifcfg.nameservers;
+    mkNameservers = (vlan: [
+      "10.${vlan}.0.53"
+    ]);
+    routes = ifcfg.routes;
+  in {
     bengalfox = {
-      nameservers = ifcfg.nameservers;
+      inherit nameservers;
       interfaces.default = {
         dns = {
           name = "bengalfox";
@@ -104,7 +217,134 @@ in
           dynDns = true;
         };
         addresses = ifcfg.addresses;
-        routes = ifcfg.routes;
+        inherit routes;
+      };
+    };
+    deluge = {
+      inherit nameservers;
+      interfaces.default = {
+        dns = {
+          name = "deluge";
+          cnames = ["dldr"];
+          zone = "foxden.network";
+          dynDns = true;
+        };
+        addresses = [
+          "10.2.11.8/16"
+        ];
+        routes = [
+          { Destination = "10.0.0.0/8"; Gateway = "10.2.0.1"; }
+        ];
+        inherit driver driverOpts;
+      };
+    };
+    e621dumper = {
+      nameservers = mkNameservers 3;
+      interfaces.default = {
+        dns = {
+          name = "e621";
+          zone = "foxden.network";
+          dynDns = true;
+        };
+        addresses = [
+          "10.3.10.12/16"
+          "fd2c:f4cb:63be:3::a0c/64"
+        ];
+        driverOpts = mkDriverOpts 3;
+        inherit routes driver;
+      };
+    };
+    fadumper = {
+      nameservers = mkNameservers 3;
+      interfaces.default = {
+        dns = {
+          name = "furaffinity";
+          zone = "foxden.network";
+          dynDns = true;
+        };
+        addresses = [
+          "10.3.10.13/16"
+          "fd2c:f4cb:63be:3::a0d/64"
+        ];
+        driverOpts = mkDriverOpts 3;
+        inherit routes driver;
+      };
+    };
+    jellyfin = {
+      inherit nameservers;
+      interfaces.default = {
+        dns = {
+          name = "jellyfin";
+          zone = "foxden.network";
+          dynDns = true;
+        };
+        addresses = [
+          "10.2.11.3/16"
+          "fd2c:f4cb:63be:2::b03/64"
+        ];
+        inherit routes driver driverOpts;
+      };
+    };
+    kiwix = {
+      inherit nameservers;
+      interfaces.default = {
+        dns = {
+          name = "kiwix";
+          zone = "foxden.network";
+          dynDns = true;
+        };
+        addresses = [
+          "10.2.11.6/16"
+          "fd2c:f4cb:63be:2::b06/64"
+        ];
+        inherit routes driver driverOpts;
+      };
+    };
+    mirror = {
+      inherit nameservers;
+      interfaces.default = {
+        dns = {
+          name = "mirror";
+          cnames = ["archlinux" "cachyos"];
+          zone = "foxden.network";
+          dynDns = true;
+        };
+        addresses = [
+          "10.3.10.11/16"
+          "fd2c:f4cb:63be:3::a0b/64"
+        ];
+        driverOpts = mkDriverOpts 3;
+        inherit routes driver;
+      };
+    };
+    nas = {
+      inherit nameservers;
+      interfaces.default = {
+        dns = {
+          name = "nas";
+          zone = "foxden.network";
+          dynDns = true;
+        };
+        addresses = [
+          "10.2.11.1/16"
+          "fd2c:f4cb:63be:2::b01/64"
+        ];
+        inherit routes driver driverOpts;
+      };
+    };
+    restic = {
+      inherit nameservers;
+      interfaces.default = {
+        dns = {
+          name = "restic";
+          zone = "foxden.network";
+          dynDns = true;
+        };
+        addresses = [
+          "10.2.11.12/16"
+          "fd2c:f4cb:63be:2::b0c/64"
+        ];
+        inherit routes driver driverOpts;
       };
     };
   };

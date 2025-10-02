@@ -33,9 +33,7 @@ let
             cookie_secure = ${secure}
             skip_provider_button = true
 
-            cookie_secret = "CHANGE ME RIGHT "
             client_id = "${svcConfig.oAuth.clientId}"
-            client_secret = "${svcConfig.oAuth.clientSecret}"
             oidc_issuer_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}"
           '';
           user = "root";
@@ -108,9 +106,6 @@ in
       enable = nixpkgs.lib.mkEnableOption "OAuth2 Proxy";
       bypassInternal = nixpkgs.lib.mkEnableOption "Bypass OAuth for internal requests";
       clientId = nixpkgs.lib.mkOption {
-        type = str;
-      };
-      clientSecret = nixpkgs.lib.mkOption {
         type = str;
       };
     };

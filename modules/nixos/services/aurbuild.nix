@@ -50,6 +50,8 @@ in
       };
     }).config
     {
+      # TODO: Make pcscd actually work, needs to wait on real hardware install...
+
       services.pcscd.enable = true;
       # Home-Manager
       # programs.gpg.scdaemonSettings = {
