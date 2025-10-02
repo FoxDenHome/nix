@@ -1,15 +1,21 @@
 { config, ... }:
 let
+  mkNameservers = (vlan: [
+    "10.${vlan}.0.53"
+    "fd2c:f4cb:63be:${vlan}\::35"
+  ]);
+  mkRoutes = (vlan: [
+    { Destination = "0.0.0.0/0"; Gateway = "10.${vlan}.0.1"; }
+    { Destination = "::/0"; Gateway = "fd2c:f4cb:63be:${vlan}\::1"; }
+  ]);
+
   ifcfg = {
     addresses = [
       "10.2.10.9/16"
       "fd2c:f4cb:63be:2::a09/64"
     ];
-    routes = [
-      { Destination = "0.0.0.0/0"; Gateway = "10.2.0.1"; }
-      { Destination = "::/0"; Gateway = "fd2c:f4cb:63be:2::1"; }
-    ];
-    nameservers = [ "10.2.0.53" ];
+    routes = mkRoutes 2;
+    nameservers = mkNameservers 2;
     interface = "br-default";
   };
 
@@ -198,19 +204,24 @@ in
 
   foxDen.hosts.hosts = let
     driver = "bridge";
-    mkDriverOpts = (vlan : {
+    mkDriverOpts = (vlan: {
       bridge = ifcfg.interface;
       vlan = vlan;
     });
-    driverOpts = mkDriverOpts 2;
-    nameservers = ifcfg.nameservers;
-    mkNameservers = (vlan: [
-      "10.${vlan}.0.53"
-    ]);
-    routes = ifcfg.routes;
+
+    mkVlanIntf = (vlan: cfg: {
+      inherit driver;
+      driverOpts = mkDriverOpts vlan;
+      routes = mkRoutes vlan;
+    } // cfg);
+
+    mkVlanHost = (vlan: cfg: {
+      nameservers = mkNameservers vlan;
+      interfaces.default = mkVlanIntf vlan cfg;
+    });
   in {
     bengalfox = {
-      inherit nameservers;
+      nameservers = ifcfg.nameservers;
       interfaces.default = {
         dns = {
           name = "bengalfox";
@@ -218,137 +229,102 @@ in
           dynDns = true;
         };
         addresses = ifcfg.addresses;
-        inherit routes;
+        routes = ifcfg.routes;
       };
     };
-    deluge = {
-      inherit nameservers;
-      interfaces.default = {
-        dns = {
-          name = "deluge";
-          cnames = ["dldr"];
-          zone = "foxden.network";
-          dynDns = true;
-        };
-        addresses = [
-          "10.2.11.8/16"
-          "fd2c:f4cb:63be:2::b08/64"
-        ];
-        routes = [
-          { Destination = "10.0.0.0/8"; Gateway = "10.2.0.1"; }
-          { Destination = "fd2c:f4cb:63be::/48"; Gateway = "fd2c:f4cb:63be:2::1/64"; }
-        ];
-        inherit driver driverOpts;
+    deluge = mkVlanHost 2 {
+      dns = {
+        name = "deluge";
+        cnames = ["dldr"];
+        zone = "foxden.network";
+        dynDns = true;
       };
+      addresses = [
+        "10.2.11.8/16"
+        "fd2c:f4cb:63be:2::b08/64"
+      ];
+      routes = [
+        { Destination = "10.0.0.0/8"; Gateway = "10.2.0.1"; }
+        { Destination = "fd2c:f4cb:63be::/48"; Gateway = "fd2c:f4cb:63be:2::1"; }
+      ];
     };
-    e621dumper = {
-      nameservers = mkNameservers 3;
-      interfaces.default = {
-        dns = {
-          name = "e621";
-          zone = "foxden.network";
-          dynDns = true;
-        };
-        addresses = [
-          "10.3.10.12/16"
-          "fd2c:f4cb:63be:3::a0c/64"
-        ];
-        driverOpts = mkDriverOpts 3;
-        inherit routes driver;
+    e621dumper = mkVlanHost 3 {
+      dns = {
+        name = "e621";
+        zone = "foxden.network";
+        dynDns = true;
       };
+      addresses = [
+        "10.3.10.12/16"
+        "fd2c:f4cb:63be:3::a0c/64"
+      ];
     };
-    fadumper = {
-      nameservers = mkNameservers 3;
-      interfaces.default = {
-        dns = {
-          name = "furaffinity";
-          zone = "foxden.network";
-          dynDns = true;
-        };
-        addresses = [
-          "10.3.10.13/16"
-          "fd2c:f4cb:63be:3::a0d/64"
-        ];
-        driverOpts = mkDriverOpts 3;
-        inherit routes driver;
+    fadumper = mkVlanHost 3 {
+      dns = {
+        name = "furaffinity";
+        zone = "foxden.network";
+        dynDns = true;
       };
+      addresses = [
+        "10.3.10.13/16"
+        "fd2c:f4cb:63be:3::a0d/64"
+      ];
     };
-    jellyfin = {
-      inherit nameservers;
-      interfaces.default = {
-        dns = {
-          name = "jellyfin";
-          zone = "foxden.network";
-          dynDns = true;
-        };
-        addresses = [
-          "10.2.11.3/16"
-          "fd2c:f4cb:63be:2::b03/64"
-        ];
-        inherit routes driver driverOpts;
+    jellyfin = mkVlanHost 2 {
+      dns = {
+        name = "jellyfin";
+        zone = "foxden.network";
+        dynDns = true;
       };
+      addresses = [
+        "10.2.11.3/16"
+        "fd2c:f4cb:63be:2::b03/64"
+      ];
     };
-    kiwix = {
-      inherit nameservers;
-      interfaces.default = {
-        dns = {
-          name = "kiwix";
-          zone = "foxden.network";
-          dynDns = true;
-        };
-        addresses = [
-          "10.2.11.6/16"
-          "fd2c:f4cb:63be:2::b06/64"
-        ];
-        inherit routes driver driverOpts;
+    kiwix = mkVlanHost 2 {
+      dns = {
+        name = "kiwix";
+        zone = "foxden.network";
+        dynDns = true;
       };
+      addresses = [
+        "10.2.11.6/16"
+        "fd2c:f4cb:63be:2::b06/64"
+      ];
     };
-    mirror = {
-      nameservers = mkNameservers 3;
-      interfaces.default = {
-        dns = {
-          name = "mirror";
-          cnames = ["archlinux" "cachyos"];
-          zone = "foxden.network";
-          dynDns = true;
-        };
-        addresses = [
-          "10.3.10.11/16"
-          "fd2c:f4cb:63be:3::a0b/64"
-        ];
-        driverOpts = mkDriverOpts 3;
-        inherit routes driver;
+    mirror = mkVlanHost 3 {
+      dns = {
+        name = "mirror";
+        cnames = ["archlinux" "cachyos"];
+        zone = "foxden.network";
+        dynDns = true;
       };
+      addresses = [
+        "10.3.10.11/16"
+        "fd2c:f4cb:63be:3::a0b/64"
+      ];
     };
-    nas = {
-      inherit nameservers;
-      interfaces.default = {
-        dns = {
-          name = "nas";
-          zone = "foxden.network";
-          dynDns = true;
-        };
-        addresses = [
-          "10.2.11.1/16"
-          "fd2c:f4cb:63be:2::b01/64"
-        ];
-        inherit routes driver driverOpts;
+    nas = mkVlanHost 2 {
+      dns = {
+        name = "nas";
+        zone = "foxden.network";
+        dynDns = true;
       };
+      addresses = [
+        "10.2.11.1/16"
+        "fd2c:f4cb:63be:2::b01/64"
+      ];
     };
-    restic = {
-      inherit nameservers;
-      interfaces.default = {
-        dns = {
-          name = "restic";
-          zone = "foxden.network";
-          dynDns = true;
-        };
-        addresses = [
-          "10.2.11.12/16"
-          "fd2c:f4cb:63be:2::b0c/64"
-        ];
-        inherit routes driver driverOpts;
+    restic = mkVlanHost 2 {
+      dns = {
+        name = "restic";
+        zone = "foxden.network";
+        dynDns = true;
       };
+      addresses = [
+        "10.2.11.12/16"
+        "fd2c:f4cb:63be:2::b0c/64"
+      ];
     };
   };
 }
