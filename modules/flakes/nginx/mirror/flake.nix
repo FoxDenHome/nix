@@ -21,7 +21,8 @@
                 pname = "mirrorweb";
                 version = "1.0.0";
                 src = ./.;
-                npmDepsHash = "sha256-yxrgmvzT498a7VoWzaJHcHzYiQJAaqDE1UwmrK2xba8=";
+                npmDeps = pkgs.importNpmLock { npmRoot = ./.; };
+                npmConfigHook = pkgs.importNpmLock.npmConfigHook;
               })
             ];
 
