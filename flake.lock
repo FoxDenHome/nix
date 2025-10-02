@@ -587,11 +587,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1759012257,
-        "narHash": "sha256-DWlDWj0Tuz+hrElm8kYSwrwb+xv10AupmXqKlN1mSIA=",
+        "lastModified": 1759380462,
+        "narHash": "sha256-cQM1om11pc45nwCrr2mx8EVgeGI88o9CsC3pmJVkF9U=",
         "owner": "Doridian",
         "repo": "uds-proxy",
-        "rev": "28434d061effb1853654afd26352289e77977ba1",
+        "rev": "bb0a06a9802a9250510b49b1827f11b39e62448c",
         "type": "github"
       },
       "original": {
