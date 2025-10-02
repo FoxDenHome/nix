@@ -38,15 +38,14 @@ in
     ];
   };
 
-
   boot.initrd.luks.devices = {
       nixroot = {
-         device = "/dev/md0";
-         allowDiscards = true;
+        device = "/dev/md0";
+        allowDiscards = true;
       };
       zssd = {
-         device = "/dev/md1";
-         allowDiscards = true;
+        device = "/dev/md1";
+        allowDiscards = true;
       };
   };
 
