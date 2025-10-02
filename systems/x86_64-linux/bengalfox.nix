@@ -251,7 +251,7 @@ in
     superfan.enable = true;
   };
 
-  service.samba.settings = {
+  services.samba.settings = {
     homes = {
       "comment" = "Home Directories";
       "browseable" = "no";

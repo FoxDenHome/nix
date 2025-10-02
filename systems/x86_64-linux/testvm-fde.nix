@@ -115,7 +115,6 @@ in
     oAuth = {
       enable = true;
       clientId = "nas-bengalfox";
-      clientSecret = "something funny";
     };
   };
   foxDen.services.deluge = {

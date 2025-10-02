@@ -102,9 +102,18 @@
       };
     };
     nixosConfigurations = (nixpkgs.lib.attrsets.listToAttrs (map mkSystemConfig systems));
+    dnsRecords = (foxDenLib.global.dns.mkRecords nixosConfigurations);
+
+    mkZoneFile = (records: builtins.toFile "records.db"
+                  (nixpkgs.lib.concatLines
+                    (map
+                      (record: "${record.name} ${builtins.toString record.ttl} IN ${record.type} ${record.value}")
+                      records)));
   in
   {
     nixosConfigurations = nixosConfigurations;
-    dnsRecords = (foxDenLib.global.dns.mkRecords nixosConfigurations);
+    dnsRecords = dnsRecords;
+
+    internalZone = mkZoneFile dnsRecords.internal."foxden.network";
   };
 }
