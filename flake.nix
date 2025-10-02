@@ -18,6 +18,8 @@
     fadumper.inputs.nixpkgs.follows = "nixpkgs";
     gitbackup.url = "github:Doridian/gitbackup";
     gitbackup.inputs.nixpkgs.follows = "nixpkgs";
+    superfan.url = "github:Doridian/superfan";
+    superfan.inputs.nixpkgs.follows = "nixpkgs";
     e621dumper.url = "github:FoxDenHome/e621dumper";
     e621dumper.inputs.nixpkgs.follows = "nixpkgs";
     backupmgr.url = "github:FoxDenHome/backupmgr";
@@ -26,7 +28,7 @@
     nginx-mirror.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { nixpkgs, uds-proxy, fadumper, e621dumper, backupmgr, nginx-mirror, gitbackup, sops-nix, impermanence, lanzaboote, ... }:
+  outputs = { nixpkgs, uds-proxy, fadumper, e621dumper, backupmgr, superfan, nginx-mirror, gitbackup, sops-nix, impermanence, lanzaboote, ... }:
   let
     isNixFile = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
 
@@ -88,7 +90,7 @@
       name = hostname;
       value = nixpkgs.lib.nixosSystem {
         system = systemArch;
-        specialArgs = { inherit nixpkgs foxDenLib uds-proxy e621dumper fadumper backupmgr nginx-mirror gitbackup; };
+        specialArgs = { inherit nixpkgs foxDenLib uds-proxy e621dumper fadumper backupmgr nginx-mirror gitbackup superfan; };
         modules = [
           ({ ... }: {
             networking.hostName = hostname;

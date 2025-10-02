@@ -248,6 +248,7 @@ in
       host = "nas";
       sharePaths = [ "/mnt/zhdd/nas" "/mnt/zhdd/nashome" ];
     };
+    superfan.enable = true;
   };
 
   service.samba.settings = {
