@@ -121,4 +121,34 @@ in
 
     backupmgr.enable = true;
   };
+
+  foxDen.hosts.hosts = let
+    driver = "bridge";
+    mkDriverOpts = (vlan: {
+      bridge = ifcfg.interface;
+      vlan = vlan;
+    });
+
+    mkVlanIntf = (vlan: cfg: {
+      inherit driver;
+      driverOpts = mkDriverOpts vlan;
+      routes = mkRoutes vlan;
+    } // cfg);
+
+    mkVlanHost = (vlan: cfg: {
+      nameservers = mkNameservers vlan;
+      interfaces.default = mkVlanIntf vlan cfg;
+    });
+  in {
+    islandfox = {
+      interfaces.default = {
+        dns = {
+          name = "islandfox";
+          zone = "foxden.network";
+          dynDns = true;
+        };
+        addresses = ifcfg.addresses;
+      };
+    };
+  };
 }

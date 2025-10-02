@@ -301,7 +301,6 @@ in
     });
   in {
     bengalfox = {
-      nameservers = ifcfg.nameservers;
       interfaces.default = {
         dns = {
           name = "bengalfox";
@@ -309,7 +308,6 @@ in
           dynDns = true;
         };
         addresses = ifcfg.addresses;
-        routes = ifcfg.routes;
       };
     };
     deluge = mkVlanHost 2 {
