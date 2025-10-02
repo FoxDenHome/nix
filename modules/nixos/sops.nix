@@ -3,7 +3,7 @@ let
   sharedSopsFile = ../../secrets/shared.yaml;
 
   mkIfAvailable = lib.mkIf config.foxDen.sops.available;
-  mkGithubTokenPath = mkIfAvailable config.sops.secrets.githubTokenEnv.path;
+  mkGithubTokenPath = mkIfAvailable config.sops.secrets."github-token-env".path;
 in
 {
   options.foxDen.sops.available = lib.mkEnableOption "Enable sops-nix usage";
@@ -15,22 +15,22 @@ in
       };
     }
     (mkIfAvailable {
-      sops.secrets.rootPasswordHash = {
+      sops.secrets."root-password-hash" = {
         neededForUsers = true;
       };
 
-      sops.secrets.githubTokenEnv = {
+      sops.secrets."github-token-env" = {
         sopsFile = sharedSopsFile;
       };
 
       users.mutableUsers = false;
 
-      users.users.root.hashedPasswordFile = config.sops.secrets.rootPasswordHash.path;
+      users.users.root.hashedPasswordFile = config.sops.secrets."root-password-hash".path;
 
       nix.extraOptions = ''
-        !include ${config.sops.secrets.nixConfig.path}
+        !include ${config.sops.secrets."nix-config".path}
       '';
-      sops.secrets.nixConfig = {
+      sops.secrets."nix-config" = {
         sopsFile = sharedSopsFile;
       };
     })

@@ -27,7 +27,7 @@ in
           "/etc/passwd:/etc/passwd:ro"
           "/etc/group:/etc/group:ro"
           "/run/pcscd:/run/pcscd:ro"
-          (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets.aurbuildGpgPin.path}:/gpg/pin:ro")
+          (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets."aurbuild-gpg-pin".path}:/gpg/pin:ro")
           "aurbuild_cache_${builderArch}:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${builderArch}:/aur/repo"
         ];
@@ -58,7 +58,7 @@ in
       #   disable-ccid = true;
       #   pcsc-shared = true;
       # };
-      sops.secrets.aurbuildGpgPin = config.lib.foxDen.sops.mkIfAvailable {};
+      sops.secrets."aurbuild-gpg-pin" = config.lib.foxDen.sops.mkIfAvailable {};
 
       users.users.aurbuild = {
         isSystemUser = true;

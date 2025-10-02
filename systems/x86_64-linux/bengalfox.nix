@@ -136,58 +136,58 @@ in
     aurbuild.enable = true;
     backupmgr.enable = true;
     deluge = {
-      enable = true;
+      enable = true; # TODO: Set data dir
       host = "deluge";
       enableCaddy = false;
     };
     e621dumper = {
-      enable = true;
+      enable = true; # TODO: Set data dir
       host = "e621dumper";
       tls = true;
       oAuth = {
         enable = true;
-        clientId = "e621dumper"; # TODO: Secrets
+        clientId = "e621dumper";
         bypassInternal = true;
       };
     };
     fadumper = {
-      enable = true;
+      enable = true; # TODO: Set data dir
       host = "fadumper";
       tls = true;
       oAuth = {
         enable = true;
-        clientId = "fadumper"; # TODO: Secrets
+        clientId = "fadumper";
         bypassInternal = true;
       };
     };
-    gitbackup.enable = true; # TODO: Secrets
+    gitbackup.enable = true;
     jellyfin = {
-      enable = true;
+      enable = true; # TODO: Set media dir
       host = "jellyfin";
       tls = true;
     };
     kiwix = {
-      enable = true;
+      enable = true; # TODO: Set data dir
       host = "kiwix";
       tls = true;
       oAuth = {
         enable = true;
-        clientId = "kiwix-bengalfox"; # TODO: Secrets
+        clientId = "kiwix-bengalfox";
         bypassInternal = true;
       };
     };
     mirror = {
-      enable = true;
+      enable = true; # TODO: Set data dir
       host = "mirror";
       tls = true;
     };
     nasweb = {
-      host = "nas";
+      host = "nas"; # TODO: Set root property
       enable = true;
       tls = true;
       oAuth = {
         enable = true;
-        clientId = "nas-bengalfox"; # TODO: Secrets
+        clientId = "nas-bengalfox";
         bypassInternal = true;
       };
     };
@@ -198,7 +198,7 @@ in
     };
     samba = {
       enable = true;
-      host = "nas";
+      host = "nas"; # TODO: Add shares
     };
   };
 

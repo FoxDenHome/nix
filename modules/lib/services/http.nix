@@ -41,11 +41,14 @@ let
           mode = "0600";
         };
 
+        sops.secrets."${serviceName}" = {};
+
         systemd.services.${serviceName} = {
           restartTriggers = [ config.environment.etc.${configFileEtc}.text ];
           serviceConfig = {
             DynamicUser = true;
             LoadCredential = "oauth2-proxy.conf:${configFile}";
+            EnvironmentFile = config.sops.secrets."${serviceName}".path;
             ExecStart = "${cmd} --config=\"\${CREDENTIALS_DIRECTORY}/oauth2-proxy.conf\"";
             Restart = "always";
           };

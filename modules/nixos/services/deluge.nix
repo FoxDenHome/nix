@@ -36,7 +36,7 @@ in
       target = "reverse_proxy http://127.0.0.1:8112";
     }).config)
     {
-      sops.secrets.delugeAuthFile = config.lib.foxDen.sops.mkIfAvailable {};
+      sops.secrets."deluge-auth-file" = config.lib.foxDen.sops.mkIfAvailable {};
 
       services.deluge = {
         enable = true;
@@ -56,7 +56,7 @@ in
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
-          LoadCredential = "auth:${config.sops.secrets.delugeAuthFile.path}";
+          LoadCredential = "auth:${config.sops.secrets."deluge-auth-file".path}";
 
           ExecStart = [
             "${pkgs.coreutils}/bin/mkdir -p /var/lib/deluge/downloads"
