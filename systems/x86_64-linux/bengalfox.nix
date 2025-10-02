@@ -7,6 +7,7 @@ let
     ];
     routes = [
       { Destination = "0.0.0.0/0"; Gateway = "10.2.0.1"; }
+      { Destination = "::/0"; Gateway = "fd2c:f4cb:63be:2::1"; }
     ];
     nameservers = [ "10.2.0.53" ];
     interface = "br-default";
@@ -231,9 +232,11 @@ in
         };
         addresses = [
           "10.2.11.8/16"
+          "fd2c:f4cb:63be:2::b08/64"
         ];
         routes = [
           { Destination = "10.0.0.0/8"; Gateway = "10.2.0.1"; }
+          { Destination = "fd2c:f4cb:63be::/48"; Gateway = "fd2c:f4cb:63be:2::1/64"; }
         ];
         inherit driver driverOpts;
       };
