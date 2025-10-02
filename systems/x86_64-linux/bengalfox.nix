@@ -301,7 +301,7 @@ in
       };
     };
     mirror = {
-      inherit nameservers;
+      nameservers = mkNameservers 3;
       interfaces.default = {
         dns = {
           name = "mirror";
