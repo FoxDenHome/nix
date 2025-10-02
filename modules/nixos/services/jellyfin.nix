@@ -12,7 +12,12 @@ let
   svcConfig = config.foxDen.services.jellyfin;
 in
 {
-  options.foxDen.services.jellyfin = services.http.mkOptions { svcName = "jellyfin"; name = "Jellyfin media server"; };
+  options.foxDen.services.jellyfin = {
+    mediaDir = lib.mkOption {
+      type = lib.types.path;
+      description = "Directory to store Jellyfin media";
+    };
+  } // services.http.mkOptions { svcName = "jellyfin"; name = "Jellyfin media server"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
@@ -35,7 +40,9 @@ in
           config.services.jellyfin.dataDir
           config.services.jellyfin.logDir
         ];
-        BindReadOnlyPaths = foxDenLib.services.mkEtcPaths [
+        BindReadOnlyPaths = [
+          "${svcConfig.mediaDir}:/data"
+        ] ++ foxDenLib.services.mkEtcPaths [
           "fonts"
         ];
       };

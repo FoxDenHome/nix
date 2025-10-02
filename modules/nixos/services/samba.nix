@@ -80,19 +80,6 @@ in
           # security
           "allow insecure wide links" = "no";
         };
-
-        # TODO: Remove this
-        # homes = {
-        #   "comment" = "Home Directories";
-        #   "browseable" = "no";
-        #   "guest ok" = "no";
-        #   "writable" = "yes";
-        #   "create mask" = "0600";
-        #   "directory mask" = "0700";
-        #   "path" = "/home/%u";
-        #   "follow symlinks" = "no";
-        #   "wide links" = "no";
-        # };
       };
 
       systemd.services = (nixpkgs.lib.attrsets.genAttrs smbServices (name: {

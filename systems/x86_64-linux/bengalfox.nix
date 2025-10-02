@@ -30,13 +30,24 @@ in
 
   system.stateVersion = "25.05";
 
-  boot.initrd.luks.devices.nixroot.device = "/dev/md0";
   boot.swraid = {
     enable = true;
     mdadmConf = [
       "ARRAY /dev/md0 metadata=1.2 UUID=a84487b7:a5d11a87:32de3997:dacc0654"
       "ARRAY /dev/md1 metadata=1.2 UUID=115c644c:fcb4a527:5d784e0c:9c379b03"
     ];
+  };
+
+
+  boot.initrd.luks.devices = {
+      nixroot = {
+         device = "/dev/md0";
+         allowDiscards = true;
+      };
+      zssd = {
+         device = "/dev/md1";
+         allowDiscards = true;
+      };
   };
 
   fileSystems."/" =
@@ -62,7 +73,15 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  # TODO: ZFS stuff
+  fileSystems."/mnt/zhdd" =
+    { device = "zhdd/ROOT";
+      fsType = "zfs";
+    };
+
+  fileSystems."/mnt/zssd" =
+    { device = "/dev/mapper/zssd";
+      fsType = "xfs";
+    };
 
   systemd.network.networks."30-${ifcfg.interface}" = {
     name = ifcfg.interface;
@@ -105,6 +124,18 @@ in
 
   services.deluge.config.outgoing_interface = "wg-deluge";
 
+  sops.secrets."zfs-zhdd.key" = config.lib.foxDen.sops.mkIfAvailable {
+    format = "binary";
+    sopsFile = ../../secrets/zfs-zhdd.key;
+  };
+
+  environment.etc."foxden/zfs-zhdd.key" = config.lib.foxDen.sops.mkIfAvailable {
+    source = config.sops.secrets."zfs-zhdd.key".path;
+    mode = "0400";
+    user = "root";
+    group = "root";
+  };
+
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
     trustedProxies = [
       "10.1.0.0/23"
@@ -136,12 +167,14 @@ in
     aurbuild.enable = true;
     backupmgr.enable = true;
     deluge = {
-      enable = true; # TODO: Set data dir
+      enable = true;
       host = "deluge";
       enableCaddy = false;
+      downloadsDir = "/mnt/zssd/nas/torrent";
     };
     e621dumper = {
-      enable = true; # TODO: Set data dir
+      enable = true;
+      dataDir = "/mnt/zhdd/e621";
       host = "e621dumper";
       tls = true;
       oAuth = {
@@ -151,7 +184,8 @@ in
       };
     };
     fadumper = {
-      enable = true; # TODO: Set data dir
+      enable = true;
+      dataDir = "/mnt/zhdd/furaffinity";
       host = "fadumper";
       tls = true;
       oAuth = {
@@ -162,13 +196,15 @@ in
     };
     gitbackup.enable = true;
     jellyfin = {
-      enable = true; # TODO: Set media dir
+      enable = true;
       host = "jellyfin";
+      mediaDir = "/mnt/zhdd/nas";
       tls = true;
     };
     kiwix = {
-      enable = true; # TODO: Set data dir
+      enable = true;
       host = "kiwix";
+      dataDir = "/mnt/zhdd/kiwix";
       tls = true;
       oAuth = {
         enable = true;
@@ -177,13 +213,24 @@ in
       };
     };
     mirror = {
-      enable = true; # TODO: Set data dir
+      enable = true;
       host = "mirror";
       tls = true;
+      dataDir = "/mnt/zhdd/mirror";
+      archMirrorId = "archlinux.doridian.net";
+      sources.archlinux = {
+        rsyncUrl = "rsync://mirror.doridian.net/archlinux/";
+        forceSync = true;
+      };
+      sources.cachyos = {
+        rsyncUrl = "rsync://mirror.doridian.net/cachyos/";
+        forceSync = true;
+      };
     };
     nasweb = {
-      host = "nas"; # TODO: Set root property
+      host = "nas";
       enable = true;
+      root = "/mnt/zhdd/nas";
       tls = true;
       oAuth = {
         enable = true;
@@ -193,12 +240,46 @@ in
     };
     restic-server = {
       enable = true;
-      host = "restic"; # TODO: Mount the old volume in
+      host = "restic";
+      dataDir = "/mnt/zhdd/restic";
       tls = true;
     };
     samba = {
       enable = true;
-      host = "nas"; # TODO: Add shares
+      host = "nas";
+      sharePaths = [ "/mnt/zhdd/nas" "/mnt/zhdd/nashome" ];
+    };
+  };
+
+  service.samba.settings = {
+    homes = {
+      "comment" = "Home Directories";
+      "browseable" = "no";
+      "guest ok" = "no";
+      "writable" = "yes";
+      "create mask" = "0600";
+      "directory mask" = "0700";
+      "path" = "/mnt/zhdd/nashome/%u";
+      "follow symlinks" = "no";
+      "wide links" = "no";
+    };
+    share = {
+      "comment" = "NAS share";
+      "browseable" = "yes";
+      "guest ok" = "yes";
+      "read only" = "yes";
+      "write list" = "wizzy doridian";
+      "printable" = "no";
+      "create mask" = "0664";
+      "force create mode" = "0664";
+      "force group" = "share";
+      "directory mask" = "2775";
+      "force directory mode" = "2775";
+      "path" = "/mnt/zhdd/nas";
+      "follow symlinks" = "no";
+      "wide links" = "no";
+      "veto files" = "/.*/";
+      "delete veto files" = "yes";
     };
   };
 
