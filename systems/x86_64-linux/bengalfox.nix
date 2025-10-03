@@ -130,13 +130,13 @@ in
 
   services.deluge.config.outgoing_interface = "wg-deluge";
 
-  sops.secrets.zfs-zhdd = config.lib.foxDen.sops.mkIfAvailable {
+  sops.secrets."zfs-zhdd.key" = config.lib.foxDen.sops.mkIfAvailable {
     format = "binary";
     sopsFile = ../../secrets/zfs-zhdd.key;
   };
 
   environment.etc."foxden/zfs-zhdd.key" = config.lib.foxDen.sops.mkIfAvailable {
-    source = config.sops.secrets.zfs-zhdd.path;
+    source = config.sops.secrets."zfs-zhdd.key".path;
     mode = "0400";
     user = "root";
     group = "root";
