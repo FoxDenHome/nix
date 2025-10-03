@@ -1,10 +1,8 @@
-{ foxDenLib, uds-proxy, pkgs, lib, config, ... }:
+{ foxDenLib, pkgs, lib, config, ... }:
 let
   services = foxDenLib.services;
 
   svcConfig = config.foxDen.services.opensearch;
-
-  udsProxyPkg = uds-proxy.packages.${config.nixpkgs.hostPlatform.system}.default;
 
   userType = with lib.types; submodule {
     options = {
@@ -167,7 +165,7 @@ in
           Type = "simple";
           RuntimeDirectory = "opensearch-uds";
           RuntimeDirectoryPreserve = "yes";
-          ExecStart = ["${udsProxyPkg}/bin/uds-proxy -socket /run/opensearch-uds/opensearch.sock -socket-mode 0777 -remote-https -insecure-skip-verify -force-remote-host 127.0.0.1:9200"];
+          ExecStart = ["${pkgs.uds-proxy}/bin/uds-proxy -socket /run/opensearch-uds/opensearch.sock -socket-mode 0777 -remote-https -insecure-skip-verify -force-remote-host 127.0.0.1:9200"];
         };
 
         wantedBy = [ "multi-user.target" "opensearch.target" ];

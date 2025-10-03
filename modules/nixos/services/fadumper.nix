@@ -1,11 +1,10 @@
-{ foxDenLib, pkgs, lib, config, fadumper, ... }:
+{ foxDenLib, pkgs, lib, config, ... }:
 let
   services = foxDenLib.services;
 
   svcConfig = config.foxDen.services.fadumper;
 
-  faDumperPkg = fadumper.packages.${config.nixpkgs.hostPlatform.system}.default;
-  faDumperDir = "${faDumperPkg}/lib/node_modules/fadumper";
+  faDumperDir = "${pkgs.fadumper}/lib/node_modules/fadumper";
 
   defaultDataDir = "/var/lib/fadumper";
   ifDefaultData = lib.mkIf (config.foxDen.services.fadumper.dataDir == defaultDataDir);
@@ -51,7 +50,7 @@ in
 
       systemd.services.fadumper-api = {
         confinement.packages = [
-          faDumperPkg
+          pkgs.fadumper
         ];
 
         serviceConfig = {
@@ -81,7 +80,7 @@ in
 
       systemd.services.fadumper-refresh = {
         confinement.packages = [
-          faDumperPkg
+          pkgs.fadumper
           pkgs.nodejs_24
         ];
         path = [ pkgs.nodejs_24 ];

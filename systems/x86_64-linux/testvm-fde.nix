@@ -89,7 +89,7 @@ in
     };
   };
 
-  foxDen.services.samba = {
+  foxDen.services.e621dumper = {
     enable = true;
     host = "dummy";
   };

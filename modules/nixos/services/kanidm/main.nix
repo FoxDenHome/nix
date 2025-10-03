@@ -1,9 +1,9 @@
-{ nixpkgs-unstable, config, ... } :
+{ nixpkgs-unstable, systemArch, ... } :
 {
   services.kanidm = {
     enableClient = true;
 
-    package = nixpkgs-unstable.outputs.legacyPackages.${config.nixpkgs.hostPlatform.system}.kanidm_1_7; # TODO: pkgs. once 25.11
+    package = nixpkgs-unstable.outputs.legacyPackages.${systemArch}.kanidm_1_7; # TODO: pkgs. once 25.11
 
     clientSettings = {
       uri = "https://auth.foxden.network";

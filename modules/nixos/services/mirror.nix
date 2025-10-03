@@ -1,4 +1,4 @@
-{ foxDenLib, nginx-mirror, pkgs, lib, config, ... }:
+{ foxDenLib, pkgs, lib, config, ... }:
 let
   services = foxDenLib.services;
 
@@ -6,8 +6,6 @@ let
   hostCfg = foxDenLib.hosts.getByName config svcConfig.host;
   primaryInterfaceName = lib.lists.head (lib.attrsets.attrNames hostCfg.interfaces);
   primaryInterface = hostCfg.interfaces.${primaryInterfaceName};
-
-  mirrorPkg = nginx-mirror.packages.${config.nixpkgs.hostPlatform.system}.default;
 
   nginxPkg = pkgs.nginxQuic.override {
     modules = [
@@ -98,13 +96,13 @@ in
       systemd.services = {
         mirror-nginx = {
           confinement.packages = [
-            mirrorPkg
+            pkgs.nginx-mirror
           ];
 
           serviceConfig = {
             BindReadOnlyPaths = [
               "/etc/foxden/nginx-proxies.conf:/etc/nginx/proxies.conf:ro"
-              "${mirrorPkg}:/njs"
+              "${pkgs.nginx-mirror}:/njs"
               "${svcConfig.dataDir}:/data"
             ];
 
@@ -195,7 +193,7 @@ in
                   ];
 
                   ExecStart = [
-                    "${pkgs.bash}/bin/bash ${mirrorPkg}/refresh/run.sh"
+                    "${pkgs.bash}/bin/bash ${pkgs.nginx-mirror}/refresh/run.sh"
                   ];
                 };
               }

@@ -36,7 +36,7 @@
     mkModuleList = (dir: (nixpkgs.lib.filter isNixFile
                           (nixpkgs.lib.filesystem.listFilesRecursive dir)));
 
-    allLibs = { inherit foxDenLib; } // (nixpkgs.lib.filterAttrs (name: value: name != "self") inputs);
+    allLibs = { inherit foxDenLib; flakeInputs = inputs; } // (nixpkgs.lib.filterAttrs (name: value: name != "self") inputs);
 
     tryEvalOrEmpty = (val: let
       eval = (builtins.tryEval val);
@@ -84,12 +84,10 @@
     {
       name = hostname;
       value = nixpkgs.lib.nixosSystem {
-        system = systemArch;
-        specialArgs = allLibs;
+        specialArgs = allLibs // { inherit systemArch; };
         modules = [
           ({ ... }: {
             networking.hostName = hostname;
-            nixpkgs.hostPlatform = systemArch;
             sops.defaultSopsFile = ./secrets/${hostname}.yaml;
           })
           system
@@ -110,5 +108,6 @@
     dnsRecords = builtins.toFile "dns-records.json" (builtins.toJSON dnsRecords);
 
     internalZone = mkZoneFile dnsRecords.internal."foxden.network";
+    inputs = inputs;
   };
 }

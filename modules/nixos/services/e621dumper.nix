@@ -1,11 +1,10 @@
-{ foxDenLib, pkgs, lib, config, e621dumper, ... }:
+{ foxDenLib, pkgs, lib, config, ... }:
 let
   services = foxDenLib.services;
 
   svcConfig = config.foxDen.services.e621dumper;
 
-  e621DumperPkg = e621dumper.packages.${config.nixpkgs.hostPlatform.system}.default;
-  e621DumperDir = "${e621DumperPkg}/lib/node_modules/e621dumper";
+  e621DumperDir = "${pkgs.e621dumper}/lib/node_modules/e621dumper";
 
   defaultDataDir = "/var/lib/e621dumper";
   ifDefaultData = lib.mkIf (config.foxDen.services.e621dumper.dataDir == defaultDataDir);
@@ -51,7 +50,7 @@ in
 
       systemd.services.e621dumper-api = {
         confinement.packages = [
-          e621DumperPkg
+          pkgs.e621dumper
         ];
 
         serviceConfig = {
@@ -81,7 +80,7 @@ in
 
       systemd.services.e621dumper-refresh = {
         confinement.packages = [
-          e621DumperPkg
+          pkgs.e621dumper
           pkgs.nodejs_24
         ];
         path = [ pkgs.nodejs_24 ];

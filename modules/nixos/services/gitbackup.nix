@@ -1,4 +1,4 @@
-{ foxDenLib, pkgs, lib, config, gitbackup, ... }:
+{ foxDenLib, pkgs, lib, config, ... }:
 let
   services = foxDenLib.services;
 
@@ -7,8 +7,6 @@ let
   defaultDataDir = "/var/lib/gitbackup";
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
   ifNotDefaultData = lib.mkIf (svcConfig.dataDir != defaultDataDir);
-
-  gitbackupPkg = gitbackup.packages.${config.nixpkgs.hostPlatform.system}.default;
 in
 {
   options.foxDen.services.gitbackup = {
@@ -50,7 +48,7 @@ in
             "${svcConfig.dataDir}"
           ];
 
-          ExecStart = [ "${gitbackupPkg}/bin/gitbackup-single" ];
+          ExecStart = [ "${pkgs.gitbackup}/bin/gitbackup-single" ];
 
           StateDirectory = ifDefaultData "gitbackup";
         };

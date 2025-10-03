@@ -1,8 +1,6 @@
-{ backupmgr, pkgs, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 let
   svcConfig = config.foxDen.services.backupmgr;
-
-  backupmgrPkg = backupmgr.packages.${config.nixpkgs.hostPlatform.system}.default;
 in
 {
   options.foxDen.services.backupmgr.enable = lib.mkEnableOption "backupmgr";
@@ -11,7 +9,7 @@ in
     {
       environment.systemPackages = [
         pkgs.restic
-        backupmgrPkg
+        pkgs.backupmgr
       ];
 
       systemd.services.backupmgr-backup = {
@@ -21,7 +19,7 @@ in
         serviceConfig = {
           Type = "simple";
           Restart = "no";
-          ExecStart = [ "${backupmgrPkg}/bin/backupmgr --mode=backup" ];
+          ExecStart = [ "${pkgs.backupmgr}/bin/backupmgr --mode=backup" ];
         };
       };
 
@@ -40,7 +38,7 @@ in
         serviceConfig = {
           Type = "simple";
           Restart = "no";
-          ExecStart = [ "${backupmgrPkg}/bin/backupmgr --mode=prune" ];
+          ExecStart = [ "${pkgs.backupmgr}/bin/backupmgr --mode=prune" ];
         };
       };
 
