@@ -16,14 +16,19 @@ let
                               !(internalPackages.${name} or false)) flakeInputs;
 
   removeDefaultPackage = nixpkgs.lib.filterAttrs (name: value: name != "default");
-  addPackage = (mod: if (mod.packages or null) != null then removeDefaultPackage mod.packages.${systemArch} else {});
 in
 {
-  imports = [
-    nixpkgs.nixosModules.readOnlyPkgs
-  ];
+  #imports = [
+  #  nixpkgs.nixosModules.readOnlyPkgs
+  #];
+  #config.nixpkgs.pkgs = nixpkgs.legacyPackages.${systemArch};
 
-  config.nixpkgs.pkgs = nixpkgs.lib.mergeAttrsList ([
-    nixpkgs.legacyPackages.${systemArch}
-  ] ++ (map addPackage (nixpkgs.lib.attrValues inputsWithoutInternal)));
+  config.nixpkgs.hostPlatform = systemArch;
+  config.nixpkgs.overlays = map
+                              (mod: final: prev:
+                                if (mod.packages or null) != null then
+                                  removeDefaultPackage mod.packages.${systemArch}
+                                else
+                                  {})
+                              (nixpkgs.lib.attrValues inputsWithoutInternal);
 }
