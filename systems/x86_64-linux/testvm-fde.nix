@@ -89,6 +89,11 @@ in
     };
   };
 
+  foxDen.services.samba = {
+    enable = true;
+    host = "dummy";
+  };
+
   systemd.network.networks."40-${ifcfg.interface}-${rootInterface}" = {
     name = rootInterface;
     bridge = [ifcfg.interface];
