@@ -31,7 +31,9 @@ in
   system.stateVersion = "25.05";
 
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  hardware.enableRedistributableFirmware = true;
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.nvidia.enabled = true;
   boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "nvme" "mpt3sas" "usbhid" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
