@@ -10,7 +10,7 @@ in
       description = "SuperMicro fan controller daemon";
 
       path = [
-        pkgs.sensors
+        pkgs.lm-sensors
       ];
 
       serviceConfig = {
