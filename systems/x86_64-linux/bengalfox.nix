@@ -1,4 +1,4 @@
-{ modulesPath, config, lib, ... }:
+{ modulesPath, config, ... }:
 let
   mkNameservers = (vlan: [
     "10.${vlan}.0.53"
