@@ -403,8 +403,8 @@ in
         dynDns = true;
       };
       addresses = [
-        "10.2.10.14/16"
-        "fd2c:f4cb:63be:2::a0e/64"
+        "10.2.11.14/16"
+        "fd2c:f4cb:63be:2::b0e/64"
       ];
     };
     jellyfin = mkVlanHost 2 {
