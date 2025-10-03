@@ -1,4 +1,4 @@
-{ config, ... }:
+{ modulesPath, config, lib, ... }:
 let
   mkNameservers = (vlan: [
     "10.${vlan}.0.53"
@@ -29,6 +29,13 @@ in
   foxDen.boot.secure = false;
 
   system.stateVersion = "25.05";
+
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "nvme" "mpt3sas" "usbhid" ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ "kvm-intel" ];
+  boot.extraModulePackages = [ ];
 
   boot.swraid = {
     enable = true;
