@@ -31,7 +31,6 @@ in
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
   hardware.enableRedistributableFirmware = true;
   hardware.cpu.intel.updateMicrocode = true;
-  hardware.nvidia.enabled = lib.mkForce true;
   boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "nvme" "mpt3sas" "usbhid" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
