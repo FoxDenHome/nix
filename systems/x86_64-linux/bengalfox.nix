@@ -18,8 +18,6 @@ let
     nameservers = mkNameservers 2;
     interface = "br-default";
   };
-
-  rootInterface = "ens1f0np0";
 in
 {
   # These are set when you reinstall the system
@@ -91,24 +89,6 @@ in
       fsType = "xfs";
     };
 
-  systemd.network.networks."30-${ifcfg.interface}" = {
-    name = ifcfg.interface;
-    routes = ifcfg.routes;
-    address = ifcfg.addresses;
-    dns = ifcfg.nameservers;
-
-    networkConfig = {
-      DHCP = "no";
-      IPv6AcceptRA = false;
-    };
-
-    # bridgeVLANs = [{
-    #   PVID = 2;
-    #   EgressUntagged = 2;
-    #   VLAN = "1-10";
-    # }];
-  };
-
   systemd.network.netdevs."${ifcfg.interface}" = {
     netdevConfig = {
       Name = ifcfg.interface;
@@ -120,14 +100,33 @@ in
     };
   };
 
-  systemd.network.networks."40-${ifcfg.interface}-${rootInterface}" = {
-      name = rootInterface;
+  systemd.network.networks."30-${ifcfg.interface}" = {
+    name = ifcfg.interface;
+    routes = ifcfg.routes;
+    address = ifcfg.addresses;
+    dns = ifcfg.nameservers;
+
+    networkConfig = {
+      DHCP = "no";
+      IPv6AcceptRA = false;
+    };
+
+    bridgeVLANs = [{
+      PVID = 2;
+      EgressUntagged = 2;
+      VLAN = "1-10";
+    }];
+  };
+
+  systemd.network.networks."40-${ifcfg.interface}-root" = {
+      name = "ens1f0np0";
       bridge = [ifcfg.interface];
-      # bridgeVLANs = [{
-      #   PVID = 2;
-      #   EgressUntagged = 2;
-      #   VLAN = "1-10";
-      # }];
+
+      bridgeVLANs = [{
+        PVID = 2;
+        EgressUntagged = 2;
+        VLAN = "1-10";
+      }];
   };
 
   services.deluge.config.outgoing_interface = "wg-deluge";
