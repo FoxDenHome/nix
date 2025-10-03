@@ -200,7 +200,10 @@ in
         bypassInternal = true;
       };
     };
-    gitbackup.enable = true;
+    gitbackup = {
+      enable = true;
+      host = "gitbackup";
+    };
     jellyfin = {
       enable = true;
       host = "jellyfin";
@@ -355,6 +358,17 @@ in
       addresses = [
         "10.3.10.13/16"
         "fd2c:f4cb:63be:3::a0d/64"
+      ];
+    };
+    gitbackup = mkVlanHost 3 {
+      dns = {
+        name = "gitbackup-bengalfox";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      addresses = [
+        "10.2.10.14/16"
+        "fd2c:f4cb:63be:2::a0e/64"
       ];
     };
     jellyfin = mkVlanHost 2 {
