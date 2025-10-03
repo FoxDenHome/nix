@@ -119,7 +119,7 @@ in
             Group = "mirror";
 
             ExecStartPre = [
-              "${pkgs.coreutils}/bin/mkdir -p /var/lib/mirror/ssl ${svcConfig.dataDir}"
+              "${pkgs.coreutils}/bin/mkdir -p /var/lib/mirror/ssl"
               "${pkgs.nodejs_24}/bin/node /njs/lib/util/renderconf.js"
             ];
             ExecStart = [ "${nginxPkg}/bin/nginx -g 'daemon off;' -p /tmp/ngxconf -c nginx.conf" ];
