@@ -119,14 +119,14 @@ in
   };
 
   systemd.network.networks."40-${ifcfg.interface}-root" = {
-      name = "ens1f0np0";
-      bridge = [ifcfg.interface];
+    name = "ens1f0np0";
+    bridge = [ifcfg.interface];
 
-      bridgeVLANs = [{
-        PVID = 2;
-        EgressUntagged = 2;
-        VLAN = "1-10";
-      }];
+    bridgeVLANs = [{
+      PVID = 2;
+      EgressUntagged = 2;
+      VLAN = "1-10";
+    }];
   };
 
   services.deluge.config.outgoing_interface = "wg-deluge";

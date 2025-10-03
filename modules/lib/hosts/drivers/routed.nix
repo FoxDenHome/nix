@@ -33,7 +33,7 @@ in
                 name = mkIfaceName iface;
                 networkConfig = {
                   DHCP = "no";
-                  IPv6AcceptRA = "no";
+                  IPv6AcceptRA = false;
                   LinkLocalAddressing = "no";
                   IPv4Forwarding = true;
                   IPv6Forwarding = true;
