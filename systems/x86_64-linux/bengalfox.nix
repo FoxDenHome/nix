@@ -170,7 +170,10 @@ in
       };
     };
 
-    aurbuild.enable = true;
+    aurbuild = {
+      enable = true;
+      host = "mirror";
+    };
     backupmgr.enable = true;
     deluge = {
       enable = true;
