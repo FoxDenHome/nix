@@ -16,6 +16,7 @@
 
   environment.systemPackages = with pkgs; [
     age
+    bridge-utils
     cryptsetup
     curl
     e2fsprogs
