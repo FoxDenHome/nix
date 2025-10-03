@@ -105,6 +105,7 @@ in
       interfaces.ext = {
         driver = "bridge";
         driverOpts.bridge = "br-default";
+        driverOpts.vlan = 2;
         dns = {
           name = "dummy";
           zone = "local.foxden.network";
