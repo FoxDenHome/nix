@@ -9,6 +9,10 @@ in
     systemd.services.superfan = {
       description = "SuperMicro fan controller daemon";
 
+      path = [
+        pkgs.sensors
+      ];
+
       serviceConfig = {
         Type = "simple";
         Restart = "always";
