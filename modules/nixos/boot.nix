@@ -1,5 +1,9 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, lanzaboote, ... }:
 {
+  imports = [
+    lanzaboote.nixosModules.lanzaboote
+  ];
+
   options.foxDen.boot.secure = lib.mkEnableOption "Enable secure boot";
 
   config = {

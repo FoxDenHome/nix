@@ -1,4 +1,4 @@
-{ lib, config, ... } :
+{ lib, config, sops-nix, ... } :
 let
   sharedSopsFile = ../../secrets/shared.yaml;
 
@@ -6,6 +6,10 @@ let
   mkGithubTokenPath = mkIfAvailable config.sops.secrets."github-token-env".path;
 in
 {
+  imports = [
+    sops-nix.nixosModules.sops
+  ];
+
   options.foxDen.sops.available = lib.mkEnableOption "Enable sops-nix usage";
 
   config = lib.mkMerge [

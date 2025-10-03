@@ -3,12 +3,11 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    impermanence.url = "github:nix-community/impermanence";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
 
+    impermanence.url = "github:nix-community/impermanence";
     lanzaboote.url = "github:nix-community/lanzaboote";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
-
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -28,7 +27,7 @@
     nginx-mirror.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { nixpkgs, uds-proxy, fadumper, e621dumper, backupmgr, superfan, nginx-mirror, gitbackup, sops-nix, impermanence, lanzaboote, ... }:
+  outputs = inputs@{ nixpkgs, ... }:
   let
     isNixFile = path: nixpkgs.lib.filesystem.pathIsRegularFile path && nixpkgs.lib.strings.hasSuffix ".nix" path;
 
@@ -37,7 +36,7 @@
     mkModuleList = (dir: (nixpkgs.lib.filter isNixFile
                           (nixpkgs.lib.filesystem.listFilesRecursive dir)));
 
-    modParams = { inherit nixpkgs; inherit foxDenLib; };
+    allLibs = { inherit foxDenLib; } // (nixpkgs.lib.filterAttrs (name: value: name != "self") inputs);
 
     tryEvalOrEmpty = (val: let
       eval = (builtins.tryEval val);
@@ -48,7 +47,7 @@
                           nameRaw = nixpkgs.lib.strings.removeSuffix ".nix" (mkRelPath dir path);
                         in {
                           name = nixpkgs.lib.strings.removeSuffix "/main" nameRaw;
-                          value = import path modParams;
+                          value = import path allLibs;
                         }) (mkModuleList dir);
                       in
                       {
@@ -65,11 +64,7 @@
     foxDenLibsRaw = mkModuleAttrSet ./modules/lib;
     foxDenLib = foxDenLibsRaw.nested;
 
-    modules = (mkModuleList ./modules/nixos) ++ [
-      impermanence.nixosModules.impermanence
-      lanzaboote.nixosModules.lanzaboote
-      sops-nix.nixosModules.sops
-    ] ++ (nixpkgs.lib.filter (mod: mod != null)
+    modules = (mkModuleList ./modules/nixos) ++ (nixpkgs.lib.filter (mod: mod != null)
       (map
         (mod: mod.nixosModule or null)
         (nixpkgs.lib.attrsets.attrValues foxDenLibsRaw.flat)
@@ -90,7 +85,7 @@
       name = hostname;
       value = nixpkgs.lib.nixosSystem {
         system = systemArch;
-        specialArgs = { inherit nixpkgs foxDenLib uds-proxy e621dumper fadumper backupmgr nginx-mirror gitbackup superfan; };
+        specialArgs = allLibs;
         modules = [
           ({ ... }: {
             networking.hostName = hostname;

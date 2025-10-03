@@ -1,5 +1,9 @@
-{ lib, pkgs, foxDenLib, config, ... }:
+{ lib, impermanence, pkgs, foxDenLib, config, ... }:
 {
+  imports = [
+    impermanence.nixosModules.impermanence
+  ];
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   services.sshd.enable = true;
