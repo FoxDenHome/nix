@@ -71,11 +71,11 @@ in
       IPv6AcceptRA = false;
     };
 
-    # bridgeVLANs = [{
-    #   PVID = 2;
-    #   EgressUntagged = 2;
-    #   VLAN = "1-10";
-    # }];
+    bridgeVLANs = [{
+      PVID = 2;
+      EgressUntagged = 2;
+      VLAN = "1-10";
+    }];
   };
 
   systemd.network.netdevs."${ifcfg.interface}" = {
@@ -90,13 +90,13 @@ in
   };
 
   systemd.network.networks."40-${ifcfg.interface}-${rootInterface}" = {
-      name = rootInterface;
-      bridge = [ifcfg.interface];
-      # bridgeVLANs = [{
-      #   PVID = 2;
-      #   EgressUntagged = 2;
-      #   VLAN = "1-10";
-      # }];
+    name = rootInterface;
+    bridge = [ifcfg.interface];
+    bridgeVLANs = [{
+      PVID = 2;
+      EgressUntagged = 2;
+      VLAN = "1-10";
+    }];
   };
   
   foxDen.hosts.hosts = {
