@@ -55,33 +55,33 @@ in
       };
   };
 
-  fileSystems."/" =
-    { device = "none";
-      fsType = "tmpfs";
-      options = [ "mode=755" ];
-    };
+  fileSystems."/" = {
+    device = "none";
+    fsType = "tmpfs";
+    options = [ "mode=755" ];
+  };
 
-  fileSystems."/nix" =
-    { device = "/dev/mapper/nixroot";
-      fsType = "xfs";
-    };
+  fileSystems."/nix" = {
+    device = "/dev/mapper/nixroot";
+    fsType = "xfs";
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/nvme0n1p1";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/nvme0n1p1";
+    fsType = "vfat";
+    options = [ "fmask=0022" "dmask=0022" ];
+  };
 
-  fileSystems."/boot2" =
-    { device = "/dev/nvme1n1p1";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+  fileSystems."/boot2" = {
+    device = "/dev/nvme1n1p1";
+    fsType = "vfat";
+    options = [ "fmask=0022" "dmask=0022" ];
+  };
 
-  # fileSystems."/mnt/zhdd" =
-  #   { device = "zhdd/ROOT";
-  #     fsType = "zfs";
-  #   };
+  fileSystems."/mnt/zhdd" = config.lib.foxDen.sops.mkIfAvailable  {
+    device = "zhdd/ROOT";
+    fsType = "zfs";
+  };
 
   fileSystems."/mnt/zssd" =
     { device = "/dev/mapper/zssd";
