@@ -311,6 +311,7 @@ in
   in {
     bengalfox = {
       interfaces.default = {
+        driver = "null";
         dns = {
           name = "bengalfox";
           zone = "foxden.network";
