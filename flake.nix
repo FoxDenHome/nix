@@ -87,8 +87,8 @@
         specialArgs = allLibs // { inherit systemArch; };
         modules = [
           ({ ... }: {
-            networking.hostName = hostname;
-            sops.defaultSopsFile = ./secrets/${hostname}.yaml;
+            config.networking.hostName = hostname;
+            config.sops.defaultSopsFile = ./secrets/${hostname}.yaml;
           })
           system
         ] ++ modules;
