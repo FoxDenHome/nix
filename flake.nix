@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-    nixos-hardware.url = "github:NixOS/nixos-hardware";
 
     impermanence.url = "github:nix-community/impermanence";
     lanzaboote.url = "github:nix-community/lanzaboote";
