@@ -78,10 +78,10 @@ in
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  fileSystems."/mnt/zhdd" =
-    { device = "zhdd/ROOT";
-      fsType = "zfs";
-    };
+  # fileSystems."/mnt/zhdd" =
+  #   { device = "zhdd/ROOT";
+  #     fsType = "zfs";
+  #   };
 
   fileSystems."/mnt/zssd" =
     { device = "/dev/mapper/zssd";
