@@ -1,12 +1,12 @@
-{ modulesPath, lib, config, ... }:
+{ modulesPath, config, ... }:
 let
   mkNameservers = (vlan: [
-    "10.${vlan}.0.53"
-    "fd2c:f4cb:63be:${vlan}\::35"
+    "10.${builtins.toString vlan}.0.53"
+    "fd2c:f4cb:63be:${builtins.toString vlan}\::35"
   ]);
   mkRoutes = (vlan: [
-    { Destination = "0.0.0.0/0"; Gateway = "10.${vlan}.0.1"; }
-    { Destination = "::/0"; Gateway = "fd2c:f4cb:63be:${vlan}\::1"; }
+    { Destination = "0.0.0.0/0"; Gateway = "10.${builtins.toString vlan}.0.1"; }
+    { Destination = "::/0"; Gateway = "fd2c:f4cb:63be:${builtins.toString vlan}\::1"; }
   ]);
 
   ifcfg = {

@@ -1,12 +1,12 @@
 { config, ... }:
 let
   mkNameservers = (vlan: [
-    "10.${vlan}.0.53"
-    "fd2c:f4cb:63be:${vlan}\::35"
+    "10.${builtins.toString vlan}.0.53"
+    "fd2c:f4cb:63be:${builtins.toString vlan}\::35"
   ]);
   mkRoutes = (vlan: [
-    { Destination = "0.0.0.0/0"; Gateway = "10.${vlan}.0.1"; }
-    { Destination = "::/0"; Gateway = "fd2c:f4cb:63be:${vlan}\::1"; }
+    { Destination = "0.0.0.0/0"; Gateway = "10.${builtins.toString vlan}.0.1"; }
+    { Destination = "::/0"; Gateway = "fd2c:f4cb:63be:${builtins.toString vlan}\::1"; }
   ]);
 
   ifcfg = {
@@ -32,9 +32,7 @@ in
 
   boot.swraid = {
     enable = true;
-    mdadmConf = [
-      "ARRAY /dev/md0 metadata=1.2 UUID=660f8703:f7ec5be9:b586b082:ce74a589"
-    ];
+    mdadmConf = "ARRAY /dev/md0 metadata=1.2 UUID=660f8703:f7ec5be9:b586b082:ce74a589";
   };
 
   boot.initrd.luks.devices = {
