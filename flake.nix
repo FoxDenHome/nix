@@ -112,7 +112,7 @@
   in
   {
     nixosConfigurations = nixosConfigurations;
-    dnsRecords = dnsRecords;
+    dnsRecords = builtins.toFile "dns-records.json" (builtins.toJSON dnsRecords);
 
     internalZone = mkZoneFile dnsRecords.internal."foxden.network";
   };
