@@ -1,5 +1,7 @@
 { pkgs, ... } :
 {
+  boot.supportedFilesystems = [ "zfs" ];
+
   boot.zfs.devNodes = "/dev/disk/by-path";
 
   environment.persistence."/nix/persist/system".files = [
