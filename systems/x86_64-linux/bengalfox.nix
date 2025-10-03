@@ -78,15 +78,55 @@ in
     options = [ "fmask=0022" "dmask=0022" ];
   };
 
-  fileSystems."/mnt/zhdd" = config.lib.foxDen.sops.mkIfAvailable {
-    device = "zhdd/ROOT";
-    fsType = "zfs";
-  };
-
   fileSystems."/mnt/zssd" =
     { device = "/dev/mapper/zssd";
       fsType = "xfs";
     };
+
+  fileSystems."/mnt/zhdd" = {
+    device = "zhdd/ROOT";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/zhdd/docker" = {
+    device = "zhdd/ROOT/docker";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/zhdd/e621" = {
+    device = "zhdd/ROOT/e621";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/zhdd/furaffinity" = {
+    device = "zhdd/ROOT/furaffinity";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/zhdd/kiwix" = {
+    device = "zhdd/ROOT/kiwix";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/zhdd/mirror" = {
+    device = "zhdd/ROOT/mirror";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/zhdd/nas" = {
+    device = "zhdd/ROOT/nas";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/zhdd/nashome" = {
+    device = "zhdd/ROOT/nashome";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/zhdd/restic" = {
+    device = "zhdd/ROOT/restic";
+    fsType = "zfs";
+  };
 
   systemd.network.netdevs."${ifcfg.interface}" = {
     netdevConfig = {
@@ -133,13 +173,6 @@ in
   sops.secrets."zfs-zhdd.key" = config.lib.foxDen.sops.mkIfAvailable {
     format = "binary";
     sopsFile = ../../secrets/zfs-zhdd.key;
-  };
-
-  environment.etc."foxden/zfs-zhdd.key" = config.lib.foxDen.sops.mkIfAvailable {
-    source = config.sops.secrets."zfs-zhdd.key".path;
-    mode = "0400";
-    user = "root";
-    group = "root";
   };
 
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
