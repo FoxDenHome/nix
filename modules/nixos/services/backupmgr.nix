@@ -28,6 +28,7 @@ in
         timerConfig = {
           OnBootSec = "30m";
           OnUnitActiveSec = "1h";
+          RandomizedDelaySec = "30m";
         };
       };
 
@@ -47,6 +48,7 @@ in
         timerConfig = {
           OnBootSec = "6h";
           OnUnitActiveSec = "7d";
+          RandomizedDelaySec = "12h";
         };
       };
 

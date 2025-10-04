@@ -110,7 +110,7 @@ in
         wantedBy = [ "timers.target" ];
         timerConfig = {
           OnCalendar = "daily";
-          AccuracySec = "12h";
+          RandomizedDelaySec = "12h";
           Persistent = true;
         };
       };
