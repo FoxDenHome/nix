@@ -202,7 +202,7 @@ in
           pkgs.bash
           pkgs.gnused
           pkgs.jdk21_headless
-        ];
+        ] ++ lib.attrsets.attrValues secCfg;
 
         path = [
           pkgs.which
