@@ -32,7 +32,7 @@ in
           "${mirrorCfg.dataDir}/foxdenaur/${builderArch}:/aur/repo"
         ];
         entrypoint = "/usr/bin/sleep";
-        cmd = "24h";
+        cmd = ["24h"];
         extraOptions = [
           "--mount=type=tmpfs,tmpfs-size=128M,destination=/aur/tmp"
         ];
