@@ -53,6 +53,16 @@ in
       # TODO: Make pcscd actually work, needs to wait on real hardware install...
 
       services.pcscd.enable = true;
+      security.polkit.extraConfig = ''
+        polkit.addRule(function(action, subject) {
+            if ((
+                action.id == "org.debian.pcsc-lite.access_card" ||
+                action.id == "org.debian.pcsc-lite.access_pcsc"
+                ) && subject.user == "aurbuild") {
+                    return polkit.Result.YES;
+            }
+        });
+      '';
       # Home-Manager
       # programs.gpg.scdaemonSettings = {
       #   disable-ccid = true;
