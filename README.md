@@ -28,7 +28,7 @@
 			- [x] kiwix
 			- [x] mirror
 			- [x] gitbackup
-			- [x] aurbuild (TODO: Passthru YubiKey)
+			- [x] aurbuild
 		- [ ] Post migration
 			- [ ] ollama
 			- [ ] hashtopolis
