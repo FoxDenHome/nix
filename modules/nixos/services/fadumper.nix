@@ -95,12 +95,14 @@ in
             svcConfig.dataDir
           ];
 
+          Type = "oneshot";
+          Restart = "no";
+
           User = "fadumper";
           Group = "fadumper";
 
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.fadumper.path;
 
-          Type = "simple";
           ExecStart = [ "${pkgs.bash}/bin/bash ./looper.sh" ];
           WorkingDirectory = faDumperDir;
           StateDirectory = ifDefaultData "fadumper";

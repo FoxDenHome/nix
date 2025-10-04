@@ -95,12 +95,14 @@ in
             svcConfig.dataDir
           ];
 
+          Type = "oneshot";
+          Restart = "no";
+
           User = "e621dumper";
           Group = "e621dumper";
 
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.e621dumper.path;
           
-          Type = "simple";
           ExecStart = [ "${pkgs.bash}/bin/bash ./looper.sh" ];
           WorkingDirectory = e621DumperDir;
           StateDirectory = ifDefaultData "e621dumper";
