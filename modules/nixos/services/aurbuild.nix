@@ -31,8 +31,6 @@ in
           "aurbuild_cache_${builderArch}:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${builderArch}:/aur/repo"
         ];
-        entrypoint = "/usr/bin/sleep";
-        cmd = ["24h"];
         extraOptions = [
           "--mount=type=tmpfs,tmpfs-size=128M,destination=/aur/tmp"
         ];
@@ -68,7 +66,11 @@ in
       #   disable-ccid = true;
       #   pcsc-shared = true;
       # };
-      sops.secrets."aurbuild-gpg-pin" = config.lib.foxDen.sops.mkIfAvailable {};
+      sops.secrets."aurbuild-gpg-pin" = config.lib.foxDen.sops.mkIfAvailable {
+        mode = "0400";
+        owner = "aurbuild";
+        group = "aurbuild";
+      };
 
       users.users.aurbuild = {
         isSystemUser = true;
