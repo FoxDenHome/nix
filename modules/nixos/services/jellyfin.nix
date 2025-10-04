@@ -33,7 +33,12 @@ in
       services.jellyfin.enable = true;
       services.jellyfin.group = "share";
 
+      users.users.jellyfin.home = "${config.services.jellyfin.dataDir}/home";
+
       systemd.services.jellyfin.serviceConfig = {
+        ExecStartPre = [
+          "${pkgs.coreutils}/bin/mkdir -p \${HOME}"
+        ];
         BindPaths = [
           config.services.jellyfin.cacheDir
           config.services.jellyfin.configDir
