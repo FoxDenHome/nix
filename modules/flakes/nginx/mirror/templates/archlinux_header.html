@@ -4,7 +4,7 @@
       <p>This is a mirror of the Arch Linux package repositories.</p>
       <p>
         It is updated <strong>every hour</strong> from the
-        <a href="https://archlinux.org/mirrors/{{$ARCH_MIRROR_ID}}/">{{$ARCH_MIRROR_ID}} mirror</a>.
+        <a href="https://archlinux.org/mirrors/{{archMirrorId}}/">{{archMirrorId}} mirror</a>.
       </p>
       <p>
         For any questions about this mirror, contact me at:
@@ -14,11 +14,11 @@
       <ul>
         <li>
           HTTPS:
-          <a href="https://archlinux.__ROOT_DOMAIN__/">https://archlinux.__ROOT_DOMAIN__/</a>
+          <a href="https://archlinux.{{rootDomain}}/">https://archlinux.{{rootDomain}}/</a>
         </li>
         <li>
           rsync:
-          <a href="rsync://archlinux.__ROOT_DOMAIN__/archlinux/">rsync://archlinux.__ROOT_DOMAIN__/archlinux/</a>
+          <a href="rsync://archlinux.{{rootDomain}}/archlinux/">rsync://archlinux.{{rootDomain}}/archlinux/</a>
         </li>
       </ul>
       <h2>Quick links</h2>
