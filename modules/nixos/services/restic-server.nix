@@ -31,7 +31,7 @@ in
         enable = true;
         dataDir = svcConfig.dataDir;
         privateRepos = true;
-        listenAddress = "127.0.0.1:8000";
+        extraFlags = [ "--listen 127.0.0.1:8000" ];
       };
 
       systemd.services.restic-rest-server = {
@@ -43,6 +43,8 @@ in
           StateDirectory = ifDefaultData "restic";
         };
       };
+
+      systemd.sockets.restic-rest-server.enable = false;
 
       environment.persistence."/nix/persist/restic-server" = ifDefaultData {
         hideMounts = true;
