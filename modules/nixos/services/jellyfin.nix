@@ -41,7 +41,7 @@ in
           config.services.jellyfin.logDir
         ];
         BindReadOnlyPaths = [
-          "${svcConfig.mediaDir}:/data"
+          "${svcConfig.mediaDir}:/media"
         ] ++ foxDenLib.services.mkEtcPaths [
           "fonts"
         ];
