@@ -65,6 +65,8 @@ while :; do
 	echo 'Running main rsync...'
 	rsync_cmd \
 		--exclude='*.links.tar.gz*' \
+		--exclude='index.htm' \
+		--exclude='index.html' \
 		--exclude='/other' \
 		--exclude='/sources' \
 		--exclude='/lastupdate' \
