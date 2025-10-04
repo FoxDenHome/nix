@@ -48,6 +48,7 @@
 
   networking.hostId = lib.mkDefault (foxDenLib.util.mkHash8 config.networking.hostName);
   networking.wireguard.useNetworkd = false;
+  networking.firewall.logRefusedConnections = false;
 
   environment.persistence."/nix/persist/system" = {
     hideMounts = true;
