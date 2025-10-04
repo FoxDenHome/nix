@@ -23,7 +23,9 @@
     gptfdisk
     mdadm
     openssl
+    screen
     ssh-to-age
+    tmux
     unixtools.netstat
     wget
     xfsprogs
