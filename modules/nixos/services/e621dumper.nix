@@ -106,7 +106,7 @@ in
         };
       };
 
-      systemd.timers.e621Dumper-refresh = {
+      systemd.timers.e621dumper-refresh = {
         wantedBy = [ "timers.target" ];
         timerConfig = {
           OnCalendar = "daily";
