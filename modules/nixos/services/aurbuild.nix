@@ -27,7 +27,7 @@ in
           "/etc/passwd:/etc/passwd:ro"
           "/etc/group:/etc/group:ro"
           "/run/pcscd:/run/pcscd:ro"
-          (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets."aurbuild-gpg-pin".path}:/gpg/pin:ro")
+          (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets."aurbuild-gpg-passphrase".path}:/gpg/passphrase:ro")
           "aurbuild_cache_${builderArch}:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${builderArch}:/aur/repo"
         ];
@@ -40,8 +40,6 @@ in
           "PGROUP" = "aurbuild";
         };
       };
-      entrypoint = "/usr/bin/sleep";
-      cmd = ["24h"];
       systemd = {
         serviceConfig = {
           ExecStartPre = [
@@ -68,7 +66,7 @@ in
       #   disable-ccid = true;
       #   pcsc-shared = true;
       # };
-      sops.secrets."aurbuild-gpg-pin" = config.lib.foxDen.sops.mkIfAvailable {
+      sops.secrets."aurbuild-gpg-passphrase" = config.lib.foxDen.sops.mkIfAvailable {
         mode = "0400";
         owner = "aurbuild";
         group = "aurbuild";
