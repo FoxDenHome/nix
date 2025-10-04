@@ -31,7 +31,7 @@ in
         enable = true;
         dataDir = svcConfig.dataDir;
         privateRepos = true;
-        listenAddress = "127.0.0.1:8080";
+        listenAddress = "127.0.0.1:8000";
       };
 
       systemd.services.restic-rest-server = {
