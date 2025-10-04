@@ -57,8 +57,7 @@ in
       systemd.timers.gitbackup = {
         wantedBy = [ "timers.target" ];
         timerConfig = {
-          OnStartupSec = "5m";
-          OnUnitInactiveSec = "1h";
+          OnCalendar = "hourly";
           RandomizedDelaySec = "45m";
         };
       };

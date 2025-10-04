@@ -26,8 +26,7 @@ in
       systemd.timers.backupmgr-backup = {
         wantedBy = [ "timers.target" ];
         timerConfig = {
-          OnBootSec = "30m";
-          OnUnitActiveSec = "1h";
+          OnCalendar = "hourly";
           RandomizedDelaySec = "30m";
         };
       };
@@ -46,8 +45,7 @@ in
       systemd.timers.backupmgr-prune = {
         wantedBy = [ "timers.target" ];
         timerConfig = {
-          OnBootSec = "6h";
-          OnUnitActiveSec = "7d";
+          OnCalendar = "weekly";
           RandomizedDelaySec = "12h";
         };
       };
