@@ -73,6 +73,8 @@ in
 
           Environment = [
             "DOWNLOAD_PATH=${svcConfig.dataDir}"
+            "URL_HOST=${foxDenLib.global.dns.mkHost primaryInterface.dns}"
+            (if svcConfig.tls then "URL_PROTOCOL=https" else "URL_PROTOCOL=http")
             "HOST=127.0.0.1"
             "PORT=8001"
           ];
