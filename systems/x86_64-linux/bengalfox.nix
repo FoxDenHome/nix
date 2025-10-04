@@ -123,9 +123,14 @@ in
     fsType = "zfs";
   };
 
-  fileSystems."/mnt/zhdd/restic" = {
-    device = "zhdd/ROOT/restic";
-    fsType = "zfs";
+  fileSystems."/mnt/zhdd/nas/torrent" = {
+    device = "/mnt/zssd/nas/torrent";
+    fsType = "bind";
+  };
+
+  fileSystems."/mnt/zhdd/nas/usenet" = {
+    device = "/mnt/zssd/nas/usenet";
+    fsType = "bind";
   };
 
   systemd.network.netdevs."${ifcfg.interface}" = {
