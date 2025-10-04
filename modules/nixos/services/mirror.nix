@@ -101,7 +101,7 @@ in
 
           serviceConfig = {
             BindReadOnlyPaths = [
-              "${foxDenLib.nginx.mkProxiesConf config}:/etc/nginx/proxies.conf:ro"
+              "${foxDenLib.nginx.mkProxiesConf config}:/etc/nginx/proxies.conf"
               "${pkgs.nginx-mirror}:/njs"
               "${svcConfig.dataDir}:/data"
             ];
