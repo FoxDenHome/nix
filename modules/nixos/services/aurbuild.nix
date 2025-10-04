@@ -50,8 +50,6 @@ in
       };
     }).config
     {
-      # TODO: Make pcscd actually work, needs to wait on real hardware install...
-
       services.pcscd.enable = true;
       security.polkit.extraConfig = ''
         polkit.addRule(function(action, subject) {
