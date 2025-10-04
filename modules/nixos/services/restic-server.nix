@@ -6,6 +6,12 @@ let
 
   defaultDataDir = "/var/lib/restic";
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
+
+  restServerConfig = (services.make {
+    name = "restic-rest-server";
+    inherit svcConfig pkgs config;
+  }).config;
+  restServerSvcConfig = restServerConfig.systemd.services."restic-rest-server";
 in
 {
   options.foxDen.services.restic-server = {
@@ -17,10 +23,7 @@ in
   } // (services.http.mkOptions { svcName = "restic-server"; name = "Restic Backup Server"; });
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
-    (services.make {
-      name = "restic-rest-server";
-      inherit svcConfig pkgs config;
-    }).config
+    restServerConfig
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "caddy-restic-rest-server";
@@ -35,6 +38,11 @@ in
       };
 
       systemd.services.restic-rest-server = {
+        after = lib.mkForce ([
+          "network.target"
+        ] ++ restServerSvcConfig.unitConfig.After);
+        requires = lib.mkForce (restServerSvcConfig.unitConfig.Requires);
+
         serviceConfig = {
           BindPaths = [
             svcConfig.dataDir
