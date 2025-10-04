@@ -34,7 +34,7 @@ in
         enable = true;
         dataDir = svcConfig.dataDir;
         privateRepos = true;
-        extraFlags = [ "--listen 127.0.0.1:8000" ];
+        extraFlags = [ "--listen=127.0.0.1:8000" ];
       };
 
       systemd.services.restic-rest-server = {
