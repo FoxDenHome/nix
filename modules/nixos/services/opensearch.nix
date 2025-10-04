@@ -155,9 +155,6 @@ in
         "plugins.security.ssl.transport.pemcert_filepath" = "/var/lib/opensearch/config/opensearch.crt";
         "plugins.security.ssl.transport.pemtrustedcas_filepath" = "/var/lib/opensearch/config/opensearch.crt";
         "transport.ssl.enforce_hostname_verification" = false;
-
-        "path.repo" = [ "/mnt/tmp" ];
-        "reindex.remote.allowlist" = ["127.0.0.1:9400"];
       };
 
       systemd.services.opensearch-uds = {
@@ -187,8 +184,6 @@ in
         ];
 
         serviceConfig = {
-          BindPaths = [ "/mnt/tmp:/mnt/tmp" ];
-
           ExecStartPre = [
             "${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -keyout /var/lib/opensearch/config/opensearch.key -out /var/lib/opensearch/config/opensearch.crt -sha256 -days 36500 -nodes -subj '/CN=opensearch'"
           ];
