@@ -125,12 +125,12 @@ in
 
   fileSystems."/mnt/zhdd/nas/torrent" = {
     device = "/mnt/zssd/nas/torrent";
-    fsType = "bind";
+    options = [ "bind" ];
   };
 
   fileSystems."/mnt/zhdd/nas/usenet" = {
     device = "/mnt/zssd/nas/usenet";
-    fsType = "bind";
+    options = [ "bind" ];
   };
 
   systemd.network.netdevs."${ifcfg.interface}" = {
