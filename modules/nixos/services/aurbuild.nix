@@ -31,6 +31,8 @@ in
           "aurbuild_cache_${builderArch}:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${builderArch}:/aur/repo"
         ];
+        entrypoint = "/usr/bin/sleep";
+        cmd = "24h";
         extraOptions = [
           "--mount=type=tmpfs,tmpfs-size=128M,destination=/aur/tmp"
         ];
