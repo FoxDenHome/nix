@@ -99,8 +99,8 @@ async function index(r: NginxHTTPRequest): Promise<void> {
 
   const ctx: RequestContext = {
     path: relPath,
-    archMirrorId: process.env.ARCH_MIRROR_ID,
-    rootDomain: process.env.ROOT_DOMAIN,
+    archMirrorId: r.variables.archMirrorId,
+    rootDomain: r.variables.rootDomain,
   };
 
   sorting.apply(r, ctx, fileInfos);
