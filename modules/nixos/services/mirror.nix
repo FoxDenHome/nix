@@ -176,7 +176,7 @@ in
                 ];
 
                 serviceConfig = {
-                  Type = "oneshot";
+                  Type = "simple";
                   Restart = "no";
 
                   User = "mirror";

@@ -95,7 +95,7 @@ in
             svcConfig.dataDir
           ];
 
-          Type = "oneshot";
+          Type = "simple";
           Restart = "no";
 
           User = "fadumper";
