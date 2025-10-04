@@ -9,6 +9,7 @@ let
   defaultDataDir = "/var/lib/fadumper";
   ifDefaultData = lib.mkIf (config.foxDen.services.fadumper.dataDir == defaultDataDir);
 
+  hostCfg = foxDenLib.hosts.getByName config svcConfig.host;
   primaryInterface = lib.lists.head (lib.attrsets.attrValues hostCfg.interfaces);
 in
 {
