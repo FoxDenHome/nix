@@ -13,9 +13,7 @@ in
       ];
 
       systemd.services.backupmgr-backup = {
-        unitConfig = {
-          Conflicts = [ "backupmgr-prune.service" ];
-        };
+        conflicts = [ "backupmgr-prune.service" ];
         serviceConfig = {
           Type = "simple";
           Restart = "no";
@@ -32,9 +30,7 @@ in
       };
 
       systemd.services.backupmgr-prune = {
-        unitConfig = {
-          Conflicts = [ "backupmgr-backup.service" ];
-        };
+        conflicts = [ "backupmgr-backup.service" ];
         serviceConfig = {
           Type = "simple";
           Restart = "no";

@@ -42,11 +42,9 @@ in
   {
     name = "wireguard-${name}";
     value = {
-      unitConfig = {
-        Requires = [ hostCfg.unit ];
-        BindsTo = [ hostCfg.unit ];
-        After = [ hostCfg.unit ];
-      };
+      requires = [ hostCfg.unit ];
+      bindsTo = [ hostCfg.unit ];
+      after = [ hostCfg.unit ];
     };
   }) (lib.attrsets.attrsToList config.foxDen.services.wireguard));
 }

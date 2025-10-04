@@ -14,11 +14,9 @@ let
 
       config.systemd.services."podman-${svc}" = nixpkgs.lib.mkMerge [
         {
-          unitConfig = {
-            Requires = [ host.unit ];
-            BindsTo = [ host.unit ];
-            After = [ host.unit ];
-          };
+          requires = [ host.unit ];
+          bindsTo = [ host.unit ];
+          after = [ host.unit ];
         }
         systemd
       ];

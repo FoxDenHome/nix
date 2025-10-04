@@ -40,12 +40,18 @@ in
       systemd.services.restic-rest-server = {
         after = lib.mkForce ([
           "network.target"
-        ] ++ restServerSvcConfig.unitConfig.After);
-        requires = lib.mkForce (restServerSvcConfig.unitConfig.Requires);
+        ] ++ restServerSvcConfig.after);
+        requires = lib.mkForce (restServerSvcConfig.requires);
 
         serviceConfig = {
           BindPaths = [
             svcConfig.dataDir
+          ];
+
+          RestrictAddressFamilies = lib.mkForce [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
           ];
 
           StateDirectory = ifDefaultData "restic";

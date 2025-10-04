@@ -24,11 +24,9 @@ let
           pkgs.cacert
         ];
 
-        unitConfig = {
-          Requires = dependency;
-          BindsTo = dependency;
-          After = dependency;
-        };
+        requires = dependency;
+        bindsTo = dependency;
+        after = dependency;
 
         serviceConfig = {
           NetworkNamespacePath = nixpkgs.lib.mkIf (svcConfig.host != "") host.namespacePath;

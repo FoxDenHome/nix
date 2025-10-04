@@ -191,9 +191,8 @@ in
             name = (nixpkgs.lib.strings.removeSuffix ".service" host.unit);
             value = {
               description = "NetNS ${host.namespace}";
-              unitConfig = {
-                After = [ "network-pre.target" ];
-              };
+              after = [ "network-pre.target" ];
+
               serviceConfig = {
                 Type = "oneshot";
                 RemainAfterExit = true;

@@ -73,11 +73,9 @@ in
       };
 
       systemd.services.deluged = {
-        unitConfig = {
-          Requires = [ "deluge-pre.service" ];
-          BindsTo = [ "deluge-pre.service" ];
-          After = [ "deluge-pre.service" ];
-        };
+        requires = [ "deluge-pre.service" ];
+        bindsTo = [ "deluge-pre.service" ];
+        after = [ "deluge-pre.service" ];
 
         serviceConfig = {
           BindPaths = [
@@ -88,11 +86,9 @@ in
       };
 
       systemd.services.delugeweb = {
-        unitConfig = {
-          Requires = [ "deluge-pre.service" ];
-          BindsTo = [ "deluge-pre.service" ];
-          After = [ "deluge-pre.service" ];
-        };
+        requires = [ "deluge-pre.service" ];
+        bindsTo = [ "deluge-pre.service" ];
+        after = [ "deluge-pre.service" ];
 
         serviceConfig = {
           BindPaths = [
