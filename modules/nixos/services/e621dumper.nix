@@ -8,6 +8,8 @@ let
 
   defaultDataDir = "/var/lib/e621dumper";
   ifDefaultData = lib.mkIf (config.foxDen.services.e621dumper.dataDir == defaultDataDir);
+
+  primaryInterface = lib.lists.head (lib.attrsets.attrValues hostCfg.interfaces);
 in
 {
   options.foxDen.services.e621dumper = {
@@ -102,6 +104,10 @@ in
 
           Environment = [
             "DOWNLOAD_PATH=${svcConfig.dataDir}"
+            "URL_HOST=${foxDenLib.global.dns.mkHost primaryInterface.dns}"
+            (if svcConfig.tls then "URL_PROTOCOL=https" else "URL_PROTOCOL=http")
+            "HOST=127.0.0.1"
+            "PORT=8001"
           ];
         };
       };
