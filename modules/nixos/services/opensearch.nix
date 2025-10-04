@@ -221,7 +221,7 @@ in
           Restart = "on-failure";
           ExecStart =
             [
-             "${pkgs.mkdir}/bin/mkdir -p /var/lib/opensearch/config/opensearch-security"
+             "${pkgs.coreutils}/bin/mkdir -p /var/lib/opensearch/config/opensearch-security"
             ]
             ++ (lib.attrsets.mapAttrsToList (name: file: "${pkgs.coreutils}/bin/cp ${file} /var/lib/opensearch/config/opensearch-security/${name}") secCfg)
             ++ (map (name: "${pkgs.coreutils}/bin/chmod 600 /var/lib/opensearch/config/opensearch-security/${name}") (lib.attrsets.attrNames secCfg))
