@@ -22,6 +22,7 @@
     e2fsprogs
     gptfdisk
     mdadm
+    ncdu
     openssl
     screen
     ssh-to-age
