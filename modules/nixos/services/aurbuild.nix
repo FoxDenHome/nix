@@ -40,6 +40,8 @@ in
           "PGROUP" = "aurbuild";
         };
       };
+      entrypoint = "/usr/bin/sleep";
+      cmd = ["24h"];
       systemd = {
         serviceConfig = {
           ExecStartPre = [
