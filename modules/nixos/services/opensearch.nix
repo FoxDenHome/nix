@@ -65,6 +65,9 @@ let
           allowed_actions = [ "*" ];
         }
       ];
+      cluster_permissions = [
+        "indices:data/write/bulk"
+      ];
       tenant_permissions = [];
     }) svcConfig.users)));
 
