@@ -1,4 +1,4 @@
-{ modulesPath, config, ... }:
+{ modulesPath, pkgs, config, ... }:
 let
   mkNameservers = (vlan: [
     "10.${builtins.toString vlan}.0.53"
@@ -188,6 +188,13 @@ in
     format = "binary";
     sopsFile = ../../secrets/zfs-zhdd.key;
   };
+
+  users.users.homeassistant = {
+    description = "Home Assistant backup user";
+    group = "homeassistant";
+    shell = "${pkgs.util-linux}/bin/nologin";
+  };
+  users.groups.homeassistant = {};
 
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
     trustedProxies = [
