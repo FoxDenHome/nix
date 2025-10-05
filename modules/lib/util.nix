@@ -33,4 +33,6 @@ in
   addHostCidr = (ipRaw: let
     ip = removeIPCidr ipRaw;
   in if (isIPv6 ip) then "${ip}/128" else "${ip}/32");
+
+  bracketIPv6 = (ip: if (isIPv6 ip) then "[${ip}]" else ip);
 }

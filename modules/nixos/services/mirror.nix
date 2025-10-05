@@ -1,5 +1,6 @@
 { foxDenLib, pkgs, lib, config, ... }:
 let
+  util = foxDenLib.util;
   services = foxDenLib.services;
 
   svcConfig = config.foxDen.services.mirror;
@@ -112,7 +113,7 @@ in
             Environment = [
               "\"ROOT_DOMAIN=${svcRootDomain}\""
               "\"ARCH_MIRROR_ID=${svcConfig.archMirrorId}\""
-              "\"RESOLVERS=${lib.strings.concatStringsSep " " hostCfg.nameservers}\""
+              "\"RESOLVERS=${lib.strings.concatStringsSep " " (map util.bracketIPv6 hostCfg.nameservers)}\""
             ];
 
             User = "mirror";
