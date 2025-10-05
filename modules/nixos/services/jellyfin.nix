@@ -37,10 +37,6 @@ in
       users.users.jellyfin.home = "${config.services.jellyfin.dataDir}/home";
 
       systemd.services.jellyfin = {
-        confinement.packages = [
-          config.hardware.graphics.package
-        ] ++ config.hardware.graphics.extraPackages;
-
         serviceConfig = {
           ExecStartPre = [
             "${pkgs.coreutils}/bin/mkdir -p \${HOME}"
