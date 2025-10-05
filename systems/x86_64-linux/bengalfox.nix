@@ -132,6 +132,12 @@ in
     options = [ "nofail" ];
   };
 
+  fileSystems."/mnt/zhdd/restic" = {
+    device = "zhdd/ROOT/restic";
+    fsType = "zfs";
+    options = [ "nofail" ];
+  };
+
   fileSystems."/mnt/zhdd/nas/torrent" = {
     device = "/mnt/zssd/nas/torrent";
     options = [ "bind" "nofail" ];
