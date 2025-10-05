@@ -7,7 +7,7 @@ let
     ]) paths
   ));
 
-  mkNamed = (svc: { svcConfig, pkgs, config, gpu, ... }:
+  mkNamed = (svc: { svcConfig, pkgs, config, gpu ? false, ... }:
   let
     host = foxDenLib.hosts.getByName config svcConfig.host;
 
