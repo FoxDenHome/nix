@@ -22,10 +22,13 @@
     curl
     e2fsprogs
     gptfdisk
+    ipmitool
+    lm_sensors
     mdadm
     ncdu
     openssl
     screen
+    smartmontools
     ssh-to-age
     tmux
     unixtools.netstat
