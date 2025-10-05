@@ -36,8 +36,6 @@ in
       target = "reverse_proxy http://127.0.0.1:8112";
     }).config)
     {
-      sops.secrets."deluge-auth-file" = config.lib.foxDen.sops.mkIfAvailable {};
-
       services.deluge = {
         enable = true;
         web = {
