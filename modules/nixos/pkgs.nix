@@ -17,6 +17,10 @@ let
 
   removeDefaultPackage = nixpkgs.lib.filterAttrs (name: value: name != "default");
   addPackage = (mod: if (mod.packages or null) != null then removeDefaultPackage mod.packages.${systemArch} else {});
+
+  nixPkgConfig = {
+    allowUnfree = true;
+  };
 in
 {
   imports = [
@@ -24,10 +28,12 @@ in
   ];
 
   config.nixpkgs.pkgs = nixpkgs.lib.mergeAttrsList ([
+    (import nixpkgs {
+      system = systemArch;
+      config = nixPkgConfig;
+    })
     {
-      config = {
-        allowUnfree = true;
-      };
+      config = nixPkgConfig;
     }
   ] ++ (map addPackage (nixpkgs.lib.attrValues inputsWithoutInternal)));
 }
