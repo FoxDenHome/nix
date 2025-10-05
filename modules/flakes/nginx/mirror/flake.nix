@@ -11,14 +11,15 @@
         pkgs = import nixpkgs { inherit system; };
 
         package =  (pkgs.stdenv.mkDerivation {
-          name = "mirrorweb";
+          name = packageJson.name;
+          version = packageJson.version;
           srcs = [
             (pkgs.fetchurl {
               url = "https://github.com/nginx/njs-acme/releases/download/v1.0.0/acme.js";
               hash = "sha256-Gu+3Ca/C7YHAf7xfarZYeC/pnohWnuho4l06bx5TVcs=";
             })
             (pkgs.buildNpmPackage {
-              pname = packageJson.name;
+              pname = "${packageJson.name}-js";
               version = packageJson.version;
               src = ./.;
               npmDeps = pkgs.importNpmLock { npmRoot = ./.; };
@@ -42,7 +43,7 @@
           installPhase = ''
             mkdir -p $out
             ls -la ./lib/node_modules
-            cp -r lib/node_modules/mirrorweb/* $out/
+            cp -r 'lib/node_modules/${packageJson.name}/'* $out/
             chmod 755 $out/lib
             cp acme.js $out/lib/acme.js
             chmod 555 $out/lib
