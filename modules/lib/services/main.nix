@@ -13,6 +13,10 @@ let
 
     dependency = if svcConfig.host != "" then [ host.unit ] else [];
     resolvConf = if svcConfig.host != "" then host.resolvConf else "/etc/resolv.conf";
+
+    gpuPackages = if gpu then [
+      config.hardware.graphics.package
+    ] ++ config.hardware.graphics.extraPackages else [];
   in
   {
     configDir = "/etc/foxden/services/${svc}";
@@ -22,7 +26,7 @@ let
         confinement.enable = true;
         confinement.packages = [
           pkgs.cacert
-        ];
+        ] ++ gpuPackages;
 
         requires = dependency;
         bindsTo = dependency;
