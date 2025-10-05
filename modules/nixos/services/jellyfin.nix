@@ -22,6 +22,7 @@ in
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
       name = "jellyfin";
+      gpu = true;
       inherit svcConfig pkgs config;
     }).config
     (services.http.make {

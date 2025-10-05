@@ -7,7 +7,7 @@ let
     ]) paths
   ));
 
-  mkNamed = (svc: { svcConfig, pkgs, config, ... }:
+  mkNamed = (svc: { svcConfig, pkgs, config, gpu, ... }:
   let
     host = foxDenLib.hosts.getByName config svcConfig.host;
 
@@ -31,7 +31,8 @@ let
         serviceConfig = {
           NetworkNamespacePath = nixpkgs.lib.mkIf (svcConfig.host != "") host.namespacePath;
           DevicePolicy = "closed";
-          PrivateDevices = nixpkgs.lib.mkForce true;
+          PrivateDevices = nixpkgs.lib.mkForce false;
+          DeviceAllow = nixpkgs.lib.mkIf gpu (config.foxDen.services.gpuDevices (dev: "${dev} rwm"));
           ProtectProc = "invisible";
           Restart = nixpkgs.lib.mkDefault "always";
 
@@ -73,6 +74,11 @@ in
         { directory = "/var/lib/private"; user = "root"; group = "root"; mode = "u=rwx,g=,o="; }
         { directory = "/var/cache/private"; user = "root"; group = "root"; mode = "u=rwx,g=,o="; }
       ];
+    };
+
+    options.foxDen.services.gpuDevices = nixpkgs.lib.mkOption {
+      type = nixpkgs.lib.types.listOf nixpkgs.lib.types.str;
+      default = [ ];
     };
   };
 }
