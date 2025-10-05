@@ -75,4 +75,4 @@ DO NOT use /var/run, always use /run, or the entire OS explodes
 
 ## TODO
 
-Refactor all node packages to use either a `.node-version` or maybe `pkgs.latest_lts`
+Check if all persist has hideMounts=true
