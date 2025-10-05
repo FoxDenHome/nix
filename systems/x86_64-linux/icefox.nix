@@ -73,13 +73,6 @@ in
     sopsFile = ../../secrets/zfs-ztank.key;
   };
 
-  environment.etc."foxden/zfs-ztank.key" = config.lib.foxDen.sops.mkIfAvailable {
-    source = config.sops.secrets."zfs-ztank.key".path;
-    mode = "0400";
-    user = "root";
-    group = "root";
-  };
-
   systemd.network.networks."30-${interface}" = {
     name = interface;
     routes = [
