@@ -56,12 +56,8 @@ in
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
-          LoadCredential = "auth:${config.sops.secrets."deluge-auth-file".path}";
-
           ExecStart = [
             "${pkgs.coreutils}/bin/mkdir -p /var/lib/deluge/downloads"
-            "${pkgs.coreutils}/bin/cp --remove-destination \${CREDENTIALS_DIRECTORY}/auth /var/lib/deluge/auth"
-            "${pkgs.coreutils}/bin/chmod 600 /var/lib/deluge/auth"
           ];
 
           User = config.services.deluge.user;
