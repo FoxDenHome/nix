@@ -35,4 +35,15 @@ in
   mkOptions = inputs: foxDenLib.services.mkOptions inputs;
   mkNamed = mkNamed;
   make = inputs: mkNamed inputs.name inputs;
+
+  nixosModule = { ... }:
+  {
+    config.environment.persistence."/nix/persist/oci" = {
+      directories = [
+        "/var/lib/containers"
+      ];
+    };
+
+    config.virtualisation.oci-containers.backend = "podman";
+  }
 }
