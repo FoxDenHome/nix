@@ -37,6 +37,7 @@ in
   boot.extraModulePackages = [ ];
 
   services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia.open = true;
 
   boot.swraid = {
     enable = true;
