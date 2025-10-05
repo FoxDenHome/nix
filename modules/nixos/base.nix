@@ -50,6 +50,8 @@
   networking.wireguard.useNetworkd = false;
   networking.firewall.logRefusedConnections = false;
 
+  services.timesyncd.servers = lib.mkDefault [ "ntp.foxden.network" ];
+
   environment.persistence."/nix/persist/system" = {
     hideMounts = true;
 
