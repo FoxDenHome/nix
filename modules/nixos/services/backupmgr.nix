@@ -13,6 +13,9 @@ in
       ];
 
       systemd.services.backupmgr-backup = {
+        path = [
+          pkgs.restic
+        ];
         conflicts = [ "backupmgr-prune.service" ];
         serviceConfig = {
           Type = "simple";
@@ -30,6 +33,9 @@ in
       };
 
       systemd.services.backupmgr-prune = {
+        path = [
+          pkgs.restic
+        ];
         conflicts = [ "backupmgr-backup.service" ];
         serviceConfig = {
           Type = "simple";
