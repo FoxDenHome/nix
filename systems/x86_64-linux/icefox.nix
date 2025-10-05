@@ -24,6 +24,8 @@ in
 
   system.stateVersion = "25.05";
 
+  services.timesyncd.servers = ["ntp1.hetzner.de" "ntp2.hetzner.com" "ntp3.hetzner.net"];
+
   boot.swraid = {
     enable = true;
     mdadmConf = [
