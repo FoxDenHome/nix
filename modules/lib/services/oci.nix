@@ -45,5 +45,10 @@ in
     };
 
     config.virtualisation.oci-containers.backend = "podman";
+
+    config.virtualisation.podman.autoPrune = {
+      enable = true;
+      flags = [ "--all" ];
+    };
   };
 }
