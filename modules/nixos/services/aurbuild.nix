@@ -27,6 +27,7 @@ in
           "/etc/passwd:/etc/passwd:ro"
           "/etc/group:/etc/group:ro"
           "/run/pcscd:/run/pcscd:ro"
+          "/etc/localtime:/etc/localtime:ro"
           (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets."aurbuild-gpg-passphrase".path}:/gpg/passphrase:ro")
           "aurbuild_cache_${builderArch}:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${builderArch}:/aur/repo"

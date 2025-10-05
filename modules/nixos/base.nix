@@ -11,6 +11,7 @@
 
   boot.supportedFilesystems = [ "vfat" "xfs" "ext4" ];
 
+  services.timesyncd.servers = lib.mkDefault [ "ntp.foxden.network" ];
   time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "en_US.UTF-8";
 
@@ -49,9 +50,6 @@
   networking.hostId = lib.mkDefault (foxDenLib.util.mkHash8 config.networking.hostName);
   networking.wireguard.useNetworkd = false;
   networking.firewall.logRefusedConnections = false;
-
-  services.timesyncd.servers = lib.mkDefault [ "ntp.foxden.network" ];
-  time.timeZone = "America/Los_Angeles";
 
   environment.persistence."/nix/persist/system" = {
     hideMounts = true;
