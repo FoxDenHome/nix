@@ -192,6 +192,7 @@ in
   users.users.homeassistant = {
     description = "Home Assistant backup user";
     group = "homeassistant";
+    isNormalUser = true;
     shell = "${pkgs.util-linux}/bin/nologin";
   };
   users.groups.homeassistant = {};
