@@ -51,9 +51,7 @@
         });
       in
       {
-        packages = {
-          default = package;
-          nginx-mirror = package;
-        };
+        packages.default = package;
+        packages.${packageJson.name} = package;
       });
 }

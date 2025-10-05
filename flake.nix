@@ -23,8 +23,8 @@
     e621dumper.inputs.nixpkgs.follows = "nixpkgs";
     backupmgr.url = "github:FoxDenHome/backupmgr";
     backupmgr.inputs.nixpkgs.follows = "nixpkgs";
-    nginx-mirror.url = ./modules/flakes/nginx/mirror;
-    nginx-mirror.inputs.nixpkgs.follows = "nixpkgs";
+    njs-mirror-nginx.url = ./modules/flakes/nginx/mirror;
+    njs-mirror-nginx.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = (inputs: import ./outputs.nix inputs);

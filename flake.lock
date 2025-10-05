@@ -327,23 +327,6 @@
         "type": "github"
       }
     },
-    "nginx-mirror": {
-      "inputs": {
-        "flake-utils": "flake-utils_5",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "path": "modules/flakes/nginx/mirror",
-        "type": "path"
-      },
-      "original": {
-        "path": "modules/flakes/nginx/mirror",
-        "type": "path"
-      },
-      "parent": []
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1759281824,
@@ -375,6 +358,23 @@
         "repo": "nixpkgs",
         "type": "github"
       }
+    },
+    "njs-mirror-nginx": {
+      "inputs": {
+        "flake-utils": "flake-utils_5",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "path": "modules/flakes/nginx/mirror",
+        "type": "path"
+      },
+      "original": {
+        "path": "modules/flakes/nginx/mirror",
+        "type": "path"
+      },
+      "parent": []
     },
     "pre-commit-hooks-nix": {
       "inputs": {
@@ -460,9 +460,9 @@
         "gitbackup": "gitbackup",
         "impermanence": "impermanence",
         "lanzaboote": "lanzaboote",
-        "nginx-mirror": "nginx-mirror",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "njs-mirror-nginx": "njs-mirror-nginx",
         "sops-nix": "sops-nix",
         "superfan": "superfan",
         "uds-proxy": "uds-proxy"
