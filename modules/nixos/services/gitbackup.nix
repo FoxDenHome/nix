@@ -39,7 +39,7 @@ in
 
           Environment = [
             "GITHUB_ORGANIZATIONS=foxCaves,FoxDenHome,FoxBukkit,MoonHack,PawNode,SpaceAgeMP,WSVPN"
-            "BACKUP_ROOT=${svcConfig.dataDir}"
+            "\"BACKUP_ROOT=${svcConfig.dataDir}\""
           ];
 
           EnvironmentFile = config.lib.foxDen.sops.mkGithubTokenPath;

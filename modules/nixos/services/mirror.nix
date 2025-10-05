@@ -110,9 +110,9 @@ in
             AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
 
             Environment = [
-              "ROOT_DOMAIN=${svcRootDomain}"
-              "ARCH_MIRROR_ID=${svcConfig.archMirrorId}"
-              "RESOLVERS=${lib.strings.concatStringsSep " " hostCfg.nameservers}"
+              "\"ROOT_DOMAIN=${svcRootDomain}\""
+              "\"ARCH_MIRROR_ID=${svcConfig.archMirrorId}\""
+              "\"RESOLVERS=${lib.strings.concatStringsSep " " hostCfg.nameservers}\""
             ];
 
             User = "mirror";
@@ -187,8 +187,8 @@ in
                   ];
 
                   Environment = [
-                    "MIRROR_SOURCE_RSYNC=${value.rsyncUrl}"
-                    "MIRROR_SOURCE_HTTPS=${value.httpsUrl}"
+                    "\"MIRROR_SOURCE_RSYNC=${value.rsyncUrl}\""
+                    "\"MIRROR_SOURCE_HTTPS=${value.httpsUrl}\""
                     "MIRROR_FORCE_SYNC=${toString value.forceSync}"
                   ];
 

@@ -185,9 +185,9 @@ in
               StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" caddyStorageRoot;
               LoadCredential = "Caddyfile:${caddyFilePath}";
               Environment = [
-                "XDG_CONFIG_HOME=${caddyStorageRoot}"
-                "XDG_DATA_HOME=${caddyStorageRoot}"
-                "HOME=${caddyStorageRoot}"
+                "\"XDG_CONFIG_HOME=${caddyStorageRoot}\""
+                "\"XDG_DATA_HOME=${caddyStorageRoot}\""
+                "\"HOME=${caddyStorageRoot}\""
               ];
               ExecStart = "${cmd} run --config \"\${CREDENTIALS_DIRECTORY}/Caddyfile\"";
               Restart = "always";
