@@ -51,6 +51,7 @@
   networking.firewall.logRefusedConnections = false;
 
   services.timesyncd.servers = lib.mkDefault [ "ntp.foxden.network" ];
+  time.timeZone = "America/Los_Angeles";
 
   environment.persistence."/nix/persist/system" = {
     hideMounts = true;
