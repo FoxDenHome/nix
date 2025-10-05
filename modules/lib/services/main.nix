@@ -41,6 +41,7 @@ let
           ] ++ mkEtcPaths [
             "hosts"
             "localtime"
+            "locale.conf"
             "passwd"
             "group"
             "pki/tls/certs"

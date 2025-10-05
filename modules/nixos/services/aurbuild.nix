@@ -27,7 +27,6 @@ in
           "/etc/passwd:/etc/passwd:ro"
           "/etc/group:/etc/group:ro"
           "/run/pcscd:/run/pcscd:ro"
-          "/etc/localtime:/etc/localtime:ro"
           (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets."aurbuild-gpg-passphrase".path}:/gpg/passphrase:ro")
           "aurbuild_cache_${builderArch}:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${builderArch}:/aur/repo"
@@ -39,7 +38,6 @@ in
           "GPG_KEY_ID" = "45B097915F67C9D68C19E5747B0F7660EAEC8D49";
           "PUSER" = "aurbuild";
           "PGROUP" = "aurbuild";
-          "TZ" = config.time.timeZone;
         };
       };
       systemd = {

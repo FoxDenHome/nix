@@ -8,6 +8,15 @@ let
           autoStart = nixpkgs.lib.mkDefault true;
           pull = nixpkgs.lib.mkDefault "always";
           networks = [ "ns:${host.namespacePath}" ];
+
+          volumes = [
+            "/etc/localtime:/etc/localtime:ro"
+            "/etc/locale.conf:/etc/locale.conf:ro"
+          ];
+          environment = {
+            "TZ" = config.time.timeZone;
+            "LANG" = config.i18n.defaultLocale;
+          };
         }
         oci
       ];
