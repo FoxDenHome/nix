@@ -69,68 +69,77 @@ in
   fileSystems."/boot" = {
     device = "/dev/nvme0n1p1";
     fsType = "vfat";
-    options = [ "fmask=0022" "dmask=0022" ];
+    options = [ "fmask=0022" "dmask=0022" "nofail" ];
   };
 
   fileSystems."/boot2" = {
     device = "/dev/nvme1n1p1";
     fsType = "vfat";
-    options = [ "fmask=0022" "dmask=0022" ];
+    options = [ "fmask=0022" "dmask=0022" "nofail" ];
   };
 
   fileSystems."/mnt/zssd" = {
     device = "/dev/mapper/zssd";
     fsType = "xfs";
+    options = [ "nofail" ];
   };
 
   fileSystems."/mnt/zhdd" = {
     device = "zhdd/ROOT";
     fsType = "zfs";
+    options = [ "nofail" ];
   };
 
   fileSystems."/mnt/zhdd/docker" = {
     device = "zhdd/ROOT/docker";
     fsType = "zfs";
+    options = [ "nofail" ];
   };
 
   fileSystems."/mnt/zhdd/e621" = {
     device = "zhdd/ROOT/e621";
     fsType = "zfs";
+    options = [ "nofail" ];
   };
 
   fileSystems."/mnt/zhdd/furaffinity" = {
     device = "zhdd/ROOT/furaffinity";
     fsType = "zfs";
+    options = [ "nofail" ];
   };
 
   fileSystems."/mnt/zhdd/kiwix" = {
     device = "zhdd/ROOT/kiwix";
     fsType = "zfs";
+    options = [ "nofail" ];
   };
 
   fileSystems."/mnt/zhdd/mirror" = {
     device = "zhdd/ROOT/mirror";
     fsType = "zfs";
+    options = [ "nofail" ];
   };
 
   fileSystems."/mnt/zhdd/nas" = {
     device = "zhdd/ROOT/nas";
     fsType = "zfs";
+    options = [ "nofail" ];
   };
 
   fileSystems."/mnt/zhdd/nashome" = {
     device = "zhdd/ROOT/nashome";
     fsType = "zfs";
+    options = [ "nofail" ];
   };
 
   fileSystems."/mnt/zhdd/nas/torrent" = {
     device = "/mnt/zssd/nas/torrent";
-    options = [ "bind" ];
+    options = [ "bind" "nofail" ];
   };
 
   fileSystems."/mnt/zhdd/nas/usenet" = {
     device = "/mnt/zssd/nas/usenet";
-    options = [ "bind" ];
+    options = [ "bind" "nofail" ];
   };
 
   systemd.network.netdevs."${ifcfg.interface}" = {
