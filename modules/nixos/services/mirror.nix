@@ -193,7 +193,7 @@ in
                   ];
 
                   ExecStart = [
-                    "${pkgs.bash}/bin/bash ${pkgs.nginx-mirror}/refresh/run.sh"
+                    "${pkgs.bash}/bin/bash ${pkgs.njs-mirror-nginx}/refresh/run.sh"
                   ];
                 };
               }
