@@ -47,10 +47,11 @@ let
           restartTriggers = [ config.environment.etc.${configFileEtc}.text ];
           serviceConfig = {
             DynamicUser = true;
+
             LoadCredential = "oauth2-proxy.conf:${configFile}";
             EnvironmentFile = config.sops.secrets."${serviceName}".path;
+
             ExecStart = "${cmd} --config=\"\${CREDENTIALS_DIRECTORY}/oauth2-proxy.conf\"";
-            Restart = "always";
           };
           wantedBy = ["multi-user.target"];
         };
@@ -180,17 +181,20 @@ in
             restartTriggers = [ config.environment.etc.${caddyFileEtc}.text ];
             serviceConfig = {
               DynamicUser = true;
+
               PrivateUsers = false; # needed for the capabilities sadly
-              AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
+              AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+
               StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" caddyStorageRoot;
+
               LoadCredential = "Caddyfile:${caddyFilePath}";
               Environment = [
                 "\"XDG_CONFIG_HOME=${caddyStorageRoot}\""
                 "\"XDG_DATA_HOME=${caddyStorageRoot}\""
                 "\"HOME=${caddyStorageRoot}\""
               ];
+
               ExecStart = "${cmd} run --config \"\${CREDENTIALS_DIRECTORY}/Caddyfile\"";
-              Restart = "always";
             };
             wantedBy = ["multi-user.target"];
           };

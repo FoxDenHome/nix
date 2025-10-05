@@ -108,7 +108,7 @@ in
             ];
 
             PrivateUsers = false; # needed for the capabilities sadly
-            AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
+            AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
 
             Environment = [
               "\"ROOT_DOMAIN=${svcRootDomain}\""
@@ -140,7 +140,7 @@ in
             ];
 
             PrivateUsers = false; # needed for the capabilities sadly
-            AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
+            AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
 
             LoadCredential = "rsyncd.conf:/etc/foxden/mirror/rsyncd.conf";
 
