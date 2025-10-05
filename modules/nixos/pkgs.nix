@@ -19,11 +19,9 @@ let
   addPackage = (mod: if (mod.packages or null) != null then removeDefaultPackage mod.packages.${systemArch} else {});
 in
 {
-  imports = [
-    nixpkgs.nixosModules.readOnlyPkgs
-  ];
-
   config.nixpkgs.pkgs = nixpkgs.lib.mergeAttrsList ([
     nixpkgs.legacyPackages.${systemArch}
   ] ++ (map addPackage (nixpkgs.lib.attrValues inputsWithoutInternal)));
+
+  config.nixpkgs.config.allowUnfree = true;
 }
