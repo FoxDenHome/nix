@@ -51,11 +51,18 @@ let
     hostname = nixpkgs.lib.strings.removeSuffix ".nix"
                 (nixpkgs.lib.strings.elemAt components (componentsLength - 1)); # e.g. bengalfox
     systemArch = nixpkgs.lib.strings.elemAt components (componentsLength - 2); # e.g. x86_64-linux
+
+    pkgs = import nixpkgs {
+      system = systemArch;
+      config.allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [
+        "nvidia-x11"
+      ];
+    };
   in
   {
     name = hostname;
     value = nixpkgs.lib.nixosSystem {
-      specialArgs = allLibs // { inherit systemArch; };
+      specialArgs = allLibs // { inherit systemArch pkgs; };
       modules = [
         ({ ... }: {
           config.networking.hostName = hostname;

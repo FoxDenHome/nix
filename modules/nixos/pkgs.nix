@@ -25,10 +25,5 @@ in
 
   config.nixpkgs.pkgs = nixpkgs.lib.mergeAttrsList ([
     nixpkgs.legacyPackages.${systemArch}
-    {
-      config = {
-        allowUnfreexxxx = true;
-      };
-    }
   ] ++ (map addPackage (nixpkgs.lib.attrValues inputsWithoutInternal)));
 }

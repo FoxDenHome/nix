@@ -38,6 +38,7 @@ in
 
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.open = true;
+  hardware.opengl.enable = true;
 
   boot.swraid = {
     enable = true;
