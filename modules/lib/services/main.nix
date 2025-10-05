@@ -17,6 +17,10 @@ let
     gpuPackages = if gpu then [
       config.hardware.graphics.package
     ] ++ config.hardware.graphics.extraPackages else [];
+    gpuPaths = if gpu then [
+      "/run/opengl-driver"
+      "/run/opengl-driver-32"
+    ] else [];
   in
   {
     configDir = "/etc/foxden/services/${svc}";
@@ -43,7 +47,7 @@ let
           BindReadOnlyPaths = [
             "/run/systemd/notify"
             "${resolvConf}:/etc/resolv.conf"
-          ] ++ mkEtcPaths [
+          ] ++ gpuPaths ++ mkEtcPaths [
             "hosts"
             "localtime"
             "locale.conf"
