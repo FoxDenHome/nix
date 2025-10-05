@@ -18,8 +18,8 @@ let
       config.hardware.graphics.package
     ] ++ config.hardware.graphics.extraPackages else [];
     gpuPaths = if gpu then [
-      "/run/opengl-driver"
-      "/run/opengl-driver-32"
+      "-/run/opengl-driver"
+      "-/run/opengl-driver-32"
     ] else [];
   in
   {
