@@ -193,9 +193,12 @@ in
     description = "Home Assistant backup user";
     group = "homeassistant";
     isNormalUser = true;
+    uid = 1005;
     shell = "${pkgs.util-linux}/bin/nologin";
   };
-  users.groups.homeassistant = {};
+  users.groups.homeassistant = {
+    gid = 1005;
+  };
 
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
     trustedProxies = [
