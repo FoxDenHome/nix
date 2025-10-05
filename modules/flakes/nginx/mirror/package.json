@@ -2,7 +2,7 @@
   "name": "mirrorweb",
   "version": "1.0.0",
   "description": "",
-  "license": "ISC",
+  "license": "GPL-3.0-or-later",
   "author": "Doridian",
   "type": "module",
   "scripts": {
