@@ -32,7 +32,7 @@ let
           NetworkNamespacePath = nixpkgs.lib.mkIf (svcConfig.host != "") host.namespacePath;
           DevicePolicy = "closed";
           PrivateDevices = nixpkgs.lib.mkForce false;
-          DeviceAllow = nixpkgs.lib.mkIf gpu (config.foxDen.services.gpuDevices (dev: "${dev} rwm"));
+          DeviceAllow = nixpkgs.lib.mkIf gpu (map (dev: "${dev} rwm") config.foxDen.services.gpuDevices);
           ProtectProc = "invisible";
           Restart = nixpkgs.lib.mkDefault "always";
 
