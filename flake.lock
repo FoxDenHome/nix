@@ -8,11 +8,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1759527388,
-        "narHash": "sha256-UONYeVSik1XSHdXc1PGZ947f/Od3LPb/4d8Arpn/ApA=",
+        "lastModified": 1759693013,
+        "narHash": "sha256-+4w+d2VtCeShhx5PoKytoM671kWI0JmGj3XyPKeNW40=",
         "owner": "FoxDenHome",
         "repo": "backupmgr",
-        "rev": "278dfd660228fc140f6b80550544077b4b85e9ad",
+        "rev": "d6eb9c39ca4858a3cd3ebeeda1cffe9041a726dc",
         "type": "github"
       },
       "original": {
