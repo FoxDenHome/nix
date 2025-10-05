@@ -45,5 +45,5 @@ in
     };
 
     config.virtualisation.oci-containers.backend = "podman";
-  }
+  };
 }
