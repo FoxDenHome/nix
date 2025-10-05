@@ -27,7 +27,7 @@ in
     nixpkgs.legacyPackages.${systemArch}
     {
       config = {
-        #allowUnfree = true;
+        allowUnfree = true;
       };
     }
   ] ++ (map addPackage (nixpkgs.lib.attrValues inputsWithoutInternal)));
