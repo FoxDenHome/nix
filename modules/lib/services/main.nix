@@ -68,7 +68,7 @@ in
 
   nixosModule = { ... }:
   {
-    environment.persistence."/nix/persist/foxden/services" = {
+    config.environment.persistence."/nix/persist/foxden/services" = {
       hideMounts = true;
       directories = [
         { directory = "/var/lib/private"; user = "root"; group = "root"; mode = "u=rwx,g=,o="; }
