@@ -13,7 +13,7 @@
 
   services.timesyncd.servers = lib.mkDefault [ "ntp.foxden.network" ];
   time.timeZone = "America/Los_Angeles";
-  i18n.defaultLocale = "en_US.UTF-8";
+  i18n.defaultLocale = "C.UTF-8";
 
   environment.systemPackages = with pkgs; [
     age
