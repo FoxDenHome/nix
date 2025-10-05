@@ -56,9 +56,6 @@ in
 
       environment.etc."backupmgr/config.json" = config.lib.foxDen.sops.mkIfAvailable {
         source = config.sops.secrets.backupmgr.path;
-        user = "root";
-        group = "root";
-        mode = "0400";
       };
     }
   ]);
