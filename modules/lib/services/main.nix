@@ -71,6 +71,7 @@ in
       hideMounts = true;
       directories = [
         { directory = "/var/lib/private"; user = "root"; group = "root"; mode = "u=rwx,g=,o="; }
+        { directory = "/var/cache/private"; user = "root"; group = "root"; mode = "u=rwx,g=,o="; }
       ];
     };
   };
