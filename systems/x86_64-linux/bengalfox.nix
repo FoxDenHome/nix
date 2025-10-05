@@ -45,7 +45,7 @@ in
     usePersistenced = false;
   }; # TODO: Remove on 25.11/unstable
   hardware.nvidia.open = true;
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
 
   boot.swraid = {
     enable = true;
