@@ -1,4 +1,4 @@
-{ config, ... }:
+{ modulesPath, config, ... }:
 let
   mkNameservers = (vlan: [
     "10.${builtins.toString vlan}.0.53"
@@ -18,8 +18,6 @@ let
     nameservers = mkNameservers 2;
     interface = "br-default";
   };
-
-  rootInterface = "enp1s0f1";
 in
 {
   # These are set when you reinstall the system
@@ -29,6 +27,14 @@ in
   foxDen.boot.secure = false;
 
   system.stateVersion = "25.05";
+
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  hardware.enableRedistributableFirmware = true;
+  hardware.cpu.amd.updateMicrocode = true;
+  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ "kvm-amd" ];
+  boot.extraModulePackages = [ ];
 
   boot.swraid = {
     enable = true;
@@ -56,13 +62,13 @@ in
   fileSystems."/boot" =
     { device = "/dev/nvme0n1p1";
       fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
+      options = [ "fmask=0022" "dmask=0022" "nofail" ];
     };
 
   fileSystems."/boot2" =
     { device = "/dev/sda1";
       fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
+      options = [ "fmask=0022" "dmask=0022" "nofail" ];
     };
 
   systemd.network.networks."30-${ifcfg.interface}" = {
@@ -76,11 +82,11 @@ in
       IPv6AcceptRA = false;
     };
 
-    # bridgeVLANs = [{
-    #   PVID = 2;
-    #   EgressUntagged = 2;
-    #   VLAN = "1-10";
-    # }];
+    bridgeVLANs = [{
+      PVID = 2;
+      EgressUntagged = 2;
+      VLAN = "1-10";
+    }];
   };
 
   systemd.network.netdevs."${ifcfg.interface}" = {
@@ -94,14 +100,15 @@ in
     };
   };
 
-  systemd.network.networks."40-${ifcfg.interface}-${rootInterface}" = {
-      name = rootInterface;
-      bridge = [ifcfg.interface];
-      # bridgeVLANs = [{
-      #   PVID = 2;
-      #   EgressUntagged = 2;
-      #   VLAN = "1-10";
-      # }];
+  systemd.network.networks."40-${ifcfg.interface}-root" = {
+    name = "enp1s0f1";
+    bridge = [ifcfg.interface];
+
+    bridgeVLANs = [{
+      PVID = 2;
+      EgressUntagged = 2;
+      VLAN = "1-10";
+    }];
   };
 
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
