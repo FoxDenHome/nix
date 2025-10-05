@@ -36,21 +36,27 @@ in
 
       users.users.jellyfin.home = "${config.services.jellyfin.dataDir}/home";
 
-      systemd.services.jellyfin.serviceConfig = {
-        ExecStartPre = [
-          "${pkgs.coreutils}/bin/mkdir -p \${HOME}"
-        ];
-        BindPaths = [
-          config.services.jellyfin.cacheDir
-          config.services.jellyfin.configDir
-          config.services.jellyfin.dataDir
-          config.services.jellyfin.logDir
-        ];
-        BindReadOnlyPaths = [
-          "${svcConfig.mediaDir}:/media"
-        ] ++ foxDenLib.services.mkEtcPaths [
-          "fonts"
-        ];
+      systemd.services.jellyfin = {
+        confinement.packages = [
+          config.hardware.graphics.package
+        ] ++ config.hardware.graphics.extraPackages;
+
+        serviceConfig = {
+          ExecStartPre = [
+            "${pkgs.coreutils}/bin/mkdir -p \${HOME}"
+          ];
+          BindPaths = [
+            config.services.jellyfin.cacheDir
+            config.services.jellyfin.configDir
+            config.services.jellyfin.dataDir
+            config.services.jellyfin.logDir
+          ];
+          BindReadOnlyPaths = [
+            "${svcConfig.mediaDir}:/media"
+          ] ++ foxDenLib.services.mkEtcPaths [
+            "fonts"
+          ];
+        };
       };
 
       environment.persistence."/nix/persist/jellyfin" = {
