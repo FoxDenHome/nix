@@ -39,10 +39,12 @@ let
         serviceConfig = {
           NetworkNamespacePath = nixpkgs.lib.mkIf (svcConfig.host != "") host.namespacePath;
           DevicePolicy = nixpkgs.lib.mkForce "closed";
-          PrivateDevices = nixpkgs.lib.mkForce false;
+          PrivateDevices = nixpkgs.lib.mkForce true;
           DeviceAllow = nixpkgs.lib.mkIf gpu (map (dev: "${dev} rw") config.foxDen.services.gpuDevices);
           ProtectProc = "invisible";
           Restart = nixpkgs.lib.mkDefault "always";
+
+          BindPaths = nixpkgs.lib.mkIf gpu (map (dev: "-${dev}") config.foxDen.services.gpuDevices);
 
           BindReadOnlyPaths = [
             "/run/systemd/notify"
