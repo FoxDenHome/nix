@@ -1,4 +1,4 @@
-{ modulesPath, pkgs, config, ... }:
+{ modulesPath, pkgs, lib, config, ... }:
 let
   mkNameservers = (vlan: [
     "10.${builtins.toString vlan}.0.53"
@@ -240,6 +240,7 @@ in
     aurbuild = {
       enable = true;
       host = "mirror";
+      packages = lib.strings.splitString "\n" (builtins.readFile ../../files/aurbuild-packages.txt);
     };
     backupmgr.enable = true;
     deluge = {
