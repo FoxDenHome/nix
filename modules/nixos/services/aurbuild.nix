@@ -36,7 +36,7 @@ in
           "aurbuild_cache_${builderArch}:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${builderArch}:/aur/repo"
         ] ++ (if svcConfig.makepkgConf != "" then [
-          (pkgs.writeText "makepkg.conf" svcConfig.makepkgConf) + ":/etc/makepkg.conf:ro"
+          "${pkgs.writeText "makepkg.conf" svcConfig.makepkgConf}:/etc/makepkg.conf:ro"
         ] else []);
         extraOptions = [
           "--mount=type=tmpfs,tmpfs-size=128M,destination=/aur/tmp"
