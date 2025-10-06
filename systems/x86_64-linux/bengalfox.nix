@@ -225,7 +225,7 @@ in
     wireguard."wg-deluge" = {
       host = "deluge";
       interface = {
-        ips = [ "10.64.17.204/32" ];
+        ips = [ "10.70.175.10/32" "fc00:bbbb:bbbb:bb01::7:af09/128" ];
         peers = [
           {
             allowedIPs = [ "0.0.0.0/0" "::/0" ];
