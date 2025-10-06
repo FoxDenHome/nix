@@ -30,13 +30,13 @@
 			- [x] gitbackup
 			- [x] aurbuild
 		- [ ] Post migration
+			- [ ] nas
+				- [ ] nzbget
+			- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
 			- [ ] ollama
 			- [ ] hashtopolis
 			- [ ] hashtopolis-agent
 			- [ ] owncast
-			- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
-			- [ ] nas
-				- [ ] nzbget
 	- [ ] islandfox
 		- [ ] Pre migration
 			- [x] restic
@@ -47,12 +47,12 @@
 			- [ ] unifi-network
 			- [ ] homeassistant VM
 			- [ ] foxcaves
-			- [ ] git
 			- [x] gitbackup
-			- [ ] website
 			- [ ] minecraft
-			- [ ] darksignsonline
+			- [ ] website
 			- [ ] SpaceAge
+			- [ ] DarkSignsOnline
+			- [ ] git
 		- [ ] Post migration
 			- [ ] affine
 	- [ ] icefox
