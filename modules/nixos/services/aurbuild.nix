@@ -14,6 +14,11 @@ in
       default = [ ];
       description = "Which packages to build";
     };
+    makepkgConf = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = "Optional makepkg.conf";
+    };
   } // (foxDenLib.services.oci.mkOptions { svcName = "aurbuild"; name = "AUR build service"; });
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
@@ -30,7 +35,9 @@ in
           (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets."aurbuild-gpg-passphrase".path}:/gpg/passphrase:ro")
           "aurbuild_cache_${builderArch}:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${builderArch}:/aur/repo"
-        ];
+        ] ++ (if svcConfig.makepkgConf != "" then [
+          (pkgs.writeText "makepkg.conf" svcConfig.makepkgConf) + ":/etc/makepkg.conf:ro"
+        ] else []);
         extraOptions = [
           "--mount=type=tmpfs,tmpfs-size=128M,destination=/aur/tmp"
         ];

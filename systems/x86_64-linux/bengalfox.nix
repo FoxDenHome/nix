@@ -241,6 +241,7 @@ in
       enable = true;
       host = "mirror";
       packages = lib.strings.splitString "\n" (builtins.readFile ../../files/aurbuild-packages.txt);
+      makepkgConf = builtins.readFile ../../files/aurbuild-makepkg.conf;
     };
     backupmgr.enable = true;
     deluge = {
