@@ -42,6 +42,10 @@
   programs.htop.enable = true;
   programs.tcpdump.enable = true;
 
+  environment.shellAliases = {
+    "sudo" = "run0 --background=''";
+  };
+
   nix.settings.allowed-users = [ "root" "@wheel" ];
 
   security.sudo.enable = false;
