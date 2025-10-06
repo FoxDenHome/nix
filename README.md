@@ -21,6 +21,7 @@
 				- [x] jellyfin
 				- [x] nasweb
 				- [x] deluge
+				- [x] nzbget
 			- [x] e621dumper
 			- [x] fadumper
 			- [x] restic
@@ -30,8 +31,6 @@
 			- [x] gitbackup
 			- [x] aurbuild
 		- [ ] Post migration
-			- [ ] nas
-				- [ ] nzbget
 			- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
 			- [ ] ollama
 			- [ ] hashtopolis
