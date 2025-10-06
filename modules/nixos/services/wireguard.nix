@@ -10,6 +10,8 @@ let
       };
     };
   };
+
+  svcConfig = config.foxDen.services.wireguard;
 in
 {
   options.foxDen.services.wireguard = with lib.types; lib.mkOption {
@@ -34,7 +36,7 @@ in
       }
       interface
     ]
-  ) config.foxDen.services.wireguard;
+  ) svcConfig;
 
   config.systemd.services = lib.attrsets.listToAttrs (map ({ name, value }: let
     hostCfg = foxDenLib.hosts.getByName config value.host;
@@ -46,5 +48,5 @@ in
       bindsTo = [ hostCfg.unit ];
       after = [ hostCfg.unit ];
     };
-  }) (lib.attrsets.attrsToList config.foxDen.services.wireguard));
+  }) (lib.attrsets.attrsToList svcConfig));
 }

@@ -7,7 +7,7 @@ let
   e621DumperDir = "${pkgs.e621dumper}/lib/node_modules/e621dumper";
 
   defaultDataDir = "/var/lib/e621dumper";
-  ifDefaultData = lib.mkIf (config.foxDen.services.e621dumper.dataDir == defaultDataDir);
+  ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
 
   hostCfg = foxDenLib.hosts.getByName config svcConfig.host;
   primaryInterface = lib.lists.head (lib.attrsets.attrValues hostCfg.interfaces);

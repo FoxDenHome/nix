@@ -7,7 +7,7 @@ let
   faDumperDir = "${pkgs.fadumper}/lib/node_modules/fadumper";
 
   defaultDataDir = "/var/lib/fadumper";
-  ifDefaultData = lib.mkIf (config.foxDen.services.fadumper.dataDir == defaultDataDir);
+  ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
 
   hostCfg = foxDenLib.hosts.getByName config svcConfig.host;
   primaryInterface = lib.lists.head (lib.attrsets.attrValues hostCfg.interfaces);

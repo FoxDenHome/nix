@@ -320,6 +320,12 @@ in
         bypassInternal = true;
       };
     };
+    nzbget = {
+      enable = true;
+      host = "nzbget";
+      enableCaddy = false;
+      downloadsDir = "/mnt/zssd/nas/usenet";
+    };
     restic-server = {
       enable = true;
       host = "restic";
@@ -400,7 +406,6 @@ in
         name = "deluge";
         cnames = ["dldr"];
         zone = "foxden.network";
-        dynDns = true;
       };
       addresses = [
         "10.2.11.8/16"
@@ -478,6 +483,16 @@ in
       addresses = [
         "10.2.11.1/16"
         "fd2c:f4cb:63be:2::b01/64"
+      ];
+    };
+    nzbget = mkVlanHost 3 {
+      dns = {
+        name = "nzbget";
+        zone = "foxden.network";
+      };
+      addresses = [
+        "10.2.11.9/16"
+        "fd2c:f4cb:63be:2::b09/64"
       ];
     };
     restic = mkVlanHost 2 {
