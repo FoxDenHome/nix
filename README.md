@@ -75,4 +75,4 @@ DO NOT use /var/run, always use /run, or the entire OS explodes
 
 ## TODO
 
-Check if all persist has hideMounts=true
+- Swap subnet to 10.0.0.0/12 maybe?

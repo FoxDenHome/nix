@@ -39,6 +39,7 @@ in
   nixosModule = { ... }:
   {
     config.environment.persistence."/nix/persist/oci" = {
+      hideMounts = true;
       directories = [
         "/var/lib/containers"
       ];

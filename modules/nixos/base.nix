@@ -56,7 +56,6 @@
 
   environment.persistence."/nix/persist/system" = {
     hideMounts = true;
-
     directories = [
       "/home"
       { directory = "/root"; mode = "u=rwx,g=,o="; }

@@ -59,7 +59,6 @@ in
 
     environment.persistence."/nix/persist/restic" = {
       hideMounts = true;
-
       directories = [
         { directory = "/var/cache/restic"; mode = "u=rwx,g=,o="; }
       ];
