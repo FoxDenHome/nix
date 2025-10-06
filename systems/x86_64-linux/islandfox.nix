@@ -124,6 +124,7 @@ in
       "10.9.0.0/23"
     ];
 
+    apcupsd.enable = true;
     backupmgr.enable = true;
   };
 
