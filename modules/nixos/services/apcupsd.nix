@@ -6,12 +6,12 @@ in
   options.foxDen.services.apcupsd = {
     enable = lib.mkEnableOption "apcupsd";
     batteryLevel = lib.mkOption {
-      type = lib.types.int.positive;
+      type = lib.types.ints.positive;
       default = 50;
       description = "Battery level (%) to trigger shutdown";
     };
     minutes = lib.mkOption {
-      type = lib.types.int.positive;
+      type = lib.types.ints.positive;
       default = 5;
       description = "Minutes of battery life to trigger shutdown";
     };
