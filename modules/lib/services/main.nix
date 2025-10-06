@@ -38,7 +38,7 @@ let
 
         serviceConfig = {
           NetworkNamespacePath = nixpkgs.lib.mkIf (svcConfig.host != "") host.namespacePath;
-          DevicePolicy = "closed";
+          DevicePolicy = nixpkgs.lib.mkForce "closed";
           PrivateDevices = nixpkgs.lib.mkForce false;
           DeviceAllow = nixpkgs.lib.mkIf gpu (map (dev: "${dev} rwm") config.foxDen.services.gpuDevices);
           ProtectProc = "invisible";
