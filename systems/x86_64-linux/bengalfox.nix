@@ -485,7 +485,7 @@ in
         "fd2c:f4cb:63be:2::b01/64"
       ];
     };
-    nzbget = mkVlanHost 3 {
+    nzbget = mkVlanHost 2 {
       dns = {
         name = "nzbget";
         zone = "foxden.network";
