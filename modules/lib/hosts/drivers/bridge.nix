@@ -7,8 +7,7 @@ in
 {
   driverOptsType = with nixpkgs.lib.types; submodule {
     vlan = nixpkgs.lib.mkOption {
-      type = ints.unsigned;
-      default = 0;
+      type = ints.positive;
     };
     bridge = nixpkgs.lib.mkOption {
       type = str;
@@ -19,23 +18,21 @@ in
   {
     config.systemd.network.networks =
       nixpkgs.lib.attrsets.listToAttrs (
-        nixpkgs.lib.lists.flatten
-          (map ((iface: let
-            vlan = iface.driverOpts.vlan or 0;
-          in [
-            {
-              name = "60-vebr-${iface.host.name}-${iface.name}";
-              value = {
-                name = mkIfaceName iface;
-                bridge = [iface.driverOpts.bridge];
-                bridgeVLANs = if (vlan > 0) then [{
-                  PVID = vlan;
-                  EgressUntagged = vlan;
-                  VLAN = vlan;
-                }] else [];
-              };
-            }
-          ])) interfaces));
+        (map ((iface: let
+          vlan = iface.driverOpts.vlan;
+        in
+        {
+          name = "60-vebr-${iface.host.name}-${iface.name}";
+          value = {
+            name = mkIfaceName iface;
+            bridge = [iface.driverOpts.bridge];
+            bridgeVLANs = [{
+              PVID = vlan;
+              EgressUntagged = vlan;
+              VLAN = vlan;
+            }];
+          };
+        })) interfaces));
   };
 
   execStart = ({ ipCmd, interface, serviceInterface, ... }: let
