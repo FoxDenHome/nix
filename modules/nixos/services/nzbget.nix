@@ -62,6 +62,16 @@ in
         bindsTo = [ "nzbget-pre.service" ];
         after = [ "nzbget-pre.service" ];
 
+        confinement.packages = [
+          pkgs.p7zip
+          pkgs.unrar
+        ];
+
+        path = [
+          pkgs.p7zip
+          pkgs.unrar
+        ];
+
         serviceConfig = {
           BindPaths = [
             svcConfig.downloadsDir
