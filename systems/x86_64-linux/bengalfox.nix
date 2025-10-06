@@ -235,8 +235,8 @@ in
       "/dev/nvidia-uvm"
       "/dev/nvidia-uvm-tools"
       "/dev/nvidia0"
-      "/dev/dri/by-path/pci-0000:82:00.0-card"
-      "/dev/dri/by-path/pci-0000:82:00.0-render"
+      #"/dev/dri/by-path/pci-0000:82:00.0-card"
+      #"/dev/dri/by-path/pci-0000:82:00.0-render"
     ];
 
     wireguard."wg-deluge" = {
