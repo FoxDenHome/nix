@@ -188,6 +188,7 @@ in
             );
           in
           {
+            restartTriggers = [ (builtins.concatStringsSep " " host.nameservers) ];
             name = (nixpkgs.lib.strings.removeSuffix ".service" host.unit);
             value = {
               description = "NetNS ${host.namespace}";
