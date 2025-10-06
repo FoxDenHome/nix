@@ -392,7 +392,7 @@ in
         addresses = ifcfg.addresses;
       };
     };
-    deluge = mkVlanHost 2 {
+    deluge = (mkVlanHost 2 {
       dns = {
         name = "deluge";
         cnames = ["dldr"];
@@ -407,6 +407,8 @@ in
         { Destination = "10.0.0.0/8"; Gateway = "10.2.0.1"; }
         { Destination = "fd2c:f4cb:63be::/48"; Gateway = "fd2c:f4cb:63be:2::1"; }
       ];
+    }) // {
+      nameservers = [ "10.64.0.1" ];
     };
     e621dumper = mkVlanHost 3 {
       dns = {
