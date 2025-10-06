@@ -73,7 +73,7 @@ in
       environment.persistence."/nix/persist/nzbget" = {
         hideMounts = true;
         directories = [
-          (mkDir config.services.nzbget.dataDir)
+          (mkDir config.services.nzbget.settings.MainDir)
         ];
       };
     }
