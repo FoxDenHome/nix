@@ -16,8 +16,8 @@
       initrd.systemd.enable = true;
 
       kernelPackages = pkgs.linuxPackages_latest;
-      kernelParams = ["module.sig_enforce=1" "lockdown=integrity" "iommu=pt" "intel_iommu=on" "amd_iommu=on"];
-      # "audit=1" "audit_backlog_limit=256"
+      kernelParams = ["iommu=pt" "intel_iommu=on" "amd_iommu=on"];
+      # "audit=1" "audit_backlog_limit=256" "module.sig_enforce=1" "lockdown=integrity"
 
       loader.systemd-boot.enable = lib.mkForce (!config.foxDen.boot.secure);
       lanzaboote = lib.mkIf config.foxDen.boot.secure {
