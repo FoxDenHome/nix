@@ -41,17 +41,21 @@
 			- [x] restic
 			- [ ] auth
 			- [ ] scrypted
-			- [ ] monitoring
 			- [ ] syncthing
 			- [ ] unifi-network
 			- [ ] homeassistant VM
 			- [ ] foxcaves
 			- [x] gitbackup
-			- [ ] minecraft
 			- [ ] website
+			- [ ] monitoring
+				- [ ] grafana
+				- [ ] prometheus
+				- [ ] telegraf
+				- [ ] mktxp
+			- [ ] git
+			- [ ] minecraft
 			- [ ] SpaceAge
 			- [ ] DarkSignsOnline
-			- [ ] git
 		- [ ] Post migration
 			- [ ] affine
 	- [ ] icefox
