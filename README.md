@@ -15,7 +15,7 @@
 - [x] OpenSearch with authentication
 - [ ] Systems
 	- [ ] bengalfox
-		- [ ] Pre migration
+		- [x] Pre migration
 			- [x] nas
 				- [x] samba
 				- [x] jellyfin
@@ -39,9 +39,9 @@
 	- [ ] islandfox
 		- [ ] Pre migration
 			- [x] restic
+			- [ ] syncthing
 			- [ ] auth
 			- [ ] scrypted
-			- [ ] syncthing
 			- [ ] unifi-network
 			- [ ] homeassistant VM
 			- [ ] foxcaves
