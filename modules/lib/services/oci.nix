@@ -3,7 +3,6 @@ let
     mkNamed = (ctName: { oci, systemd ? {}, svcConfig, pkgs, config, ... }: (let
       host = foxDenLib.hosts.getByName config svcConfig.host;
       dependency = if svcConfig.host != "" then [ host.unit ] else [];
-      systemdName = "podman-${ctName}";
     in {
       config = {
         virtualisation.oci-containers.containers."${ctName}" = nixpkgs.lib.mkMerge [
@@ -37,7 +36,7 @@ let
         };
         users.groups."${ctName}" = {};
 
-        systemd.services.${systemdName} = nixpkgs.lib.mkMerge [
+        systemd.services."podman-${ctName}" = nixpkgs.lib.mkMerge [
           {
             requires = dependency;
             bindsTo = dependency;
