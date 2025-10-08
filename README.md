@@ -44,7 +44,7 @@
 			- [x] syncthing
 			- [x] auth
 			- [x] scrypted
-			- [ ] unifi-network
+			- [x] unifi-network
 			- [ ] homeassistant VM
 			- [ ] foxcaves
 				- [ ] postgres

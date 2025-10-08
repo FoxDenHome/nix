@@ -396,7 +396,6 @@ in
         dns = {
           name = "bengalfox";
           zone = "foxden.network";
-          dynDns = true;
         };
         addresses = ifcfg.addresses;
       };

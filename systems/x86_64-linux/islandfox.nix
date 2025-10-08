@@ -131,6 +131,14 @@ in
       enable = true;
       host = "auth";
     };
+    unifi = {
+      enable = true;
+      host = "unifi";
+    };
+    scrypted = {
+      enable = true;
+      host = "scrypted";
+    };
   };
 
   foxDen.hosts.hosts = let
@@ -156,7 +164,6 @@ in
         dns = {
           name = "islandfox";
           zone = "foxden.network";
-          dynDns = true;
         };
         addresses = ifcfg.addresses;
       };
@@ -181,6 +188,26 @@ in
       addresses = [
         "10.1.14.1/16"
         "fd2c:f4cb:63be:1::e01/64"
+      ];
+    };
+    scrypted = mkVlanHost 2 {
+      dns = {
+        name = "scrypted";
+        zone = "foxden.network";
+      };
+      addresses = [
+        "10.2.11.16/16"
+        "fd2c:f4cb:63be:2::b10/64"
+      ];
+    };
+    unifi = mkVlanHost 1 {
+      dns = {
+        name = "unifi";
+        zone = "foxden.network";
+      };
+      addresses = [
+        "10.1.10.1/16"
+        "fd2c:f4cb:63be:1::a01/64"
       ];
     };
   };
