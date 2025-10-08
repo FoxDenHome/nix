@@ -45,8 +45,8 @@ in
         origin = "https://${hostName}";
         domain = hostName;
 
-        tls_chain = "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.crt:server.crt";
-        tls_key = "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.key:server.key";
+        tls_chain = "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.crt";
+        tls_key = "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.key";
 
         http_client_address_info.x-forward-for = ["127.0.0.1" "127.0.0.0/8"];
       };
@@ -61,6 +61,9 @@ in
 
       systemd.services.kanidm = {
         serviceConfig = {
+          BindReadOnlyPaths = [
+            "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory"
+          ];
           ExecStartPre = [
             "${pkgs.coreutils}/bin/mkdir -p /var/lib/kanidm/backups"
           ];
