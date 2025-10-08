@@ -43,6 +43,11 @@ let
                 pkgs.coreutils
                 pkgs.podman
               ];
+
+              path = [
+                pkgs.coreutils
+                pkgs.podman
+              ];
             }
             systemd
           ];
