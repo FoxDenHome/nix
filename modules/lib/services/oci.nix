@@ -33,6 +33,7 @@ let
           autoSubUidGidRange = true;
           home = "/var/lib/foxden-oci/${ctName}";
           createHome = true;
+          linger = true;
         };
         users.groups."${ctName}" = {};
 
