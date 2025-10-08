@@ -55,12 +55,31 @@ in
     {
       services.pcscd.enable = true;
       security.polkit.extraConfig = ''
+        const aurbuildUidOffset = (() => {
+          for (const line of polkit.spawn(["cat", "/etc/subuid"]).split('\n')) {
+            const directive = line.trim().split(':');
+            if (directive.length < 3) {
+              continue;
+            }
+            if (directive[0] === "aurbuild") {
+              return parseInt(directive[1], 10);
+            }
+          }
+        })();
+
+        function isInAurbuildSubuidRange(subjet) {
+          const uid = parseInt(subjet.user, 10);
+          if (isNaN(uid)) {
+            return false;
+          }
+          return uid >= aurbuildUidOffset && uid < (aurbuildUidOffset + 65536);
+        }
+
         polkit.addRule(function(action, subject) {
-            if ((
-                action.id == "org.debian.pcsc-lite.access_card" ||
-                action.id == "org.debian.pcsc-lite.access_pcsc"
-                ) && subject.user == "aurbuild") {
-                    return polkit.Result.YES;
+            if ((action.id == "org.debian.pcsc-lite.access_card" ||
+                action.id == "org.debian.pcsc-lite.access_pcsc") &&
+                isInAurbuildSubuidRange(subject)) {
+              return polkit.Result.YES;
             }
         });
       '';
