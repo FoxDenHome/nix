@@ -57,6 +57,7 @@ in
           ];
           ExecStartPre = [
             "${pkgs.coreutils}/bin/cp -f \${CREDENTIALS_DIRECTORY}/* /var/lib/kanidm/"
+            "${pkgs.coreutils}/bin/mkdir -p /var/lib/kanidm/backups"
           ];
           StateDirectory = "kanidm";
         };
@@ -66,7 +67,6 @@ in
         hideMounts = true;
         directories = [
           { directory = "/var/lib/kanidm"; user = "kanidm"; group = "kanidm"; mode = "u=rwx,g=,o="; }
-          { directory = "/var/lib/kanidm/backups"; user = "kanidm"; group = "kanidm"; mode = "u=rwx,g=,o="; }
         ];
       };
     }
