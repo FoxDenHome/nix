@@ -43,8 +43,8 @@ in
         origin = "https://${hostName}";
         domain = hostName;
 
-        tls_chain = "/var/lib/kanidm/server/server.crt";
-        tls_key = "/var/lib/kanidm/server/server.key";
+        tls_chain = "/var/lib/kanidm/server.crt";
+        tls_key = "/var/lib/kanidm/server.key";
 
         http_client_address_info.x-forwarded-for = ["127.0.0.1" "127.0.0.0/8"];
       };
