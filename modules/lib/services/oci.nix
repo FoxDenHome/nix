@@ -52,7 +52,7 @@ let
 
               serviceConfig = {
                 PrivateUsers = false;
-                ProtectProc = "default";
+                ProtectProc = nixpkgs.lib.mkForce "default";
 
                 BindPaths = [
                   config.users.users."${ctName}".home
