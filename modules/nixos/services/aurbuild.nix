@@ -29,8 +29,6 @@ in
         image = "ghcr.io/doridian/aurbuild/aurbuild:latest";
         volumes = [
           "${packagesTxt}:/aur/packages.txt:ro"
-          "/etc/passwd:/etc/passwd:ro"
-          "/etc/group:/etc/group:ro"
           "/run/pcscd:/run/pcscd:ro"
           (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets."aurbuild-gpg-passphrase".path}:/gpg/passphrase:ro")
           "aurbuild_cache_${builderArch}:/aur/cache"
@@ -43,8 +41,6 @@ in
         ];
         environment = {
           "GPG_KEY_ID" = "45B097915F67C9D68C19E5747B0F7660EAEC8D49";
-          "PUSER" = "aurbuild";
-          "PGROUP" = "aurbuild";
         };
       };
       systemd = {
@@ -78,13 +74,6 @@ in
         owner = "aurbuild";
         group = "aurbuild";
       };
-
-      users.users.aurbuild = {
-        isSystemUser = true;
-        group = "aurbuild";
-        home = "/home/aur"; # This is for inside the container
-      };
-      users.groups.aurbuild = {};
     }
   ]);
 }
