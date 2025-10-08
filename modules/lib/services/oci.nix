@@ -59,6 +59,7 @@ let
                 BindReadOnlyPaths = [
                   "/run/wrappers/bin/newuidmap"
                   "/run/wrappers/bin/newgidmap"
+                  "/etc/containers/policy.json"
                 ];
               };
             }
