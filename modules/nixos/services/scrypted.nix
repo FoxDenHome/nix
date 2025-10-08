@@ -15,6 +15,8 @@ in
         user = "scrypted:scrypted";
         volumes = [
           "scrypted_data:/server/volume"
+          "/etc/passwd:/etc/passwd:ro"
+          "/etc/group:/etc/group:ro"
         ];
         environment = {
           "SCRYPTED_DOCKER_AVAHI" = "true";
