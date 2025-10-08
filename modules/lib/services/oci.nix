@@ -47,7 +47,7 @@ let
               path = [
                 pkgs.coreutils
                 pkgs.podman
-                "/run/wrappers/bin"
+                "/run/wrappers"
               ];
 
               serviceConfig = {
