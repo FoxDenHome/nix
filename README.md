@@ -41,7 +41,7 @@
 			- [x] restic
 			- [x] syncthing
 			- [x] auth
-			- [ ] scrypted (prolly OCI)
+			- [x] scrypted
 			- [ ] unifi-network
 			- [ ] homeassistant VM
 			- [ ] foxcaves
