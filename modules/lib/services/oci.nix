@@ -1,8 +1,8 @@
-{ foxDenLib, lib, nixpkgs, ... }:
+{ foxDenLib, nixpkgs, ... }:
 let
     mkNamed = (svc: inputs@{ oci, systemd ? {}, svcConfig, pkgs, config, ... }: (let
       systemdName = "podman-${svc}";
-    in lib.mkMerge [
+    in nixpkgs.lib.mkMerge [
       (foxDenLib.services.mkNamed systemdName inputs)
       {
         config.virtualisation.oci-containers.containers."${svc}" = nixpkgs.lib.mkMerge [
