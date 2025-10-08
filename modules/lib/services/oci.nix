@@ -31,7 +31,7 @@ let
         autoSubUidGidRange = true;
         home = "/var/lib/foxden-oci/${svc}";
       };
-      users.groups."${svc}" = {};
+      config.users.groups."${svc}" = {};
 
       config.systemd.services."podman-${svc}" = nixpkgs.lib.mkMerge [
         {
