@@ -57,17 +57,16 @@ in
     {
       services.pcscd.enable = true;
       security.polkit.extraConfig = ''
-        const aurbuildUidOffset = (() => {
-          for (const line of polkit.spawn(["cat", "/etc/subuid"]).split('\n')) {
-            const directive = line.trim().split(':');
-            if (directive.length < 3) {
-              continue;
-            }
-            if (directive[0] === "aurbuild") {
-              return parseInt(directive[1], 10);
-            }
+        let aurbuildUidOffset;
+        for (const line of polkit.spawn(["cat", "/etc/subuid"]).split('\n')) {
+          const directive = line.trim().split(':');
+          if (directive.length < 3) {
+            continue;
           }
-        })();
+          if (directive[0] === "aurbuild") {
+            aurbuildUidOffset = parseInt(directive[1], 10);
+          }
+        }
 
         const aurbuildPuid = (aurbuildUidOffset + 1000).toString(10);
 
