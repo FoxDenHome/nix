@@ -46,8 +46,8 @@ in
       systemd = {
         serviceConfig = {
           ExecStartPre = [
-            "${pkgs.coreutils}/bin/mkdir -p ${mirrorCfg.dataDir}/foxdenaur/${builderArch}"
-            "${pkgs.coreutils}/bin/chown aurbuild:aurbuild ${mirrorCfg.dataDir}/foxdenaur/${builderArch}"
+            "+${pkgs.coreutils}/bin/mkdir -p ${mirrorCfg.dataDir}/foxdenaur/${builderArch}"
+            "+${pkgs.coreutils}/bin/chown aurbuild:aurbuild ${mirrorCfg.dataDir}/foxdenaur/${builderArch}"
           ];
         };
       };
