@@ -59,9 +59,10 @@ in
       security.polkit.extraConfig = ''
         var aurbuildUidOffset;
         var subuidData = polkit.spawn(["cat", "/etc/subuid"]);
-        var subuidLines = subuidData.split('\n');
-        for (var line of subuidLines) {
-          var directive = line.trim().split(':');
+        var subuidLines = subuidData.split("\n");
+        for (var lineIdx in subuidLines) {
+          var line = subuidLines[lineIdx];
+          var directive = line.trim().split(":");
           if (directive.length < 3) {
             continue;
           }
