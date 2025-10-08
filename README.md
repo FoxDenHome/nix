@@ -59,7 +59,12 @@
 				- [ ] mktxp
 			- [ ] git
 			- [ ] minecraft
-			- [ ] SpaceAge
+			- [ ] SpaceAge (oci)
+				- [ ] mysql
+				- [ ] tts
+				- [ ] api
+				- [ ] gmod
+				- [ ] website
 			- [ ] DarkSignsOnline
 		- [ ] Post migration
 			- [ ] affine
