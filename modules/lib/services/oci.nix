@@ -52,6 +52,7 @@ let
 
               serviceConfig = {
                 PrivateUsers = false;
+                PrivatePIDs = true;
 
                 BindPaths = [
                   config.users.users."${ctName}".home
