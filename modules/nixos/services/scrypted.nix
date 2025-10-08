@@ -18,16 +18,10 @@ in
         environment = {
           "SCRYPTED_DOCKER_AVAHI" = "true";
         };
-        podman.user = "scrypted";
       };
     }).config
     {
-      users.users.scrypted = {
-        isSystemUser = true;
-        group = "scrypted";
-        autoSubUidGidRange = true;
-      };
-      users.groups.scrypted = {};
+
     }
   ]);
 }

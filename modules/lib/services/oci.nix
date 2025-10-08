@@ -17,9 +17,21 @@ let
             "TZ" = config.time.timeZone;
             "LANG" = config.i18n.defaultLocale;
           };
+
+          podman = {
+            user = svc;
+          };
         }
         oci
       ];
+
+      config.users.users."${svc}" = {
+        isSystemUser = true;
+        group = svc;
+        autoSubUidGidRange = true;
+        home = "/var/lib/foxden-oci/${svc}";
+      };
+      users.groups."${svc}" = {};
 
       config.systemd.services."podman-${svc}" = nixpkgs.lib.mkMerge [
         {
@@ -42,6 +54,7 @@ in
       hideMounts = true;
       directories = [
         "/var/lib/containers"
+        "/var/lib/foxden-oci"
       ];
     };
 
