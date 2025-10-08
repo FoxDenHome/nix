@@ -9,7 +9,9 @@ let
   hostName = foxDenLib.global.dns.mkHost primaryInterface.dns;
 in
 {
-  options.foxDen.services.kanidm.server.enable = lib.mkEnableOption "kanidm server";
+  options.foxDen.services.kanidm.server = {
+    enable = lib.mkEnableOption "kanidm server";
+  } // (services.http.mkOptions { svcName = "kanidm"; name = "Kanidm server"; });
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
