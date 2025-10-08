@@ -1,12 +1,12 @@
 { foxDenLib, nixpkgs, ... }:
 let
-    mkNamed = (svc: inputs@{ oci, systemd ? {}, svcConfig, pkgs, config, ... }: (let
-      systemdName = "podman-${svc}";
+    mkNamed = (ctName: inputs@{ oci, systemd ? {}, svcConfig, pkgs, config, ... }: (let
+      systemdName = "podman-${ctName}";
     in {
       config = nixpkgs.lib.mkMerge [
         (foxDenLib.services.mkNamed systemdName inputs).config
         {
-          virtualisation.oci-containers.containers."${svc}" = nixpkgs.lib.mkMerge [
+          virtualisation.oci-containers.containers."${ctName}" = nixpkgs.lib.mkMerge [
             {
               autoStart = nixpkgs.lib.mkDefault true;
               pull = nixpkgs.lib.mkDefault "always";
@@ -22,20 +22,20 @@ let
               };
 
               podman = {
-                user = svc;
+                user = ctName;
               };
             }
             oci
           ];
 
-          users.users."${svc}" = {
+          users.users."${ctName}" = {
             isSystemUser = true;
-            group = svc;
+            group = ctName;
             autoSubUidGidRange = true;
-            home = "/var/lib/foxden-oci/${svc}";
+            home = "/var/lib/foxden-oci/${ctName}";
             createHome = true;
           };
-          users.groups."${svc}" = {};
+          users.groups."${ctName}" = {};
 
           systemd.services.${systemdName} = nixpkgs.lib.mkMerge [
             {
@@ -47,6 +47,10 @@ let
               path = [
                 pkgs.coreutils
                 pkgs.podman
+              ];
+
+              BindPaths = [
+                config.users.users."${ctName}".home
               ];
             }
             systemd
