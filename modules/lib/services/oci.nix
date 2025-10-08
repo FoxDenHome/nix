@@ -53,9 +53,11 @@ let
               serviceConfig = {
                 PrivateUsers = false;
                 ProtectProc = nixpkgs.lib.mkForce "default";
+                ProcSubset = "all";
 
                 BindPaths = [
                   config.users.users."${ctName}".home
+                  "/proc:/proc"
                 ];
                 BindReadOnlyPaths = [
                   "/run/wrappers/bin/newuidmap"
