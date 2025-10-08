@@ -37,7 +37,15 @@ let
           };
           users.groups."${svc}" = {};
 
-          systemd.services.${systemdName} = systemd;
+          systemd.services.${systemdName} = nixpkgs.lib.mkMerge [
+            {
+              confinement.packages = [
+                pkgs.coreutils
+                pkgs.podman
+              ];
+            }
+            systemd
+          ];
         }
       ];
     }));
