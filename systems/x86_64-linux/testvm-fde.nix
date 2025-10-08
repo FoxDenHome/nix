@@ -90,10 +90,10 @@ in
   };
 
   foxDen.services = {
-    syncthing.enable = true;
-    syncthing.host = "dummy";
-    kanidm.server.enable = true;
-    kanidm.server.host = "dummy2";
+    scrypted = {
+      enable = true;
+      host = "dummy";
+    };
   };
 
   systemd.network.networks."40-${ifcfg.interface}-${rootInterface}" = {

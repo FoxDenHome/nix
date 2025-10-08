@@ -40,8 +40,8 @@
 		- [ ] Pre migration
 			- [x] restic
 			- [x] syncthing
-			- [ ] auth
-			- [ ] scrypted
+			- [x] auth
+			- [ ] scrypted (prolly OCI)
 			- [ ] unifi-network
 			- [ ] homeassistant VM
 			- [ ] foxcaves
@@ -66,7 +66,7 @@
 			- [x] kiwix
 			- [x] mirror
 			- [x] gitbackup
-			- [ ] syncthing
+			- [x] syncthing
 			- [ ] snirouter
 			- [ ] xmpp
 
