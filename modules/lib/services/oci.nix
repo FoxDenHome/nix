@@ -47,11 +47,15 @@ let
               path = [
                 pkgs.coreutils
                 pkgs.podman
+                "/run/wrappers/bin"
               ];
 
               serviceConfig = {
                 BindPaths = [
                   config.users.users."${ctName}".home
+                ];
+                BindReadOnlyPaths = [
+                  "/run/wrappers/bin/newuidmap"
                 ];
               };
             }
