@@ -2,14 +2,14 @@
 let
   services = foxDenLib.services;
 
-  svcConfig = config.foxDen.kanidm.server;
+  svcConfig = config.foxDen.services.kanidm.server;
 
   hostCfg = foxDenLib.hosts.getByName config svcConfig.host;
   primaryInterface = lib.lists.head (lib.attrsets.attrValues hostCfg.interfaces);
   hostName = foxDenLib.global.dns.mkHost primaryInterface.dns;
 in
 {
-  options.foxDen.kanidm.server.enable = lib.mkEnableOption "kanidm server";
+  options.foxDen.services.kanidm.server.enable = lib.mkEnableOption "kanidm server";
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {

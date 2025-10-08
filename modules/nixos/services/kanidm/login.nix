@@ -1,12 +1,12 @@
 { pkgs, lib, config, foxDenLib, ... } :
 {
-  options.foxDen.kanidm.login = lib.mkOption {
+  options.foxDen.services.kanidm.login = lib.mkOption {
     type = lib.types.bool;
     default = true;
     description = "Enable kanidm login";
   };
 
-  config = lib.mkIf config.foxDen.kanidm.login {
+  config = lib.mkIf config.foxDen.services.kanidm.login {
     security.wrappers."kanidm_ssh_authorizedkeys" = {
       source = "${config.services.kanidm.package}/bin/kanidm_ssh_authorizedkeys";
       owner = "root";

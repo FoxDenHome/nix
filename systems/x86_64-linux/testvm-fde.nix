@@ -93,7 +93,6 @@ in
     syncthing.enable = true;
     syncthing.host = "dummy";
     kanidm.server.enable = true;
-    kanidm.host = "dummy";
   };
 
   systemd.network.networks."40-${ifcfg.interface}-${rootInterface}" = {
