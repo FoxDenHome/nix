@@ -49,9 +49,11 @@ let
                 pkgs.podman
               ];
 
-              BindPaths = [
-                config.users.users."${ctName}".home
-              ];
+              serviceConfig = {
+                BindPaths = [
+                  config.users.users."${ctName}".home
+                ];
+              };
             }
             systemd
           ];

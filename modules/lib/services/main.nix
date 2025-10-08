@@ -55,6 +55,8 @@ let
             "locale.conf"
             "passwd"
             "group"
+            "subuid"
+            "subgid"
             "pki/tls/certs"
             "ssl/certs"
           ];
