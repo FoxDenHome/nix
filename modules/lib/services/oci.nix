@@ -39,31 +39,10 @@ let
 
           systemd.services.${systemdName} = nixpkgs.lib.mkMerge [
             {
-              confinement.packages = [
-                pkgs.coreutils
-                pkgs.podman
-              ];
-
-              path = [
-                pkgs.coreutils
-                pkgs.podman
-                "/run/wrappers"
-              ];
+              confinement.enable = nixpkgs.lib.mkForce false;
 
               serviceConfig = {
-                PrivateUsers = false;
                 ProtectProc = nixpkgs.lib.mkForce "default";
-                ProcSubset = "all";
-
-                BindPaths = [
-                  config.users.users."${ctName}".home
-                  "/proc:/proc"
-                ];
-                BindReadOnlyPaths = [
-                  "/run/wrappers/bin/newuidmap"
-                  "/run/wrappers/bin/newgidmap"
-                  "/etc/containers/policy.json"
-                ];
               };
             }
             systemd
