@@ -20,6 +20,11 @@ in
           "SCRYPTED_DOCKER_AVAHI" = "true";
         };
       };
+      systemd = {
+        serviceConfig = {
+          PrivateUsers = "identity";
+        };
+      };
     }).config
     {
       users.users.scrypted = {
