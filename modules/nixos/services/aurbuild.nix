@@ -57,11 +57,11 @@ in
     {
       services.pcscd.enable = true;
       security.polkit.extraConfig = ''
-        let aurbuildUidOffset;
-        const subuidData = polkit.spawn(["cat", "/etc/subuid"]);
-        const subuidLines = subuidData.split('\n');
-        for (const line of subuidLines) {
-          const directive = line.trim().split(':');
+        var aurbuildUidOffset;
+        var subuidData = polkit.spawn(["cat", "/etc/subuid"]);
+        var subuidLines = subuidData.split('\n');
+        for (var line of subuidLines) {
+          var directive = line.trim().split(':');
           if (directive.length < 3) {
             continue;
           }
@@ -70,7 +70,7 @@ in
           }
         }
 
-        const aurbuildPuid = (aurbuildUidOffset + 1000).toString(10);
+        var aurbuildPuid = (aurbuildUidOffset + 1000).toString(10);
 
         polkit.addRule(function(action, subject) {
             if ((action.id == "org.debian.pcsc-lite.access_card" ||
