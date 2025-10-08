@@ -56,7 +56,8 @@ in
             "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.key:server.key"
           ];
           ExecStartPre = [
-            "${pkgs.coreutils}/bin/cp -f \${CREDENTIALS_DIRECTORY}/* /var/lib/kanidm/"
+            "${pkgs.coreutils}/bin/cp -f \${CREDENTIALS_DIRECTORY}/server.crt /var/lib/kanidm/"
+            "${pkgs.coreutils}/bin/cp -f \${CREDENTIALS_DIRECTORY}/server.key /var/lib/kanidm/"
             "${pkgs.coreutils}/bin/mkdir -p /var/lib/kanidm/backups"
           ];
           StateDirectory = "kanidm";
