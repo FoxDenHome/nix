@@ -34,6 +34,8 @@
 			- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
 			- [ ] ollama
 			- [ ] hashtopolis
+				- [ ] mysql
+				- [ ] backend
 			- [ ] hashtopolis-agent
 			- [ ] owncast
 	- [ ] islandfox
