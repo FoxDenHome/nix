@@ -7,7 +7,7 @@ let
         {
           autoStart = nixpkgs.lib.mkDefault true;
           pull = nixpkgs.lib.mkDefault "always";
-          networks = [ "ns:host" ];
+          networks = [ "host" ];
 
           volumes = [
             "/etc/localtime:/etc/localtime:ro"
