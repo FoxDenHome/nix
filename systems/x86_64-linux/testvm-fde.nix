@@ -90,7 +90,7 @@ in
   };
 
   foxDen.services = {
-    scrypted = {
+    unifi = {
       enable = true;
       host = "dummy";
     };
