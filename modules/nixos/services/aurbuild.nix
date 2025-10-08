@@ -71,7 +71,8 @@ in
           }
         }
 
-        var aurbuildPuid = (aurbuildUidOffset + 1000).toString(10);
+        // PUID=1000, but root is the actual UID, not at 0 offset
+        var aurbuildPuid = (aurbuildUidOffset + 999).toString(10);
 
         polkit.addRule(function(action, subject) {
             if ((action.id == "org.debian.pcsc-lite.access_card" ||
