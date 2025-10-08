@@ -3,6 +3,7 @@ let
     mkNamed = (ctName: { oci, systemd ? {}, svcConfig, pkgs, config, ... }: (let
       host = foxDenLib.hosts.getByName config svcConfig.host;
       dependency = if svcConfig.host != "" then [ host.unit ] else [];
+      resolvConf = if svcConfig.host != "" then host.resolvConf else "/etc/resolv.conf";
     in {
       config = {
         virtualisation.oci-containers.containers."${ctName}" = nixpkgs.lib.mkMerge [
@@ -45,6 +46,9 @@ let
             serviceConfig = {
               NetworkNamespacePath = nixpkgs.lib.mkIf (svcConfig.host != "") host.namespacePath;
               Restart = nixpkgs.lib.mkDefault "always";
+              BindReadOnlyPaths = [
+                "${resolvConf}:/etc/resolv.conf"
+              ];
             };
           }
           systemd
