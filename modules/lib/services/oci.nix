@@ -58,6 +58,7 @@ let
                 ];
                 BindReadOnlyPaths = [
                   "/run/wrappers/bin/newuidmap"
+                  "/run/wrappers/bin/newgidmap"
                 ];
               };
             }
