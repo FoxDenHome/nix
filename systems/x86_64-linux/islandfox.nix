@@ -127,7 +127,10 @@ in
     apcupsd.enable = true;
     backupmgr.enable = true;
     syncthing.enable = true;
-    kanidm.server.enable = true;
+    kanidm.server = {
+      enable = true;
+      host = "auth";
+    };
   };
 
   foxDen.hosts.hosts = let
