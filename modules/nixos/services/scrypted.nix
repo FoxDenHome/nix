@@ -12,28 +12,16 @@ in
       name = "scrypted";
       oci = {
         image = "ghcr.io/koush/scrypted:latest";
-        user = "scrypted:scrypted";
         volumes = [
           "scrypted_data:/server/volume"
-          "/etc/passwd:/etc/passwd:ro"
-          "/etc/group:/etc/group:ro"
         ];
         environment = {
           "SCRYPTED_DOCKER_AVAHI" = "true";
         };
       };
-      systemd = {
-        serviceConfig = {
-          PrivateUsers = false;
-        };
-      };
     }).config
     {
-      users.users.scrypted = {
-        isSystemUser = true;
-        group = "scrypted";
-      };
-      users.groups.scrypted = {};
+
     }
   ]);
 }
