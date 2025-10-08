@@ -11,7 +11,7 @@ in
 {
   options.foxDen.kanidm.server.enable = lib.mkEnableOption "kanidm server";
 
-  config = lib.mkIf svcConfig.enable lib.mkMerge [
+  config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
       name = "kanidm";
       inherit svcConfig pkgs config;
@@ -67,5 +67,5 @@ in
         ];
       };
     }
-  ];
+  ]);
 }
