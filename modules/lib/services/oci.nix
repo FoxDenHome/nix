@@ -52,10 +52,10 @@ let
 
               serviceConfig = {
                 PrivateUsers = false;
-                PrivatePIDs = true;
 
                 BindPaths = [
                   config.users.users."${ctName}".home
+                  "/proc:/proc"
                 ];
                 BindReadOnlyPaths = [
                   "/run/wrappers/bin/newuidmap"
