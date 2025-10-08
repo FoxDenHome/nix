@@ -52,8 +52,8 @@ in
       systemd.services.kanidm = {
         serviceConfig = {
           LoadCredential = [
-            "/var/lib/private/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.crt"
-            "/var/lib/private/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.key"
+            "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.crt"
+            "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.key"
           ];
           ExecStartPre = [
             "${pkgs.coreutils}/bin/cp -f \${CREDENTIALS_DIRECTORY}/* /var/lib/kanidm/"
