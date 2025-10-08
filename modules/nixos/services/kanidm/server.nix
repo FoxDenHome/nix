@@ -40,6 +40,8 @@ in
     {
       services.kanidm.enableServer = true;
       services.kanidm.serverSettings = {
+        version = "2";
+
         origin = "https://${hostName}";
         domain = hostName;
 
