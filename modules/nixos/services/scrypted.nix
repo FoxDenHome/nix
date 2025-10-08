@@ -22,7 +22,7 @@ in
       };
       systemd = {
         serviceConfig = {
-          PrivateUsers = "identity";
+          PrivateUsers = false;
         };
       };
     }).config
