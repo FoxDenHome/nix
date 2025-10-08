@@ -93,7 +93,7 @@ in
     syncthing.enable = true;
     syncthing.host = "dummy";
     kanidm.server.enable = true;
-    kanidm.server.host = "dummy";
+    kanidm.server.host = "dummy2";
   };
 
   systemd.network.networks."40-${ifcfg.interface}-${rootInterface}" = {
@@ -120,6 +120,23 @@ in
         addresses = [
           "192.168.122.203/24"
           "fd00:dead:beef:122::203/64"
+        ];
+        routes = ifcfg.routes;
+      };
+    };
+    dummy2 = {
+      nameservers = ifcfg.nameservers;
+      interfaces.ext = {
+        driver = "bridge";
+        driverOpts.bridge = "br-default";
+        driverOpts.vlan = 2;
+        dns = {
+          name = "dummy";
+          zone = "local.foxden.network";
+        };
+        addresses = [
+          "192.168.122.204/24"
+          "fd00:dead:beef:122::204/64"
         ];
         routes = ifcfg.routes;
       };
