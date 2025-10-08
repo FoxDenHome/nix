@@ -45,6 +45,9 @@
 			- [ ] unifi-network
 			- [ ] homeassistant VM
 			- [ ] foxcaves
+				- [ ] postgres
+				- [ ] redis
+				- [ ] site (OCI)
 			- [x] gitbackup
 			- [ ] website
 			- [ ] monitoring
