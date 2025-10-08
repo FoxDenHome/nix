@@ -43,21 +43,23 @@ in
         origin = "https://${hostName}";
         domain = hostName;
 
-        tls_chain = "/var/lib/kanidm/server.crt";
-        tls_key = "/var/lib/kanidm/server.key";
+        tls_chain = "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.crt:server.crt";
+        tls_key = "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.key:server.key";
 
         http_client_address_info.x-forwarded-for = ["127.0.0.1" "127.0.0.0/8"];
       };
 
+      systemd.services.caddy-kanidm = {
+        serviceConfig = {
+          DynamicUser = lib.mkForce false;
+          User = "kanidm";
+          Group = "kanidm";
+        };
+      };
+
       systemd.services.kanidm = {
         serviceConfig = {
-          LoadCredential = [
-            "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.crt:server.crt"
-            "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.key:server.key"
-          ];
           ExecStartPre = [
-            "${pkgs.coreutils}/bin/cp -f \${CREDENTIALS_DIRECTORY}/server.crt /var/lib/kanidm/"
-            "${pkgs.coreutils}/bin/cp -f \${CREDENTIALS_DIRECTORY}/server.key /var/lib/kanidm/"
             "${pkgs.coreutils}/bin/mkdir -p /var/lib/kanidm/backups"
           ];
           StateDirectory = "kanidm";
