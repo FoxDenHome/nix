@@ -1,54 +1,56 @@
 { foxDenLib, nixpkgs, ... }:
 let
-    mkNamed = (ctName: inputs@{ oci, systemd ? {}, svcConfig, pkgs, config, ... }: (let
+    mkNamed = (ctName: { oci, systemd ? {}, svcConfig, pkgs, config, ... }: (let
+      host = foxDenLib.hosts.getByName config svcConfig.host;
+      dependency = if svcConfig.host != "" then [ host.unit ] else [];
       systemdName = "podman-${ctName}";
     in {
-      config = nixpkgs.lib.mkMerge [
-        (foxDenLib.services.mkNamed systemdName inputs).config
-        {
-          virtualisation.oci-containers.containers."${ctName}" = nixpkgs.lib.mkMerge [
-            {
-              autoStart = nixpkgs.lib.mkDefault true;
-              pull = nixpkgs.lib.mkDefault "always";
-              networks = [ "host" ];
+      config = {
+        virtualisation.oci-containers.containers."${ctName}" = nixpkgs.lib.mkMerge [
+          {
+            autoStart = nixpkgs.lib.mkDefault true;
+            pull = nixpkgs.lib.mkDefault "always";
+            networks = [ "host" ];
 
-              volumes = [
-                "/etc/localtime:/etc/localtime:ro"
-                "/etc/locale.conf:/etc/locale.conf:ro"
-              ];
-              environment = {
-                "TZ" = config.time.timeZone;
-                "LANG" = config.i18n.defaultLocale;
-              };
+            volumes = [
+              "/etc/localtime:/etc/localtime:ro"
+              "/etc/locale.conf:/etc/locale.conf:ro"
+            ];
+            environment = {
+              "TZ" = config.time.timeZone;
+              "LANG" = config.i18n.defaultLocale;
+            };
 
-              podman = {
-                user = ctName;
-              };
-            }
-            oci
-          ];
+            podman = {
+              user = ctName;
+            };
+          }
+          oci
+        ];
 
-          users.users."${ctName}" = {
-            isSystemUser = true;
-            group = ctName;
-            autoSubUidGidRange = true;
-            home = "/var/lib/foxden-oci/${ctName}";
-            createHome = true;
-          };
-          users.groups."${ctName}" = {};
+        users.users."${ctName}" = {
+          isSystemUser = true;
+          group = ctName;
+          autoSubUidGidRange = true;
+          home = "/var/lib/foxden-oci/${ctName}";
+          createHome = true;
+        };
+        users.groups."${ctName}" = {};
 
-          systemd.services.${systemdName} = nixpkgs.lib.mkMerge [
-            {
-              confinement.enable = nixpkgs.lib.mkForce false;
+        systemd.services.${systemdName} = nixpkgs.lib.mkMerge [
+          {
+            requires = dependency;
+            bindsTo = dependency;
+            after = dependency;
 
-              serviceConfig = {
-                ProtectProc = nixpkgs.lib.mkForce "default";
-              };
-            }
-            systemd
-          ];
-        }
-      ];
+            serviceConfig = {
+              NetworkNamespacePath = nixpkgs.lib.mkIf (svcConfig.host != "") host.namespacePath;
+              Restart = nixpkgs.lib.mkDefault "always";
+            };
+          }
+          systemd
+        ];
+      };
     }));
 in
 {
