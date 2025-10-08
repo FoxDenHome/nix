@@ -66,6 +66,7 @@ in
         hideMounts = true;
         directories = [
           { directory = "/var/lib/kanidm"; user = "kanidm"; group = "kanidm"; mode = "u=rwx,g=,o="; }
+          { directory = "/var/lib/kanidm/backups"; user = "kanidm"; group = "kanidm"; mode = "u=rwx,g=,o="; }
         ];
       };
     }
