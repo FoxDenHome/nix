@@ -4,8 +4,8 @@ let
 
   mkDir = (dir: {
     directory = dir;
-    user = config.services.unifi.user;
-    group = config.services.unifi.group;
+    user = "unifi";
+    group = "unifi";
     mode = "u=rwx,g=,o=";
   });
 
