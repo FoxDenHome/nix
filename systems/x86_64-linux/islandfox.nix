@@ -127,6 +127,7 @@ in
     apcupsd.enable = true;
     backupmgr.enable = true;
     syncthing.enable = true;
+    kanidm.server.enable = true;
   };
 
   foxDen.hosts.hosts = let
@@ -166,6 +167,17 @@ in
       addresses = [
         "10.2.11.2/16"
         "fd2c:f4cb:63be:2::b02/64"
+      ];
+    };
+    auth = mkVlanHost 1 {
+      dns = {
+        name = "auth";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      addresses = [
+        "10.1.14.1/16"
+        "fd2c:f4cb:63be:1::e01/64"
       ];
     };
   };
