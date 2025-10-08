@@ -30,6 +30,7 @@ let
         group = svc;
         autoSubUidGidRange = true;
         home = "/var/lib/foxden-oci/${svc}";
+        createHome = true;
       };
       config.users.groups."${svc}" = {};
 
