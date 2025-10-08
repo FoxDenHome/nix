@@ -58,7 +58,8 @@ in
       services.pcscd.enable = true;
       security.polkit.extraConfig = ''
         let aurbuildUidOffset;
-        for (const line of polkit.spawn(["cat", "/etc/subuid"]).split('\n')) {
+        const subuidLines = polkit.spawn(["cat", "/etc/subuid"]).split('\n');
+        for (line of subuidLines) {
           const directive = line.trim().split(':');
           if (directive.length < 3) {
             continue;
