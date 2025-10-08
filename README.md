@@ -39,7 +39,7 @@
 	- [ ] islandfox
 		- [ ] Pre migration
 			- [x] restic
-			- [ ] syncthing
+			- [x] syncthing
 			- [ ] auth
 			- [ ] scrypted
 			- [ ] unifi-network

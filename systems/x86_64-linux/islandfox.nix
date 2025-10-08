@@ -126,6 +126,7 @@ in
 
     apcupsd.enable = true;
     backupmgr.enable = true;
+    syncthing.enable = true;
   };
 
   foxDen.hosts.hosts = let
@@ -155,6 +156,17 @@ in
         };
         addresses = ifcfg.addresses;
       };
+    };
+    syncthing = mkVlanHost 2 {
+      dns = {
+        name = "syncthing";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      addresses = [
+        "10.2.11.2/16"
+        "fd2c:f4cb:63be:2::b02/64"
+      ];
     };
   };
 }
