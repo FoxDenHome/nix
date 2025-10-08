@@ -41,6 +41,8 @@ in
         ];
         environment = {
           "GPG_KEY_ID" = "45B097915F67C9D68C19E5747B0F7660EAEC8D49";
+          "PUID" = "1000";
+          "PGID" = "1000";
         };
       };
       systemd = {
@@ -67,18 +69,12 @@ in
           }
         })();
 
-        function isInAurbuildSubuidRange(subjet) {
-          const uid = parseInt(subjet.user, 10);
-          if (isNaN(uid)) {
-            return false;
-          }
-          return uid >= aurbuildUidOffset && uid < (aurbuildUidOffset + 65536);
-        }
+        const aurbuildPuid = (aurbuildUidOffset + 1000).toString(10);
 
         polkit.addRule(function(action, subject) {
             if ((action.id == "org.debian.pcsc-lite.access_card" ||
                 action.id == "org.debian.pcsc-lite.access_pcsc") &&
-                isInAurbuildSubuidRange(subject)) {
+                subject.user === aurbuildPuid) {
               return polkit.Result.YES;
             }
         });
