@@ -101,7 +101,7 @@ in
             ];
           };
         };
-      }) (lib.attrsets.attrsToList svcConfig.services));
+      }) svcConfig.services);
     }
     {
       systemd.services = lib.attrsets.listToAttrs (map (mySvc: let
@@ -121,7 +121,7 @@ in
             ];
           };
         };
-      }) (lib.attrsets.attrsToList svcConfig.services));
+      }) svcConfig.services);
     }
     # {
     #   systemd.services = lib.mkMerge (map (svc: (mkProxyTo svc).systemd.services) svcConfig.services);
