@@ -63,9 +63,9 @@ in
       services.mysql = {
         enable = true;
         package = pkgs.mariadb;
-        initialDatabases = lib.attrsets.genAttrs serviceList (name: {
+        initialDatabases = map (name: {
           inherit name;
-        });
+        }) serviceList;
         ensureUsers = lib.attrsets.genAttrs serviceList (name: let
           clientSvc = svcConfig.services.${name};
         in
