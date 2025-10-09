@@ -34,8 +34,8 @@ in
       };
     };
 
-    systemd.services.libvirtd-autocreator = {
-      description = "Libvirt Auto Creator Service";
+    systemd.services.libvirt-autocreator = {
+      description = "Libvirt AutoCreator Service";
       after = [ "libvirtd.service" ];
       requires = [ "libvirtd.service" ];
       serviceConfig = {
