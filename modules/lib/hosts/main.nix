@@ -181,7 +181,7 @@ in
             mkInterfaceStartConfig = (interface: let
               ifaceDriver = foxDenLib.hosts.drivers.${interface.driver};
               serviceInterface = (ifaceDriver.serviceInterface or (interface: "host${interface.suffix}")) interface;
-              driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface interface; };
+              driverRunParams = { inherit ipCmd ipInNsCmd netnsExecCmd serviceInterface interface; };
             in
               (ifaceDriver.execStart driverRunParams)
                 ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA host.namespace}" ]
