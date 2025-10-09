@@ -46,6 +46,7 @@ let
             serviceConfig = {
               NetworkNamespacePath = nixpkgs.lib.mkIf (svcConfig.host != "") host.namespacePath;
               Restart = nixpkgs.lib.mkDefault "always";
+              AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
               BindReadOnlyPaths = [
                 "${resolvConf}:/etc/resolv.conf"
               ];
