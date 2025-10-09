@@ -405,7 +405,6 @@ in
     deluge = (mkVlanHost 2 {
       dns = {
         name = "deluge";
-        cnames = ["dldr"];
         zone = "foxden.network";
       };
       addresses = [
