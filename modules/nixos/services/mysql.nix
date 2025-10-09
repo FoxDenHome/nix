@@ -55,7 +55,6 @@ in
     }).config
     {
       foxDen.services.mysql.host = "mysql";
-      foxDen.services.mysql.enable = true;
 
       foxDen.hosts.hosts = {
         mysql.interfaces = {};
