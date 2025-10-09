@@ -68,13 +68,13 @@ in
 
     networkConfig = {
       DHCP = "no";
-      IPv6AcceptRA = false;
+      IPv6AcceptRA = true;
     };
 
     bridgeVLANs = [{
       PVID = 2;
       EgressUntagged = 2;
-      VLAN = "1-10";
+      VLAN = "2";
     }];
   };
 

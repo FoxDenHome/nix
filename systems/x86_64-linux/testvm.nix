@@ -52,7 +52,7 @@ in
 
     networkConfig = {
       DHCP = "no";
-      IPv6AcceptRA = false;
+      IPv6AcceptRA = true;
     };
 
     # bridgeVLANs = [{
