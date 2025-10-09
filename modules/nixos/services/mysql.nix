@@ -124,7 +124,7 @@ in
       }) (lib.attrsets.attrsToList svcConfig.services));
     }
     {
-      systemd.services = lib.mkMerge (map (svc: (mkProxyTo svc).systemd.services) svcConfig.services);
+      #systemd.services = lib.mkMerge (map (svc: (mkProxyTo svc).systemd.services) svcConfig.services);
     }
   ]);
 }
