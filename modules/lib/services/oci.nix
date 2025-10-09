@@ -36,7 +36,7 @@ let
         };
         users.groups."${ctName}" = {};
 
-        foxDen.hosts = let
+        foxDen.hosts.hosts = let
           hostEval = builtins.tryEval svcConfig.host;
           hostOK = hostEval.success && hostEval.value != "";
         in if hostOK then {
