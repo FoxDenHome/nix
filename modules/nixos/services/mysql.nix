@@ -83,48 +83,48 @@ in
         };
       };
     }
+    # {
+    #   systemd.services = lib.attrsets.listToAttrs (map (mySvc: let
+    #     svcName = if mySvc.proxy then "mysql-${mySvc.name}" else mySvc.targetService;
+    #   in
+    #   {
+    #     name = svcName;
+    #     value = {
+    #       requires = [ "mysql.service" ];
+    #       after = [ "mysql.service" ];
+    #       serviceConfig = {
+    #         BindReadOnlyPaths = [
+    #           "/run/mysql"
+    #         ];
+    #         Environment = [
+    #           "MYSQL_SOCKET=/run/mysql/mysql.sock"
+    #         ];
+    #       };
+    #     };
+    #   }) (lib.attrsets.attrsToList svcConfig.services));
+    # }
+    # {
+    #   systemd.services = lib.attrsets.listToAttrs (map (mySvc: let
+    #     svcName = if mySvc.proxy then "mysql-${mySvc.name}" else mySvc.targetService;
+    #   in
+    #   {
+    #     name = mySvc.targetService;
+    #     value = let
+    #       deps = if mySvc.proxy then ["${svcName}.service"] else [];
+    #     in {
+    #       requires = deps;
+    #       after = deps;
+    #       serviceConfig = {
+    #         Environment = [
+    #           "MYSQL_DATABASE=${mySvc.name}"
+    #           "MYSQL_USERNAME=${svcName}"
+    #         ];
+    #       };
+    #     };
+    #   }) (lib.attrsets.attrsToList svcConfig.services));
+    # }
     {
-      systemd.services = lib.attrsets.listToAttrs (map (mySvc: let
-        svcName = if mySvc.proxy then "mysql-${mySvc.name}" else mySvc.targetService;
-      in
-      {
-        name = svcName;
-        value = {
-          requires = [ "mysql.service" ];
-          after = [ "mysql.service" ];
-          serviceConfig = {
-            BindReadOnlyPaths = [
-              "/run/mysql"
-            ];
-            Environment = [
-              "MYSQL_SOCKET=/run/mysql/mysql.sock"
-            ];
-          };
-        };
-      }) (lib.attrsets.attrsToList svcConfig.services));
-    }
-    {
-      systemd.services = lib.attrsets.listToAttrs (map (mySvc: let
-        svcName = if mySvc.proxy then "mysql-${mySvc.name}" else mySvc.targetService;
-      in
-      {
-        name = mySvc.targetService;
-        value = let
-          deps = if mySvc.proxy then ["${svcName}.service"] else [];
-        in {
-          requires = deps;
-          after = deps;
-          serviceConfig = {
-            Environment = [
-              "MYSQL_DATABASE=${mySvc.name}"
-              "MYSQL_USERNAME=${svcName}"
-            ];
-          };
-        };
-      }) (lib.attrsets.attrsToList svcConfig.services));
-    }
-    {
-      #systemd.services = lib.mkMerge (map (svc: (mkProxyTo svc).systemd.services) svcConfig.services);
+      systemd.services = lib.mkMerge (map (svc: (mkProxyTo svc).systemd.services) svcConfig.services);
     }
   ]);
 }
