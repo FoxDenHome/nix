@@ -7,7 +7,6 @@ let
   hostCfg = foxDenLib.hosts.getByName config svcConfig.host;
   primaryInterface = lib.lists.head (lib.attrsets.attrValues hostCfg.interfaces);
   hostName = foxDenLib.global.dns.mkHost primaryInterface.dns;
-  proto = if svcConfig.tls then "https" else "http";
 in
 {
   options.foxDen.services.darksignsonline = services.mkOptions { svcName = "darksignsonline"; name = "Dark Signs Online"; };
@@ -24,22 +23,28 @@ in
         ];
         environment = {
           "DOMAIN" = hostName;
+          "DB_HOST" = "127.0.0.1";
           "DB_USERNAME" = "$MYSQL_USERNAME";
           "DB_PASSWORD" = "";
           "DB_DATABASE" = "$MYSQL_DATABASE";
           "SMTP_FROM" = "noreply@${hostName}";
         };
         environmentFiles = [
-          (config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.darksignsonline.path);
+          (config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.darksignsonline.path)
         ];
-      }
+      };
     }).config
     {
       sops.secrets.darksignsonline = config.lib.foxDen.sops.mkIfAvailable {};
 
       foxDen.services.mysql = {
-        services = [ "podman-darksignsonline" ];
-        dbUsers = [ "darksignsonline" ];
+        services = [
+          {
+            name = "darksignsonline";
+            proxy = true;
+            targetService = "podman-darksignsonline";
+          }
+        ];
       };
     }
   ]);

@@ -7,12 +7,14 @@ let
     ]) paths
   ));
 
-  mkNamed = (svc: { svcConfig, pkgs, config, gpu ? false, ... }:
+  mkNamed = (svc: { svcConfig, overrideHost ? null, pkgs, config, gpu ? false, ... }:
   let
-    host = foxDenLib.hosts.getByName config svcConfig.host;
+    cfgHostName = if overrideHost != null then overrideHost else svcConfig.host;
 
-    dependency = if svcConfig.host != "" then [ host.unit ] else [];
-    resolvConf = if svcConfig.host != "" then host.resolvConf else "/etc/resolv.conf";
+    host = foxDenLib.hosts.getByName config cfgHostName;
+
+    dependency = if cfgHostName != "" then [ host.unit ] else [];
+    resolvConf = if cfgHostName != "" then host.resolvConf else "/etc/resolv.conf";
 
     gpuPackages = if gpu then [
       config.hardware.graphics.package
@@ -37,7 +39,7 @@ let
         after = dependency;
 
         serviceConfig = {
-          NetworkNamespacePath = nixpkgs.lib.mkIf (svcConfig.host != "") host.namespacePath;
+          NetworkNamespacePath = nixpkgs.lib.mkIf (cfgHostName != "") host.namespacePath;
           DevicePolicy = nixpkgs.lib.mkForce "closed";
           PrivateDevices = nixpkgs.lib.mkForce true;
           DeviceAllow = nixpkgs.lib.mkIf gpu (map (dev: "${dev} rw") config.foxDen.services.gpuDevices);

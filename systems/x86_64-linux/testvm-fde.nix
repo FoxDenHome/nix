@@ -92,7 +92,7 @@ in
   };
 
   foxDen.services = {
-    unifi = {
+    darksignsonline = {
       enable = true;
       host = "dummy";
     };
