@@ -216,7 +216,7 @@ in
                   "${cmdInNs} ip addr add 127.0.0.1/8 dev lo"
                   "${cmdInNs} ip addr add ::1/128 dev lo noprefixroute"
                   "${cmdInNs} ip link set lo up"
-                  "${cmdInNs} sysctl -w net.ipv4.ip_unprivileged_port_start=1"
+                  "${cmdInNs} ${pkgs.sysctl}/bin/sysctl -w net.ipv4.ip_unprivileged_port_start=1"
                 ]
                 ++ (nixpkgs.lib.flatten (map mkInterfaceStartConfig (nixpkgs.lib.filter (iface: iface.host.name == host.name) interfaces)));
 
