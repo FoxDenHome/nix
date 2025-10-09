@@ -2,15 +2,14 @@
 let
     mkNamed = (ctName: { oci, systemd ? {}, svcConfig, pkgs, config, ... }: (let
       host = foxDenLib.hosts.getByName config svcConfig.host;
-      dependency = if svcConfig.host != "" then [ host.unit ] else [];
-      resolvConf = if svcConfig.host != "" then host.resolvConf else "/etc/resolv.conf";
+      dependency = [ host.unit ];
     in {
       config = {
         virtualisation.oci-containers.containers."${ctName}" = nixpkgs.lib.mkMerge [
           {
             autoStart = nixpkgs.lib.mkDefault true;
             pull = nixpkgs.lib.mkDefault "always";
-            networks = [ "host" ];
+            networks = [ "ns:${host.namespacePath}" ];
 
             volumes = [
               "/etc/localtime:/etc/localtime:ro"
@@ -44,10 +43,13 @@ let
             after = dependency;
 
             serviceConfig = {
-              NetworkNamespacePath = nixpkgs.lib.mkIf (svcConfig.host != "") host.namespacePath;
+              NetworkNamespacePath = host.namespacePath;
               Restart = nixpkgs.lib.mkDefault "always";
+              ExecStartPre = [
+                "+${pkgs.coreutils}/bin/chown ${ctName}:${ctName} ${host.namespacePath}"
+              ];
               BindReadOnlyPaths = [
-                "${resolvConf}:/etc/resolv.conf"
+                "${host.resolvConf}:/etc/resolv.conf"
               ];
             };
           }
