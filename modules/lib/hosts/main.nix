@@ -210,6 +210,7 @@ in
                   "${ipInNsCmd} addr add 127.0.0.1/8 dev lo"
                   "${ipInNsCmd} addr add ::1/128 dev lo noprefixroute"
                   "${ipInNsCmd} link set lo up"
+                  "${ipCmd} netns exec ${eSA host.namespace} ${pkgs.sysctl}/bin/sysctl -w net.ipv4.ip_unprivileged_port_start=80"
                 ]
                 ++ (nixpkgs.lib.flatten (map mkInterfaceStartConfig (nixpkgs.lib.filter (iface: iface.host.name == host.name) interfaces)));
 
