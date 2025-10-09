@@ -17,8 +17,10 @@ let
       echo "Creating root disk for ${vm.name}"
       ${pkgs.qemu-utils}/bin/qemu-img create -f qcow2 /var/lib/libvirt/images/${vm.name}.qcow2 ${vm.config.rootDiskSize}
     fi
+    ${pkgs.coreutils}/bin/chown -h qemu-libvirtd:qemu-libvirtd /var/lib/libvirt/images/${vm.name}.qcow2
     ${pkgs.libvirt}/bin/virsh define ${vm.libvirtXml}
-  '');
+    ${pkgs.libvirt}/bin/virsh autostart ${if vm.config.autostart then "" else "--disable"} ${vm.name}
+  '' ++ (if vm.config.autostart then "\n${pkgs.libvirt}/bin/virsh start ${vm.name}\n" else ""));
 in
 {
   config = lib.mkIf ((lib.length vmNames) > 0) {

@@ -1,5 +1,6 @@
 {
   rootDiskSize = "80G";
+  autostart = true;
   interface = {
     dns = {
       name = "bengalfox-win";

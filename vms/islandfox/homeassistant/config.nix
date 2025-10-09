@@ -1,5 +1,6 @@
 {
   rootDiskSize = "64G";
+  autostart = true;
   interface = {
     driver = "null";
     dns = {
