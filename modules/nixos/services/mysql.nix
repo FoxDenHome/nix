@@ -18,12 +18,12 @@ let
 
   mkProxyTo = (clientSvc: if clientSvc.proxy then (lib.mkMerge [
     (services.make {
-      name = "mysql-${clientSvc.targetService}";
-      overrideHost = config.foxDen.services.${clientSvc.targetService}.host;
+      name = "mysql-${clientSvc.name}";
+      overrideHost = config.foxDen.services.${clientSvc.name}.host;
       inherit svcConfig pkgs config;
     }).config.systemd.services
     {
-      "mysql-${clientSvc.targetService}" = {
+      "mysql-${clientSvc.name}" = {
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
