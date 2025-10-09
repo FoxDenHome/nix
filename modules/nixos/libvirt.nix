@@ -1,6 +1,9 @@
 { hostName, pkgs, lib, ... } :
 let
-  vmNames = lib.attrsets.attrNames (builtins.readDir ../../vms/${hostName});
+  vmNames = let
+    vmDirTry = builtins.tryEval (builtins.readDir ../../vms/${hostName});
+    vmDir = if vmDirTry.success then vmDirTry.value else [];
+  in lib.attrsets.attrNames vmDir;
 
   vms = lib.attrsets.genAttrs vmNames (name: {
     inherit name;
