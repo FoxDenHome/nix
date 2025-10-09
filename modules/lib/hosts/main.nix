@@ -196,7 +196,6 @@ in
             });
           in
           {
-            restartTriggers = [ (builtins.concatStringsSep " " host.nameservers) ];
             name = (nixpkgs.lib.strings.removeSuffix ".service" host.unit);
             value = let
               ifaceHooks = map mkHooks (nixpkgs.lib.filter (iface: iface.host.name == host.name) interfaces);
@@ -204,6 +203,7 @@ in
             in {
               description = "NetNS ${host.namespace}";
               after = [ "network-pre.target" ];
+              restartTriggers = [ (builtins.concatStringsSep " " host.nameservers) ];
 
               serviceConfig = {
                 Type = "oneshot";
