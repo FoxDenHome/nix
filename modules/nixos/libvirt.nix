@@ -7,7 +7,7 @@
     environment.persistence."/nix/persist/libvirt" = {
       hideMounts = true;
       directories = [
-        { directory = "/var/lib/libvirt"; user = "libvirt-qemu"; group = "libvirt-qemu"; mode = "u=rwx,g=,o="; }
+        { directory = "/var/lib/libvirt"; user = "qemu-libvirtd"; group = "qemu-libvirtd"; mode = "u=rwx,g=,o="; }
       ];
     };
   };
