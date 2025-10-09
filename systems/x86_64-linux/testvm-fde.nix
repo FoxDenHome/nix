@@ -92,7 +92,7 @@ in
   };
 
   foxDen.services = {
-    darksignsonline = {
+    syncthing = {
       enable = true;
       host = "dummy";
     };
