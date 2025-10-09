@@ -6,7 +6,6 @@ let
   ]);
   mkRoutes = (vlan: [
     { Destination = "0.0.0.0/0"; Gateway = "10.${builtins.toString vlan}.0.1"; }
-    { Destination = "::/0"; Gateway = "fd2c:f4cb:63be:${builtins.toString vlan}\::1"; }
   ]);
 
   ifcfg = {
