@@ -35,7 +35,11 @@ in
       };
     }).config
     {
-      sops.secrets.darksignsonline = config.lib.foxDen.sops.mkIfAvailable {};
+      sops.secrets.darksignsonline = config.lib.foxDen.sops.mkIfAvailable {
+        mode = "0400";
+        owner = "darksignsonline";
+        group = "darksignsonline";
+      };
 
       foxDen.services.mysql = {
         enable = true;
