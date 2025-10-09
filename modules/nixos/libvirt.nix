@@ -1,15 +1,16 @@
 { hostName, pkgs, lib, ... } :
 let
+  vmDirPath = ../../vms/${hostName};
+
   vmNames = let
-    vmDirTry = builtins.tryEval (builtins.readDir ../../vms/${hostName});
-    vmDir = if vmDirTry.success then vmDirTry.value else [];
+    vmDir = if (builtins.pathExists vmDirPath) then (builtins.readDir vmDirPath) else [];
   in lib.attrsets.attrNames vmDir;
 
   vms = lib.attrsets.genAttrs vmNames (name: {
     inherit name;
     # TODO: Validate this somehow
-    config = import ../../vms/${hostName}/${name}/config.nix;
-    libvirtXml = ../../vms/${hostName}/${name}/libvirt.xml;
+    config = import vmDirPath+"/${name}/config.nix";
+    libvirtXml = vmDirPath+"/${name}/libvirt.xml";
   });
 
   setupVMScript = vm: pkgs.writeShellScript "setup-vm" (''
