@@ -210,19 +210,20 @@ in
                 RemainAfterExit = true;
 
                 ExecStart = [
-                  "-${ipCmd} netns del ${eSA host.namespace}"
-                  "${ipCmd} netns add ${eSA host.namespace}"
-                  "${ipInNsCmd} addr add 127.0.0.1/8 dev lo"
-                  "${ipInNsCmd} addr add ::1/128 dev lo noprefixroute"
-                  "${ipInNsCmd} link set lo up"
-                  "${netnsExecCmd} ${pkgs.sysctl}/bin/sysctl -w net.ipv4.ip_unprivileged_port_start=1"
-                ]
-                ++ (getHook "start");
+                    "-${ipCmd} netns del ${eSA host.namespace}"
+                    "${ipCmd} netns add ${eSA host.namespace}"
+                    "${ipInNsCmd} addr add 127.0.0.1/8 dev lo"
+                    "${ipInNsCmd} addr add ::1/128 dev lo noprefixroute"
+                    "${ipInNsCmd} link set lo up"
+                    "${netnsExecCmd} ${pkgs.sysctl}/bin/sysctl -w net.ipv4.ip_unprivileged_port_start=1"
+                  ]
+                  ++ (getHook "start");
 
-                ExecStop = [
-                  "${ipCmd} netns del ${eSA host.namespace}"
-                ]
-                ++ (getHook "stop");
+                ExecStop =
+                  (getHook "stop")
+                  ++ [
+                    "${ipCmd} netns del ${eSA host.namespace}"
+                  ];
               };
             };
           }) hosts));
