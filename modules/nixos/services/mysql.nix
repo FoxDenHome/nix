@@ -63,18 +63,15 @@ in
       services.mysql = {
         enable = true;
         package = pkgs.mariadb;
-        initialDatabases = map (name: {
-          inherit name;
-        }) serviceList;
-        ensureUsers = lib.attrsets.genAttrs serviceList (name: let
-          clientSvc = svcConfig.services.${name};
-        in
-        {
-          name = if clientSvc.proxy then "mysql-${name}" else name;
+        initialDatabases = map (svc: {
+          inherit (svc) name;
+        }) svcConfig.services;
+        ensureUsers = map (svc: {
+          name = if svc.proxy then "mysql-${svc.name}" else svc.targetService;
           ensurePermissions = {
-            "${name}.*" = "ALL PRIVILEGES";
+            "${svc.name}.*" = "ALL PRIVILEGES";
           };
-        });
+        }) svcConfig.services;
       };
 
       systemd.services.mysql = {
