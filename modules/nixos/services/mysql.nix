@@ -27,8 +27,9 @@ let
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
-          DynamicUser = true;
           Type = "simple";
+          User = clientSvc.name;
+          Group = clientSvc.name;
           ExecStart = [
             "${pkgs.socat}/bin/socat TCP-LISTEN:3306,bind=127.0.0.1,reuseaddr,fork UNIX-CLIENT:$MYSQL_SOCKET"
           ];
