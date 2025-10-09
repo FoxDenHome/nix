@@ -51,6 +51,11 @@ in
       services.mysql = {
         enable = true;
         package = pkgs.mariadb;
+        settings = {
+          mysqld = {
+            skip-networking = true;
+          };
+        };
         initialDatabases = map (svc: {
           inherit (svc) name;
         }) svcConfig.services;
