@@ -59,5 +59,11 @@ in
         }
       });
     '';
+
+    foxDen.hosts.hosts = lib.attrsets.genAttrs vmNames (name: {
+      interfaces.default = {
+        driver = "null";
+      } // (vms.${name}.interface);
+    });
   };
 }
