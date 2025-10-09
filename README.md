@@ -63,7 +63,7 @@
 			- [ ] git
 			- [ ] minecraft
 			- [ ] SpaceAge (oci)
-				- [ ] mysql
+				- [x] mysql
 				- [ ] tts
 				- [ ] api
 				- [ ] gmod
