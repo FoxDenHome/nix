@@ -101,6 +101,10 @@ in
     ];
 
     backupmgr.enable = true;
+    gitbackup = {
+      enable = true;
+      host = "";
+    };
   };
 
   foxDen.hosts.hosts = let

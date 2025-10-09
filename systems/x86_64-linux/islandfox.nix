@@ -128,6 +128,10 @@ in
 
     apcupsd.enable = true;
     backupmgr.enable = true;
+    gitbackup = {
+      enable = true;
+      host = "";
+    };
     syncthing = {
       enable = true;
       host = "syncthing";
