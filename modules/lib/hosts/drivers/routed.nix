@@ -54,8 +54,8 @@ in
   ]);
 
   execStop = ({ ipCmd, interface, ... }: let
-    iface = mkIfaceName interface;
+    hostIface = mkIfaceName interface;
   in [
-    "-${ipCmd} link del ${eSA iface}"
+    "-${ipCmd} link del ${eSA hostIface}"
   ]);
 }
