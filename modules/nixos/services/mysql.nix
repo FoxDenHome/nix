@@ -48,7 +48,7 @@ in
     };
   };
 
-  config = lib.mkIf ((lib.length svcConfig.services) > 0) (lib.mkMerge [
+  config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
       name = "mysql";
       inherit svcConfig pkgs config;
