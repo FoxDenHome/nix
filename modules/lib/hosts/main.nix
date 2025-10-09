@@ -178,24 +178,30 @@ in
 
             renderRoute = (dev: route: "${ipInNsCmd} route add " + (if route.Destination != null then eSA route.Destination else "default") + (if route.Gateway != null then " via ${eSA route.Gateway}" else " dev ${eSA dev}"));
 
-            mkInterfaceStartConfig = (interface: let
+            mkInterfaceConfig = (interface: let
               ifaceDriver = foxDenLib.hosts.drivers.${interface.driver};
               serviceInterface = (ifaceDriver.serviceInterface or (interface: "host${interface.suffix}")) interface;
               driverRunParams = { inherit ipCmd ipInNsCmd netnsExecCmd serviceInterface interface; };
             in
-              (ifaceDriver.execStart driverRunParams)
+            {
+              ExecStart = (ifaceDriver.execStart driverRunParams)
                 ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA host.namespace}" ]
                 ++ (map (addr:
                       "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
                       interface.addresses)
                 ++ [ "${ipInNsCmd} link set ${eSA serviceInterface} up" ]
-                ++ (map (renderRoute serviceInterface) interface.routes)
-            );
+                ++ (map (renderRoute serviceInterface) interface.routes);
+              ExecStop = [ "${ipInNsCmd} link set ${eSA serviceInterface} down" ]
+                ++ (ifaceDriver.execStart driverRunParams);
+            });
           in
           {
             restartTriggers = [ (builtins.concatStringsSep " " host.nameservers) ];
             name = (nixpkgs.lib.strings.removeSuffix ".service" host.unit);
-            value = {
+            value = let
+              ifaceConfig = map mkInterfaceConfig (nixpkgs.lib.filter (iface: iface.host.name == host.name) interfaces);
+              mkMergedCfg = sub: nixpkgs.lib.flatten (map (cfg: cfg.${sub}) ifaceConfig);
+            in {
               description = "NetNS ${host.namespace}";
               after = [ "network-pre.target" ];
 
@@ -213,11 +219,12 @@ in
                   "${ipInNsCmd} link set lo up"
                   "${netnsExecCmd} ${pkgs.sysctl}/bin/sysctl -w net.ipv4.ip_unprivileged_port_start=1"
                 ]
-                ++ (nixpkgs.lib.flatten (map mkInterfaceStartConfig (nixpkgs.lib.filter (iface: iface.host.name == host.name) interfaces)));
+                ++ mkMergedCfg "ExecStart";
 
                 ExecStop = [
                   "${ipCmd} netns del ${eSA host.namespace}"
-                ];
+                ]
+                ++ mkMergedCfg "ExecStop";
               };
             };
           }) hosts));
