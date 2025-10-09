@@ -45,6 +45,10 @@ let
         type = nullOr (listOf routeType);
         default = [];
       };
+      acceptRA = nixpkgs.lib.mkOption {
+        type = bool;
+        default = true;
+      };
     };
   };
 
@@ -179,6 +183,8 @@ in
               serviceInterface = (ifaceDriver.serviceInterface or (interface: "host${interface.suffix}")) interface;
               driverRunParams = { inherit ipCmd ipInNsCmd netnsExecCmd serviceInterface interface; };
               hooks = ifaceDriver.hooks driverRunParams;
+
+              sysctlRACmd = "net.ipv6.conf.${serviceInterface}.accept_ra=" + (if interface.acceptRA then "1" else "0");
             in
             {
               start =
@@ -187,7 +193,10 @@ in
                 ++ (map (addr:
                       "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
                       interface.addresses)
-                ++ [ "${ipInNsCmd} link set ${eSA serviceInterface} up" ]
+                ++ [
+                  "${netnsExecCmd} ${pkgs.sysctl}/bin/sysctl -w ${eSA sysctlRACmd}"
+                  "${ipInNsCmd} link set ${eSA serviceInterface} up"
+                ]
                 ++ (map (renderRoute serviceInterface) interface.routes);
 
               stop =
