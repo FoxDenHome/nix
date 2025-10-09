@@ -131,7 +131,6 @@ in
     darksignsonline = {
       enable = true;
       host = "darksignsonline";
-      tls = true;
     };
     gitbackup = {
       enable = true;
