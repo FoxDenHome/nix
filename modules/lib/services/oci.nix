@@ -36,7 +36,9 @@ let
         };
         users.groups."${ctName}" = {};
 
-        foxDen.hosts.${svcConfig.host}.owner = ctName;
+        foxDen.hosts = if (svcConfig.host or "") != "" then {
+          ${svcConfig.host}.owner = ctName;
+        } else {};
 
         systemd.services."podman-${ctName}" = nixpkgs.lib.mkMerge [
           {
