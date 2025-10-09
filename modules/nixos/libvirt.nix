@@ -1,4 +1,4 @@
-{ hostName, lib, ... } :
+{ hostName, pkgs, lib, ... } :
 let
   vmNames = lib.attrsets.attrNames (builtins.readDir ../../vms/${hostName});
 
