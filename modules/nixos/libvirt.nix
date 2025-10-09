@@ -9,7 +9,7 @@ let
   vms = lib.attrsets.genAttrs vmNames (name: {
     inherit name;
     # TODO: Validate this somehow
-    config = import vmDirPath+"/${name}/config.nix";
+    config = import (vmDirPath+"/${name}/config.nix");
     libvirtXml = vmDirPath+"/${name}/libvirt.xml";
   });
 
