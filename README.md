@@ -46,7 +46,7 @@
 			- [x] auth
 			- [x] scrypted
 			- [x] unifi-network
-			- [ ] homeassistant VM (QEMU setup done!)
+			- [x] homeassistant VM (QEMU setup done, import after migration!)
 			- [ ] foxcaves
 				- [ ] postgres
 				- [ ] redis
