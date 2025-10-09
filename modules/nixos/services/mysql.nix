@@ -16,8 +16,6 @@ let
     };
   };
 
-  serviceList = map (svc: svc.name) svcConfig.services;
-
   mkProxyTo = (clientSvc: if clientSvc.proxy then (lib.mkMerge [
     (services.make {
       name = "mysql-${clientSvc.targetService}";
@@ -75,6 +73,12 @@ in
       };
 
       systemd.services.mysql = {
+        confinement.packages = [
+          pkgs.gnused
+        ];
+        path = [
+          pkgs.gnused
+        ];
         serviceConfig = {
           StateDirectory = "mysql";
         };
