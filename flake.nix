@@ -23,6 +23,8 @@
     e621dumper.inputs.nixpkgs.follows = "nixpkgs";
     backupmgr.url = "github:FoxDenHome/backupmgr";
     backupmgr.inputs.nixpkgs.follows = "nixpkgs";
+    oauth-jit-radius.url = "github:Doridian/oauth-jit-radius";
+    oauth-jit-radius.inputs.nixpkgs.follows = "nixpkgs";
     njs-mirror-nginx.url = ./modules/flakes/nginx/mirror;
     njs-mirror-nginx.inputs.nixpkgs.follows = "nixpkgs";
   };
