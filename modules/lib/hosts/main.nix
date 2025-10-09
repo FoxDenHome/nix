@@ -172,21 +172,22 @@ in
         ++ [{
           # Configure each host's NetNS
           services = (nixpkgs.lib.attrsets.listToAttrs (map (host: let
-            cmdInNs = "ip netns exec ${eSA host.namespace}";
+            ipCmd = eSA "${pkgs.iproute2}/bin/ip";
+            ipInNsCmd = "${ipCmd} netns exec ${eSA host.namespace} ${ipCmd}";
 
-            renderRoute = (dev: route: "${cmdInNs} ip route add " + (if route.Destination != null then eSA route.Destination else "default") + (if route.Gateway != null then " via ${eSA route.Gateway}" else " dev ${eSA dev}"));
+            renderRoute = (dev: route: "${ipInNsCmd} route add " + (if route.Destination != null then eSA route.Destination else "default") + (if route.Gateway != null then " via ${eSA route.Gateway}" else " dev ${eSA dev}"));
 
             mkInterfaceStartConfig = (interface: let
               ifaceDriver = foxDenLib.hosts.drivers.${interface.driver};
               serviceInterface = (ifaceDriver.serviceInterface or (interface: "host${interface.suffix}")) interface;
-              driverRunParams = { inherit cmdInNs serviceInterface interface; };
+              driverRunParams = { inherit ipCmd ipInNsCmd serviceInterface interface; };
             in
               (ifaceDriver.execStart driverRunParams)
-                ++ [ "ip link set ${eSA serviceInterface} netns ${eSA host.namespace}" ]
+                ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA host.namespace}" ]
                 ++ (map (addr:
-                      "${cmdInNs} ip addr add ${eSA addr} dev ${eSA serviceInterface}")
+                      "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
                       interface.addresses)
-                ++ [ "${cmdInNs} ip link set ${eSA serviceInterface} up" ]
+                ++ [ "${ipInNsCmd} link set ${eSA serviceInterface} up" ]
                 ++ (map (renderRoute serviceInterface) interface.routes)
             );
           in
@@ -197,13 +198,6 @@ in
               description = "NetNS ${host.namespace}";
               after = [ "network-pre.target" ];
 
-              path = [
-                pkgs.iproute2
-              ];
-              confinement.packages = [
-                pkgs.iproute2
-              ];
-
               serviceConfig = {
                 Type = "oneshot";
                 RemainAfterExit = true;
@@ -211,17 +205,17 @@ in
                 User = host.owner;
 
                 ExecStart = [
-                  "-ip netns del ${eSA host.namespace}"
-                  "ip netns add ${eSA host.namespace}"
-                  "${cmdInNs} ip addr add 127.0.0.1/8 dev lo"
-                  "${cmdInNs} ip addr add ::1/128 dev lo noprefixroute"
-                  "${cmdInNs} ip link set lo up"
-                  "${cmdInNs} sysctl -w net.ipv4.ip_unprivileged_port_start=1"
+                  "-${ipCmd} netns del ${eSA host.namespace}"
+                  "${ipCmd} netns add ${eSA host.namespace}"
+                  "${ipInNsCmd} addr add 127.0.0.1/8 dev lo"
+                  "${ipInNsCmd} addr add ::1/128 dev lo noprefixroute"
+                  "${ipInNsCmd} link set lo up"
+                  "${ipCmd} netns exec ${eSA host.namespace} ${pkgs.sysctl}/bin/sysctl -w net.ipv4.ip_unprivileged_port_start=1"
                 ]
                 ++ (nixpkgs.lib.flatten (map mkInterfaceStartConfig (nixpkgs.lib.filter (iface: iface.host.name == host.name) interfaces)));
 
                 ExecStop = [
-                  "ip netns del ${eSA host.namespace}"
+                  "${ipCmd} netns del ${eSA host.namespace}"
                 ];
               };
             };
