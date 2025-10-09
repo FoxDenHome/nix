@@ -123,6 +123,5 @@ in
         };
       }) (lib.attrsets.attrsToList svcConfig.services);
     }
-    (map mkProxyTo svcConfig.services)
   ]);
 }
