@@ -76,6 +76,7 @@ let
 in
 {
   nixosConfigurations = nixosConfigurations;
+  dnsRecordsObj = dnsRecords;
   dnsRecords = builtins.toFile "dns-records.json" (builtins.toJSON dnsRecords);
 
   internalZone = mkZoneFile dnsRecords.internal."foxden.network";
