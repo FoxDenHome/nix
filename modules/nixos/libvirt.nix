@@ -9,7 +9,7 @@ let
     libvirtXml = ../../vms/${hostName}/${name}/libvirt.xml;
   });
 
-  setupVMScript = (vm: pkgs.writeShellScript "setup-vm" ''
+  setupVMScript = vm: pkgs.writeShellScript "setup-vm" (''
     #!${pkgs.bash}/bin/bash
     set -euo pipefail
 
