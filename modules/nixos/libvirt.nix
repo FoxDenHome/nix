@@ -3,7 +3,7 @@ let
   vmDirPath = ../../vms/${hostName};
 
   vmNames = let
-    vmDir = if (builtins.pathExists vmDirPath) then (builtins.readDir vmDirPath) else [];
+    vmDir = if (builtins.pathExists vmDirPath) then (builtins.readDir vmDirPath) else {};
   in lib.attrsets.attrNames vmDir;
 
   vms = lib.attrsets.genAttrs vmNames (name: {
