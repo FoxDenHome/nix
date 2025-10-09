@@ -22,8 +22,15 @@ let
 in
 {
   config = {
-    virtualisation.libvirtd.qemu.runAsRoot = false;
-    virtualisation.libvirtd.enable = true;
+    virtualisation.libvirtd = {
+      enable = true;
+      qemu = {
+        runAsRoot = false;
+        ovmf = {
+          enable = true;
+        };
+      };
+    };
 
     systemd.services.libvirtd-autocreator = {
       description = "Libvirt Auto Creator Service";
