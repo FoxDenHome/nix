@@ -182,9 +182,6 @@ in
             serviceConfig = {
               DynamicUser = true;
 
-              PrivateUsers = false; # needed for the capabilities sadly
-              AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-
               StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" caddyStorageRoot;
 
               LoadCredential = "Caddyfile:${caddyFilePath}";

@@ -107,9 +107,6 @@ in
               "${svcConfig.dataDir}:/data"
             ];
 
-            PrivateUsers = false; # needed for the capabilities sadly
-            AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-
             Environment = [
               "\"ROOT_DOMAIN=${svcRootDomain}\""
               "\"ARCH_MIRROR_ID=${svcConfig.archMirrorId}\""
@@ -138,9 +135,6 @@ in
             BindReadOnlyPaths = [
               "${svcConfig.dataDir}:/data"
             ];
-
-            PrivateUsers = false; # needed for the capabilities sadly
-            AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
 
             LoadCredential = "rsyncd.conf:/etc/foxden/mirror/rsyncd.conf";
 

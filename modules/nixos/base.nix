@@ -58,6 +58,10 @@
   networking.wireguard.useNetworkd = false;
   networking.firewall.logRefusedConnections = false;
 
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_unprivileged_port_start" = "80";
+  };
+
   environment.persistence."/nix/persist/system" = {
     hideMounts = true;
     directories = [
