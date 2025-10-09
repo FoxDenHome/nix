@@ -178,29 +178,33 @@ in
 
             renderRoute = (dev: route: "${ipInNsCmd} route add " + (if route.Destination != null then eSA route.Destination else "default") + (if route.Gateway != null then " via ${eSA route.Gateway}" else " dev ${eSA dev}"));
 
-            mkInterfaceConfig = (interface: let
+            mkHooks = (interface: let
               ifaceDriver = foxDenLib.hosts.drivers.${interface.driver};
               serviceInterface = (ifaceDriver.serviceInterface or (interface: "host${interface.suffix}")) interface;
               driverRunParams = { inherit ipCmd ipInNsCmd netnsExecCmd serviceInterface interface; };
+              hooks = ifaceDriver.hooks driverRunParams;
             in
             {
-              ExecStart = (ifaceDriver.execStart driverRunParams)
+              start =
+                hooks.start
                 ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA host.namespace}" ]
                 ++ (map (addr:
                       "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
                       interface.addresses)
                 ++ [ "${ipInNsCmd} link set ${eSA serviceInterface} up" ]
                 ++ (map (renderRoute serviceInterface) interface.routes);
-              ExecStop = [ "${ipInNsCmd} link set ${eSA serviceInterface} down" ]
-                ++ (ifaceDriver.execStart driverRunParams);
+
+              stop =
+                [ "${ipInNsCmd} link set ${eSA serviceInterface} down" ]
+                ++ hooks.stop;
             });
           in
           {
             restartTriggers = [ (builtins.concatStringsSep " " host.nameservers) ];
             name = (nixpkgs.lib.strings.removeSuffix ".service" host.unit);
             value = let
-              ifaceConfig = map mkInterfaceConfig (nixpkgs.lib.filter (iface: iface.host.name == host.name) interfaces);
-              mkMergedCfg = sub: nixpkgs.lib.flatten (map (cfg: cfg.${sub}) ifaceConfig);
+              ifaceHooks = map mkHooks (nixpkgs.lib.filter (iface: iface.host.name == host.name) interfaces);
+              getHook = sub: nixpkgs.lib.flatten (map (cfg: cfg.${sub}) ifaceHooks);
             in {
               description = "NetNS ${host.namespace}";
               after = [ "network-pre.target" ];
@@ -219,12 +223,12 @@ in
                   "${ipInNsCmd} link set lo up"
                   "${netnsExecCmd} ${pkgs.sysctl}/bin/sysctl -w net.ipv4.ip_unprivileged_port_start=1"
                 ]
-                ++ mkMergedCfg "ExecStart";
+                ++ (getHook "start");
 
                 ExecStop = [
                   "${ipCmd} netns del ${eSA host.namespace}"
                 ]
-                ++ mkMergedCfg "ExecStop";
+                ++ (getHook "stop");
               };
             };
           }) hosts));

@@ -35,16 +35,16 @@ in
         })) interfaces));
   };
 
-  execStart = ({ ipCmd, interface, serviceInterface, ... }: let
+  hooks = ({ ipCmd, interface, serviceInterface, ... }: let
     hostIface = mkIfaceName interface;
-  in [
-    "-${ipCmd} link del ${eSA hostIface}"
-    "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA serviceInterface}"
-  ]);
-
-  execStop = ({ ipCmd, interface, ... }: let
-    hostIface = mkIfaceName interface;
-  in [
-    "-${ipCmd} link del ${eSA hostIface}"
-  ]);
+  in
+  {
+    start = [
+      "-${ipCmd} link del ${eSA hostIface}"
+      "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA serviceInterface}"
+    ];
+    stop = [
+      "-${ipCmd} link del ${eSA hostIface}"
+    ];
+  });
 }
