@@ -46,9 +46,6 @@ let
               PrivateNetwork = true;
               NetworkNamespacePath = host.namespacePath;
               Restart = nixpkgs.lib.mkDefault "always";
-              ExecStartPre = [
-                "+${pkgs.coreutils}/bin/chown ${ctName}:${ctName} ${host.namespacePath}"
-              ];
               BindReadOnlyPaths = [
                 "${host.resolvConf}:/etc/resolv.conf"
               ];
