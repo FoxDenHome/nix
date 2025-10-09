@@ -76,7 +76,7 @@ in
         });
       };
 
-      systemd.service.mysql = {
+      systemd.services.mysql = {
         serviceConfig = {
           DynamicUser = true;
           StateDirectory = "mysql";
@@ -122,6 +122,9 @@ in
           };
         };
       }) (lib.attrsets.attrsToList svcConfig.services);
+    }
+    {
+      systemd.services = lib.mkMerge (map (svc: (mkProxyTo svc).systemd.services) svcConfig.services);
     }
   ]);
 }
