@@ -48,11 +48,12 @@
 			- [x] scrypted
 			- [x] unifi-network
 			- [x] homeassistant VM (QEMU setup done, import after migration!)
+			- [x] gitbackup
+			- [x] DarkSignsOnline
 			- [ ] foxcaves
 				- [ ] postgres
 				- [ ] redis
 				- [ ] site (OCI)
-			- [x] gitbackup
 			- [ ] website
 			- [ ] monitoring
 				- [ ] grafana
@@ -67,7 +68,6 @@
 				- [ ] api
 				- [ ] gmod
 				- [ ] website
-			- [x] DarkSignsOnline
 		- [ ] Post migration
 			- [ ] affine
 	- [ ] icefox
