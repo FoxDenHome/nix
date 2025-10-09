@@ -19,9 +19,11 @@ let
     fi
     ${pkgs.libvirt}/bin/virsh define ${vm.libvirtXml}
   '');
+
+  hasVMs = (lib.length vmNames) > 0;
 in
 {
-  config = {
+  config = lib.mkIf hasVMs {
     virtualisation.libvirtd = {
       enable = true;
       qemu = {
