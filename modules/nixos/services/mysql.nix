@@ -84,7 +84,7 @@ in
       };
     }
     {
-      systemd.services = lib.attrsets.listToAttrs map (mySvc: let
+      systemd.services = lib.attrsets.listToAttrs (map (mySvc: let
         svcName = if mySvc.proxy then "mysql-${mySvc.name}" else mySvc.targetService;
       in
       {
@@ -101,10 +101,10 @@ in
             ];
           };
         };
-      }) (lib.attrsets.attrsToList svcConfig.services);
+      }) (lib.attrsets.attrsToList svcConfig.services));
     }
     {
-      systemd.services = lib.attrsets.listToAttrs map (mySvc: let
+      systemd.services = lib.attrsets.listToAttrs (map (mySvc: let
         svcName = if mySvc.proxy then "mysql-${mySvc.name}" else mySvc.targetService;
       in
       {
@@ -121,7 +121,7 @@ in
             ];
           };
         };
-      }) (lib.attrsets.attrsToList svcConfig.services);
+      }) (lib.attrsets.attrsToList svcConfig.services));
     }
     {
       systemd.services = lib.mkMerge (map (svc: (mkProxyTo svc).systemd.services) svcConfig.services);
