@@ -10,5 +10,14 @@
         { directory = "/var/lib/libvirt"; user = "qemu-libvirtd"; group = "qemu-libvirtd"; mode = "u=rwx,g=,o="; }
       ];
     };
+
+    security.polkit.extraConfig = ''
+      polkit.addRule(function(action, subject) {
+        if (action.id == "org.libvirt.unix.manage" &&
+          subject.isInGroup("superadmins")) {
+          return polkit.Result.YES;
+        }
+      });
+    '';
   };
 }
