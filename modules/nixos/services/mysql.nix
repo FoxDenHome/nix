@@ -21,9 +21,9 @@ let
       name = "mysql-${clientSvc.targetService}";
       overrideHost = config.foxDen.services.${clientSvc.targetService}.host;
       inherit svcConfig pkgs config;
-    }).config
+    }).config.systemd.services
     {
-      systemd.services."mysql-${clientSvc.targetService}" = {
+      "mysql-${clientSvc.targetService}" = {
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
@@ -92,10 +92,10 @@ in
           after = [ "mysql.service" ];
           serviceConfig = {
             BindReadOnlyPaths = [
-              "/run/mysql"
+              "/run/mysqld"
             ];
             Environment = [
-              "MYSQL_SOCKET=/run/mysql/mysql.sock"
+              "MYSQL_SOCKET=/run/mysqld/mysqld.sock"
             ];
           };
         };
@@ -121,8 +121,8 @@ in
         };
       }) svcConfig.services);
     }
-    # {
-    #   systemd.services = lib.mkMerge (map (svc: (mkProxyTo svc).systemd.services) svcConfig.services);
-    # }
+    {
+      systemd.services = lib.mkMerge (map mkProxyTo svcConfig.services);
+    }
   ]);
 }
