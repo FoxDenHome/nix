@@ -15,7 +15,7 @@ let
 
     if [ ! -f /var/lib/libvirt/images/${vm.name}.qcow2 ]; then
       echo "Creating root disk for ${vm.name}"
-      qemu-img create -f qcow2 /var/lib/libvirt/images/${vm.name}.qcow2 ${vm.config.rootDiskSize}
+      ${pkgs.qemu-utils}/bin/qemu-img create -f qcow2 /var/lib/libvirt/images/${vm.name}.qcow2 ${vm.config.rootDiskSize}
     fi
     ${pkgs.libvirt}/bin/virsh define ${vm.libvirtXml}
   '');
