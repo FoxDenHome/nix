@@ -46,10 +46,10 @@ in
         ]);
   };
 
-  execStart = ({ interface, serviceInterface, ... }: let
+  execStart = ({ ipCmd, interface, serviceInterface, ... }: let
     hostIface = mkIfaceName interface;
   in [
-    "-ip link del ${eSA hostIface}"
-    "ip link add ${eSA hostIface} type veth peer name ${eSA serviceInterface}"
+    "-${ipCmd} link del ${eSA hostIface}"
+    "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA serviceInterface}"
   ]);
 }
