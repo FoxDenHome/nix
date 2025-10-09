@@ -78,6 +78,8 @@ in
     }];
   };
 
+  virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ];
+
   systemd.network.netdevs."${ifcfg.interface}" = {
     netdevConfig = {
       Name = ifcfg.interface;

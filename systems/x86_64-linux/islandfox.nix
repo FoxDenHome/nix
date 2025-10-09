@@ -111,6 +111,8 @@ in
     }];
   };
 
+  virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ];
+
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
     trustedProxies = [
       "10.1.0.0/23"

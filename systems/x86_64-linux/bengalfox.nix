@@ -372,6 +372,8 @@ in
     };
   };
 
+  virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ];
+
   foxDen.hosts.hosts = let
     driver = "bridge";
     mkDriverOpts = (vlan: {
