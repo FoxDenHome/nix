@@ -402,6 +402,19 @@ in
         addresses = ifcfg.addresses;
       };
     };
+    bengalfox-win = {
+      interfaces.default = {
+        driver = "null";
+        dns = {
+          name = "bengalfox-win";
+          zone = "foxden.network";
+        };
+        addresses = [
+          "10.2.10.10/16"
+          "fd2c:f4cb:63be:2::a0a/64"
+        ];
+      };
+    };
     deluge = (mkVlanHost 2 {
       dns = {
         name = "deluge";

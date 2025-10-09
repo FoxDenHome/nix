@@ -30,6 +30,7 @@
 			- [x] mirror
 			- [x] gitbackup
 			- [x] aurbuild
+			- [x] win2k22 VM
 		- [ ] Post migration
 			- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
 			- [ ] ollama
@@ -45,7 +46,7 @@
 			- [x] auth
 			- [x] scrypted
 			- [x] unifi-network
-			- [ ] homeassistant VM
+			- [ ] homeassistant VM (QEMU setup done!)
 			- [ ] foxcaves
 				- [ ] postgres
 				- [ ] redis
