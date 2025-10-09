@@ -128,6 +128,11 @@ in
 
     apcupsd.enable = true;
     backupmgr.enable = true;
+    darksignsonline = {
+      enable = true;
+      host = "darksignsonline";
+      tls = true;
+    };
     gitbackup = {
       enable = true;
       host = "";
@@ -188,6 +193,18 @@ in
         addresses = ifcfg.addresses;
       };
     };
+    darksignsonline = mkVlanHost 3 {
+      dns = {
+        name = "@";
+        zone = "darksignsonline.com";
+        dynDns = true;
+      };
+      addresses = [
+        "10.3.10.15/16"
+        "fd2c:f4cb:63be:3::a0f/64"
+      ];
+    };
+
     syncthing = mkVlanHost 2 {
       dns = {
         name = "syncthing";
