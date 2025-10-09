@@ -17,7 +17,7 @@ let
       echo "Creating root disk for ${vm.name}"
       qemu-img create -f qcow2 /var/lib/libvirt/images/${vm.name}.qcow2 ${vm.config.rootDiskSize}
     fi
-    virsh define ${vm.libvirtXml}
+    ${pkgs.libvirt}/bin/virsh define ${vm.libvirtXml}
   '');
 in
 {
