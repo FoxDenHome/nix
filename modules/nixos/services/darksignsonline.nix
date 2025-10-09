@@ -38,6 +38,7 @@ in
       sops.secrets.darksignsonline = config.lib.foxDen.sops.mkIfAvailable {};
 
       foxDen.services.mysql = {
+        enable = true;
         services = [
           {
             name = "darksignsonline";
