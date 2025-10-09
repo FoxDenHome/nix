@@ -70,6 +70,10 @@ let
         type = listOf str;
         default = [];
       };
+      owner = nixpkgs.lib.mkOption {
+        type = str;
+        default = "root";
+      };
     };
   };
 
@@ -197,6 +201,8 @@ in
               serviceConfig = {
                 Type = "oneshot";
                 RemainAfterExit = true;
+
+                User = host.owner;
 
                 ExecStart = [
                   "-${ipCmd} netns del ${eSA host.namespace}"

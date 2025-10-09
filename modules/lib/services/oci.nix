@@ -36,6 +36,8 @@ let
         };
         users.groups."${ctName}" = {};
 
+        foxDen.hosts.${svcConfig.host}.owner = ctName;
+
         systemd.services."podman-${ctName}" = nixpkgs.lib.mkMerge [
           {
             requires = dependency;
