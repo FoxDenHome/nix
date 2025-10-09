@@ -13,6 +13,7 @@
 	- [x] OAuth
 - [x] Samba server
 - [x] OpenSearch with authentication
+- [ ] Make daemon that syncs VM XMLs and create initial VM QCOW2 images automatically
 - [ ] Systems
 	- [ ] bengalfox
 		- [x] Pre migration
