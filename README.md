@@ -67,7 +67,7 @@
 				- [ ] api
 				- [ ] gmod
 				- [ ] website
-			- [ ] DarkSignsOnline
+			- [x] DarkSignsOnline
 		- [ ] Post migration
 			- [ ] affine
 	- [ ] icefox
