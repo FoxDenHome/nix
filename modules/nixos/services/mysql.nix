@@ -47,17 +47,7 @@ in
   };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
-    (services.make {
-      name = "mysql";
-      inherit svcConfig pkgs config;
-    }).config
     {
-      foxDen.services.mysql.host = "mysql";
-
-      foxDen.hosts.hosts = {
-        mysql.interfaces = {};
-      };
-
       services.mysql = {
         enable = true;
         package = pkgs.mariadb;
@@ -73,13 +63,8 @@ in
       };
 
       systemd.services.mysql = {
-        confinement.packages = [
-          pkgs.gnused
-        ];
-        path = [
-          pkgs.gnused
-        ];
         serviceConfig = {
+          PrivateNetwork = true;
           StateDirectory = "mysql";
         };
       };
