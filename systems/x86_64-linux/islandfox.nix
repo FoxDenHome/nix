@@ -126,10 +126,23 @@ in
 
     apcupsd.enable = true;
     backupmgr.enable = true;
-    syncthing.enable = true;
+    syncthing = {
+      enable = true;
+      host = "syncthing";
+      tls = true;
+    };
     kanidm.server = {
       enable = true;
+      tls = true;
       host = "auth";
+    };
+    oauth-jit-radius = {
+      enable = true;
+      host = "radius";
+      tls = true;
+      oAuth = {
+        clientId = "radius";
+      };
     };
     unifi = {
       enable = true;
@@ -188,6 +201,17 @@ in
       addresses = [
         "10.1.14.1/16"
         "fd2c:f4cb:63be:1::e01/64"
+      ];
+    };
+    radius = mkVlanHost 1 {
+      dns = {
+        name = "radius.auth";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      addresses = [
+        "10.1.14.2/16"
+        "fd2c:f4cb:63be:1::e02/64"
       ];
     };
     scrypted = mkVlanHost 2 {
