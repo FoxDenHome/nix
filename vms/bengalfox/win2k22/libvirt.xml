@@ -16,7 +16,7 @@
     <memory mode='strict' nodeset='0'/>
   </numatune>
   <os>
-    <type arch='x86_64' machine='pc-q35-9.2'>hvm</type>
+    <type arch='x86_64' machine='q35'>hvm</type>
   </os>
   <features>
     <acpi/>
