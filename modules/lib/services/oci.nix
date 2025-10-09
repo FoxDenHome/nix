@@ -50,6 +50,7 @@ let
             after = dependency;
 
             serviceConfig = {
+              PrivateNetwork = true;
               NetworkNamespacePath = host.namespacePath;
               Restart = nixpkgs.lib.mkDefault "always";
               ExecStartPre = [
