@@ -1,0 +1,3 @@
+{
+  rootDiskSize = "80G";
+}

@@ -48,18 +48,18 @@ let
     components = nixpkgs.lib.path.subpath.components splitPath.subpath;
     componentsLength = nixpkgs.lib.lists.length components;
 
-    hostname = nixpkgs.lib.strings.removeSuffix ".nix"
-                (nixpkgs.lib.strings.elemAt components (componentsLength - 1)); # e.g. bengalfox
+    hostName = nixpkgs.lib.strings.removeSuffix ".nix"
+                (nixpkgs.lib.strings.elemAt components (compameonentsLength - 1)); # e.g. bengalfox
     systemArch = nixpkgs.lib.strings.elemAt components (componentsLength - 2); # e.g. x86_64-linux
   in
   {
-    name = hostname;
+    name = hostName;
     value = nixpkgs.lib.nixosSystem {
-      specialArgs = allLibs // { inherit systemArch; };
+      specialArgs = allLibs // { inherit systemArch hostName; };
       modules = [
         ({ ... }: {
-          config.networking.hostName = hostname;
-          config.sops.defaultSopsFile = ./secrets/${hostname}.yaml;
+          config.networking.hostName = hostName;
+          config.sops.defaultSopsFile = ./secrets/${hostName}.yaml;
         })
         system
       ] ++ modules;
