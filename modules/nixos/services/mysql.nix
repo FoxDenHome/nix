@@ -62,6 +62,7 @@ in
 
       services.mysql = {
         enable = true;
+        packages = pkgs.mariadb;
         initialDatabases = lib.attrsets.genAttrs serviceList (name: {
           inherit name;
         });
