@@ -76,9 +76,15 @@ in
 
       systemd.services.mysql = {
         serviceConfig = {
-          DynamicUser = true;
           StateDirectory = "mysql";
         };
+      };
+
+      config.environment.persistence."/nix/persist/mysql" = {
+        hideMounts = true;
+        directories = [
+          { directory = "/var/lib/mysql"; user = config.services.mysql.user; group = config.services.mysql.group; mode = "u=rwx,g=rx,o="; }
+        ];
       };
     }
     {
