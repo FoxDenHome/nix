@@ -11,7 +11,10 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "doridian-website";
-      target = "root * /web";
+      target = ''
+        root * /web
+        file_server
+      '';
     }).config
     {
       systemd.services.doridian-website = {
