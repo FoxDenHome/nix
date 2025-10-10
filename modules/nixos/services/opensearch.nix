@@ -110,7 +110,7 @@ let
   secCfg."tenants.yml" = writeEmptyYaml "tenants.yml" "tenants";
   secCfg."whitelist.yml" = writeEmptyYaml "whitelist.yml" "whitelist";
 
-  enable = (lib.length lib.attrsets.attrNames svcConfig.users) > 0;
+  enable = (lib.length (lib.attrsets.attrNames svcConfig.users)) > 0;
 in
 {
   options.foxDen.services.opensearch = services.mkOptions { svcName = "opensearch"; name = "OpenSearch"; } // {
