@@ -201,7 +201,7 @@ in
                       "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
                       interface.addresses)
                 ++ [
-                  "${netnsExecCmd} ${pkgs.sysctl}/bin/sysctl -p ${pkgs.writeFile "sysctls" sysctls}"
+                  "${netnsExecCmd} ${pkgs.sysctl}/bin/sysctl -p ${pkgs.writers.writeText "sysctls" sysctls}"
                   "${ipInNsCmd} link set ${eSA serviceInterface} up"
                 ]
                 ++ (map (renderRoute serviceInterface) interface.routes);
