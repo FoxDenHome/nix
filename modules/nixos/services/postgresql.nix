@@ -53,6 +53,12 @@ in
       inherit svcConfig pkgs config;
     }).config
     {
+      foxDen.services.postgresql.host = "postgresql";
+
+      foxDen.hosts.hosts = {
+        postgresql.interfaces = {};
+      };
+
       services.postgresql = {
         enable = true;
         package = pkgs.postgresql_17;
@@ -72,7 +78,7 @@ in
 
       systemd.services.postgresql = {
         serviceConfig = {
-          PrivateNetwork = true;
+          PrivateUsers = false;
           StateDirectory = "postgresql";
         };
       };

@@ -53,6 +53,12 @@ in
       inherit svcConfig pkgs config;
     }).config
     {
+      foxDen.services.mysql.host = "mysql";
+
+      foxDen.hosts.hosts = {
+        mysql.interfaces = {};
+      };
+
       services.mysql = {
         enable = true;
         package = pkgs.mariadb;
@@ -74,7 +80,7 @@ in
 
       systemd.services.mysql = {
         serviceConfig = {
-          PrivateNetwork = true;
+          PrivateUsers = false;
           StateDirectory = "mysql";
           BindReadOnlyPaths = [
             "/etc/my.cnf"
