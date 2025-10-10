@@ -37,6 +37,8 @@ let
       };
     }
   ]) else {});
+
+  enable = (lib.length svcConfig.services) > 0;
 in
 {
   options.foxDen.services.mysql = services.mkOptions { svcName = "mysql"; name = "MySQL"; } // {
@@ -47,7 +49,7 @@ in
     };
   };
 
-  config = lib.mkIf ((lib.length svcConfig.services) > 0) (lib.mkMerge [
+  config = lib.mkIf enable (lib.mkMerge [
     (services.make {
       name = "mysql";
       inherit svcConfig pkgs config;

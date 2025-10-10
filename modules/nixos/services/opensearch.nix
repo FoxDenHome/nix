@@ -109,6 +109,8 @@ let
   secCfg."action_groups.yml" = writeEmptyYaml "action_groups.yml" "actiongroups";
   secCfg."tenants.yml" = writeEmptyYaml "tenants.yml" "tenants";
   secCfg."whitelist.yml" = writeEmptyYaml "whitelist.yml" "whitelist";
+
+  enable = (lib.length lib.attrsets.attrNames svcConfig.users) > 0;
 in
 {
   options.foxDen.services.opensearch = services.mkOptions { svcName = "opensearch"; name = "OpenSearch"; } // {
@@ -122,7 +124,7 @@ in
     };
   };
 
-  config = lib.mkIf ((lib.length lib.attrsets.attrNames svcConfig.users) > 0) (lib.mkMerge [
+  config = lib.mkIf enable (lib.mkMerge [
     (services.make {
       name = "opensearch";
       inherit svcConfig pkgs config;

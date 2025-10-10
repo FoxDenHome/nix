@@ -37,6 +37,8 @@ let
       };
     }
   ]) else {});
+
+  enable = (lib.length svcConfig.services) > 0;
 in
 {
   options.foxDen.services.postgresql = services.mkOptions { svcName = "postgresql"; name = "PostgreSQL"; } // {
@@ -47,7 +49,7 @@ in
     };
   };
 
-  config = lib.mkIf ((lib.length svcConfig.services) > 0) (lib.mkMerge [
+  config = lib.mkIf enable (lib.mkMerge [
     (services.make {
       name = "postgresql";
       inherit svcConfig pkgs config;
