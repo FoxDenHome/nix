@@ -47,7 +47,7 @@ in
     };
   };
 
-  config = lib.mkIf svcConfig.enable (lib.mkMerge [
+  config = lib.mkIf ((lib.length svcConfig.services) > 0) (lib.mkMerge [
     (services.make {
       name = "postgresql";
       inherit svcConfig pkgs config;
