@@ -96,6 +96,10 @@ in
       enable = true;
       host = "dummy";
     };
+    doridian-website = {
+      enable = true;
+      host = "dummy2";
+    };
   };
 
   systemd.network.networks."40-${ifcfg.interface}-${rootInterface}" = {

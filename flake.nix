@@ -27,6 +27,8 @@
     oauth-jit-radius.inputs.nixpkgs.follows = "nixpkgs";
     njs-mirror-nginx.url = ./modules/flakes/nginx/mirror;
     njs-mirror-nginx.inputs.nixpkgs.follows = "nixpkgs";
+    doridian-website.url = ./modules/flakes/doridian-website;
+    doridian-website.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = (inputs: import ./outputs.nix inputs);
