@@ -63,9 +63,7 @@ in
         enable = true;
         package = pkgs.postgresql_17;
         enableTCPIP = false;
-        ensureDatabases = map (svc: {
-          inherit (svc) name;
-        }) svcConfig.services;
+        ensureDatabases = map (svc: svc.name) svcConfig.services;
         ensureUsers = map (svc: {
           inherit (svc) name;
           ensureDBOwnership = true;
