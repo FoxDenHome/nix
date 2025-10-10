@@ -92,7 +92,7 @@ in
   };
 
   foxDen.services = {
-    syncthing = {
+    mysql = {
       enable = true;
       host = "dummy";
     };

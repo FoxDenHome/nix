@@ -48,6 +48,10 @@ in
   };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
+    (services.make {
+      name = "mysql";
+      inherit svcConfig pkgs config;
+    }).config
     {
       services.mysql = {
         enable = true;
