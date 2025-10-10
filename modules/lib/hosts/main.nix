@@ -45,9 +45,9 @@ let
         type = nullOr (listOf routeType);
         default = [];
       };
-      acceptRA = nixpkgs.lib.mkOption {
-        type = bool;
-        default = true;
+      sysctls = nixpkgs.lib.mkOption {
+        type = attrsOf str;
+        default = {};
       };
     };
   };
@@ -184,7 +184,14 @@ in
               driverRunParams = { inherit ipCmd ipInNsCmd netnsExecCmd serviceInterface interface; };
               hooks = ifaceDriver.hooks driverRunParams;
 
-              sysctlRACmd = "net.ipv6.conf.${serviceInterface}.accept_ra=" + (if interface.acceptRA then "1" else "0");
+              sysctlsRaw = {
+                "net.ipv6.conf.INTERFACE.accept_ra" = "1";
+              } // interface.sysctls;
+
+              sysctls = nixpkgs.lib.concatStringsSep "\n" (map
+                ({ name, value }: "${nixpkgs.lib.replaceString "INTERFACE" serviceInterface name} = ${value}")
+                nixpkgs.lib.attrsets.attrsToList sysctlsRaw
+              );
             in
             {
               start =
@@ -194,7 +201,7 @@ in
                       "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
                       interface.addresses)
                 ++ [
-                  "${netnsExecCmd} ${pkgs.sysctl}/bin/sysctl -w ${eSA sysctlRACmd}"
+                  "${netnsExecCmd} ${pkgs.sysctl}/bin/sysctl -p ${pkgs.writeFile "sysctls" sysctls}"
                   "${ipInNsCmd} link set ${eSA serviceInterface} up"
                 ]
                 ++ (map (renderRoute serviceInterface) interface.routes);

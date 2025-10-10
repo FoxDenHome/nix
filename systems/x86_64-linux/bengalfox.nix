@@ -414,7 +414,9 @@ in
         { Destination = "10.0.0.0/8"; Gateway = "10.2.0.1"; }
         { Destination = "fd2c:f4cb:63be::/48"; Gateway = "fd2c:f4cb:63be:2::1"; }
       ];
-      acceptRA = false;
+      sysctls = {
+        "net.ipv6.conf.INTERFACE.accept_ra_defrtr" = "0";
+      };
     }) // {
       nameservers = [ "10.64.0.1" ];
     };
