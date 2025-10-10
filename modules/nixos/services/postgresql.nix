@@ -54,6 +54,7 @@ in
     }).config
     {
       foxDen.services.postgresql.host = "postgresql";
+      foxDen.services.postgresql.enable = true;
 
       foxDen.hosts.hosts = {
         postgresql.interfaces = {};
