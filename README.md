@@ -51,8 +51,8 @@
 			- [x] gitbackup
 			- [x] DarkSignsOnline
 			- [ ] foxcaves
-				- [ ] postgres
-				- [ ] redis
+				- [x] postgres
+				- [x] redis
 				- [ ] site (OCI)
 			- [ ] website
 			- [ ] monitoring
