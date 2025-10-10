@@ -55,13 +55,13 @@
 				- [x] redis
 				- [x] site (OCI)
 			- [x] website
+			- [x] minecraft
 			- [ ] monitoring
 				- [ ] grafana
 				- [ ] prometheus
 				- [ ] telegraf
 				- [ ] mktxp
 			- [ ] git
-			- [ ] minecraft
 			- [ ] SpaceAge
 				- [x] mysql
 				- [ ] tts

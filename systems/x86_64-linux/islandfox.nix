@@ -1,4 +1,4 @@
-{ modulesPath, config, ... }:
+{ modulesPath, pkgs, config, ... }:
 let
   mkNameservers = (vlan: [
     "10.${builtins.toString vlan}.0.53"
@@ -161,6 +161,19 @@ in
       enable = true;
       host = "scrypted";
     };
+    foxcaves = {
+      enable = true;
+      host = "foxcaves";
+    };
+    doridian-website = {
+      enable = true;
+      host = "doridian-website";
+    };
+    minecraft = {
+      enable = true;
+      jrePackage = pkgs.jre17_minimal;
+      host = "minecraft";
+    };
   };
 
   foxDen.hosts.hosts = let
@@ -193,8 +206,8 @@ in
     };
     darksignsonline = mkVlanHost 3 {
       dns = {
-        name = "@";
-        zone = "darksignsonline.com";
+        name = "darksignsonline";
+        zone = "foxden.network";
         dynDns = true;
       };
       addresses = [
@@ -202,7 +215,17 @@ in
         "fd2c:f4cb:63be:3::a0f/64"
       ];
     };
-
+    foxcaves = mkVlanHost 3 {
+      dns = {
+        name = "foxcaves";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      addresses = [
+        "10.3.10.1/16"
+        "fd2c:f4cb:63be:3::a01/64"
+      ];
+    };
     syncthing = mkVlanHost 2 {
       dns = {
         name = "syncthing";
@@ -254,6 +277,28 @@ in
       addresses = [
         "10.1.10.1/16"
         "fd2c:f4cb:63be:1::a01/64"
+      ];
+    };
+    doridian-website = mkVlanHost 3 {
+      dns = {
+        name = "website";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      addresses = [
+        "10.3.10.10/16"
+        "fd2c:f4cb:63be:3::a0a/64"
+      ];
+    };
+    minecraft = mkVlanHost 3 {
+      dns = {
+        name = "minecraft";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      addresses = [
+        "10.3.10.8/16"
+        "fd2c:f4cb:63be:3::a08/64"
       ];
     };
   };
