@@ -50,10 +50,10 @@
 			- [x] homeassistant VM (QEMU setup done, import after migration!)
 			- [x] gitbackup
 			- [x] DarkSignsOnline
-			- [ ] foxcaves
+			- [x] foxcaves
 				- [x] postgres
 				- [x] redis
-				- [ ] site (OCI)
+				- [x] site (OCI)
 			- [ ] website
 			- [ ] monitoring
 				- [ ] grafana
