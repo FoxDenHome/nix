@@ -47,13 +47,14 @@ in
     };
   };
 
-  config = lib.mkIf svcConfig.enable (lib.mkMerge [
+  config = lib.mkIf ((lib.length svcConfig.services) > 0) (lib.mkMerge [
     (services.make {
       name = "mysql";
       inherit svcConfig pkgs config;
     }).config
     {
       foxDen.services.mysql.host = "mysql";
+      foxDen.services.mysql.enable = true;
 
       foxDen.hosts.hosts = {
         mysql.interfaces = {};

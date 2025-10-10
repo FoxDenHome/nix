@@ -122,7 +122,7 @@ in
     };
   };
 
-  config = lib.mkIf svcConfig.enable (lib.mkMerge [
+  config = lib.mkIf ((lib.length lib.attrsets.attrNames svcConfig.users) > 0) (lib.mkMerge [
     (services.make {
       name = "opensearch";
       inherit svcConfig pkgs config;
@@ -137,6 +137,7 @@ in
     }).config
     {
       foxDen.services.opensearch.host = "opensearch";
+      foxDen.services.opensearch.enable = true;
       services.opensearch.enable = true;
 
       foxDen.hosts.hosts = {
