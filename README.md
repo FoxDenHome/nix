@@ -54,7 +54,7 @@
 				- [x] postgres
 				- [x] redis
 				- [x] site (OCI)
-			- [ ] website
+			- [x] website
 			- [ ] monitoring
 				- [ ] grafana
 				- [ ] prometheus
@@ -62,11 +62,11 @@
 				- [ ] mktxp
 			- [ ] git
 			- [ ] minecraft
-			- [ ] SpaceAge (oci)
+			- [ ] SpaceAge
 				- [x] mysql
 				- [ ] tts
-				- [ ] api
-				- [ ] gmod
+				- [ ] api (OCI)
+				- [ ] gmod (OCI)
 				- [ ] website
 		- [ ] Post migration
 			- [ ] affine
