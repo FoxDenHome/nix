@@ -94,7 +94,9 @@ in
   foxDen.services = {
     mysql = {
       enable = true;
-      host = "dummy";
+    };
+    postgresql = {
+      enable = true;
     };
   };
 
