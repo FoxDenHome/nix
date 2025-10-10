@@ -190,7 +190,7 @@ in
 
               sysctls = nixpkgs.lib.concatStringsSep "\n" (map
                 ({ name, value }: "${nixpkgs.lib.replaceString "INTERFACE" serviceInterface name} = ${value}")
-                nixpkgs.lib.attrsets.attrsToList sysctlsRaw
+                (nixpkgs.lib.attrsets.attrsToList sysctlsRaw)
               );
             in
             {
