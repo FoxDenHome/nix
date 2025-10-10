@@ -76,6 +76,9 @@ in
         serviceConfig = {
           PrivateNetwork = true;
           StateDirectory = "mysql";
+          BindReadOnlyPaths = [
+            "/etc/my.cnf"
+          ];
         };
       };
 
