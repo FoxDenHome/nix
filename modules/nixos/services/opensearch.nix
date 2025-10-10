@@ -116,6 +116,7 @@ in
   options.foxDen.services.opensearch = services.mkOptions { svcName = "opensearch"; name = "OpenSearch"; } // {
     users = with lib.types; lib.mkOption {
       type = attrsOf userType;
+      default = { };
     };
     services = with lib.types; lib.mkOption {
       type = listOf str;
