@@ -186,6 +186,7 @@ in
 
               sysctlsRaw = {
                 "net.ipv6.conf.INTERFACE.accept_ra" = "1";
+                "net.ipv4.ip_unprivileged_port_start" = "1";
               } // interface.sysctls;
 
               sysctls = nixpkgs.lib.concatStringsSep "\n" (map
@@ -235,7 +236,6 @@ in
                     "${ipInNsCmd} addr add 127.0.0.1/8 dev lo"
                     "${ipInNsCmd} addr add ::1/128 dev lo noprefixroute"
                     "${ipInNsCmd} link set lo up"
-                    "${netnsExecCmd} ${pkgs.sysctl}/bin/sysctl -w net.ipv4.ip_unprivileged_port_start=1"
                   ]
                   ++ (getHook "start");
 
