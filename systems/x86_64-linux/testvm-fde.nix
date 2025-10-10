@@ -92,11 +92,10 @@ in
   };
 
   foxDen.services = {
-    mysql = {
+    postgresql.enable = true;
+    foxcaves = {
       enable = true;
-    };
-    postgresql = {
-      enable = true;
+      host = "dummy";
     };
   };
 

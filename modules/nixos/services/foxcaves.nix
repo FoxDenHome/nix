@@ -3,13 +3,14 @@ let
   services = foxDenLib.services;
 
   svcConfig = config.foxDen.services.foxcaves;
-
-  hostCfg = foxDenLib.hosts.getByName config svcConfig.host;
-  primaryInterface = lib.lists.head (lib.attrsets.attrValues hostCfg.interfaces);
-  hostName = foxDenLib.global.dns.mkHost primaryInterface.dns;
 in
 {
-  options.foxDen.services.foxcaves = services.mkOptions { svcName = "foxcaves"; name = "foxCaves"; };
+  options.foxDen.services.foxcaves = {
+    dataVolume = lib.mkOption {
+      type = lib.types.str;
+      default = "storage";
+    };
+  } // services.mkOptions { svcName = "foxcaves"; name = "foxCaves"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (foxDenLib.services.oci.make {
@@ -19,6 +20,7 @@ in
         image = "ghcr.io/foxcaves/foxcaves/foxcaves:latest";
         volumes = [
           "ssl:/etc/letsencrypt"
+          "${svcConfig.dataVolume}:/var/www/foxcaves/storage"
           (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets.foxcaves.path}:/var/www/foxcaves/config/production.lua:ro")
         ];
         environment = {
