@@ -79,7 +79,6 @@ in
       systemd.services.postgresql = {
         serviceConfig = {
           PrivateUsers = false;
-          StateDirectory = "postgresql";
         };
       };
 
