@@ -86,7 +86,7 @@ in
       environment.persistence."/nix/persist/postgresql" = {
         hideMounts = true;
         directories = [
-          { directory = "/var/lib/postgresql"; user = config.services.postgresql.user; group = config.services.postgresql.group; mode = "u=rwx,g=rx,o="; }
+          { directory = "/var/lib/postgresql"; user = "postgresql"; group = "postgresql"; mode = "u=rwx,g=rx,o="; }
         ];
       };
     }
