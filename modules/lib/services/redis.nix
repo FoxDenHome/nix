@@ -19,7 +19,7 @@ in
     };
   } // (services.mkOptions inputs));
 
-  make = (inputs@{ config, svcConfig, pkgs, target, ... }:
+  make = (inputs@{ config, svcConfig, pkgs, ... }:
     let
       name = "redis-${inputs.name}";
       svc = services.mkNamed name inputs;
