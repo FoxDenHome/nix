@@ -78,10 +78,10 @@ in
         }
       ];
 
-      environment.persistence."/nix/persist/forgejo" = {
+      environment.persistence."/nix/persist/forgejo" = ifDefaultData {
         hideMounts = true;
         directories = [
-          (mkDir config.services.forgejo.stateDir)
+          (mkDir defaultDataDir)
         ];
       };
     }
