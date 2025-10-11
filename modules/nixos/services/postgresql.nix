@@ -78,6 +78,13 @@ in
       };
 
       systemd.services.postgresql = {
+        confinement.packages = [
+          pkgs.gnugrep
+        ];
+        path = [
+          pkgs.gnugrep
+        ];
+
         serviceConfig = {
           PrivateUsers = false;
         };
