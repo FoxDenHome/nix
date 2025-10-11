@@ -17,6 +17,10 @@ let
           type = str;
           default = "";
         };
+        auxAddresses = nixpkgs.lib.mkOption {
+          type = listOf foxDenLib.types.ip;
+          default = [];
+        };
         cnames = nixpkgs.lib.mkOption {
           type = listOf str;
           default = [];
@@ -150,7 +154,7 @@ in
             });
           in
           (
-            (map mkRecord iface.addresses)
+            (map mkRecord (iface.addresses ++ iface.dns.auxAddresses))
             ++ (mkIfaceDynDns iface)
             ++ (mkIfaceCname iface ifaceHasInternal "internal")
             ++ (mkIfaceCname iface ifaceHasExternal "external")

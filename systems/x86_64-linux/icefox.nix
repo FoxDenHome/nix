@@ -1,19 +1,21 @@
-{ config, ... }:
+{ config, lib, ... }:
 let
-  nameservers = [
-    "213.133.98.98"
-    "213.133.98.99"
-    "213.133.98.100"
-  ];
-  interface = "enp7s0";
-  interfaceAddresses = [
-    "95.216.116.140/26"
-    "2a01:4f9:2b:1a42::2/64"
-  ];
   s2sAddresses = [
     "10.99.10.2/16"
     "fd2c:f4cb:63be::a63:a02/112"
   ];
+  ifcfg = {
+    addresses = [
+      "95.216.116.140/26"
+      "2a01:4f9:2b:1a42::2/64"
+    ];
+    nameservers = [
+      "213.133.98.98"
+      "213.133.98.99"
+      "213.133.98.100"
+    ];
+    interface = "br-default";
+  };
 in
 {
   # These are set when you reinstall the system
@@ -73,18 +75,45 @@ in
     sopsFile = ../../secrets/zfs-ztank.key;
   };
 
-  systemd.network.networks."30-${interface}" = {
-    name = interface;
+  virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ];
+
+  systemd.network.networks."30-${ifcfg.interface}" = {
+    name = ifcfg.interface;
     routes = [
       { Destination = "0.0.0.0/0"; Gateway = "95.216.116.129"; }
     ];
-    address = interfaceAddresses;
-    dns = nameservers;
+    address = ifcfg.addresses ++ [
+      "2a01:4f9:2b:1a42:ffff::1/64"
+    ];
+    dns = ifcfg.nameservers;
 
     networkConfig = {
+      IPv4Forwarding = true;
+      IPv6Forwarding = true;
+      IPv4ProxyARP = true;
+      IPv6ProxyNDP = true;
+
+      IPv6ProxyNDPAddress = ["2a01:4f9:2b:1a42:ffff::2"];
+
       DHCP = "no";
       IPv6AcceptRA = true;
     };
+  };
+
+  systemd.network.netdevs."${ifcfg.interface}" = {
+    netdevConfig = {
+      Name = ifcfg.interface;
+      Kind = "bridge";
+    };
+
+    bridgeConfig = {
+      VLANFiltering = false;
+    };
+  };
+
+  systemd.network.networks."40-${ifcfg.interface}-root" = {
+    name = "enp7s0";
+    bridge = [ifcfg.interface];
   };
 
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
@@ -108,26 +137,37 @@ in
   };
 
   foxDen.hosts.hosts = let
-    driver = "routed";
-    driverOpts = {
-      network = interface;
-    };
-    routes = [
-      { Destination = "95.216.116.140"; }
-      { Destination = "2a01:4f9:2b:1a42::2"; }
-      { Destination = "0.0.0.0/0"; Gateway = "95.216.116.140"; }
-      { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::2"; }
+    mkHost = tpl: lib.mkMerge
+    [
+      {
+        inherit (ifcfg) nameservers;
+        interfaces.default = {
+          driver = "routed";
+          driverOpts = {
+            network = ifcfg.interface;
+          };
+          routes = [
+            { Destination = "95.216.116.140"; }
+            { Destination = "2a01:4f9:2b:1a42::2"; }
+            { Destination = "0.0.0.0/0"; Gateway = "95.216.116.140"; }
+            { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::2"; }
+          ];
+        };
+      }
+      tpl
     ];
   in
   {
     icefox = {
-      inherit nameservers;
+      inherit (ifcfg) nameservers;
       interfaces.default = {
+        driver = "null";
         dns = {
           name = "icefox";
           zone = "foxden.network";
+          auxAddresses = s2sAddresses;
         };
-        addresses = interfaceAddresses ++ s2sAddresses;
+        addresses = ifcfg.addresses;
       };
     };
   };
