@@ -15,7 +15,7 @@
     boot = {
       initrd.systemd.enable = true;
 
-      kernelPackages = pkgs.linuxPackages_latest;
+      kernelPackages = pkgs.linuxPackages_6_16;
       kernelParams = ["iommu=pt" "intel_iommu=on" "amd_iommu=on"];
       # "audit=1" "audit_backlog_limit=256" "module.sig_enforce=1" "lockdown=integrity"
 
