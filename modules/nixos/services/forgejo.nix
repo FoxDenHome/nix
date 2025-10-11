@@ -84,6 +84,7 @@ in
             DOMAIN = hostName;
             HTTP_PORT = 3000;
             ROOT_URL = "${proto}://${hostName}";
+            START_SSH_SERVER = true;
           };
           session = {
             COOKIE_SECURE = svcConfig.tls;
