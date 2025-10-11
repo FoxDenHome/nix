@@ -105,7 +105,14 @@ in
       };
 
       systemd.services.forgejo = baseSystemdConfig;
-      systemd.services.forgejo-secrets = baseSystemdConfig;
+      systemd.services.forgejo-secrets = lib.mkMerge [
+        baseSystemdConfig
+        {
+          serviceConfig = {
+            Restart = "no";
+          };
+        }
+      ];
 
       foxDen.services.postgresql.services = [
         {
