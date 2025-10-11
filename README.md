@@ -56,12 +56,12 @@
 				- [x] site (OCI)
 			- [x] website
 			- [x] minecraft
+			- [x] git
 			- [ ] monitoring
 				- [ ] grafana
 				- [ ] prometheus
 				- [ ] telegraf
 				- [ ] mktxp
-			- [x] git
 			- [ ] SpaceAge
 				- [x] mysql
 				- [ ] tts
