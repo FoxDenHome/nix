@@ -18,6 +18,17 @@ let
   primaryInterface = lib.lists.head (lib.attrsets.attrValues hostCfg.interfaces);
   hostName = foxDenLib.global.dns.mkHost primaryInterface.dns;
   proto = if svcConfig.tls then "https" else "http";
+
+  baseServiceConfig = {
+    BindPaths = [ config.services.forgejo.stateDir ];
+    StateDirectory = ifDefaultData "forgejo";
+  };
+
+  baseSystemdConfig = {
+    requires = [ "forgejo-pre.service" ];
+    after = [ "forgejo-pre.service" ];
+    serviceConfig = baseServiceConfig;  
+  };
 in
 {
   options.foxDen.services.forgejo = {
@@ -31,6 +42,14 @@ in
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
       name = "forgejo";
+      inherit svcConfig pkgs config;
+    }).config
+    (services.make {
+      name = "forgejo-secrets";
+      inherit svcConfig pkgs config;
+    }).config
+    (services.make {
+      name = "forgejo-dump";
       inherit svcConfig pkgs config;
     }).config
     (services.http.make {
@@ -64,15 +83,20 @@ in
         };
       };
 
-      systemd.services.forgejo = {
-        serviceConfig = {
-          BindPaths = [ config.services.forgejo.stateDir ];
-          ExecStartPre = [
+      systemd.services.forgejo-pre = {
+        serviceConfig = baseServiceConfig // {
+          ExecStart = [
             "${pkgs.coreutils}/bin/mkdir -p ${config.services.forgejo.customDir} ${config.services.forgejo.dump.backupDir} ${config.services.forgejo.lfs.contentDir} ${config.services.forgejo.repositoryRoot}"
           ];
-          StateDirectory = ifDefaultData "forgejo";
+          Type = "oneshot";
+          RemainAfterExit = true;
         };
+
+        wantedBy = [ "multi-user.target" ];
       };
+
+      systemd.services.forgejo = baseSystemdConfig;
+      systemd.services.forgejo-secrets = baseSystemdConfig;
 
       foxDen.services.postgresql.services = [
         {
