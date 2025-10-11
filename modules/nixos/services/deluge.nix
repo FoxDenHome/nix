@@ -51,15 +51,17 @@ in
         };
         declarative = true;
         group = "share";
-        authFile = "/var/lib/deluge/auth";
+        authFile = "${config.services.deluge.dataDir}/auth";
       };
 
       systemd.services.deluge-pre = {
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
+          BindPaths = [config.services.deluge.dataDir];
+
           ExecStart = [
-            "${pkgs.coreutils}/bin/mkdir -p /var/lib/deluge/downloads"
+            "${pkgs.coreutils}/bin/mkdir -p ${config.services.deluge.dataDir}/downloads"
           ];
 
           User = config.services.deluge.user;

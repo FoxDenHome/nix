@@ -165,7 +165,7 @@ in
       enable = true;
       host = "foxcaves";
     };
-    doridian-website = {
+    website = {
       enable = true;
       host = "doridian-website";
     };
@@ -173,6 +173,11 @@ in
       enable = true;
       jrePackage = pkgs.jre17_minimal;
       host = "minecraft";
+    };
+    forgejo = {
+      enable = true;
+      host = "git";
+      tls = true;
     };
   };
 
@@ -279,7 +284,7 @@ in
         "fd2c:f4cb:63be:1::a01/64"
       ];
     };
-    doridian-website = mkVlanHost 3 {
+    website = mkVlanHost 3 {
       dns = {
         name = "website";
         zone = "foxden.network";
@@ -299,6 +304,17 @@ in
       addresses = [
         "10.3.10.8/16"
         "fd2c:f4cb:63be:3::a08/64"
+      ];
+    };
+    git = mkVlanHost 3 {
+      dns = {
+        name = "git";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      addresses = [
+        "10.3.10.2/16"
+        "fd2c:f4cb:63be:3::a02/64"
       ];
     };
   };
