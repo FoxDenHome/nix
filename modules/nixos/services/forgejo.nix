@@ -41,6 +41,10 @@ in
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
+      name = "forgejo-pre";
+      inherit svcConfig pkgs config;
+    }).config
+    (services.make {
       name = "forgejo";
       inherit svcConfig pkgs config;
     }).config
