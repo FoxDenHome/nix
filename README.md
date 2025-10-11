@@ -69,6 +69,7 @@
 				- [ ] gmod (OCI)
 				- [ ] website
 		- [ ] Post migration
+			- [ ] minecraft: turn into a flake built from server JAR + Collar mod + custom start.sh
 			- [ ] affine
 	- [ ] icefox
 		- [ ] Pre migration
