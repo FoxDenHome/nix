@@ -67,6 +67,9 @@ in
       systemd.services.forgejo = {
         serviceConfig = {
           BindPaths = [ config.services.forgejo.stateDir ];
+          ExecStartPre = [
+            "${pkgs.coreutils}/bin/mkdir -p ${config.services.forgejo.customDir} ${config.services.forgejo.dump.backupDir} ${config.services.forgejo.lfs.contentDir} ${config.services.forgejo.repositoryRoot}"
+          ];
           StateDirectory = ifDefaultData "forgejo";
         };
       };
