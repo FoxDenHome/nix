@@ -23,6 +23,7 @@ in
   options.foxDen.services.forgejo = {
     dataDir = lib.mkOption {
       type = lib.types.path;
+      default = defaultDataDir;
       description = "Directory to store git data";
     };
   } // services.http.mkOptions { svcName = "forgejo"; name = "Forgejo git server"; };
