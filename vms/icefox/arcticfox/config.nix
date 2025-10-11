@@ -4,7 +4,7 @@
   interface = {
     dns = {
       name = "arcticfox";
-      zone = "doridian.net";
+      zone = "foxden.network";
     };
     addresses = [
       "95.216.116.135/26"
