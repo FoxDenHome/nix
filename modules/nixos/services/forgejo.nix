@@ -41,6 +41,7 @@ in
     {
       services.forgejo = {
         enable = true;
+        stateDir = svcConfig.dataDir;
         database = {
           createDatabase = false;
           name = "forgejo";
@@ -65,7 +66,7 @@ in
 
       systemd.services.forgejo = {
         serviceConfig = {
-          BindPaths = [ config.services.forgejo.dataDir ];
+          BindPaths = [ config.services.forgejo.stateDir ];
           StateDirectory = ifDefaultData "forgejo";
         };
       };
@@ -80,7 +81,7 @@ in
       environment.persistence."/nix/persist/forgejo" = {
         hideMounts = true;
         directories = [
-          (mkDir config.services.forgejo.dataDir)
+          (mkDir config.services.forgejo.stateDir)
         ];
       };
     }
