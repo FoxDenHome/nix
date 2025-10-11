@@ -92,7 +92,7 @@ in
   };
 
   foxDen.services = {
-    foxcaves = {
+    forgejo = {
       enable = true;
       host = "dummy";
     };

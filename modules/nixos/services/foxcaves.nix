@@ -39,16 +39,13 @@ in
         group = "foxcaves";
       };
 
-      foxDen.services.postgresql = {
-        enable = true;
-        services = [
-          {
-            name = "foxcaves";
-            proxy = true;
-            targetService = "podman-foxcaves";
-          }
-        ];
-      };
+      foxDen.services.postgresql.services = [
+        {
+          name = "foxcaves";
+          proxy = true;
+          targetService = "podman-foxcaves";
+        }
+      ];
     }
   ]);
 }
