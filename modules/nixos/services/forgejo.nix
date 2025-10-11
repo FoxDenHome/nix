@@ -50,14 +50,16 @@ in
         lfs = {
           enable = true;
         };
-        server = {
-          PROTOCOL = "fcgi";
-          DOMAIN = hostName;
-          HTTP_PORT = 3000;
-          ROOT_URL = "${proto}://${hostName}";
-        };
-        session = {
-          COOKIE_SECURE = svcConfig.tls;
+        settings = {
+          server = {
+            PROTOCOL = "fcgi";
+            DOMAIN = hostName;
+            HTTP_PORT = 3000;
+            ROOT_URL = "${proto}://${hostName}";
+          };
+          session = {
+            COOKIE_SECURE = svcConfig.tls;
+          };
         };
       };
 
