@@ -18,6 +18,8 @@ let
   identChecks = lib.concatStringsSep " || " (map mkIdentCheck idents);
 
   polkitRules = pkgs.writers.writeText "05-foxden.rules" ''
+    // Auth as self if in adminIdentities
+    // this avoids the unnecessary selection of which identity to use
     polkit.addAdminRule(function(action, subject) {
       if (${identChecks}) {
         return ["unix-user:"+subject.user];
