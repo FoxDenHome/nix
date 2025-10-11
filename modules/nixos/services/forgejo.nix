@@ -59,7 +59,7 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "caddy-forgejo";
-      target = "reverse_proxy http://127.0.0.1:8096";
+      target = "fastcgi / 127.0.0.1:3000";
     }).config
     {
       services.forgejo = {
