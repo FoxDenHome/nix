@@ -90,7 +90,7 @@ in
       systemd.services.forgejo-pre = {
         serviceConfig = baseServiceConfig // {
           ExecStart = [
-            "${pkgs.coreutils}/bin/mkdir -p ${config.services.forgejo.customDir} ${config.services.forgejo.dump.backupDir} ${config.services.forgejo.lfs.contentDir} ${config.services.forgejo.repositoryRoot}"
+            "${pkgs.coreutils}/bin/mkdir -p ${config.services.forgejo.stateDir}/data ${config.services.forgejo.stateDir}/conf ${config.services.forgejo.stateDir}/log ${config.services.forgejo.stateDir}/.ssh  ${config.services.forgejo.customDir}/conf ${config.services.forgejo.dump.backupDir} ${config.services.forgejo.lfs.contentDir} ${config.services.forgejo.repositoryRoot}"
           ];
 
           User = config.services.forgejo.user;
