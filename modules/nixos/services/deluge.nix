@@ -65,6 +65,7 @@ in
           User = config.services.deluge.user;
           Group = config.services.deluge.group;
 
+          Restart = "no";
           Type = "oneshot";
           RemainAfterExit = true;
         };

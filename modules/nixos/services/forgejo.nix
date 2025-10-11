@@ -92,6 +92,11 @@ in
           ExecStart = [
             "${pkgs.coreutils}/bin/mkdir -p ${config.services.forgejo.customDir} ${config.services.forgejo.dump.backupDir} ${config.services.forgejo.lfs.contentDir} ${config.services.forgejo.repositoryRoot}"
           ];
+
+          User = config.services.forgejo.user;
+          Group = config.services.forgejo.group;
+
+          Restart = "no";
           Type = "oneshot";
           RemainAfterExit = true;
         };
