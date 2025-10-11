@@ -21,8 +21,6 @@ let
     polkit.addAdminRule(function(action, subject) {
       if (${identChecks}) {
         return ["unix-user:"+subject.user];
-      } else {
-        return [polkit.Result.NO];
       }
     });
   '';
