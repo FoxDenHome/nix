@@ -16,7 +16,7 @@ let
 in
 {
   config = {
-    systemd.services.polkit.restartTriggers = [ polkitRules.path ];
+    systemd.services.polkit.restartTriggers = [ polkitRules ];
     environment.etc."polkit-1/rules.d/05-foxden.rules".source = polkitRules;
   };
 }
