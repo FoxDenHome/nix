@@ -82,6 +82,7 @@ in
           server = {
             PROTOCOL = "fcgi";
             DOMAIN = hostName;
+            HTTP_ADDR = "127.0.0.1";
             HTTP_PORT = 3000;
             ROOT_URL = "${proto}://${hostName}";
             START_SSH_SERVER = true;
