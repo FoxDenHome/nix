@@ -73,7 +73,7 @@ in
           createDatabase = false;
           name = "forgejo";
           user = "forgejo";
-          socket = "/run/postgresql/.s.PGSQL.5432";
+          socket = config.foxDen.services.postgresql.socketPath;
         };
         lfs = {
           enable = true;

@@ -2,6 +2,8 @@
 let
   services = foxDenLib.services;
 
+  socketPath = "/run/opensearch-uds/opensearch.sock";
+
   svcConfig = config.foxDen.services.opensearch;
 
   userType = with lib.types; submodule {
@@ -113,15 +115,19 @@ let
   enable = (lib.length (lib.attrsets.attrNames svcConfig.users)) > 0;
 in
 {
-  options.foxDen.services.opensearch = services.mkOptions { svcName = "opensearch"; name = "OpenSearch"; } // {
-    users = with lib.types; lib.mkOption {
+  options.foxDen.services.opensearch = with lib.types; services.mkOptions { svcName = "opensearch"; name = "OpenSearch"; } // {
+    users = lib.mkOption {
       type = attrsOf userType;
       default = { };
     };
-    services = with lib.types; lib.mkOption {
+    services = lib.mkOption {
       type = listOf str;
       default = [ ];
       description = "List of services connecting to OpenSearch";
+    };
+    socketPath = lib.mkOption {
+      type = str;
+      description = "Path to OpenSearch socket (read-only)";
     };
   };
 
@@ -139,8 +145,11 @@ in
       inherit svcConfig pkgs config;
     }).config
     {
-      foxDen.services.opensearch.host = "opensearch";
-      foxDen.services.opensearch.enable = true;
+      foxDen.services.opensearch = {
+        enable = true;
+        host = "opensearch";
+        inherit socketPath;
+      };
       services.opensearch.enable = true;
 
       foxDen.hosts.hosts = {
@@ -172,7 +181,7 @@ in
           Type = "simple";
           RuntimeDirectory = "opensearch-uds";
           RuntimeDirectoryPreserve = "yes";
-          ExecStart = ["${pkgs.uds-proxy}/bin/uds-proxy -socket /run/opensearch-uds/opensearch.sock -socket-mode 0777 -remote-https -insecure-skip-verify -force-remote-host 127.0.0.1:9200"];
+          ExecStart = ["${pkgs.uds-proxy}/bin/uds-proxy -socket ${socketPath} -socket-mode 0777 -remote-https -insecure-skip-verify -force-remote-host 127.0.0.1:9200"];
         };
 
         wantedBy = [ "multi-user.target" "opensearch.target" ];
@@ -257,7 +266,7 @@ in
             "/run/opensearch-uds"
           ];
           Environment = [
-            "OS_UNIX_SOCKET_PATH=/run/opensearch-uds/opensearch.sock"
+            "OS_UNIX_SOCKET_PATH=${socketPath}"
             "OS_URL=http://127.0.0.1:9200"
           ];
         };

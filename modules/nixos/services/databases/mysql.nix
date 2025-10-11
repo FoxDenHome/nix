@@ -2,6 +2,8 @@
 let
   services = foxDenLib.services;
 
+  socketPath = "/run/mysqld/mysqld.sock";
+
   svcConfig = config.foxDen.services.mysql;
 
   serviceType = with lib.types; submodule {
@@ -31,7 +33,7 @@ let
           User = clientSvc.name;
           Group = clientSvc.name;
           ExecStart = [
-            "${pkgs.socat}/bin/socat TCP-LISTEN:3306,bind=127.0.0.1,reuseaddr,fork UNIX-CLIENT:/run/mysqld/mysqld.sock"
+            "${pkgs.socat}/bin/socat TCP-LISTEN:3306,bind=127.0.0.1,reuseaddr,fork UNIX-CLIENT:${socketPath}"
           ];
         };
       };
@@ -41,11 +43,15 @@ let
   enable = (lib.length svcConfig.services) > 0;
 in
 {
-  options.foxDen.services.mysql = services.mkOptions { svcName = "mysql"; name = "MySQL"; } // {
-    services = with lib.types; lib.mkOption {
+  options.foxDen.services.mysql = with lib.types; services.mkOptions { svcName = "mysql"; name = "MySQL"; } // {
+    services = lib.mkOption {
       type = listOf serviceType;
       default = [ ];
       description = "List of systemd services connecting to MySQL";
+    };
+    socketPath = lib.mkOption {
+      type = str;
+      description = "Path to MySQL socket (read-only)";
     };
   };
 
@@ -55,8 +61,11 @@ in
       inherit svcConfig pkgs config;
     }).config
     {
-      foxDen.services.mysql.host = "mysql";
-      foxDen.services.mysql.enable = true;
+      foxDen.services.mysql = {
+        enable = true;
+        host = "mysql";
+        inherit socketPath;
+      };
 
       foxDen.hosts.hosts = {
         mysql.interfaces = {};
@@ -112,7 +121,7 @@ in
               "/run/mysqld"
             ];
             Environment = [
-              "MYSQL_SOCKET=/run/mysqld/mysqld.sock"
+              "MYSQL_SOCKET=${socketPath}"
             ];
           };
         };

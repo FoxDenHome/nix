@@ -2,6 +2,8 @@
 let
   services = foxDenLib.services;
 
+  socketPath = "/run/postgresql/.s.PGSQL.5432";
+
   svcConfig = config.foxDen.services.postgresql;
 
   serviceType = with lib.types; submodule {
@@ -31,7 +33,7 @@ let
           User = clientSvc.name;
           Group = clientSvc.name;
           ExecStart = [
-            "${pkgs.socat}/bin/socat TCP-LISTEN:5432,bind=127.0.0.1,reuseaddr,fork UNIX-CLIENT:/run/postgresql/.s.PGSQL.5432"
+            "${pkgs.socat}/bin/socat TCP-LISTEN:5432,bind=127.0.0.1,reuseaddr,fork UNIX-CLIENT:${socketPath}"
           ];
         };
       };
@@ -41,11 +43,15 @@ let
   enable = (lib.length svcConfig.services) > 0;
 in
 {
-  options.foxDen.services.postgresql = services.mkOptions { svcName = "postgresql"; name = "PostgreSQL"; } // {
-    services = with lib.types; lib.mkOption {
+  options.foxDen.services.postgresql = with lib.types; services.mkOptions { svcName = "postgresql"; name = "PostgreSQL"; } // {
+    services = lib.mkOption {
       type = listOf serviceType;
       default = [ ];
       description = "List of systemd services connecting to PostgreSQL";
+    };
+    socketPath = lib.mkOption {
+      type = str;
+      description = "Path to PostgreSQL socket (read-only)";
     };
   };
 
@@ -55,8 +61,11 @@ in
       inherit svcConfig pkgs config;
     }).config
     {
-      foxDen.services.postgresql.host = "postgresql";
-      foxDen.services.postgresql.enable = true;
+      foxDen.services.postgresql = {
+        enable = true;
+        host = "postgresql";
+        inherit socketPath;
+      };
 
       foxDen.hosts.hosts = {
         postgresql.interfaces = {};
@@ -111,7 +120,7 @@ in
               "/run/postgresql"
             ];
             Environment = [
-              "POSTGRESQL_SOCKET=/run/postgresql/.s.PGSQL.5432"
+              "POSTGRESQL_SOCKET=${socketPath}"
             ];
           };
         };
