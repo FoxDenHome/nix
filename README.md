@@ -61,7 +61,7 @@
 				- [ ] prometheus
 				- [ ] telegraf
 				- [ ] mktxp
-			- [ ] git
+			- [x] git
 			- [ ] SpaceAge
 				- [x] mysql
 				- [ ] tts
