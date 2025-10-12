@@ -17,7 +17,7 @@ let
           "10.2.1.2/32"
         ];
         secret = "$\{RADIUS_SECRET_MIKROTIK}";
-        mapper = "default";
+        mapper = "mikrotik";
       }
       {
         subnets = [ "10.1.12.1/32" ];
