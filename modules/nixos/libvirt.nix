@@ -37,6 +37,7 @@ in
         };
       };
     };
+    virtualisation.useSecureBoot = true;
 
     systemd.services.libvirt-autocreator = {
       description = "Libvirt AutoCreator Service";
