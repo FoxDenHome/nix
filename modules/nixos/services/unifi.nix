@@ -31,7 +31,14 @@ in
     (lib.mkIf svcConfig.enableHttp (services.http.make {
       inherit svcConfig pkgs config;
       name = "caddy-unifi";
-      target = "reverse_proxy http://127.0.0.1:8080";
+      target = ''
+        reverse_proxy https://127.0.0.1:8443 {
+          transport http {
+            tls
+            tls_insecure_skip_verify
+          }
+        }
+      '';
     }).config)
     {
       services.unifi = {
