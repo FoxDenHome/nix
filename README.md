@@ -36,12 +36,12 @@
 			- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
 			- [ ] ollama
 			- [ ] hashtopolis
-				- [ ] mysql
+				- [x] mysql
 				- [ ] backend
 			- [ ] hashtopolis-agent
 			- [ ] owncast
 	- [ ] islandfox
-		- [ ] Pre migration
+		- [x] Pre migration
 			- [x] restic
 			- [x] syncthing
 			- [x] auth
@@ -57,18 +57,20 @@
 			- [x] website
 			- [x] minecraft
 			- [x] git
-			- [ ] monitoring
-				- [ ] grafana
-				- [ ] prometheus
-				- [ ] telegraf
-				- [ ] mktxp
+			- [x] monitoring
+				- [x] grafana
+				- [x] prometheus
+				- [x] telegraf
+		- [ ] Post migration
 			- [ ] SpaceAge
 				- [x] mysql
 				- [ ] tts
 				- [ ] api (OCI)
 				- [ ] gmod (OCI)
 				- [ ] website
-		- [ ] Post migration
+			- [ ] monitoring
+				- [ ] grafana: Manage more declaratively
+				- [ ] mktxp
 			- [ ] minecraft: turn into a flake built from server JAR + Collar mod + custom start.sh
 			- [ ] affine
 	- [ ] icefox
