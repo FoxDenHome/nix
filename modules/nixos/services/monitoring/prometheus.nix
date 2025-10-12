@@ -52,6 +52,10 @@ in
       };
 
       systemd.services.prometheus = {
+        confinement.packages = [
+          pkgs.coreutils
+        ];
+
         serviceConfig = {
           ExecStartPre = [
             "${pkgs.coreutils}/bin/mkdir -p /tmp/scrape_configs"

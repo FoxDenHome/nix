@@ -65,6 +65,10 @@ in
       };
 
       systemd.services.grafana = {
+        confinement.packages = [
+          pkgs.coreutils
+        ];
+
         serviceConfig = {
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.grafana.path;
           StateDirectory = "grafana";
