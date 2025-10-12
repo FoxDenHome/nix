@@ -68,9 +68,6 @@ in
           ExecStart = [
             "${pkgs.libvirt}/bin/virsh console ${vm.name}"
           ];
-          ExecStop = [
-            "${pkgs.libvirt}/bin/virsh shutdown ${vm.name}"
-          ];
           Restart = "always";
         };
         wantedBy = [ "multi-user.target" ];
