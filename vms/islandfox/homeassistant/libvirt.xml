@@ -10,8 +10,6 @@
       <feature enabled='no' name='enrolled-keys'/>
       <feature enabled='no' name='secure-boot'/>
     </firmware>
-    <loader readonly='yes' type='pflash' format='raw'>/var/lib/libvirt/ovmf/OVMF_CODE.secboot.4m.fd</loader>
-    <nvram template='/var/lib/libvirt/ovmf/OVMF_VARS.4m.fd' templateFormat='raw' format='raw'>/var/lib/libvirt/qemu/nvram/homeassistant_VARS.fd</nvram>
     <boot dev='hd'/>
   </os>
   <features>
