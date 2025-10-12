@@ -167,7 +167,7 @@ in
       enable = true;
       host = "foxcaves";
     };
-    website = {
+    doridian-website = {
       enable = true;
       host = "doridian-website";
     };
