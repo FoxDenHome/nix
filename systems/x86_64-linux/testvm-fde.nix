@@ -96,7 +96,11 @@ in
       enable = true;
       host = "dummy";
     };
-    doridian-website = {
+    grafana = {
+      enable = true;
+      host = "dummy2";
+    };
+    prometheus = {
       enable = true;
       host = "dummy2";
     };

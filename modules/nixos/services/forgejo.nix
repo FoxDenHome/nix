@@ -73,7 +73,8 @@ in
           createDatabase = false;
           name = "forgejo";
           user = "forgejo";
-          socket = config.foxDen.services.postgresql.socketPath;
+          socket = config.foxDen.services.mysql.socketPath;
+          type = "mysql";
         };
         lfs = {
           enable = true;
@@ -120,7 +121,7 @@ in
         }
       ];
 
-      foxDen.services.postgresql.services = [
+      foxDen.services.mysql.services = [
         {
           name = "forgejo";
           targetService = "forgejo";
