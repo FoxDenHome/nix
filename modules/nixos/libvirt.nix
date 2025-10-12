@@ -61,14 +61,12 @@ in
         wants = [ "libvirt-autocreator.service" ];
 
         serviceConfig = {
-          Type = "simple";
-          ExecStartPre = [
+          Type = "oneshot";
+          ExecStart = [
             "-${pkgs.libvirt}/bin/virsh start ${vm.name}"
           ];
-          ExecStart = [
-            "${pkgs.libvirt}/bin/virsh console ${vm.name}"
-          ];
-          Restart = "always";
+          RemainAfterExit = true;
+          Restart = "no";
         };
         wantedBy = [ "multi-user.target" ];
       };
