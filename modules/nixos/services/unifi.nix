@@ -20,7 +20,7 @@ let
 in
 {
   options.foxDen.services.unifi = {
-    enableCaddy = lib.mkEnableOption "Caddy reverse proxy for UniFi Web UI";
+    enableHttp = lib.mkEnableOption "HTTP reverse proxy for UniFi Web UI";
   } // (services.http.mkOptions { svcName = "unifi"; name = "UniFi Network Controller"; });
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
@@ -28,7 +28,7 @@ in
       name = "unifi";
       inherit svcConfig pkgs config;
     }).config
-    (lib.mkIf svcConfig.enableCaddy (services.http.make {
+    (lib.mkIf svcConfig.enableHttp (services.http.make {
       inherit svcConfig pkgs config;
       name = "caddy-unifi";
       target = "reverse_proxy http://127.0.0.1:8443";

@@ -170,6 +170,8 @@ in
     unifi = {
       enable = true;
       host = "unifi";
+      enableHttp = true;
+      tls = true;
     };
     scrypted = {
       enable = true;

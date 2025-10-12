@@ -18,7 +18,7 @@ in
       default = "/var/lib/deluge/downloads";
       description = "Directory to store Deluge downloads";
     };
-    enableCaddy = lib.mkEnableOption "Caddy reverse proxy for Deluge Web UI";
+    enableHttp = lib.mkEnableOption "HTTP reverse proxy for Deluge Web UI";
   } // (services.http.mkOptions { svcName = "deluge"; name = "Deluge BitTorrent Client"; });
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
@@ -34,7 +34,7 @@ in
       name = "delugeweb";
       inherit svcConfig pkgs config;
     }).config
-    (lib.mkIf svcConfig.enableCaddy (services.http.make {
+    (lib.mkIf svcConfig.enableHttp (services.http.make {
       inherit svcConfig pkgs config;
       name = "caddy-deluge";
       target = "reverse_proxy http://127.0.0.1:8112";

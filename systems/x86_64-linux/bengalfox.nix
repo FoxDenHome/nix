@@ -247,7 +247,7 @@ in
     deluge = {
       enable = true;
       host = "deluge";
-      enableCaddy = false;
+      enableHttp = false;
       downloadsDir = "/mnt/zssd/nas/torrent";
     };
     e621dumper = {
@@ -322,7 +322,7 @@ in
     nzbget = {
       enable = true;
       host = "nzbget";
-      enableCaddy = false;
+      enableHttp = false;
       downloadsDir = "/mnt/zssd/nas/usenet";
     };
     restic-server = {

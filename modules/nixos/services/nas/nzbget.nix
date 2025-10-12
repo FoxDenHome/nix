@@ -18,7 +18,7 @@ in
       default = "/var/lib/nzbget/downloads";
       description = "Directory to store completed NZBGet downloads";
     };
-    enableCaddy = lib.mkEnableOption "Caddy reverse proxy for NZBGet Web UI";
+    enableHttp = lib.mkEnableOption "HTTP reverse proxy for NZBGet Web UI";
   } // (services.http.mkOptions { svcName = "nzbget"; name = "NZBGet Usenet Client"; });
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
@@ -26,7 +26,7 @@ in
       name = "nzbget";
       inherit svcConfig pkgs config;
     }).config
-    (lib.mkIf svcConfig.enableCaddy (services.http.make {
+    (lib.mkIf svcConfig.enableHttp (services.http.make {
       inherit svcConfig pkgs config;
       name = "caddy-nzbget";
       target = "reverse_proxy http://127.0.0.1:6789";
