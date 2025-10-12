@@ -186,6 +186,7 @@ in
       enable = true;
       host = "doridian-website";
       auxHosts = [ "doridian.net" ];
+      tls = true;
     };
     minecraft = {
       enable = true;
