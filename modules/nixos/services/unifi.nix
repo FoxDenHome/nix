@@ -1,4 +1,4 @@
-{ foxDenLib, pkgs, lib, config, ... }:
+{ foxDenLib, pkgs, lib, config, nixpkgs-unstable, systemArch, ... }:
 let
   services = foxDenLib.services;
 
@@ -29,6 +29,7 @@ in
     {
       services.unifi = {
         enable = true;
+        unifiPackage = nixpkgs-unstable.outputs.legacyPackages.${systemArch}.unifi; # TODO: pkgs. once 25.11
       };
 
       systemd.services.unifi = {
