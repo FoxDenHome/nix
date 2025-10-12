@@ -32,7 +32,7 @@ in
         dataDir = svcConfig.dataDir;
         settings = {
           gui = {
-            address = ":8384";
+            address = "127.0.0.1:8384";
             theme = "black";
           };
         };
