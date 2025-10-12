@@ -71,10 +71,11 @@ in
         stateDir = svcConfig.dataDir;
         database = {
           createDatabase = false;
-          name = "forgejo";
-          user = "forgejo";
-          socket = config.foxDen.services.mysql.socketPath;
-          type = "mysql";
+          #name = "forgejo";
+          #user = "forgejo";
+          #socket = config.foxDen.services.mysql.socketPath;
+          #type = "mysql";
+          type = "sqlite3";
         };
         lfs = {
           enable = true;
@@ -121,12 +122,12 @@ in
         }
       ];
 
-      foxDen.services.mysql.services = [
-        {
-          name = "forgejo";
-          targetService = "forgejo";
-        }
-      ];
+      #foxDen.services.mysql.services = [
+      #  {
+      #    name = "forgejo";
+      #    targetService = "forgejo";
+      #  }
+      #];
 
       environment.persistence."/nix/persist/forgejo" = ifDefaultData {
         hideMounts = true;
