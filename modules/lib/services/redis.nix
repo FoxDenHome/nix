@@ -29,6 +29,7 @@ in
         svc.config
         {
           services.redis.servers.${inputs.name} = {
+            enable = true;
             port = 6379;
             bind = "127.0.0.1";
             requirePass = svcConfig.requirePass;
