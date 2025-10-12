@@ -25,8 +25,6 @@
       <feature enabled='no' name='enrolled-keys'/>
       <feature enabled='no' name='secure-boot'/>
     </firmware>
-    <loader readonly='yes' secure='no' type='pflash' format='raw'>/run/libvirt/nix-ovmf/OVMF_CODE.fd</loader>
-    <nvram template='/run/libvirt/nix-ovmf/OVMF_VARS.fd' templateFormat='raw' format='raw'>/var/lib/libvirt/nvram/arcticfox_VARS.fd</nvram>
   </os>
   <features>
     <acpi/>
