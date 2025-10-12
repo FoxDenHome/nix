@@ -23,7 +23,7 @@ let
     fi
     ${pkgs.coreutils}/bin/chown -h qemu-libvirtd:qemu-libvirtd /var/lib/libvirt/images/${vm.name}.qcow2
     ${pkgs.libvirt}/bin/virsh define ${vm.libvirtXml}
-    ${pkgs.libvirt}/bin/virsh autostart --disable
+    ${pkgs.libvirt}/bin/virsh autostart ${vm.name} --disable
   '' + (if vm.config.autostart then "\n${pkgs.libvirt}/bin/virsh start ${vm.name} || true\n" else ""));
 in
 {
