@@ -44,10 +44,11 @@ in
             root_url = "${proto}://${hostName}";
           };
           database = {
-            name = "grafana";
-            user = "grafana";
-            host = config.foxDen.services.mysql.socketPath;
-            type = "mysql";
+            # name = "grafana";
+            # user = "grafana";
+            # host = config.foxDen.services.mysql.socketPath;
+            # type = "mysql";
+            type = "sqlite3";
           };
           security = {
             cookie_secure = svcConfig.tls;
@@ -75,12 +76,12 @@ in
         };
       };
 
-      foxDen.services.mysql.services = [
-        {
-          name = "grafana";
-          targetService = "grafana";
-        }
-      ];
+      # foxDen.services.mysql.services = [
+      #   {
+      #     name = "grafana";
+      #     targetService = "grafana";
+      #   }
+      # ];
 
       environment.persistence."/nix/persist/grafana" = {
         hideMounts = true;

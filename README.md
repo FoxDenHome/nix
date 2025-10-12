@@ -69,8 +69,9 @@
 				- [ ] gmod (OCI)
 				- [ ] website
 			- [ ] monitoring
-				- [ ] grafana: Manage more declaratively
+				- [ ] grafana: Manage more declaratively + mysql (right now on sqlite3)
 				- [ ] mktxp
+			- [ ] git/forgejo + mysql (right now on sqlite3)
 			- [ ] minecraft: turn into a flake built from server JAR + Collar mod + custom start.sh
 			- [ ] affine
 	- [ ] icefox
