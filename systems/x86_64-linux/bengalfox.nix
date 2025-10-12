@@ -373,6 +373,8 @@ in
 
   virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ];
 
+  foxDen.hosts.index = 1;
+
   foxDen.hosts.hosts = let
     driver = "bridge";
     mkDriverOpts = (vlan: {

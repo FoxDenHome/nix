@@ -119,7 +119,7 @@ in
       VLAN = "1-10";
     }];
   };
-  
+
   foxDen.hosts.hosts = {
     dummy = {
       nameservers = ifcfg.nameservers;

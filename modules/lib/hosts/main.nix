@@ -93,26 +93,23 @@ let
     namespacePath = "/run/netns/${namespace}";
     unit = "netns-host-${name}.service";
     resolvConf = "/etc/foxden/hosts/${name}/resolv.conf";
-    suffix = util.mkHash8 name;
   } // config.foxDen.hosts.hosts.${name});
-
-  mkHashMac = (str: let
-    hash = util.mkShortHash 6 str;
-  in
-    "00:16:3e:${builtins.substring 0 2 hash}:${builtins.substring 2 2 hash}:${builtins.substring 4 2 hash}");
 in
 {
   getByName = getByName;
 
   nixosModule = ({ config, pkgs, foxDenLib, ... }:
   let
+    hostIndexHex1 = nixpkgs.lib.toHexString (config.foxDen.hosts.index or 0);
+    hostIndexHex = if (nixpkgs.lib.stringLength hostIndexHex1 == 1) then "0${hostIndexHex1}" else hostIndexHex1;
+
+    mkHashMac = (hash: "e6:21:${hostIndexHex}:${builtins.substring 0 2 hash}:${builtins.substring 2 2 hash}:${builtins.substring 4 2 hash}");
+
     hosts = map (getByName config) (nixpkgs.lib.attrsets.attrNames config.foxDen.hosts.hosts);
-    mapIfaces = (host: map ({ name, value }:  let
-        suffixSrc = host.name + "|" + name;
-      in value //{
+    mapIfaces = (host: map ({ name, value }:  value // rec {
         inherit host name;
-        suffix = util.mkHash8 suffixSrc;
-        mac = if value.mac != null then value.mac else (mkHashMac suffixSrc);
+        suffix = util.mkShortHash 6 (host.name + "|" + name);
+        mac = if value.mac != null then value.mac else (mkHashMac suffix);
       }) (nixpkgs.lib.attrsets.attrsToList host.interfaces));
     interfaces = nixpkgs.lib.flatten (map mapIfaces hosts);
 
@@ -162,6 +159,10 @@ in
           List of MAC addresses that are already in use on your network.
           This is used to avoid generating colliding MAC addresses for interfaces.
         '';
+      };
+      index = nixpkgs.lib.mkOption {
+        type = ints.uint8;
+        default = 0;
       };
     };
 

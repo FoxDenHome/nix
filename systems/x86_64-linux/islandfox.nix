@@ -196,6 +196,8 @@ in
     };
   };
 
+  foxDen.hosts.index = 2;
+
   foxDen.hosts.hosts = let
     driver = "bridge";
     mkDriverOpts = (vlan: {

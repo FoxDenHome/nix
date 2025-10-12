@@ -54,7 +54,7 @@
 
   users.groups.share.gid = 1001;
 
-  networking.hostId = lib.mkDefault (foxDenLib.util.mkHash8 config.networking.hostName);
+  networking.hostId = lib.mkDefault (foxDenLib.util.mkShortHash 8 config.networking.hostName);
   networking.wireguard.useNetworkd = false;
   networking.firewall.logRefusedConnections = false;
   networking.nftables.enable = true;

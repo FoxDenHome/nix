@@ -22,7 +22,6 @@ let
 in
 {
   mkShortHash = mkShortHash;
-  mkHash8 = mkShortHash 8;
 
   isPrivateIP = (ip: if (isIPv6 ip) then (isPrivateIPv6 ip) else (isPrivateIPv4 ip));
 
