@@ -41,9 +41,7 @@ in
         runAsRoot = false;
         ovmf = {
           enable = true;
-          packages = [(nixpkgsUnstable.OVMF.override {
-            secureBoot = true;
-          }).fd];
+          packages = [pkgs.OVMFFull.fd];
         };
       };
     };
