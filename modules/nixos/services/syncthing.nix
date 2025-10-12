@@ -30,6 +30,12 @@ in
       services.syncthing = {
         enable = true;
         dataDir = svcConfig.dataDir;
+        settings = {
+          gui = {
+            address = ":8384";
+            theme = "black";
+          };
+        };
       };
 
       systemd.services.syncthing = {
