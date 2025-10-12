@@ -62,10 +62,31 @@ in
           pkgs.coreutils
         ];
 
-        serviceConfig = {
+        serviceConfig = let
+          mibsPackage = (pkgs.stdenv.mkDerivation {
+            name = "mibs-combined";
+            version = "1.0.0";
+            srcs = [
+              ./mibs
+              "${pkgs.net-snmp}/share/snmp/mibs"
+            ];
+
+            unpackPhase = ''
+              mkdir -p mibs
+              for srcFile in $srcs; do
+                  cp -r "$srcFile/"* mibs
+              done
+            '';
+
+            installPhase = ''
+              mkdir -p $out
+              cp -r ./mibs $out/
+            '';
+          });
+        in
+        {
           BindReadOnlyPaths = [
-            "${./mibs}:/usr/share/snmp/mibs/custom"
-            "${pkgs.net-snmp}/share/snmp/mibs:/usr/share/snmp/mibs/standard"
+            "${mibsPackage}/mibs:/usr/share/snmp/mibs"
           ];
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.telegraf.path;
         };
