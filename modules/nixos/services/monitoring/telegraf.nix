@@ -60,12 +60,12 @@ in
       systemd.services.telegraf = {
         confinement.packages = [
           pkgs.coreutils
-          pkgs.net-snmp
         ];
 
         serviceConfig = {
           BindReadOnlyPaths = [
-            "${./mibs}:/usr/share/snmp/mibs"
+            "${./mibs}:/usr/share/snmp/mibs/custom"
+            "${pkgs.net-snmp}/share/snmp/mibs:/usr/share/snmp/mibs/standard"
           ];
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.telegraf.path;
         };
