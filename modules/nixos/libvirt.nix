@@ -45,7 +45,7 @@ in
       };
     };
     # TODO: 25.11: virtualisation.useSecureBoot = true;
-    virtualisation.efi.OVMF = (nixpkgsUnstable.OVMF.override {
+    virtualisation.libvirtd.qemu.ovmf.packages = (nixpkgsUnstable.OVMF.override {
       secureBoot = true;
     }).fd;
 
