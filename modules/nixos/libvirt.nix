@@ -30,6 +30,8 @@ in
   config = lib.mkIf ((lib.length vmNames) > 0) {
     virtualisation.libvirtd = {
       enable = true;
+      onShutdown = "shutdown";
+      onBoot = "ignore";
       qemu = {
         package = pkgs.qemu_kvm;
         runAsRoot = false;
