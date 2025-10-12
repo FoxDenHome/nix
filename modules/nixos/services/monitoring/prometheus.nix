@@ -41,7 +41,7 @@ in
     {
       services.prometheus = {
         enable = true;
-        dataDir = svcConfig.dataDir;
+        stateDir = svcConfig.dataDir;
         configText = builtins.toYAML cfgObj;
       };
 
