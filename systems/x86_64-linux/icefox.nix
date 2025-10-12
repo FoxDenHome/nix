@@ -168,7 +168,7 @@ in
     mkHost = iface: {
       inherit (ifcfg) nameservers;
       interfaces.default = {
-        inherit (iface) dns;
+        inherit (iface) dns macAddress;
         addresses = lib.filter (ip: !(foxDenLib.util.isPrivateIP ip)) iface.addresses;
         driver = "hetzner";
         driverOpts = {
@@ -224,6 +224,7 @@ in
         "95.216.116.139/26"
         "2a01:4f9:2b:1a42::3/64"
       ];
+      macAddress = "TODO";
     };
     icefox-http = mkHost {
       dns = {
@@ -234,6 +235,7 @@ in
         "95.216.116.180/26"
         "2a01:4f9:2b:1a42::8/64"
       ];
+      macAddress = "00:50:56:00:81:B8";
     };
   };
 }
