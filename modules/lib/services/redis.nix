@@ -22,6 +22,13 @@
               StateDirectory = name;
             };
           };
+
+          environment.persistence."/nix/persist/redis" = {
+            hideMounts = true;
+            directories = [
+              { directory = "/var/lib/${inputs.name}"; user = inputs.name; group = inputs.name; mode = "u=rwx,g=rx,o="; }
+            ];
+          };
         }
       ]);
     });
