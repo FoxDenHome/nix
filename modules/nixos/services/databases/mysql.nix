@@ -87,9 +87,10 @@ in
         ensureDatabases = lib.flatten (map (svc: [svc.name] ++ svc.databases) svcConfig.services);
         ensureUsers = map (svc: {
           name = if svc.proxy then "mysql-${svc.name}" else svc.targetService;
-          ensurePermissions = lib.attrsets.genAttrs ([svc.name] ++ svc.databases) (dbName: {
-            "${dbName}.*" = "ALL PRIVILEGES";
-          });
+          ensurePermissions = lib.attrsets.listToAttrs (map (dbName: {
+            name = "${dbName}.*";
+            value = "ALL PRIVILEGES";
+          }) ([svc.name] ++ svc.databases));
         }) svcConfig.services;
       };
 
