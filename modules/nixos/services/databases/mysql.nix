@@ -79,7 +79,7 @@ in
             skip-networking = true;
           };
         };
-        initialDatabases = map (svc: {
+        ensureDatabases = map (svc: {
           inherit (svc) name;
         }) svcConfig.services;
         ensureUsers = map (svc: {
