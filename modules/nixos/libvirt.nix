@@ -23,7 +23,7 @@ let
     fi
     ${pkgs.coreutils}/bin/chown -h qemu-libvirtd:qemu-libvirtd /var/lib/libvirt/images/${vm.name}.qcow2
     ${pkgs.libvirt}/bin/virsh define ${vm.libvirtXml}
-    ${pkgs.libvirt}/bin/virsh autostart ${if vm.config.autostart then "" else "--disable"} ${vm.name}
+    ${pkgs.libvirt}/bin/virsh autostart --disable"
   '' + (if vm.config.autostart then "\n${pkgs.libvirt}/bin/virsh start ${vm.name} || true\n" else ""));
 in
 {
@@ -37,26 +37,39 @@ in
         ovmf = {
           enable = true;
         };
-        verbatimConfig = ''
-          nvram = [
-            "/var/lib/libvirt/ovmf/OVMF_CODE.secboot.4m.fd:/var/lib/libvirt/ovmf/OVMF_VARS.4m.fd"
-          ]
-        '';
       };
     };
 
-    systemd.services.libvirt-autocreator = {
-      description = "Libvirt AutoCreator Service";
-      after = [ "libvirtd.service" ];
-      requires = [ "libvirtd.service" ];
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/libvirt/images";
-        ExecStart = (map setupVMScript (lib.attrsets.attrValues vms));
-        RemainAfterExit = true;
+    systemd.services = {
+      libvirt-autocreator = {
+        description = "Libvirt AutoCreator Service";
+        after = [ "libvirtd.service" ];
+        requires = [ "libvirtd.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/libvirt/images";
+          ExecStart = (map setupVMScript (lib.attrsets.attrValues vms));
+          RemainAfterExit = true;
+        };
+        wantedBy = [ "multi-user.target" ];
       };
-      wantedBy = [ "multi-user.target" ];
-    };
+    } // lib.attrsets.listToAttrs (map (vm: {
+      name = "libvirt-vm-${vm.name}-autostart";
+      value = {
+        after = [ "libvirt-autocreator.service" "libvirtd.service" ];
+        requires = [ "libvirtd.service" ];
+        wants = [ "libvirt-autocreator.service" ];
+
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = [
+            "${pkgs.libvirt}/bin/virsh start --console ${vm.name}"
+          ];
+          Restart = "always";
+        };
+        wantedBy = [ "multi-user.target" ];
+      };
+    }) (lib.attrsets.attrValues vms));
 
     environment.persistence."/nix/persist/libvirt" = {
       hideMounts = true;
