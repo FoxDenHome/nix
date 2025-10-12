@@ -113,8 +113,8 @@ in
           type filter hook forward priority 0;
           ip accept
           arp accept
-          iifname ${phyIface} accept
-          not oifname ${phyIface} accept
+          iif ${phyIface} accept
+          not oif ${phyIface} accept
           ether saddr ${ifcfg.macAddress} accept
           drop
         }
