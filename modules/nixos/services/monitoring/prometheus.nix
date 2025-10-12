@@ -4,8 +4,8 @@ let
 
   mkDir = (dir: {
     directory = dir;
-    user = config.services.prometheus.user;
-    group = config.services.prometheus.group;
+    user = "prometheus";
+    group = "prometheus";
     mode = "u=rwx,g=,o=";
   });
 
@@ -47,8 +47,8 @@ in
 
       sops.secrets.prometheus = config.lib.foxDen.sops.mkIfAvailable {
         mode = "0400";
-        owner = config.services.prometheus.user;
-        group = config.services.prometheus.group;
+        owner = "prometheus";
+        group = "prometheus";
       };
 
       systemd.services.prometheus = {
