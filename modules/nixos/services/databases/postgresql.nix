@@ -80,7 +80,9 @@ in
           inherit (svc) name;
           ensureDBOwnership = true;
         }) svcConfig.services;
-        identMap = lib.concatStringsSep "\n" (map (svc: ''
+        identMap = ''
+          postgres root postgres
+        '' + lib.concatStringsSep "\n" (map (svc: ''
           postgres ${svc.targetService} ${svc.name}
         '') svcConfig.services);
       };
