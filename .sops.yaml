@@ -3,6 +3,7 @@ keys:
   - &admin_doridian_capefox age1r7tefnes2xh3y55r984apsmwzx5lrpsuxuzwcjfg76m2m974apvqavyezp
   - &server_testvm_fennec age1tgv02ark8aq0knagyt7tdpgdc2e6rds9c2rm8uumuqj6vr3ngujqg8eqr6
   - &server_bengalfox age1hdgjgrzk9lq88f3vwxtf4p9fnmjkuzdf4ykcg8p7kgf3t8hgxqvqenv5fl
+  - &server_islandfox age142dhgtgtgm6kv252pd8ypt3xnvvzl2qavycvme9yqzyesktcwuyq8w3u22
 # First hit rule counts
 creation_rules:
   - path_regex: '^secrets/testvm\.'
@@ -24,6 +25,7 @@ creation_rules:
         - *admin_doridian_capefox
         - *server_testvm_fennec
         - *server_bengalfox
+        - *server_islandfox
   - path_regex: '^secrets/bengalfox\.'
     key_groups:
       - age:
@@ -41,6 +43,7 @@ creation_rules:
       - age:
         - *admin_doridian_fennec
         - *admin_doridian_capefox
+        - *server_islandfox
   - path_regex: '^secrets/icefox\.'
     key_groups:
       - age:
