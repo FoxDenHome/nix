@@ -47,8 +47,8 @@ in
 
       sops.secrets.prometheus = config.lib.foxDen.sops.mkIfAvailable {
         mode = "0400";
-        owner = "prometheus";
-        group = "prometheus";
+        owner = config.services.prometheus.user;
+        group = config.services.prometheus.group;
       };
 
       systemd.services.prometheus = {

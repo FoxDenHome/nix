@@ -4,8 +4,8 @@ let
 
   mkDir = (dir: {
     directory = dir;
-    user = config.services.grafana.user;
-    group = config.services.grafana.group;
+    user = "grafana";
+    group = "grafana";
     mode = "u=rwx,g=,o=";
   });
 
