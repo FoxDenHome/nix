@@ -36,7 +36,7 @@ in
     {
       services.grafana = {
         enable = true;
-        dataDir = svcConfig.dataDir;
+        dataDir = "/var/lib/grafana";
         settings = {
           server = {
             http_addr = "127.0.0.1";
@@ -67,6 +67,7 @@ in
       systemd.services.grafana = {
         serviceConfig = {
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.grafana.path;
+          StateDirectory = "grafana";
         };
       };
 
