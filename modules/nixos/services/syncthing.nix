@@ -27,7 +27,10 @@ in
       target = "reverse_proxy http://127.0.0.1:8384";
     }).config
     {
-      services.syncthing.dataDir = svcConfig.dataDir;
+      services.syncthing = {
+        enable = true;
+        dataDir = svcConfig.dataDir;
+      };
 
       systemd.services.syncthing = {
         serviceConfig = {
