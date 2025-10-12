@@ -42,7 +42,7 @@ in
       services.prometheus = {
         enable = true;
         stateDir = "/var/lib/prometheus";
-        configText = builtins.toYAML cfgObj;
+        configText = lib.generators.toYAML cfgObj;
       };
 
       sops.secrets.prometheus = config.lib.foxDen.sops.mkIfAvailable {
