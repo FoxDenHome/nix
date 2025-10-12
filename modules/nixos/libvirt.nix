@@ -37,7 +37,7 @@ in
         };
       };
     };
-    virtualisation.useSecureBoot = true;
+    # TODO: 25.11: virtualisation.useSecureBoot = true;
 
     systemd.services.libvirt-autocreator = {
       description = "Libvirt AutoCreator Service";
