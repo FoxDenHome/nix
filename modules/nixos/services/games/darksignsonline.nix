@@ -23,10 +23,7 @@ in
         ];
         environment = {
           "DOMAIN" = hostName;
-          "DB_HOST" = "127.0.0.1";
-          "DB_USERNAME" = "$MYSQL_USERNAME";
-          "DB_PASSWORD" = "";
-          "DB_DATABASE" = "$MYSQL_DATABASE";
+          "MYSQL_PASSWORD" = "";
           "SMTP_FROM" = "noreply@${hostName}";
         };
         environmentFiles = [
