@@ -74,7 +74,8 @@ in
             unpackPhase = ''
               mkdir -p mibs
               for srcFile in $srcs; do
-                  cp -r "$srcFile/"* mibs
+                echo "Copying from $srcFile"
+                cp -r "$srcFile/"* mibs
               done
             '';
 
