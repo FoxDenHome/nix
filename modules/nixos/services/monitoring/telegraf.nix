@@ -63,6 +63,9 @@ in
         ];
 
         serviceConfig = {
+          BindReadOnlyPaths = [
+            "${./mibs}:/usr/share/snmp/mibs"
+          ];
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.telegraf.path;
         };
       };
