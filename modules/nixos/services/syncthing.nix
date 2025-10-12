@@ -24,7 +24,11 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "caddy-syncthing";
-      target = "reverse_proxy http://127.0.0.1:8384 { header_up Host localhost }";
+      target = ''
+        reverse_proxy http://127.0.0.1:8384 {
+          header_up Host localhost
+        }
+      '';
     }).config
     {
       services.syncthing = {
