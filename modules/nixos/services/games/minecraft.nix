@@ -10,7 +10,7 @@ in
 {
   options.foxDen.services.minecraft = with lib.types; {
     jrePackage = lib.mkOption {
-      type = str;
+      type = package;
       description = "JRE package to use for running Minecraft server";
     };
     dataDir = lib.mkOption {
