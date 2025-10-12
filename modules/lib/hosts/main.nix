@@ -12,17 +12,21 @@ let
         type = attrsOf anything; # TODO: Host driver schema
         default = {};
       };
+      mac = nixpkgs.lib.mkOption {
+        type = nullOr str;
+        default = null;
+      };
       dns = {
         name = nixpkgs.lib.mkOption {
           type = str;
           default = "";
         };
         auxAddresses = nixpkgs.lib.mkOption {
-          type = listOf foxDenLib.types.ip;
+          type = uniq foxDenLib.types.ip;
           default = [];
         };
         cnames = nixpkgs.lib.mkOption {
-          type = listOf str;
+          type = uniq str;
           default = [];
         };
         zone = nixpkgs.lib.mkOption {
@@ -43,7 +47,7 @@ let
         };
       };
       addresses = nixpkgs.lib.mkOption {
-        type = listOf foxDenLib.types.ip;
+        type = uniq foxDenLib.types.ip;
       };
       routes = nixpkgs.lib.mkOption {
         type = nullOr (listOf routeType);
@@ -91,6 +95,11 @@ let
     resolvConf = "/etc/foxden/hosts/${name}/resolv.conf";
     suffix = util.mkHash8 name;
   } // config.foxDen.hosts.hosts.${name});
+
+  mkHashMac = (str: let
+    hash = util.mkShortHash 6 str;
+  in
+    "00:16:3e:${builtins.substring 0 2 hash}:${builtins.substring 2 4 hash}:${builtins.substring 4 6 hash}");
 in
 {
   getByName = getByName;
@@ -98,7 +107,13 @@ in
   nixosModule = ({ config, pkgs, foxDenLib, ... }:
   let
     hosts = map (getByName config) (nixpkgs.lib.attrsets.attrNames config.foxDen.hosts.hosts);
-    mapIfaces = (host: map ({ name, value }: value // { inherit host name; suffix = util.mkHash8 (host.name + "|" + name); }) (nixpkgs.lib.attrsets.attrsToList host.interfaces));
+    mapIfaces = (host: map ({ name, value }:  let
+        suffixSrc = host.name + "|" + name;
+      in value //{
+        inherit host name;
+        suffix = util.mkHash8 suffixSrc;
+        mac = if value.mac != null then value.mac else (mkHashMac suffixSrc);
+      }) (nixpkgs.lib.attrsets.attrsToList host.interfaces));
     interfaces = nixpkgs.lib.flatten (map mapIfaces hosts);
 
     ifaceHasV4 = (iface: nixpkgs.lib.any util.isIPv4 iface.addresses);
@@ -139,9 +154,20 @@ in
         type = attrsOf hostType;
         default = {};
       };
+      usedMacAddresses = nixpkgs.lib.mkOption {
+        type = addCheck (listOf str) (macs: let
+          uniqueMacs = nixpkgs.lib.lists.uniqueString macs;
+        in (nixpkgs.lib.lists.length macs) == (nixpkgs.lib.lists.length uniqueMacs));
+        description = ''
+          List of MAC addresses that are already in use on your network.
+          This is used to avoid generating colliding MAC addresses for interfaces.
+        '';
+      };
     };
 
     config = {
+      foxDen.hosts.usedMacAddresses = map (iface: iface.mac) interfaces;
+
       foxDen.dns.records = nixpkgs.lib.flatten (map
           (iface: let
             mkRecord = (addr: nixpkgs.lib.mkIf (iface.dns.name != "") {
@@ -185,6 +211,7 @@ in
             mkHooks = (interface: let
               ifaceDriver = foxDenLib.hosts.drivers.${interface.driver};
               serviceInterface = (ifaceDriver.serviceInterface or (interface: "host${interface.suffix}")) interface;
+
               driverRunParams = { inherit ipCmd ipInNsCmd netnsExecCmd serviceInterface interface; };
               hooks = ifaceDriver.hooks driverRunParams;
 
@@ -207,6 +234,9 @@ in
                       interface.addresses)
                 ++ [
                   "${netnsExecCmd} ${pkgs.sysctl}/bin/sysctl -p ${pkgs.writers.writeText "sysctls" sysctls}"
+                ] ++ (hooks.setMac or [
+                  "${ipInNsCmd} link set ${eSA serviceInterface} mac ${eSA interface.mac}"
+                ]) ++ [
                   "${ipInNsCmd} link set ${eSA serviceInterface} up"
                 ]
                 ++ (map (renderRoute serviceInterface) interface.routes);

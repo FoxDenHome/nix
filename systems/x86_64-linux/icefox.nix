@@ -1,9 +1,12 @@
-{ config, lib, ... }:
+{ config, foxDenLib, lib, ... }:
 let
-  s2sAddresses = [
-    "10.99.10.2/16"
-    "fd2c:f4cb:63be::a63:a02/112"
-  ];
+  ifcfg-s2s = {
+    addresses = [
+      "10.99.10.2/16"
+      "fd2c:f4cb:63be::a63:a02/112"
+    ];
+    interface = "br-s2s";
+  };
   ifcfg = {
     addresses = [
       "95.216.116.140/26"
@@ -116,6 +119,30 @@ in
     bridge = [ifcfg.interface];
   };
 
+  systemd.network.networks."30-${ifcfg-s2s.interface}" = {
+    name = ifcfg-s2s.interface;
+    address = [
+      "10.99.12.1/24"
+      "fd2c:f4cb:63be::a63:c01/120"
+    ];
+
+    networkConfig = {
+      DHCP = "no";
+      IPv6AcceptRA = false;
+    };
+  };
+
+  systemd.network.netdevs."${ifcfg-s2s.interface}" = {
+    netdevConfig = {
+      Name = ifcfg-s2s.interface;
+      Kind = "bridge";
+    };
+
+    bridgeConfig = {
+      VLANFiltering = false;
+    };
+  };
+
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
     trustedProxies = [
       "10.1.0.0/23"
@@ -127,7 +154,7 @@ in
       "10.7.0.0/23"
       "10.8.0.0/23"
       "10.9.0.0/23"
-      "192.168.69.1/32"
+      # TODO: IP of snirouter on 10.99 here
     ];
 
     backupmgr.enable = true;
@@ -138,25 +165,35 @@ in
   };
 
   foxDen.hosts.hosts = let
-    mkHost = tpl: lib.mkMerge
-    [
-      {
-        inherit (ifcfg) nameservers;
-        interfaces.default = {
-          driver = "routed";
-          driverOpts = {
-            network = ifcfg.interface;
-          };
-          routes = [
-            { Destination = "95.216.116.140"; }
-            { Destination = "2a01:4f9:2b:1a42::2"; }
-            { Destination = "0.0.0.0/0"; Gateway = "95.216.116.140"; }
-            { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::2"; }
-          ];
+    mkHost = iface: {
+      inherit (ifcfg) nameservers;
+      interfaces.default = {
+        inherit (iface) dns;
+        addresses = lib.filter (ip: !(foxDenLib.util.isPrivateIP ip)) iface.addresses;
+        driver = "hetzner";
+        driverOpts = {
+          network = ifcfg.interface;
+          bridge = ifcfg.interface;
         };
-      }
-      tpl
-    ];
+        routes = [
+          { Destination = "2a01:4f9:2b:1a42::2"; }
+          { Destination = "0.0.0.0/0"; Gateway = "95.216.116.129"; }
+          { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::2"; }
+        ];
+      };
+      interfaces.s2s = {
+        inherit (iface) dns;
+        addresses = lib.filter (foxDenLib.util.isPrivateIP) iface.addresses;
+        driver = "bridge";
+        driverOpts = {
+          bridge = ifcfg-s2s.interface;
+        };
+        routes = [
+          { Destination = "10.0.0.0/8"; Gateway = "10.99.12.1"; }
+          { Destination = "fd2c:f4cb:63be::/60"; Gateway = "fd2c:f4cb:63be::a63:c01"; }
+        ];
+      };
+    };
   in
   {
     icefox = {
@@ -166,10 +203,37 @@ in
         dns = {
           name = "icefox";
           zone = "foxden.network";
-          auxAddresses = s2sAddresses;
         };
         addresses = ifcfg.addresses;
       };
+      interfaces.s2s = {
+        driver = "null";
+        dns = {
+          name = "icefox";
+          zone = "foxden.network";
+        };
+        addresses = ifcfg-s2s.addresses;
+      };
+    };
+    mirror = mkHost {
+      dns = {
+        name = "mirror-offsite";
+        zone = "foxden.network";
+      };
+      addresses = [
+        "95.216.116.139/26"
+        "2a01:4f9:2b:1a42::3/64"
+      ];
+    };
+    icefox-http = mkHost {
+      dns = {
+        name = "icefox-http";
+        zone = "foxden.network";
+      };
+      addresses = [
+        "95.216.116.180/26"
+        "2a01:4f9:2b:1a42::8/64"
+      ];
     };
   };
 }

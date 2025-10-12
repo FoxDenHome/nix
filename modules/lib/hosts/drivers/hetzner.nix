@@ -1,11 +1,15 @@
 { nixpkgs, foxDenLib, ... } :
 let
   eSA = nixpkgs.lib.strings.escapeShellArg;
-  mkIfaceName = (interface: "vert${interface.suffix}");
+
+  mkIfaceName = (iface: "vehz${iface.suffix}");
 in
 {
   driverOptsType = with nixpkgs.lib.types; submodule {
     network = nixpkgs.lib.mkOption {
+      type = str;
+    };
+    bridge = nixpkgs.lib.mkOption {
       type = str;
     };
   };
@@ -16,9 +20,7 @@ in
         (map (iface: {
           "${iface.driverOpts.network}" = {
             networkConfig = {
-              IPv4Forwarding = true;
               IPv6Forwarding = true;
-              IPv4ProxyARP = true;
               IPv6ProxyNDP = true;
 
               IPv6ProxyNDPAddress = nixpkgs.lib.filter foxDenLib.util.isIPv6 iface.addresses;
@@ -26,23 +28,14 @@ in
           };
         }) interfaces) ++
         [
-          (nixpkgs.lib.attrsets.listToAttrs
-          (map (iface: {
-              name = "60-vert-${iface.host.name}-${iface.name}";
+          (nixpkgs.lib.attrsets.listToAttrs (
+            (map ((iface: {
+              name = "60-vehz-${iface.host.name}-${iface.name}";
               value = {
                 name = mkIfaceName iface;
-                networkConfig = {
-                  DHCP = "no";
-                  IPv6AcceptRA = false;
-                  LinkLocalAddressing = "no";
-                  IPv4Forwarding = true;
-                  IPv6Forwarding = true;
-                };
-                routes = map (addr: {
-                  Destination = addr;
-                }) iface.addresses;
+                bridge = [iface.driverOpts.bridge];
               };
-            }) interfaces))
+            })) interfaces)))
         ]);
   };
 
