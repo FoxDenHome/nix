@@ -41,7 +41,7 @@ in
     {
       services.prometheus = {
         enable = true;
-        stateDir = "/var/lib/prometheus";
+        stateDir = "prometheus";
         configText = builtins.toJSON cfgObj;
       };
 
