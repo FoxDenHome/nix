@@ -41,13 +41,13 @@ in
         runAsRoot = false;
         ovmf = {
           enable = true;
+          packages = [(nixpkgsUnstable.OVMF.override {
+            secureBoot = true;
+          }).fd];
         };
       };
     };
     # TODO: 25.11: virtualisation.useSecureBoot = true;
-    virtualisation.libvirtd.qemu.ovmf.packages = [(nixpkgsUnstable.OVMF.override {
-      secureBoot = true;
-    }).fd];
 
     systemd.services.libvirt-autocreator = {
       description = "Libvirt AutoCreator Service";
