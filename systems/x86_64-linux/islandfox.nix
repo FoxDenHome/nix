@@ -181,6 +181,15 @@ in
       host = "git";
       tls = true;
     };
+    grafana = {
+      enable = true;
+      host = "grafana";
+      tls = true;
+    };
+    prometheus = {
+      enable = true;
+      host = "prometheus";
+    };
   };
 
   foxDen.hosts.hosts = let
@@ -242,6 +251,28 @@ in
       addresses = [
         "10.2.11.2/16"
         "fd2c:f4cb:63be:2::b02/64"
+      ];
+    };
+    grafana = mkVlanHost 2 {
+      dns = {
+        name = "grafana";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      addresses = [
+        "10.2.11.5/16"
+        "fd2c:f4cb:63be:2::b05/64"
+      ];
+    };
+    prometheus = mkVlanHost 2 {
+      dns = {
+        name = "prometheus";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      addresses = [
+        "10.2.11.20/16"
+        "fd2c:f4cb:63be:2::b14/64"
       ];
     };
     auth = mkVlanHost 1 {
