@@ -20,6 +20,8 @@ let
     macAddress = "fc:34:97:68:1e:07";
     interface = "br-default";
   };
+
+  phyIface = "enp7s0";
 in
 {
   # These are set when you reinstall the system
@@ -104,6 +106,23 @@ in
     };
   };
 
+  networking.nftables.tables = {
+    filter = {
+      content = ''
+        chain forward {
+          type filter hook forward priority 0;
+          ip accept
+          arp accept
+          iifname ${phyIface} accept
+          not oifname ${phyIface} accept
+          ether saddr ${ifcfg.macAddress} accept
+          drop
+        }
+      '';
+      family = "bridge";
+    };
+  };
+
   systemd.network.netdevs."${ifcfg.interface}" = {
     netdevConfig = {
       Name = ifcfg.interface;
@@ -117,7 +136,7 @@ in
   };
 
   systemd.network.networks."40-${ifcfg.interface}-root" = {
-    name = "enp7s0";
+    name = phyIface;
     bridge = [ifcfg.interface];
   };
 

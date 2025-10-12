@@ -57,6 +57,7 @@
   networking.hostId = lib.mkDefault (foxDenLib.util.mkHash8 config.networking.hostName);
   networking.wireguard.useNetworkd = false;
   networking.firewall.logRefusedConnections = false;
+  networking.nftables.enable = true;
 
   boot.kernel.sysctl = {
     "net.ipv4.ip_unprivileged_port_start" = "80";
