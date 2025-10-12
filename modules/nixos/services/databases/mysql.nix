@@ -89,6 +89,9 @@ in
       };
 
       systemd.services.mysql = {
+        confinement.packages = [
+          pkgs.gnused
+        ];
         serviceConfig = {
           PrivateUsers = false;
           StateDirectory = "mysql";
