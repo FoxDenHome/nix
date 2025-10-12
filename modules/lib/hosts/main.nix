@@ -22,11 +22,11 @@ let
           default = "";
         };
         auxAddresses = nixpkgs.lib.mkOption {
-          type = uniq foxDenLib.types.ip;
+          type = uniq (listOf foxDenLib.types.ip);
           default = [];
         };
         cnames = nixpkgs.lib.mkOption {
-          type = uniq str;
+          type = uniq (listOf str);
           default = [];
         };
         zone = nixpkgs.lib.mkOption {
@@ -47,7 +47,7 @@ let
         };
       };
       addresses = nixpkgs.lib.mkOption {
-        type = uniq foxDenLib.types.ip;
+        type = uniq (listOf foxDenLib.types.ip);
       };
       routes = nixpkgs.lib.mkOption {
         type = nullOr (listOf routeType);
