@@ -161,7 +161,7 @@ in
         '';
       };
       index = nixpkgs.lib.mkOption {
-        type = ints.uint8;
+        type = ints.u8;
         default = 0;
       };
     };
