@@ -36,11 +36,12 @@ in
         swtpm.enable = true;
         ovmf = {
           enable = true;
-          packages = [(pkgs.OVMF.override {
-            secureBoot = true;
-            tpmSupport = true;
-          }).fd];
         };
+        verbatimConfig = ''
+          nvram = [
+            "/var/lib/libvirt/ovmf/OVMF_CODE.secboot.4m.fd:/var/lib/libvirt/ovmf/OVMF_VARS.4m.fd"
+          ]
+        '';
       };
     };
 
