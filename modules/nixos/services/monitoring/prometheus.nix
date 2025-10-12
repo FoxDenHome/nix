@@ -24,7 +24,8 @@ let
       };
     };
     scrape_config_files = [
-      "/tmp/scrape_configs/*.yml"
+      "/tmp/prometheus-scrape/*.yml"
+      "/etc/prometheus-scrape/*.yml"
     ];
   };
 in
@@ -57,9 +58,12 @@ in
         ];
 
         serviceConfig = {
+          BindReadOnlyPaths = [
+            "${./prometheus-scrape}:/etc/prometheus-scrape"
+          ];
           ExecStartPre = [
-            "${pkgs.coreutils}/bin/mkdir -p /tmp/scrape_configs"
-            "${pkgs.bash}/bin/bash -c '${pkgs.gnused}/bin/sed \"s~__HOMEASSISTANT_API_TOKEN__~$HOMEASSISTANT_API_TOKEN~\" < ${./prometheus-scrape.yml} > /tmp/scrape_configs/prometheus-scrape.yml'"
+            "${pkgs.coreutils}/bin/mkdir -p /tmp/prometheus-scrape"
+            "${pkgs.bash}/bin/bash -c '${pkgs.gnused}/bin/sed \"s~__HOMEASSISTANT_API_TOKEN__~$HOMEASSISTANT_API_TOKEN~\" < ${./prometheus-scrape/homeassistant.yml.tpl} > /tmp/prometheus-scrape/homeassistant.yml'"
           ];
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.prometheus.path;
         };
