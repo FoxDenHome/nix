@@ -86,7 +86,7 @@ in
         };
         ensureDatabases = lib.flatten (map (svc: [svc.name] ++ svc.databases) svcConfig.services);
         ensureUsers = map (svc: {
-          name = if svc.proxy then "mysql-${svc.name}" else svc.targetService;
+          name = if svc.proxy then svc.name else svc.targetService;
           ensurePermissions = lib.attrsets.listToAttrs (map (dbName: {
             name = "${dbName}.*";
             value = "ALL PRIVILEGES";
@@ -137,6 +137,7 @@ in
     {
       systemd.services = lib.attrsets.listToAttrs (map (mySvc: let
         svcName = if mySvc.proxy then "mysql-${mySvc.name}" else mySvc.targetService;
+        usrName = if mySvc.proxy then mySvc.name else mySvc.targetService;
       in
       {
         name = mySvc.targetService;
@@ -148,7 +149,7 @@ in
           serviceConfig = {
             Environment = [
               "MYSQL_DATABASE=${mySvc.name}"
-              "MYSQL_USERNAME=${svcName}"
+              "MYSQL_USERNAME=${usrName}"
             ] ++ (if mySvc.proxy then [
               "MYSQL_HOST=127.0.0.1"
               "MYSQL_PORT=3306"

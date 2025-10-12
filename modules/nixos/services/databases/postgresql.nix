@@ -82,7 +82,6 @@ in
         }) svcConfig.services;
         identMap = lib.concatStringsSep "\n" (map (svc: ''
           postgres ${svc.targetService} ${svc.name}
-          postgres postgresql-${svc.name} ${svc.name}
         '') svcConfig.services);
       };
 
@@ -129,6 +128,7 @@ in
     {
       systemd.services = lib.attrsets.listToAttrs (map (pgSvc: let
         svcName = if pgSvc.proxy then "postgresql-${pgSvc.name}" else pgSvc.targetService;
+        usrName = if pgSvc.proxy then pgSvc.name else pgSvc.targetService;
       in
       {
         name = pgSvc.targetService;
@@ -140,7 +140,7 @@ in
           serviceConfig = {
             Environment = [
               "POSTGRESQL_DATABASE=${pgSvc.name}"
-              "POSTGRESQL_USERNAME=${svcName}"
+              "POSTGRESQL_USERNAME=${usrName}"
             ] ++ (if pgSvc.proxy then [
               "POSTGRESQL_HOST=127.0.0.1"
               "POSTGRESQL_PORT=5432"
