@@ -185,6 +185,7 @@ in
     doridian-website = {
       enable = true;
       host = "doridian-website";
+      auxHosts = [ "doridian.net" ];
     };
     minecraft = {
       enable = true;
@@ -212,6 +213,17 @@ in
   };
 
   foxDen.hosts.index = 2;
+
+  foxDen.dns.records = [
+    {
+      zone = "doridian.net";
+      name = "@";
+      type = "ALIAS";
+      ttl = 3600;
+      value = "website.foxden.network.";
+      horizon = "*";
+    }
+  ];
 
   foxDen.hosts.hosts = let
     driver = "bridge";

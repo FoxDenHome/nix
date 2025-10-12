@@ -185,6 +185,33 @@ in
     };
   };
 
+  foxDen.dns.records = [
+    {
+      zone = "doridian.net";
+      name = "mirror";
+      type = "CNAME";
+      ttl = 3600;
+      value = "mirror-offsite.foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "doridian.net";
+      name = "cachyos";
+      type = "CNAME";
+      ttl = 3600;
+      value = "mirror-offsite.foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "doridian.net";
+      name = "cachyos";
+      type = "CNAME";
+      ttl = 3600;
+      value = "mirror-offsite.foxden.network.";
+      horizon = "*";
+    }
+  ];
+
   foxDen.hosts.hosts = let
     mkHost = iface: {
       inherit (ifcfg) nameservers;

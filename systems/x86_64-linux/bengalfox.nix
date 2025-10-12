@@ -375,6 +375,25 @@ in
 
   foxDen.hosts.index = 1;
 
+  foxDen.dns.records = [
+    {
+      zone = "foxden.network";
+      name = "archlinux";
+      type = "CNAME";
+      ttl = 3600;
+      value = "mirror.foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "foxden.network";
+      name = "cachyos";
+      type = "CNAME";
+      ttl = 3600;
+      value = "mirror.foxden.network.";
+      horizon = "*";
+    }
+  ];
+
   foxDen.hosts.hosts = let
     driver = "bridge";
     mkDriverOpts = (vlan: {
@@ -469,7 +488,6 @@ in
     mirror = mkVlanHost 3 {
       dns = {
         name = "mirror";
-        cnames = ["archlinux" "cachyos"];
         zone = "foxden.network";
         dynDns = true;
       };

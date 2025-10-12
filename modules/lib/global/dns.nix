@@ -28,7 +28,7 @@ let
         default = false;
       };
       horizon = lib.mkOption {
-        type = enum [ "internal" "external" ];
+        type = enum [ "internal" "external" "*" ];
       };
     };
   };
@@ -48,13 +48,14 @@ in
   mkRecords = (nixosConfigurations: let
     records = globalConfig.getList ["foxDen" "dns" "records"] nixosConfigurations;
     # TODO: Go back to uniqueStrings once next NixOS stable
-    horizons = nixpkgs.lib.lists.unique (map (record: record.horizon) records);
+    horizons = nixpkgs.lib.filter (h: h != "*")
+        nixpkgs.lib.lists.unique (map (record: record.horizon) records);
     zones = nixpkgs.lib.lists.unique (map (record: record.zone) records);
   in
   (nixpkgs.lib.attrsets.genAttrs horizons (horizon:
     nixpkgs.lib.attrsets.genAttrs zones (zone:
       nixpkgs.lib.filter (record:
-        record.horizon == horizon && record.zone == zone)
+        (record.horizon == horizon || record.horizon == "*") && record.zone == zone)
         records
     )
   )));

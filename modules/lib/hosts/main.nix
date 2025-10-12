@@ -25,10 +25,6 @@ let
           type = uniq (listOf foxDenLib.types.ip);
           default = [];
         };
-        cnames = nixpkgs.lib.mkOption {
-          type = uniq (listOf str);
-          default = [];
-        };
         zone = nixpkgs.lib.mkOption {
           type = str;
           default = "foxden.network";
@@ -116,9 +112,6 @@ in
     ifaceHasV4 = (iface: nixpkgs.lib.any util.isIPv4 iface.addresses);
     ifaceHasV6 = (iface: nixpkgs.lib.any util.isIPv6 iface.addresses);
 
-    ifaceHasInternal = (iface: nixpkgs.lib.any util.isPrivateIP iface.addresses);
-    ifaceHasExternal = (iface: nixpkgs.lib.any (addr: !(util.isPrivateIP addr)) iface.addresses);
-
     mkIfaceDynDnsOne = (iface: check: type: value: if (check iface) then [
       {
         zone = iface.dns.zone;
@@ -135,15 +128,6 @@ in
       (mkIfaceDynDnsOne iface ifaceHasV4 "A" "127.0.0.1") ++
       (mkIfaceDynDnsOne iface ifaceHasV6 "AAAA" "fe80::1")
     else []);
-
-    mkIfaceCname = (iface: check: horizon: if (check iface) then (map (cname: {
-      zone = iface.dns.zone;
-      name = cname;
-      type = "CNAME";
-      ttl = iface.dns.ttl;
-      value = foxDenLib.global.dns.mkHost iface.dns;
-      horizon = horizon;
-    }) iface.dns.cnames) else []);
   in
   {
     options.foxDen.hosts = with nixpkgs.lib.types; {
@@ -183,8 +167,6 @@ in
           (
             (map mkRecord (iface.addresses ++ iface.dns.auxAddresses))
             ++ (mkIfaceDynDns iface)
-            ++ (mkIfaceCname iface ifaceHasInternal "internal")
-            ++ (mkIfaceCname iface ifaceHasExternal "external")
           ))
         interfaces);
 
