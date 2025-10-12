@@ -18,6 +18,10 @@ in
       name = "kanidm";
       inherit svcConfig pkgs config;
     }).config
+    (services.make {
+      name = "kanidm-pre";
+      inherit svcConfig pkgs config;
+    }).config
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "caddy-kanidm";
@@ -58,14 +62,28 @@ in
           Group = "kanidm";
         };
       };
+    
+      systemd.services.kanidm-pre = {
+        serviceConfig = {
+          ExecStart = [
+            "${pkgs.coreutils}/bin/mkdir -p /var/lib/kanidm/backups"
+          ];
+          StateDirectory = "kanidm";
+          Type = "oneshot";
+          RemainAfterExit = true;
+          Restart = "no";
+          User = "kanidm";
+          Group = "kanidm";
+        };
+      };
 
       systemd.services.kanidm = {
+        after = [ "kanidm-pre.service" ];
+        requires = [ "kanidm-pre.service" ];
+
         serviceConfig = {
           BindReadOnlyPaths = [
             "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory"
-          ];
-          ExecStartPre = [
-            "${pkgs.coreutils}/bin/mkdir -p /var/lib/kanidm/backups"
           ];
           StateDirectory = "kanidm";
         };
