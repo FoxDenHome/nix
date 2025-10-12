@@ -104,6 +104,10 @@ in
       enable = true;
       host = "dummy2";
     };
+    telegraf = {
+      enable = true;
+      host = "dummy2";
+    };
   };
 
   systemd.network.networks."40-${ifcfg.interface}-${rootInterface}" = {
