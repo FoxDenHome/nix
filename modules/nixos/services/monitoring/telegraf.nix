@@ -60,6 +60,7 @@ in
       systemd.services.telegraf = {
         confinement.packages = [
           pkgs.coreutils
+          pkgs.net-snmp
         ];
 
         serviceConfig = {
