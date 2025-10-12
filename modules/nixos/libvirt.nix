@@ -54,7 +54,7 @@ in
         wantedBy = [ "multi-user.target" ];
       };
     } // lib.attrsets.listToAttrs (map (vm: {
-      name = "libvirt-vm-${vm.name}-autostart";
+      name = "libvirt-vm-${vm.name}";
       value = {
         after = [ "libvirt-autocreator.service" "libvirtd.service" ];
         requires = [ "libvirtd.service" ];
@@ -62,8 +62,14 @@ in
 
         serviceConfig = {
           Type = "simple";
+          ExecStartPre = [
+            "-${pkgs.libvirt}/bin/virsh start ${vm.name}"
+          ];
           ExecStart = [
-            "${pkgs.libvirt}/bin/virsh start --console ${vm.name}"
+            "${pkgs.libvirt}/bin/virsh console ${vm.name}"
+          ];
+          ExecStop = [
+            "${pkgs.libvirt}/bin/virsh shutdown ${vm.name}"
           ];
           Restart = "always";
         };
