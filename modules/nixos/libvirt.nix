@@ -44,6 +44,7 @@ in
       requires = [ "libvirtd.service" ];
       serviceConfig = {
         Type = "oneshot";
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/libvirt/images";
         ExecStart = (map setupVMScript (lib.attrsets.attrValues vms));
         RemainAfterExit = true;
       };
