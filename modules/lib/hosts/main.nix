@@ -99,7 +99,7 @@ let
   mkHashMac = (str: let
     hash = util.mkShortHash 6 str;
   in
-    "00:16:3e:${builtins.substring 0 2 hash}:${builtins.substring 2 4 hash}:${builtins.substring 4 6 hash}");
+    "00:16:3e:${builtins.substring 0 2 hash}:${builtins.substring 2 2 hash}:${builtins.substring 4 2 hash}");
 in
 {
   getByName = getByName;
