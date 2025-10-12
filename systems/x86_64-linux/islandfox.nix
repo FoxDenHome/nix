@@ -332,7 +332,7 @@ in
         "fd2c:f4cb:63be:1::a01/64"
       ];
     };
-    website = mkVlanHost 3 {
+    doridian-website = mkVlanHost 3 {
       dns = {
         name = "website";
         zone = "foxden.network";
