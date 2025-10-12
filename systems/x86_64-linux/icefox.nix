@@ -17,6 +17,7 @@ let
       "213.133.98.99"
       "213.133.98.100"
     ];
+    macAddress = "fc:34:97:68:1e:07";
     interface = "br-default";
   };
 in
@@ -107,6 +108,7 @@ in
     netdevConfig = {
       Name = ifcfg.interface;
       Kind = "bridge";
+      MACAddress = ifcfg.macAddress;
     };
 
     bridgeConfig = {

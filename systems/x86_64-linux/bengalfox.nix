@@ -16,6 +16,7 @@ let
     routes = mkRoutes 2;
     nameservers = mkNameservers 2;
     interface = "br-default";
+    macAddress = "e8:eb:d3:08:d2:98";
   };
 in
 {
@@ -46,14 +47,14 @@ in
   };
 
   boot.initrd.luks.devices = {
-      nixroot = {
-        device = "/dev/md0";
-        allowDiscards = true;
-      };
-      zssd = {
-        device = "/dev/md1";
-        allowDiscards = true;
-      };
+    nixroot = {
+      device = "/dev/md0";
+      allowDiscards = true;
+    };
+    zssd = {
+      device = "/dev/md1";
+      allowDiscards = true;
+    };
   };
 
   fileSystems."/" = {
@@ -153,6 +154,7 @@ in
     netdevConfig = {
       Name = ifcfg.interface;
       Kind = "bridge";
+      MACAddress = ifcfg.macAddress;
     };
 
     bridgeConfig = {
@@ -188,8 +190,6 @@ in
       VLAN = "1-10";
     }];
   };
-
-  services.deluge.config.outgoing_interface = "wg-deluge";
 
   sops.secrets."zfs-zhdd.key" = config.lib.foxDen.sops.mkIfAvailable {
     format = "binary";
