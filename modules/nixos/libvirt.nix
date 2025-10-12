@@ -1,5 +1,12 @@
-{ hostName, pkgs, lib, ... } :
+{ hostName, pkgs, lib, nixpkgs-unstable, systemArch, ... } :
 let
+  nixpkgsUnstable = (import nixpkgs-unstable {
+    system = systemArch;
+    config = {
+      allowUnfree = true;
+    };
+  });
+
   vmDirPath = ../../vms/${hostName};
 
   vmNames = let
@@ -38,6 +45,9 @@ in
       };
     };
     # TODO: 25.11: virtualisation.useSecureBoot = true;
+    virtualisation.efi.OVMF = (nixpkgsUnstable.OVMF.override {
+      secureBoot = true;
+    }).fd;
 
     systemd.services.libvirt-autocreator = {
       description = "Libvirt AutoCreator Service";
