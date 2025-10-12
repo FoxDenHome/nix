@@ -190,6 +190,10 @@ in
       enable = true;
       host = "prometheus";
     };
+    telegraf = {
+      enable = true;
+      host = "telegraf";
+    };
   };
 
   foxDen.hosts.hosts = let
@@ -268,11 +272,20 @@ in
       dns = {
         name = "prometheus";
         zone = "foxden.network";
-        dynDns = true;
       };
       addresses = [
         "10.2.11.20/16"
         "fd2c:f4cb:63be:2::b14/64"
+      ];
+    };
+    telegraf = mkVlanHost 2 {
+      dns = {
+        name = "telegraf";
+        zone = "foxden.network";
+      };
+      addresses = [
+        "10.2.11.21/16"
+        "fd2c:f4cb:63be:2::b15/64"
       ];
     };
     auth = mkVlanHost 1 {
