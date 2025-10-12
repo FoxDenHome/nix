@@ -102,7 +102,7 @@ in
       environment.persistence."/nix/persist/postgresql" = {
         hideMounts = true;
         directories = [
-          { directory = "/var/lib/postgresql"; user = "postgresql"; group = "postgresql"; mode = "u=rwx,g=rx,o="; }
+          { directory = "/var/lib/postgresql"; user = "postgres"; group = "postgres"; mode = "u=rwx,g=rx,o="; }
         ];
       };
     }
