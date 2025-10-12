@@ -43,7 +43,6 @@ let
       token_url = "https://auth.foxden.network/oauth2/token";
       auth_url = "https://auth.foxden.network/ui/oauth2";
       redirect_url = "${proto}://${hostName}/redirect";
-      login_url = "${proto}://${hostName}/login";
       scopes = [
         "openid"
         "profile"
