@@ -41,6 +41,18 @@ in
     mdadmConf = "ARRAY /dev/md0 metadata=1.2 UUID=660f8703:f7ec5be9:b586b082:ce74a589";
   };
 
+  boot.extraModprobeConfig = ''
+    blacklist bluetooth
+    blacklist btintel
+    blacklist btrtl
+    blacklist btmtk
+    blacklist btbcm
+    blacklist btusb
+
+    alias pci:v00008086d00002723sv00008086sd00000080bc02sc80i00 vfio-pci
+    options vfio-pci ids=8086:0080
+  '';
+
   boot.initrd.luks.devices = {
     nixroot = {
       device = "/dev/md0";
