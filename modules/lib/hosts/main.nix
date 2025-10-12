@@ -235,7 +235,7 @@ in
                 ++ [
                   "${netnsExecCmd} ${pkgs.sysctl}/bin/sysctl -p ${pkgs.writers.writeText "sysctls" sysctls}"
                 ] ++ (hooks.setMac or [
-                  "${ipInNsCmd} link set ${eSA serviceInterface} mac ${eSA interface.mac}"
+                  "${ipInNsCmd} link set ${eSA serviceInterface} address ${eSA interface.mac}"
                 ]) ++ [
                   "${ipInNsCmd} link set ${eSA serviceInterface} up"
                 ]
