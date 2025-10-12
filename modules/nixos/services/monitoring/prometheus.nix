@@ -41,7 +41,7 @@ in
     {
       services.prometheus = {
         enable = true;
-        stateDir = svcConfig.dataDir;
+        stateDir = "/var/lib/prometheus";
         configText = builtins.toYAML cfgObj;
       };
 
@@ -58,6 +58,7 @@ in
             "${pkgs.bash}/bin/bash -c '${pkgs.gnused}/bin/sed \"s~__HOMEASSISTANT_API_TOKEN__~$HOMEASSISTANT_API_TOKEN~\" < ${./prometheus-scrape.yml} > /tmp/scrape_configs/prometheus-scrape.yml'"
           ];
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.prometheus.path;
+          StateDirectory = "prometheus";
         };
       };
 
