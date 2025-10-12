@@ -10,8 +10,8 @@
       <feature enabled='no' name='enrolled-keys'/>
       <feature enabled='no' name='secure-boot'/>
     </firmware>
-    <loader readonly='yes' type='pflash' format='raw'>/run/libvirt/nix-ovmf/OVMF_CODE.fd</loader>
-    <nvram template='/run/libvirt/nix-ovmf/OVMF_VARS.fd' templateFormat='raw' format='raw'>/var/lib/libvirt/qemu/nvram/homeassistant_VARS.fd</nvram>
+    <loader readonly='yes' type='pflash' format='raw'>/var/lib/libvirt/OVMF_CODE.4m.fd</loader>
+    <nvram template='/var/lib/libvirt/OVMF_VARS.4m.fd' templateFormat='raw' format='raw'>/var/lib/libvirt/qemu/nvram/homeassistant_VARS.fd</nvram>
     <boot dev='hd'/>
   </os>
   <features>
