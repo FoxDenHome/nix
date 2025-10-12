@@ -45,9 +45,9 @@ in
           User = "minecraft";
           Group = "minecraft";
 
-          Environment = {
-            "SERVER_DIR" = "/data";
-          };
+          Environment = [
+            "SERVER_DIR=/data"
+          ];
 
           BindPaths = [
             "${svcConfig.dataDir}:/data"
