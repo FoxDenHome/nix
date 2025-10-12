@@ -23,7 +23,6 @@ in
         ];
         environment = {
           "DOMAIN" = hostName;
-          "MYSQL_PASSWORD" = "";
           "SMTP_FROM" = "noreply@${hostName}";
         };
         environmentFiles = [
