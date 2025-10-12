@@ -43,6 +43,9 @@ in
         services = [
           {
             name = "darksignsonline";
+            databases = [
+              "darksignsonline_wiki"
+            ];
             proxy = true;
             targetService = "podman-darksignsonline";
           }

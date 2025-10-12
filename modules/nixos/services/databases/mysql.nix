@@ -11,6 +11,11 @@ let
       name = lib.mkOption {
         type = str;
       };
+      databases = lib.mkOption {
+        type = listOf str;
+        default = [ ];
+        description = "List of databases to ensure exist for this user";
+      };
       proxy = lib.mkEnableOption "Enable MySQL proxy for 127.0.0.1 access";
       targetService = lib.mkOption {
         type = str;
@@ -79,12 +84,12 @@ in
             skip-networking = true;
           };
         };
-        ensureDatabases = map (svc: svc.name) svcConfig.services;
+        ensureDatabases = lib.flatten (map (svc: [svc.name] ++ svc.databases) svcConfig.services);
         ensureUsers = map (svc: {
           name = if svc.proxy then "mysql-${svc.name}" else svc.targetService;
-          ensurePermissions = {
-            "${svc.name}.*" = "ALL PRIVILEGES";
-          };
+          ensurePermissions = lib.attrsets.genAttrs ([svc.name] ++ svc.databases) (dbName: {
+            "${dbName}.*" = "ALL PRIVILEGES";
+          });
         }) svcConfig.services;
       };
 
