@@ -143,6 +143,7 @@ in
     backupmgr.enable = true;
     darksignsonline = {
       enable = true;
+      domain = "darksignsonline.com";
       host = "darksignsonline";
     };
     gitbackup = {
