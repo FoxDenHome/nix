@@ -68,7 +68,7 @@ in
             version = "1.0.0";
             srcs = [
               ./mibs
-              "${pkgs.net-snmp}/share/snmp/mibs"
+              "${pkgs.net-snmp.out}/share/snmp/mibs"
             ];
 
             unpackPhase = ''
