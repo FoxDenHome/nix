@@ -1,3 +1,0 @@
-job_name: mktxp
-static_configs:
-  - targets: ['mktxp.foxden.network:49090']
