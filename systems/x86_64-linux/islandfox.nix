@@ -220,6 +220,11 @@ in
       enable = true;
       host = "telegraf";
     };
+    spaceage.api = {
+      enable = true;
+      host = "spaceage-api";
+      auxHosts = [ "api.spaceage.mp" ];
+    };
   };
 
   foxDen.hosts.index = 2;
@@ -287,6 +292,38 @@ in
       type = "ALIAS";
       ttl = 3600;
       value = "foxcaves.foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "spaceage.mp";
+      name = "@";
+      type = "ALIAS";
+      ttl = 3600;
+      value = "spaceage-website.foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "spaceage.mp";
+      name = "www";
+      type = "ALIAS";
+      ttl = 3600;
+      value = "spaceage-website.foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "spaceage.mp";
+      name = "tts";
+      type = "ALIAS";
+      ttl = 3600;
+      value = "spaceage-tts.foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "spaceage.mp";
+      name = "api";
+      type = "ALIAS";
+      ttl = 3600;
+      value = "spaceage-api.foxden.network.";
       horizon = "*";
     }
   ];

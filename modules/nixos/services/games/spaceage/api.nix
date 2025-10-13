@@ -1,0 +1,67 @@
+{ foxDenLib, pkgs, lib, config, ... }:
+let
+  services = foxDenLib.services;
+
+  svcConfig = config.foxDen.services.spaceAge.api;
+in
+{
+  options.foxDen.services.spaceAge.api = {
+  } // services.http.mkOptions { svcName = "space-age-api"; name = "SpaceAge API"; };
+
+  config = lib.mkIf svcConfig.enable (lib.mkMerge [
+    (foxDenLib.services.make {
+      inherit pkgs config svcConfig;
+      name = "space-age-api";
+    }).config
+    (services.http.make {
+      inherit svcConfig pkgs config;
+      name = "caddy-space-age-api";
+      target = "reverse_proxy http://127.0.0.1:4000";
+    }).config
+    {
+      sops.secrets.spaceage-api = config.lib.foxDen.sops.mkIfAvailable {
+        mode = "0400";
+        owner = "spaceage-api";
+        group = "spaceage-api";
+      };
+
+      users.users.spaceage-api = {
+        isSystemUser = true;
+        group = "spaceage-api";
+      };
+      users.groups.spaceage-api = {};
+
+      systemd.services.spaceage-api = {
+        serviceConfig = {
+          User = "spaceage-api";
+          Group = "spaceage-api";
+
+          Environment = [
+            "DATABASE_URL=ecto://spaceage-api@127.0.0.1/spaceage-api"
+          ];
+          EnvironmentFiles = [
+            (config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.spaceage-api.path)
+          ];
+
+          Type = "exec";
+          ExecStart = "${pkgs.space_age_api}/bin/space_age_api start";
+          ExecStop = "${pkgs.space_age_api}/bin/space_age_api stop";
+          ExecReload = "${pkgs.space_age_api}/bin/space_age_api restart";
+        };
+
+        wantedBy = [ "multi-user.target" ];
+      };
+
+      foxDen.services.mysql = {
+        enable = true;
+        services = [
+          {
+            name = "spaceage-api";
+            proxy = true;
+            targetService = "spaceage-api";
+          }
+        ];
+      };
+    }
+  ]);
+}

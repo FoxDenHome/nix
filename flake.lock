@@ -150,6 +150,24 @@
         "type": "github"
       }
     },
+    "flake-utils_10": {
+      "inputs": {
+        "systems": "systems_10"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "flake-utils_2": {
       "inputs": {
         "systems": "systems_2"
@@ -540,6 +558,7 @@
         "njs-mirror-nginx": "njs-mirror-nginx",
         "oauth-jit-radius": "oauth-jit-radius",
         "sops-nix": "sops-nix",
+        "space_age_api": "space_age_api",
         "superfan": "superfan",
         "uds-proxy": "uds-proxy"
       }
@@ -585,9 +604,30 @@
         "type": "github"
       }
     },
-    "superfan": {
+    "space_age_api": {
       "inputs": {
         "flake-utils": "flake-utils_8",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1760382747,
+        "narHash": "sha256-VC6sv54QhrxPISvcCQrY5JItNUO5sZnwfXNpDbRyBlo=",
+        "owner": "SpaceAgeMP",
+        "repo": "space_age_api",
+        "rev": "e97804695fb417250f72ccc1d583bb3eb52c9036",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SpaceAgeMP",
+        "repo": "space_age_api",
+        "type": "github"
+      }
+    },
+    "superfan": {
+      "inputs": {
+        "flake-utils": "flake-utils_9",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -607,6 +647,21 @@
       }
     },
     "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_10": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
@@ -743,7 +798,7 @@
     },
     "uds-proxy": {
       "inputs": {
-        "flake-utils": "flake-utils_9",
+        "flake-utils": "flake-utils_10",
         "nixpkgs": [
           "nixpkgs"
         ]

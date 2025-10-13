@@ -29,7 +29,7 @@
     njs-mirror-nginx.inputs.nixpkgs.follows = "nixpkgs";
     doridian-website.url = ./modules/flakes/doridian-website;
     doridian-website.inputs.nixpkgs.follows = "nixpkgs";
-    space_age_api.url = "github:SpaceAge/space_age_api";
+    space_age_api.url = "github:SpaceAgeMP/space_age_api";
     space_age_api.inputs.nixpkgs.follows = "nixpkgs";
   };
 
