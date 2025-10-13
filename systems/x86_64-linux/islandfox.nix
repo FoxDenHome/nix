@@ -468,5 +468,49 @@ in
         "fd2c:f4cb:63be:3::a02/64"
       ];
     };
+    spaceage-gmod = mkVlanHost 3 {
+      dns = {
+        name = "spaceage-gmod";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      addresses = [
+        "10.3.10.4/16"
+        "fd2c:f4cb:63be:3::a04/64"
+      ];
+    };
+    spaceage-api = mkVlanHost 3 {
+      dns = {
+        name = "spaceage-api";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      addresses = [
+        "10.3.10.5/16"
+        "fd2c:f4cb:63be:3::a05/64"
+      ];
+    };
+    spaceage-tts = mkVlanHost 3 {
+      dns = {
+        name = "spaceage-tts";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      addresses = [
+        "10.3.10.6/16"
+        "fd2c:f4cb:63be:3::a06/64"
+      ];
+    };
+    spaceage-website = mkVlanHost 3 {
+      dns = {
+        name = "spaceage-website";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      addresses = [
+        "10.3.10.9/16"
+        "fd2c:f4cb:63be:3::a09/64"
+      ];
+    };
   };
 }
