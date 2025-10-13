@@ -194,8 +194,8 @@ in
       tls = true;
     };
     minecraft = {
-      enable = false; # TODO: This crashes the poor CPU somehow
-      jrePackage = pkgs.jdk17;
+      enable = true; # TODO: This crashes the poor CPU somehow
+      jrePackage = pkgs.corretto17;
       host = "minecraft";
     };
     forgejo = {
