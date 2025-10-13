@@ -59,7 +59,7 @@ in
         serviceConfig = {
           ExecStartPre = [
             "${pkgs.coreutils}/bin/mkdir -p /tmp/scrape_configs"
-            "${pkgs.coreutils}/bin/touch -p /tmp/scrape_configs/prometheus-scrape.yml"
+            "${pkgs.coreutils}/bin/touch /tmp/scrape_configs/prometheus-scrape.yml"
             "${pkgs.coreutils}/bin/chmod 600 /tmp/scrape_configs/prometheus-scrape.yml"
             "${pkgs.envsubst}/bin/envsubst -i ${./prometheus-scrape.yml} -o /tmp/scrape_configs/prometheus-scrape.yml"
           ];
