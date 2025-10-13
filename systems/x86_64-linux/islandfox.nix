@@ -226,6 +226,12 @@ in
       auxHosts = [ "api.spaceage.mp" ];
       tls = true;
     };
+    spaceage-website = {
+      enable = true;
+      host = "spaceage-website";
+      auxHosts = [ "spaceage.mp" "www.spaceage.mp" ];
+      tls = true;
+    };
   };
 
   foxDen.hosts.index = 2;
