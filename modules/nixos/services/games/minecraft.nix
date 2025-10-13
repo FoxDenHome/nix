@@ -31,11 +31,9 @@ let
       for srcFile in $srcs; do
         echo "Copying from $srcFile"
         if [ -d $srcFile ]; then
-          rm -rf server_tmp && mkdir -p server_tmp
-          cp -r $srcFile/* server_tmp
-          rm server_tmp/server-icon.png
-          cp -r server_tmp/* server/
-          rm -rf server_tmp
+          chattr -i $srcFile/server-icon.png
+          rm -f $srcFile/server-icon.png
+          cp -r $srcFile/* server
         else
           if [[ $srcFile == *.jar ]]; then
             cp -r $srcFile server/mods/$(stripHash $srcFile)
