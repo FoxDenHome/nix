@@ -205,6 +205,10 @@ in
       host = "grafana";
       tls = true;
     };
+    mktxp = {
+      enable = true;
+      host = "mktxp";
+    };
     prometheus = {
       enable = true;
       host = "prometheus";
@@ -318,6 +322,16 @@ in
       addresses = [
         "10.2.11.21/16"
         "fd2c:f4cb:63be:2::b15/64"
+      ];
+    };
+    mktxp = mkVlanHost 2 {
+      dns = {
+        name = "mktxp";
+        zone = "foxden.network";
+      };
+      addresses = [
+        "10.2.11.22/16"
+        "fd2c:f4cb:63be:2::b16/64"
       ];
     };
     auth = mkVlanHost 1 {
