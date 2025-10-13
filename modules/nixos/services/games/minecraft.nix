@@ -48,6 +48,7 @@ let
 
     installPhase = ''
       mkdir -p $out
+      chmod 500 $out/minecraft-*.sh
       cp -r ./server $out/
     '';
   });
