@@ -66,9 +66,10 @@
 		- [ ] SpaceAge
 			- [x] mysql
 			- [ ] tts
-			- [ ] api (OCI)
+			- [x] api
+				- [ ] Move CORS header emission into app itself?
 			- [ ] gmod (OCI)
-			- [ ] website
+			- [x] website
 		- [ ] minecraft: turn into a flake built from server JAR + Collar mod + custom start.sh
 		- [ ] affine
 	- [ ] icefox
