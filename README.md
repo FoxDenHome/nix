@@ -81,9 +81,9 @@
 		- [x] mirror
 		- [x] gitbackup
 		- [x] syncthing
+		- [x] arcticfox
 		- [ ] snirouter
 		- [ ] xmpp
-		- [ ] arcticfox
 
 ## Notes
 
