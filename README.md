@@ -16,65 +16,62 @@
 - [ ] Make daemon that syncs VM XMLs and create initial VM QCOW2 images automatically
 - [ ] Systems
 	- [ ] bengalfox
-		- [x] Pre migration
-			- [x] nas
-				- [x] samba
-				- [x] jellyfin
-				- [x] nasweb
-				- [x] deluge
-				- [x] nzbget
-			- [x] e621dumper
-			- [x] fadumper
-			- [x] restic
-			- [x] rest-server
-			- [x] kiwix
-			- [x] mirror
-			- [x] gitbackup
-			- [x] aurbuild
-			- [x] win2k22 VM
-		- [ ] Post migration
-			- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
-			- [ ] ollama
-			- [ ] hashtopolis
-				- [x] mysql
-				- [ ] backend
-			- [ ] hashtopolis-agent
-			- [ ] owncast
+		- [x] nas
+			- [x] samba
+			- [x] jellyfin
+			- [x] nasweb
+			- [x] deluge
+			- [x] nzbget
+		- [x] e621dumper
+		- [x] fadumper
+		- [x] restic
+		- [x] rest-server
+		- [x] kiwix
+		- [x] mirror
+		- [x] gitbackup
+		- [x] aurbuild
+		- [x] win2k22 VM
+		- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
+		- [ ] ollama
+		- [ ] hashtopolis
+			- [x] mysql
+			- [ ] backend
+		- [ ] hashtopolis-agent
+		- [ ] owncast
 	- [ ] islandfox
-		- [x] Pre migration
-			- [x] restic
-			- [x] syncthing
-			- [x] auth
-			- [x] scrypted
-			- [x] unifi-network
-			- [x] homeassistant VM (QEMU setup done, import after migration!)
-			- [x] gitbackup
-			- [x] DarkSignsOnline
-			- [x] foxcaves
-				- [x] postgres
-				- [x] redis
-				- [x] site (OCI)
-			- [x] website
-			- [x] minecraft
-			- [x] git
+		- [x] restic
+		- [x] syncthing
+		- [x] auth
+		- [x] scrypted
+		- [x] unifi-network
+		- [x] homeassistant VM (QEMU setup done, import after migration!)
+		- [x] gitbackup
+		- [x] DarkSignsOnline
+		- [x] foxcaves
+			- [x] postgres
+			- [x] redis
+			- [x] site (OCI)
+		- [x] website
+		- [x] minecraft
+		- [x] git
+			- [ ] mysql (right now on sqlite3)
+		- [x] monitoring
+			- [x] grafana
+			- [x] prometheus
+			- [x] telegraf
+			- [x] mktxp
+			- [x] grafana
+				- [ ] manage more declaratively
 				- [ ] mysql (right now on sqlite3)
-			- [x] monitoring
-				- [x] grafana
-				- [x] prometheus
-				- [x] telegraf
-				- [x] mktxp
-				- [x] grafana
-					- [ ] manage more declaratively
-					- [ ] mysql (right now on sqlite3)
-			- [ ] SpaceAge
-				- [x] mysql
-				- [ ] tts
-				- [ ] api (OCI)
-				- [ ] gmod (OCI)
-				- [ ] website
-			- [ ] minecraft: turn into a flake built from server JAR + Collar mod + custom start.sh
-				- DO NOT TURN ON MINECRAFT. It causes a hard CPU lockup. Investigate first!
-			- [ ] affine
+		- [ ] SpaceAge
+			- [x] mysql
+			- [ ] tts
+			- [ ] api (OCI)
+			- [ ] gmod (OCI)
+			- [ ] website
+		- [ ] minecraft: turn into a flake built from server JAR + Collar mod + custom start.sh
+			- DO NOT TURN ON MINECRAFT. It causes a hard CPU lockup. Investigate first!
+		- [ ] affine
 	- [ ] icefox
 		- [ ] Pre migration
 			- [x] nas (see bengalfox)
