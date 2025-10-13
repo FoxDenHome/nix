@@ -6,6 +6,33 @@ let
 
   defaultDataDir = "/var/lib/minecraft";
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
+
+  serverPackage = (pkgs.stdenv.mkDerivation {
+    name = "minecraft-server-package";
+    version = "1.0.0";
+    srcs = [
+      (pkgs.fetchzip {
+        url = "https://mediafilez.forgecdn.net/files/7046/196/All_of_Create_6.0_v2.0_serverpack.zip";
+        name = "server";
+        stripRoot = false;
+        hash = "sha256-G7J40m6Jjqc4Oi0q0RMIup/8AsNbY+dy1/0BSmeR4Nw=";
+      })
+      ./minecraft-run.sh
+    ];
+
+    unpackPhase = ''
+      mkdir -p server
+      for srcFile in $srcs; do
+        echo "Copying from $srcFile"
+        cp -r "$srcFile/"* server
+      done
+    '';
+
+    installPhase = ''
+      mkdir -p $out
+      cp -r ./server $out/
+    '';
+  });
 in
 {
   options.foxDen.services.minecraft = with lib.types; {
@@ -17,11 +44,6 @@ in
       type = path;
       default = defaultDataDir;
       description = "Directory to store Minecraft data";
-    };
-    runScript = lib.mkOption {
-      type = str;
-      default = "start.sh";
-      description = "Path to the Minecraft server run script (relative to server dir)";
     };
   } // (services.http.mkOptions { svcName = "minecraft"; name = "Minecraft server"; });
 
@@ -77,13 +99,14 @@ in
             svcConfig.dataDir
           ];
           BindReadOnlyPaths = [
+            "${serverPackage}/server:/server"
             "/usr/bin/env"
           ];
           WorkingDirectory = svcConfig.dataDir;
 
-          ExecStart = [
-            "${svcConfig.dataDir}/${svcConfig.runScript}"
-          ];
+          ExecStartPre = [ ./minecraft-install.sh ];
+          ExecStart = [ "${svcConfig.dataDir}/minecraft-run.sh" ];
+
           StateDirectory = ifDefaultData "minecraft";
         };
 
