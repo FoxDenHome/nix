@@ -2,19 +2,12 @@
 let
   services = foxDenLib.services;
 
-  mkDir = (dir: {
-    directory = dir;
-    user = "prometheus";
-    group = "prometheus";
-    mode = "u=rwx,g=,o=";
-  });
-
-  svcConfig = config.foxDen.services.prometheus;
+  svcConfig = config.foxDen.services.mktxp;
 in
 {
-  options.foxDen.services.prometheus = {
+  options.foxDen.services.mktxp = {
 
-  } // services.mkOptions { svcName = "prometheus"; name = "Prometheus monitoring server"; };
+  } // services.mkOptions { svcName = "mktxp"; name = "MKTXP monitoring server"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
