@@ -33,8 +33,8 @@ let
         if [ -d $srcFile ]; then
           rm -rf server-tmp && mkdir -p server-tmp
           cp -r $srcFile/* server-tmp
-          chmod 600 server-tmp/server-icon.png server-tmp/variables.txt server-tmp/server.properties server-tmp/start.*
-          rm -fv server-tmp/server-icon.png server-tmp/variables.txt server-tmp/server.properties server-tmp/start.*
+          chmod 600 server-tmp/server-icon.png server-tmp/variables.txt server-tmp/server.properties server-tmp/minecraft-*.sh || true
+          rm -fv server-tmp/server-icon.png server-tmp/variables.txt server-tmp/server.properties server-tmp/minecraft-*.sh
           cp -r server-tmp/* server/
         else
           if [[ $srcFile == *.jar ]]; then
