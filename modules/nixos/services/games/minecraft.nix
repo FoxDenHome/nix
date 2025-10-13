@@ -52,16 +52,16 @@ in
           Group = "minecraft";
 
           Environment = [
-            "SERVER_DIR=/data"
+            "SERVER_DIR=${svcConfig.dataDir}"
           ];
 
           BindPaths = [
-            "${svcConfig.dataDir}:/data"
+            svcConfig.dataDir
           ];
-          WorkingDirectory = "/data";
+          WorkingDirectory = "${svcConfig.dataDir}";
 
           ExecStart = [
-            "/data/${svcConfig.runScript}"
+            "${svcConfig.dataDir}/${svcConfig.runScript}"
           ];
           StateDirectory = ifDefaultData "minecraft";
         };
