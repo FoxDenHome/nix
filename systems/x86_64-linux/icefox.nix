@@ -178,6 +178,47 @@ in
       # TODO: IP of snirouter on 10.99 here
     ];
 
+    wireguard."wg-deluge" = {
+      host = "deluge";
+      interface = {
+        ips = [ "10.70.175.10/32" "fc00:bbbb:bbbb:bb01::7:af09/128" ];
+        peers = [
+          {
+            allowedIPs = [ "0.0.0.0/0" "::/0" "10.64.0.1/32" ];
+            endpoint = "23.234.81.127:51820";
+            persistentKeepalive = 25;
+            publicKey = "G6+A375GVmuFCAtvwgx3SWCWhrMvdQ+cboXQ8zp2ang=";
+          }
+        ];
+      };
+    };
+    wireguard."wg-s2s" = {
+      host = "";
+      interface = {
+        ips = [ "10.99.10.2/16" ];
+        peers = [
+          {
+            allowedIPs = [ "10.99.1.1/32" "fd2c:f4cb:63be::a63:101/128" "10.0.0.0/8" "fd2c:f4cb:63be::/60" ];
+            endpoint = "router.foxden.network:13231";
+            persistentKeepalive = 25;
+            publicKey = "nCTAIMDv50QhwjCw72FwP2u2pKGMcqxJ09DQ9wJdxH0=";
+          }
+          {
+            allowedIPs = [ "10.99.10.1/32" "fd2c:f4cb:63be::a63:a01/128" ];
+            endpoint = "redfox.doridian.net:13231";
+            persistentKeepalive = 25;
+            publicKey = "s1COjkpfpzfQ05ZLNLGQrlEhomlzwHv+APvUABzbSh8=";
+          }
+          {
+            allowedIPs = [ "10.99.1.2/32" "fd2c:f4cb:63be::a63:102/128" ];
+            endpoint = "router-backup.foxden.network:13231";
+            persistentKeepalive = 25;
+            publicKey = "8zUl7b1frvuzcBrIA5lNsegzzyAOniaZ4tczSdoqcWM=";
+          }
+        ];
+      };
+    };
+
     backupmgr.enable = true;
     gitbackup = {
       enable = true;
