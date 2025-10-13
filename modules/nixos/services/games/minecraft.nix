@@ -59,6 +59,8 @@ in
           ];
           StateDirectory = ifDefaultData "minecraft";
         };
+
+        wantedBy = [ "multi-user.target" ];
       };
 
       environment.persistence."/nix/persist/minecraft" = ifDefaultData {
