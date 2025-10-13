@@ -1,6 +1,6 @@
 { pkgs, lib, config, ... }:
 let
-  svcConfig = config.foxDen.services.apcupsd;
+  svcConfig = config.foxDen.services.watchdog;
 in
 {
   options.foxDen.services.watchdog = {
