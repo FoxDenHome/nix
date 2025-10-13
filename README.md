@@ -65,10 +65,11 @@
 				- [ ] mysql (right now on sqlite3)
 		- [ ] SpaceAge
 			- [x] mysql
-			- [ ] tts
+			- [x] tts
 			- [x] api
 				- [ ] Move CORS header emission into app itself?
-			- [ ] gmod (OCI)
+			- [x] gmod (OCI)
+				- [ ] Make StarLord + SteamCMD a flake, too
 			- [x] website
 		- [ ] minecraft: turn into a flake built from server JAR + Collar mod + custom start.sh
 		- [ ] affine
