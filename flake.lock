@@ -703,11 +703,11 @@
         "nix-jekyll-builder": "nix-jekyll-builder"
       },
       "locked": {
-        "lastModified": 1760389952,
-        "narHash": "sha256-VxKl6IrH7LPArNTPG7ZUrT2aRwihC4flmlWo5a0iFzA=",
+        "lastModified": 1760390539,
+        "narHash": "sha256-r904vsWcAAobeESgdSGpLkBgMD/oCW2Q0tAqIxJu9BE=",
         "owner": "SpaceAgeMP",
         "repo": "website",
-        "rev": "d213501a730607f7a6fd537cc019775fd6da667e",
+        "rev": "1d7f9c57b8311c18597db27fb46e33ce2df72ca0",
         "type": "github"
       },
       "original": {
