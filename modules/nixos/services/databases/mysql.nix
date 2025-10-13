@@ -86,13 +86,13 @@ in
             skip-networking = true;
           };
         };
-        ensureDatabases = lib.flatten (map (svc: [mkDbName svc.name] ++ svc.databases) svcConfig.services);
+        ensureDatabases = lib.flatten (map (svc: [(mkDbName svc.name)] ++ svc.databases) svcConfig.services);
         ensureUsers = map (svc: {
           name = if svc.proxy then svc.name else svc.targetService;
           ensurePermissions = lib.attrsets.listToAttrs (map (dbName: {
             name = "${dbName}.*";
             value = "ALL PRIVILEGES";
-          }) ([mkDbName svc.name] ++ svc.databases));
+          }) ([(mkDbName svc.name)] ++ svc.databases));
         }) svcConfig.services;
       };
 
