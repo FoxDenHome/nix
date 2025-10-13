@@ -15,7 +15,7 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "caddy-spaceage-tts";
-      target = "reverse_proxy http://127.0.0.1:8000";
+      target = "reverse_proxy 127.0.0.1:8000";
     }).config
     {
       systemd.services.spaceage-tts = {
