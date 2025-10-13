@@ -25,7 +25,11 @@ let
       mkdir -p server
       for srcFile in $srcs; do
         echo "Copying from $srcFile"
-        cp -r "$srcFile/"* server
+        if [ -d $srcFile ]; then
+          cp -r $srcFile/* server
+        else
+          cp -r $srcFile server
+        fi
       done
     '';
 
