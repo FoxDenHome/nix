@@ -68,7 +68,7 @@
 			- [x] mysql
 			- [x] tts
 			- [x] api
-				- [ ] Move CORS header emission into app itself?
+				- [x] Move CORS header emission into app itself?
 			- [x] gmod (OCI)
 				- [ ] Make StarLord + SteamCMD a flake, too
 			- [x] website
