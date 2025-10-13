@@ -42,9 +42,13 @@ in
       systemd.services.minecraft = {
         confinement.packages = [
           svcConfig.jrePackage
+          pkgs.coreutils
+          pkgs.bash
         ];
         path = [
           svcConfig.jrePackage
+          pkgs.coreutils
+          pkgs.bash
         ];
 
         serviceConfig = {
