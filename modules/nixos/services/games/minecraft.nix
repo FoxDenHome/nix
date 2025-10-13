@@ -17,18 +17,28 @@ let
         stripRoot = false;
         hash = "sha256-G7J40m6Jjqc4Oi0q0RMIup/8AsNbY+dy1/0BSmeR4Nw=";
       })
+      (pkgs.fetchurl {
+        url = "https://cdn.modrinth.com/data/E1XS8bXN/versions/rLfqDKHu/PlayerCollars-1.2.6%2B1.20.1-forge.jar";
+        hash = lib.fakeHash;
+      })
       ./minecraft-run.sh
       ./minecraft-install.sh
+      ./server-icon.png
     ];
 
     unpackPhase = ''
-      mkdir -p server
+      mkdir -p server/mods
       for srcFile in $srcs; do
         echo "Copying from $srcFile"
         if [ -d $srcFile ]; then
+          rm -f $srcFile/server-icon.png
           cp -r $srcFile/* server
         else
-          cp -r $srcFile server/$(stripHash $srcFile)
+          if [[ $srcFile == *.jar ]]; then
+            cp -r $srcFile server/mods/$(stripHash $srcFile)
+          else
+            cp -r $srcFile server/$(stripHash $srcFile)
+          fi
         fi
       done
     '';
