@@ -189,7 +189,7 @@ in
       tls = true;
     };
     minecraft = {
-      enable = true;
+      enable = false; # TODO: This crashes the poor CPU somehow
       jrePackage = pkgs.jdk17;
       host = "minecraft";
     };
