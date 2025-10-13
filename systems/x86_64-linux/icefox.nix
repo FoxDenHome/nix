@@ -175,7 +175,7 @@ in
       "10.7.0.0/23"
       "10.8.0.0/23"
       "10.9.0.0/23"
-      # TODO: IP of snirouter on 10.99 here
+      "10.99.12.2/32"
     ];
 
     wireguard."wg-deluge" = {
