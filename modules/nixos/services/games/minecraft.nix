@@ -31,7 +31,7 @@ let
       for srcFile in $srcs; do
         echo "Copying from $srcFile"
         if [ -d $srcFile ]; then
-          ls -Rla $srcFile
+          chmod 600 $srcFile/server-icon.png || true
           rm -f $srcFile/server-icon.png
           cp -r $srcFile/* server
         else
