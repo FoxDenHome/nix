@@ -37,7 +37,7 @@ in
           Group = "spaceage-api";
 
           Environment = [
-            "DATABASE_URL=ecto://spaceage-api@127.0.0.1/spaceage-api"
+            "DATABASE_URL=ecto://spaceage-api@127.0.0.1/spaceage_api"
           ];
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.spaceage-api.path;
 

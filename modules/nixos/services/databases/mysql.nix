@@ -46,6 +46,8 @@ let
   ]) else {});
 
   enable = (lib.length svcConfig.services) > 0;
+
+  mkDbName = lib.replaceString "-" "_";
 in
 {
   options.foxDen.services.mysql = with lib.types; services.mkOptions { svcName = "mysql"; name = "MySQL"; } // {
@@ -84,13 +86,13 @@ in
             skip-networking = true;
           };
         };
-        ensureDatabases = lib.flatten (map (svc: [svc.name] ++ svc.databases) svcConfig.services);
+        ensureDatabases = lib.flatten (map (svc: [mkDbName svc.name] ++ svc.databases) svcConfig.services);
         ensureUsers = map (svc: {
           name = if svc.proxy then svc.name else svc.targetService;
           ensurePermissions = lib.attrsets.listToAttrs (map (dbName: {
             name = "${dbName}.*";
             value = "ALL PRIVILEGES";
-          }) ([svc.name] ++ svc.databases));
+          }) ([mkDbName svc.name] ++ svc.databases));
         }) svcConfig.services;
       };
 
@@ -148,7 +150,7 @@ in
           after = deps;
           serviceConfig = {
             Environment = [
-              "MYSQL_DATABASE=${mySvc.name}"
+              "MYSQL_DATABASE=${mkDbName mySvc.name}"
               "MYSQL_USERNAME=${usrName}"
             ] ++ (if mySvc.proxy then [
               "MYSQL_HOST=127.0.0.1"
