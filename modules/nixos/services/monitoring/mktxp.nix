@@ -30,9 +30,11 @@ in
       systemd.services.mktxp = {
         confinement.packages = [
           pkgs.gnused
+          pkgs.which
         ];
         path = [
           pkgs.gnused
+          pkgs.which
         ];
 
         serviceConfig = {
