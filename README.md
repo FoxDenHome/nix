@@ -57,22 +57,23 @@
 			- [x] website
 			- [x] minecraft
 			- [x] git
+				- [ ] mysql (right now on sqlite3)
 			- [x] monitoring
 				- [x] grafana
 				- [x] prometheus
 				- [x] telegraf
-		- [ ] Post migration
+				- [x] mktxp
+				- [x] grafana
+					- [ ] manage more declaratively
+					- [ ] mysql (right now on sqlite3)
 			- [ ] SpaceAge
 				- [x] mysql
 				- [ ] tts
 				- [ ] api (OCI)
 				- [ ] gmod (OCI)
 				- [ ] website
-			- [ ] monitoring
-				- [ ] grafana: Manage more declaratively + mysql (right now on sqlite3)
-				- [ ] mktxp
-			- [ ] git/forgejo + mysql (right now on sqlite3)
 			- [ ] minecraft: turn into a flake built from server JAR + Collar mod + custom start.sh
+				- DO NOT TURN ON MINECRAFT. It causes a hard CPU lockup. Investigate first!
 			- [ ] affine
 	- [ ] icefox
 		- [ ] Pre migration
