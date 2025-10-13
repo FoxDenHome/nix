@@ -74,17 +74,16 @@
 			- [x] website
 		- [ ] affine
 	- [ ] icefox
-		- [ ] Pre migration
-			- [x] nas (see bengalfox)
-			- [x] restic
-			- [x] rest-server
-			- [x] kiwix
-			- [x] mirror
-			- [x] gitbackup
-			- [x] syncthing
-			- [ ] snirouter
-			- [ ] xmpp
-			- [ ] arcticfox
+		- [x] nas (see bengalfox)
+		- [x] restic
+		- [x] rest-server
+		- [x] kiwix
+		- [x] mirror
+		- [x] gitbackup
+		- [x] syncthing
+		- [ ] snirouter
+		- [ ] xmpp
+		- [ ] arcticfox
 
 ## Notes
 
