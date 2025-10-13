@@ -18,6 +18,7 @@ let
         hash = "sha256-G7J40m6Jjqc4Oi0q0RMIup/8AsNbY+dy1/0BSmeR4Nw=";
       })
       ./minecraft-run.sh
+      ./minecraft-install.sh
     ];
 
     unpackPhase = ''
@@ -104,7 +105,7 @@ in
           ];
           WorkingDirectory = svcConfig.dataDir;
 
-          ExecStartPre = [ ./minecraft-install.sh ];
+          ExecStartPre = [ "${serverPackage}/minecraft-install.sh" ];
           ExecStart = [ "${svcConfig.dataDir}/minecraft-run.sh" ];
 
           StateDirectory = ifDefaultData "minecraft";
