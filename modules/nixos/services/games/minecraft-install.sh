@@ -7,7 +7,12 @@ INSTALL_SCRIPT="$0"
 VERSION_FILE="${SERVER_DIR}/nix-version.txt"
 
 run_update() {
-    echo "${INSTALL_SCRIPT}" > "${VERSION_FILE}"
+  cd "${SERVER_DIR}"
+  rm -rf mods run.* libraries
+  cp -r /server/* ./
+
+  echo "${INSTALL_SCRIPT}" > "${VERSION_FILE}"
+  exit 0
 }
 
 if [ ! -f "${VERSION_FILE}" ]; then
