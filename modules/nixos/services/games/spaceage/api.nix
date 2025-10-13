@@ -5,17 +5,17 @@ let
   svcConfig = config.foxDen.services.spaceage.api;
 in
 {
-  options.foxDen.services.spaceage.api = {
-  } // services.http.mkOptions { svcName = "space-age-api"; name = "SpaceAge API"; };
+  options.foxDen.services.spaceage-api = {
+  } // services.http.mkOptions { svcName = "spaceage-api"; name = "SpaceAge API"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (foxDenLib.services.make {
       inherit pkgs config svcConfig;
-      name = "space-age-api";
+      name = "spaceage-api";
     }).config
     (services.http.make {
       inherit svcConfig pkgs config;
-      name = "caddy-space-age-api";
+      name = "caddy-spaceage-api";
       target = "reverse_proxy http://127.0.0.1:4000";
     }).config
     {

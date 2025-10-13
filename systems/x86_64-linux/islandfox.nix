@@ -220,7 +220,7 @@ in
       enable = true;
       host = "telegraf";
     };
-    spaceage.api = {
+    spaceage-api = {
       enable = true;
       host = "spaceage-api";
       auxHosts = [ "api.spaceage.mp" ];
