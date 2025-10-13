@@ -28,6 +28,13 @@ in
       users.groups.mktxp = {};
 
       systemd.services.mktxp = {
+        confinement.packages = [
+          pkgs.gnused
+        ];
+        path = [
+          pkgs.gnused
+        ];
+
         serviceConfig = {
           ExecStartPre = [
             "${pkgs.coreutils}/bin/touch /tmp/mktxp.conf"
