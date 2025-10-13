@@ -44,11 +44,17 @@ in
           svcConfig.jrePackage
           pkgs.coreutils
           pkgs.bash
+          pkgs.gawk
+          pkgs.gnugrep
+          pkgs.gnused
         ];
         path = [
           svcConfig.jrePackage
           pkgs.coreutils
           pkgs.bash
+          pkgs.gawk
+          pkgs.gnugrep
+          pkgs.gnused
         ];
 
         serviceConfig = {
