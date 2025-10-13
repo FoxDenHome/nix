@@ -45,7 +45,7 @@ in
           ];
 
           ExecStart = [
-            "${pkgs.mktxp}/bin/mktxp export --cfg-dir /tmp"
+            "${pkgs.mktxp}/bin/mktxp --cfg-dir /tmp export"
           ];
 
           Type = "simple";
