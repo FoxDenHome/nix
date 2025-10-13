@@ -32,6 +32,8 @@
     spaceage-api.url = "github:SpaceAgeMP/space_age_api";
     spaceage-api.inputs.nixpkgs.follows = "nixpkgs";
     spaceage-website.url = "github:SpaceAgeMP/website";
+    spaceage-tts.url = "github:SpaceAgeMP/TTS";
+    spaceage-tts.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = (inputs: import ./outputs.nix inputs);

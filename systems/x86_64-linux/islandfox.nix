@@ -232,6 +232,12 @@ in
       auxHosts = [ "spaceage.mp" "www.spaceage.mp" ];
       tls = true;
     };
+    spaceage-tts = {
+      enable = true;
+      host = "spaceage-tts";
+      auxHosts = [ "tts.spaceage.mp" ];
+      tls = true;
+    };
   };
 
   foxDen.hosts.index = 2;
