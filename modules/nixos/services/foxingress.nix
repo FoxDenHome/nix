@@ -7,7 +7,9 @@ let
 in
 {
   options.foxDen.services.foxingress = {
-    config = lib.types.attrsOf lib.types.any;
+    config = lib.mkOption {
+      type = lib.types.attrsOf lib.types.any;
+    };
     configText = lib.mkOption {
       type = lib.types.str;
       description = "Raw text configuration for foxIngress, alternative to 'config' option.";
