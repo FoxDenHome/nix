@@ -20,7 +20,7 @@ in
       systemd.services.spaceage-website = {
         serviceConfig = {
           BindReadOnlyPaths = [
-            "${pkgs.spaceage-website}/src:/web"
+            "${pkgs.spaceage-website}:/web"
           ];
         };
       };
