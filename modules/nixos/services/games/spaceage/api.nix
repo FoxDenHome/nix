@@ -2,10 +2,10 @@
 let
   services = foxDenLib.services;
 
-  svcConfig = config.foxDen.services.spaceAge.api;
+  svcConfig = config.foxDen.services.spaceage.api;
 in
 {
-  options.foxDen.services.spaceAge.api = {
+  options.foxDen.services.spaceage.api = {
   } // services.http.mkOptions { svcName = "space-age-api"; name = "SpaceAge API"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
