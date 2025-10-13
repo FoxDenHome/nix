@@ -2,7 +2,7 @@
 let
   services = foxDenLib.services;
 
-  svcConfig = config.foxDen.services.spaceage.api;
+  svcConfig = config.foxDen.services.spaceage-api;
 in
 {
   options.foxDen.services.spaceage-api = {
