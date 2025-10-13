@@ -33,6 +33,12 @@ in
       name = "minecraft";
     }).config
     {
+      users.users.minecraft = {
+        isSystemUser = true;
+        group = "minecraft";
+      };
+      users.groups.minecraft = {};
+
       systemd.services.minecraft = {
         confinement.packages = [
           svcConfig.jrePackage
