@@ -238,6 +238,10 @@ in
       auxHosts = [ "tts.spaceage.mp" ];
       tls = true;
     };
+    spaceage-gmod = {
+      enable = true;
+      host = "spaceage-gmod";
+    };
   };
 
   foxDen.hosts.index = 2;
