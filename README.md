@@ -53,6 +53,7 @@
 			- [x] site (OCI)
 		- [x] website
 		- [x] minecraft
+			- [ ] turn into a flake built from server JAR + Collar mod + custom start.sh
 		- [x] git
 			- [ ] mysql (right now on sqlite3)
 		- [x] monitoring
@@ -63,7 +64,7 @@
 			- [x] grafana
 				- [ ] manage more declaratively
 				- [ ] mysql (right now on sqlite3)
-		- [ ] SpaceAge
+		- [x] SpaceAge
 			- [x] mysql
 			- [x] tts
 			- [x] api
@@ -71,7 +72,6 @@
 			- [x] gmod (OCI)
 				- [ ] Make StarLord + SteamCMD a flake, too
 			- [x] website
-		- [ ] minecraft: turn into a flake built from server JAR + Collar mod + custom start.sh
 		- [ ] affine
 	- [ ] icefox
 		- [ ] Pre migration
