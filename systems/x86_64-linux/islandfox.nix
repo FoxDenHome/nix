@@ -224,6 +224,7 @@ in
       enable = true;
       host = "spaceage-api";
       auxHosts = [ "api.spaceage.mp" ];
+      tls = true;
     };
   };
 
