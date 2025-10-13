@@ -47,6 +47,8 @@ in
           pkgs.gawk
           pkgs.gnugrep
           pkgs.gnused
+          pkgs.wget
+          pkgs.curl
         ];
         path = [
           svcConfig.jrePackage
@@ -55,6 +57,8 @@ in
           pkgs.gawk
           pkgs.gnugrep
           pkgs.gnused
+          pkgs.wget
+          pkgs.curl
         ];
 
         serviceConfig = {
