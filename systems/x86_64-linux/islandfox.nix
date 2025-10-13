@@ -190,7 +190,7 @@ in
     };
     minecraft = {
       enable = true;
-      jrePackage = pkgs.jre17_minimal;
+      jrePackage = pkgs.jdk17;
       host = "minecraft";
     };
     forgejo = {
