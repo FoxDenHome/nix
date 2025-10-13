@@ -62,7 +62,10 @@ in
           BindPaths = [
             svcConfig.dataDir
           ];
-          WorkingDirectory = "${svcConfig.dataDir}";
+          BindReadOnlyPaths = [
+            "/usr/bin/env"
+          ];
+          WorkingDirectory = svcConfig.dataDir;
 
           ExecStart = [
             "${svcConfig.dataDir}/${svcConfig.runScript}"
