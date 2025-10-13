@@ -70,7 +70,6 @@
 			- [ ] gmod (OCI)
 			- [ ] website
 		- [ ] minecraft: turn into a flake built from server JAR + Collar mod + custom start.sh
-			- DO NOT TURN ON MINECRAFT. It causes a hard CPU lockup. Investigate first!
 		- [ ] affine
 	- [ ] icefox
 		- [ ] Pre migration
