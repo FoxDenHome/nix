@@ -39,9 +39,7 @@ in
           Environment = [
             "DATABASE_URL=ecto://spaceage-api@127.0.0.1/spaceage-api"
           ];
-          EnvironmentFiles = [
-            (config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.spaceage-api.path)
-          ];
+          EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.spaceage-api.path;
 
           Type = "exec";
           ExecStart = "${pkgs.space_age_api}/bin/space_age_api start";
