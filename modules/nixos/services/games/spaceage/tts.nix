@@ -2,7 +2,7 @@
 let
   services = foxDenLib.services;
 
-  svcConfig = config.foxDen.services.spaceage-website;
+  svcConfig = config.foxDen.services.spaceage-tts;
 in
 {
   options.foxDen.services.spaceage-tts = (services.http.mkOptions { svcName = "spaceage-tts"; name = "SpaceAge TTS"; });
