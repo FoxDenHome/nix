@@ -16,7 +16,14 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "caddy-spaceage-api";
-      target = "reverse_proxy http://127.0.0.1:4000";
+      target = ''
+        reverse_proxy http://127.0.0.1:4000
+        header {
+          Access-Control-Allow-Origin "*"
+          Access-Control-Allow-Methods "GET HEAD OPTIONS"
+          Access-Control-Allow-Headers "Client-ID"
+        }
+      '';
     }).config
     {
       sops.secrets.spaceage-api = config.lib.foxDen.sops.mkIfAvailable {
