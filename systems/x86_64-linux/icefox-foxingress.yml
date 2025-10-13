@@ -1,0 +1,60 @@
+listeners:
+  http: :80
+  https: :443
+  quic: :443
+  prometheus: :9001
+
+defaults:
+  backends:
+    default:
+      host: 169.254.169.254
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
+
+templates:
+  xmpp:
+    default:
+      host: 192.168.69.4
+  nas:
+    default:
+      host: 192.168.69.5
+      proxy_protocol: true
+  syncthing:
+    default:
+      host: 192.168.69.6
+      proxy_protocol: true
+  restic:
+    default:
+      host: 192.168.69.7
+      proxy_protocol: true
+
+hosts:
+  foxden.network:
+    template: xmpp
+  xmpp.foxden.network:
+    template: xmpp
+  upload.xmpp.foxden.network:
+    template: xmpp
+  muc.xmpp.foxden.network:
+    template: xmpp
+  proxy.xmpp.foxden.network:
+    template: xmpp
+  pubsub.xmpp.foxden.network:
+    template: xmpp
+
+  nas-offsite.foxden.network:
+    template: nas
+  kiwix-offsite.foxden.network:
+    template: kiwix
+  jellyfin-offsite.foxden.network:
+    template: jellyfin
+
+  syncthing.doridian.net:
+    template: syncthing
+
+  restic.doridian.net:
+    template: restic

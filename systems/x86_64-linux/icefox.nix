@@ -241,6 +241,11 @@ in
         rsyncUrl = "rsync://mirror.foxden.network/foxdenaur";
       };
     };
+    foxingress = {
+      enable = true;
+      host = "icefox-http";
+      configText = builtins.readFile ./icefox-foxingress.yml;
+    };
   };
 
   foxDen.dns.records = [
