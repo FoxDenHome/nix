@@ -18,18 +18,26 @@ defaults:
 templates:
   xmpp:
     default:
-      host: 192.168.69.4
+      host: 10.99.12.4
   nas:
     default:
-      host: 192.168.69.5
+      host: 10.99.12.5
       proxy_protocol: true
   syncthing:
     default:
-      host: 192.168.69.6
+      host: 10.99.12.6
       proxy_protocol: true
   restic:
     default:
-      host: 192.168.69.7
+      host: 10.99.12.7
+      proxy_protocol: true
+  jellyfin:
+    default:
+      host: 10.99.12.9
+      proxy_protocol: true
+  kiwix:
+    default:
+      host: 10.99.12.10
       proxy_protocol: true
 
 hosts:

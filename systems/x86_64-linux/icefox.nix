@@ -359,5 +359,71 @@ in
       ];
       macAddress = "00:50:56:00:81:B8";
     };
+    syncthing = mkSniHost {
+      dns = {
+        name = "syncthing-offsite";
+        zone = "foxden.network";
+      };
+      addresses = [
+        "2a01:4f9:2b:1a42::6/64"
+        "10.99.12.6/24"
+        "fd2c:f4cb:63be::a63:c06/120"
+      ];
+    };
+    restic = mkSniHost {
+      dns = {
+        name = "restic-offsite";
+        zone = "foxden.network";
+      };
+      addresses = [
+        "2a01:4f9:2b:1a42::7/64"
+        "10.99.12.7/24"
+        "fd2c:f4cb:63be::a63:c07/120"
+      ];
+    };
+    nas = mkSniHost {
+      dns = {
+        name = "nas-offsite";
+        zone = "foxden.network";
+      };
+      addresses = [
+        "2a01:4f9:2b:1a42::5/64"
+        "10.99.12.5/24"
+        "fd2c:f4cb:63be::a63:c05/120"
+      ];
+    };
+    xmpp = mkSniHost {
+      dns = {
+        name = "xmpp";
+        zone = "foxden.network";
+      };
+      addresses = [
+        "2a01:4f9:2b:1a42::4/64"
+        "10.99.12.4/24"
+        "fd2c:f4cb:63be::a63:c04/120"
+      ];
+    };
+    jellyfin = mkSniHost {
+      dns = {
+        name = "jellyfin-offsite";
+        zone = "foxden.network";
+      };
+      addresses = [
+        "2a01:4f9:2b:1a42::9/64"
+        "10.99.12.9/24"
+        "fd2c:f4cb:63be::a63:c09/120"
+      ];
+    };
+    kiwix = mkSniHost {
+      dns = {
+        name = "kiwix-offsite";
+        zone = "foxden.network";
+      };
+      addresses = [
+        "2a01:4f9:2b:1a42::a/64"
+        "10.99.12.10/24"
+        "fd2c:f4cb:63be::a63:c0a/120"
+      ];
+    };
   };
 }
