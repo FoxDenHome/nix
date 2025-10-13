@@ -15,8 +15,6 @@ run_update() {
   find -type d -exec chmod 700 {} \; || true
   find -type f -exec chmod 600 {} \; || true
   cp -r /server/* ./
-  find -type d -exec chmod 700 {} \; || true
-  find -type f -exec chmod 600 {} \; || true
 
   echo "${INSTALL_SCRIPT}" > "${VERSION_FILE}"
   exit 0
