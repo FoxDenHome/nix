@@ -41,7 +41,7 @@ in
           ExecStartPre = [
             "${pkgs.coreutils}/bin/touch /tmp/mktxp.conf"
             "${pkgs.coreutils}/bin/chmod 600 /tmp/mktxp.conf"
-            "${pkgs.bash}/bin/bash -c 'cat ${./mktxp.conf} | sed \"s/__MTIK_USERNAME__/$MTIK_USERNAME/g\" | sed \"s/__MTIK_PASSWORD__/$MTIK_PASSWORD/g\" > /tmp/mktxp.conf'"
+            "${pkgs.envsubst}/bin/envsubst -i ${./mktxp.conf} -o /tmp/mktxp.conf"
           ];
 
           ExecStart = [

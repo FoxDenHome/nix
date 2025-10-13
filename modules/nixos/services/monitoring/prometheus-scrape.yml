@@ -10,7 +10,7 @@ scrape_configs:
   - job_name: homeassistant
     metrics_path: /api/prometheus
     authorization:
-      credentials: '__HOMEASSISTANT_API_TOKEN__'
+      credentials: '$HOMEASSISTANT_API_TOKEN'
     scheme: https
     static_configs:
       - targets: ['homeassistant.foxden.network:443']

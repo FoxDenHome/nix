@@ -59,7 +59,9 @@ in
         serviceConfig = {
           ExecStartPre = [
             "${pkgs.coreutils}/bin/mkdir -p /tmp/scrape_configs"
-            "${pkgs.bash}/bin/bash -c '${pkgs.gnused}/bin/sed \"s~__HOMEASSISTANT_API_TOKEN__~$HOMEASSISTANT_API_TOKEN~\" < ${./prometheus-scrape.yml} > /tmp/scrape_configs/prometheus-scrape.yml'"
+            "${pkgs.coreutils}/bin/touch -p /tmp/scrape_configs/prometheus-scrape.yml"
+            "${pkgs.coreutils}/bin/chmod 600 /tmp/scrape_configs/prometheus-scrape.yml"
+            "${pkgs.envsubst}/bin/envsubst -i ${./prometheus-scrape.yml} -o /tmp/scrape_configs/prometheus-scrape.yml"
           ];
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.prometheus.path;
         };
