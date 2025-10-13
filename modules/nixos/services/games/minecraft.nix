@@ -28,7 +28,7 @@ let
         if [ -d $srcFile ]; then
           cp -r $srcFile/* server
         else
-          cp -r $srcFile server
+          cp -r $srcFile server/$(stripHash $srcFile)
         fi
       done
     '';
@@ -109,7 +109,7 @@ in
           ];
           WorkingDirectory = svcConfig.dataDir;
 
-          ExecStartPre = [ "${serverPackage}/minecraft-install.sh" ];
+          ExecStartPre = [ "/server/minecraft-install.sh" ];
           ExecStart = [ "${svcConfig.dataDir}/minecraft-run.sh" ];
 
           StateDirectory = ifDefaultData "minecraft";
