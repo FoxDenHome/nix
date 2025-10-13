@@ -230,6 +230,62 @@ in
       value = "website.foxden.network.";
       horizon = "*";
     }
+    {
+      zone = "doridian.net";
+      name = "www";
+      type = "ALIAS";
+      ttl = 3600;
+      value = "website.foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "darksignsonline.com";
+      name = "@";
+      type = "ALIAS";
+      ttl = 3600;
+      value = "darksignsonline.foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "darksignsonline.com";
+      name = "www";
+      type = "ALIAS";
+      ttl = 3600;
+      value = "darksignsonline.foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "f0x.es";
+      name = "@";
+      type = "ALIAS";
+      ttl = 3600;
+      value = "foxcaves.foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "foxcav.es";
+      name = "@";
+      type = "ALIAS";
+      ttl = 3600;
+      value = "foxcaves.foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "f0x.es";
+      name = "www";
+      type = "ALIAS";
+      ttl = 3600;
+      value = "foxcaves.foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "foxcav.es";
+      name = "www";
+      type = "ALIAS";
+      ttl = 3600;
+      value = "foxcaves.foxden.network.";
+      horizon = "*";
+    }
   ];
 
   foxDen.hosts.hosts = let
