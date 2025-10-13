@@ -19,7 +19,7 @@ let
       })
       (pkgs.fetchurl {
         url = "https://cdn.modrinth.com/data/E1XS8bXN/versions/rLfqDKHu/PlayerCollars-1.2.6%2B1.20.1-forge.jar";
-        hash = lib.fakeHash;
+        hash = "sha256-kEYZzR+tWaISRCkvZ0I1nHHXUabZxMdchs7YxX+HBqA=";
       })
       ./minecraft-run.sh
       ./minecraft-install.sh
