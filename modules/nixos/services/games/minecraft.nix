@@ -51,6 +51,7 @@ in
           pkgs.gnused
           pkgs.wget
           pkgs.curl
+          pkgs.unzip
         ];
         path = [
           svcConfig.jrePackage
@@ -61,6 +62,7 @@ in
           pkgs.gnused
           pkgs.wget
           pkgs.curl
+          pkgs.unzip
         ];
 
         serviceConfig = {
