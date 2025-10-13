@@ -36,6 +36,7 @@ in
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
+  services.xserver.videoDrivers = [ "amdgpu" ];
   hardware.graphics.enable = true;
 
   boot.swraid = {
