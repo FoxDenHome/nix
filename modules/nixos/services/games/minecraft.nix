@@ -31,7 +31,7 @@ let
       for srcFile in $srcs; do
         echo "Copying from $srcFile"
         if [ -d $srcFile ]; then
-          chattr -i $srcFile/server-icon.png
+          ls -Rla $srcFile
           rm -f $srcFile/server-icon.png
           cp -r $srcFile/* server
         else
