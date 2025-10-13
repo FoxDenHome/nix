@@ -109,7 +109,7 @@ in
           ];
           WorkingDirectory = svcConfig.dataDir;
 
-          ExecStartPre = [ "/server/minecraft-install.sh" ];
+          ExecStartPre = [ "${serverPackage}/server/minecraft-install.sh" ];
           ExecStart = [ "${svcConfig.dataDir}/minecraft-run.sh" ];
 
           StateDirectory = ifDefaultData "minecraft";
