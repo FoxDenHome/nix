@@ -6,12 +6,10 @@ in
   options.foxDen.services.backupmgr.enable = lib.mkEnableOption "backupmgr";
 
   config = lib.mkIf svcConfig.enable {
-    programs.fuse.enable = true;
-
     environment.systemPackages = [
       pkgs.restic
       pkgs.backupmgr
-      pkgs.fuse3
+      pkgs.fuse
     ];
 
     systemd.services.backupmgr-backup = {
