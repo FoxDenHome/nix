@@ -224,6 +224,23 @@ in
       enable = true;
       host = "";
     };
+    mirror = {
+      enable = true;
+      host = "mirror";
+      tls = true;
+      dataDir = "/mnt/ztank/local/mirror";
+      archMirrorId = "23m.com";
+      sources.archlinux = {
+        rsyncUrl = "rsync://mirror.23m.com/archlinux";
+        httpsUrl = "https://mirror.23m.com/archlinux";
+      };
+      sources.cachyos = {
+        rsyncUrl = "rsync://202.61.194.133:8958/cachy";
+      };
+      sources.foxdenaur = {
+        rsyncUrl = "rsync://mirror.foxden.network/foxdenaur";
+      };
+    };
   };
 
   foxDen.dns.records = [
@@ -319,6 +336,8 @@ in
       addresses = [
         "95.216.116.139/26"
         "2a01:4f9:2b:1a42::3/64"
+        "10.99.12.3/24"
+        "fd2c:f4cb:63be::a63:c03/120"
       ];
       macAddress = "TODO";
     };
@@ -330,6 +349,8 @@ in
       addresses = [
         "95.216.116.180/26"
         "2a01:4f9:2b:1a42::8/64"
+        "10.99.12.2/24"
+        "fd2c:f4cb:63be::a63:c02/120"
       ];
       macAddress = "00:50:56:00:81:B8";
     };
