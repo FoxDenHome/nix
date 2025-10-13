@@ -139,6 +139,8 @@ in
       "10.9.0.0/23"
     ];
 
+    watchdog.enable = true;
+
     apcupsd.enable = true;
     backupmgr.enable = true;
     darksignsonline = {

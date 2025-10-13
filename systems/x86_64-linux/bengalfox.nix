@@ -221,6 +221,8 @@ in
       "10.9.0.0/23"
     ];
 
+    watchdog.enable = true;
+
     wireguard."wg-deluge" = {
       host = "deluge";
       interface = {
