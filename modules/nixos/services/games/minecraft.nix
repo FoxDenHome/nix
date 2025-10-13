@@ -85,6 +85,7 @@ in
         confinement.packages = [
           svcConfig.jrePackage
           pkgs.coreutils
+          pkgs.findutils
           pkgs.bash
           pkgs.gawk
           pkgs.gnugrep
@@ -96,6 +97,7 @@ in
         path = [
           svcConfig.jrePackage
           pkgs.coreutils
+          pkgs.findutils
           pkgs.bash
           pkgs.gawk
           pkgs.gnugrep
