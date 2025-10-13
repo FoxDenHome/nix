@@ -39,6 +39,8 @@ in
       };
       users.groups.minecraft = {};
 
+      environment.systemPackages = [ pkgs.unzip ];
+
       systemd.services.minecraft = {
         confinement.packages = [
           svcConfig.jrePackage
