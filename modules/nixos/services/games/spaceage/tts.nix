@@ -8,7 +8,7 @@ in
   options.foxDen.services.spaceage-tts = (services.http.mkOptions { svcName = "spaceage-tts"; name = "SpaceAge TTS"; });
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
-    (services.http.make {
+    (services.make {
       inherit svcConfig pkgs config;
       name = "spaceage-tts";
     }).config
