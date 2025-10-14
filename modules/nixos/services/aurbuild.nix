@@ -9,13 +9,7 @@ let
   builderArch = "x86_64";
 in
 {
-  options.foxDen.services.aurbuild = {
-    makepkgConf = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      description = "Optional makepkg.conf";
-    };
-  } // (foxDenLib.services.oci.mkOptions { svcName = "aurbuild"; name = "AUR build service"; });
+  options.foxDen.services.aurbuild = foxDenLib.services.oci.mkOptions { svcName = "aurbuild"; name = "AUR build service"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (foxDenLib.services.oci.make {
