@@ -223,14 +223,8 @@ in
     filter = {
       content = ''
         chain forward {
-          type filter hook forward priority 0;
+          type filter hook forward priority 0; policy accept;
           oifname ${phyIface} ether saddr & ff:ff:00:00:00:00 == e6:21:00:00:00:00 drop
-          ether type ip accept
-          ether type arp accept
-          iifname ${phyIface} accept
-          oifname != ${phyIface} accept
-          ether saddr ${ifcfg.mac} accept
-          drop
         }
       '';
       family = "bridge";
