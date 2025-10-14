@@ -16,10 +16,10 @@ let
     dependency = if cfgHostName != "" then [ host.unit ] else [];
     resolvConf = if cfgHostName != "" then host.resolvConf else "/etc/resolv.conf";
 
-    gpuPackages = if gpu then [
+    gpuPackages = if gpu && config.hardware.graphics.package then [
       config.hardware.graphics.package
     ] ++ config.hardware.graphics.extraPackages else [];
-    gpuPaths = if gpu then [
+    gpuPaths = if gpu && config.hardware.graphics.package then [
       "-/run/opengl-driver"
       "-/run/opengl-driver-32"
     ] else [];
