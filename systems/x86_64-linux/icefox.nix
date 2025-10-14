@@ -235,12 +235,15 @@ in
           type nat hook prerouting priority dstnat; policy accept;
 
           # foxIngress
-          iifname br-default tcp dport { 80, 443 } ip daddr 95.216.116.140 dnat to 10.99.12.2
-          iifname br-default udp dport { 443 } ip daddr 95.216.116.140 dnat to 10.99.12.2
+          iifname br-default ip daddr 95.216.116.140 tcp dport { 80, 443 } dnat to 10.99.12.2
+          iifname br-default ip daddr 95.216.116.140 udp dport { 443 } dnat to 10.99.12.2
+
+          # XMPP
+          iifname br-default ip daddr 95.216.116.140 udp dport { 5222, 5269, 5223 } dnat to 10.99.12.4
 
           # Syncthing
-          iifname br-default tcp dport { 22000 } ip daddr 95.216.116.140 dnat to 10.99.12.6
-          iifname br-default udp dport { 22000 } ip daddr 95.216.116.140 dnat to 10.99.12.6
+          iifname br-default ip daddr 95.216.116.140 tcp dport { 22000 } dnat to 10.99.12.6
+          iifname br-default ip daddr 95.216.116.140 udp dport { 22000 } dnat to 10.99.12.6
         }
       '';
       family = "ip";
