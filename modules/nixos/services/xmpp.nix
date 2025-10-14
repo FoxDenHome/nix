@@ -17,6 +17,9 @@ let
 
   tlsChain = "/var/lib/foxden/caddy-prosody/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.crt";
   tlsKey = "/var/lib/foxden/caddy-prosody/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.key";
+  foxDenHost = "xmpp.foxden.network";
+  foxDenTlsChain = "/var/lib/foxden/caddy-prosody/certificates/acme-v02.api.letsencrypt.org-directory/${foxDenHost}/${foxDenHost}.crt";
+  foxDenTlsKey = "/var/lib/foxden/caddy-prosody/certificates/acme-v02.api.letsencrypt.org-directory/${foxDenHost}/${foxDenHost}.key";
 in
 {
   options.foxDen.services.xmpp = {
@@ -47,6 +50,8 @@ in
           BindReadOnlyPaths = [
             tlsChain
             tlsKey
+            foxDenTlsChain
+            foxDenTlsKey
             "/etc/prosody/prosody.cfg.lua"
           ];
         };
@@ -62,8 +67,8 @@ in
         virtualHosts."foxden.network" = {
           enabled = true;
           domain = "foxden.network";
-          ssl.cert = tlsChain;
-          ssl.key = tlsKey;
+          ssl.cert = foxDenTlsChain;
+          ssl.key = foxDenTlsKey;
         };
         muc = [ {
           domain = "muc.xmpp.foxden.network";          
