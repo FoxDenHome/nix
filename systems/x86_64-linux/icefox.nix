@@ -361,6 +361,17 @@ in
         bypassInternal = true;
       };
     };
+    nasweb = {
+      host = "nas";
+      enable = true;
+      root = "/mnt/zhdd/nas";
+      tls = true;
+      oAuth = {
+        enable = true;
+        clientId = "nas-icefox";
+        bypassInternal = true;
+      };
+    };
     mirror = {
       enable = true;
       host = "mirror";
