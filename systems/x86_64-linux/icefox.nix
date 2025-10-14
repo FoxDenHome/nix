@@ -411,7 +411,7 @@ in
     };
 
     mkSniHost = (iface: lib.mkMerge [
-      (mkHost iface)
+      (mkHost ({ mac = null; } // iface))
       {
         interfaces.default.dns.auxAddresses = [ "95.216.116.180" ];
       }
