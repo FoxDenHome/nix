@@ -62,8 +62,8 @@ in
         admins = [
           "doridian@foxden.network"
         ];
-        ssl.cert = tlsChain;
-        ssl.key = tlsKey;
+        ssl.cert = foxDenTlsChain;
+        ssl.key = foxDenTlsKey;
         virtualHosts."foxden.network" = {
           enabled = true;
           domain = "foxden.network";
@@ -74,7 +74,7 @@ in
           domain = "muc.xmpp.foxden.network";          
         } ];
         httpFileShare = {
-          domain = "https://upload.xmpp.foxden.network";
+          domain = "upload.xmpp.foxden.network";
           size_limit = 1024 * 1024 * 1000;
           daily_quota = 10 * 1024 * 1024 * 1000;
           expires_after = 60 * 60 * 24 * 7;
