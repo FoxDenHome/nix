@@ -402,6 +402,7 @@ in
         driver = "bridge";
         driverOpts = {
           bridge = ifcfg-s2s.interface;
+          vlan = 0;
         };
         routes = [
           { Destination = "10.0.0.0/8"; Gateway = "10.99.12.1"; }

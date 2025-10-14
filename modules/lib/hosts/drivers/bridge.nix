@@ -7,7 +7,7 @@ in
 {
   driverOptsType = with nixpkgs.lib.types; submodule {
     vlan = nixpkgs.lib.mkOption {
-      type = ints.positive;
+      type = ints.unsigned;
     };
     bridge = nixpkgs.lib.mkOption {
       type = str;
@@ -26,11 +26,11 @@ in
           value = {
             name = mkIfaceName iface;
             bridge = [iface.driverOpts.bridge];
-            bridgeVLANs = [{
+            bridgeVLANs = if (vlan > 0) then [{
               PVID = vlan;
               EgressUntagged = vlan;
               VLAN = vlan;
-            }];
+            }] else [];
           };
         })) interfaces));
   };
