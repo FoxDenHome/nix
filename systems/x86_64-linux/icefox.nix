@@ -530,6 +530,17 @@ in
         "fd2c:f4cb:63be::a63:c0a/120"
       ];
     };
+    deluge = mkSniHost {
+      dns = {
+        name = "deluge-offsite";
+        zone = "foxden.network";
+      };
+      addresses = [
+        "2a01:4f9:2b:1a42::7/64"
+        "10.99.12.11/24"
+        "fd2c:f4cb:63be::a63:c0b/120"
+      ];
+    };
   };
 
   systemd.services."getty@tty1" = {
