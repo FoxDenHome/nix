@@ -335,9 +335,9 @@ in
         peers = [
           {
             allowedIPs = [ "0.0.0.0/0" "::/0" "10.64.0.1/32" ];
-            endpoint = "23.234.81.127:51820";
+            endpoint = "193.138.7.157:51820";
             persistentKeepalive = 25;
-            publicKey = "G6+A375GVmuFCAtvwgx3SWCWhrMvdQ+cboXQ8zp2ang=";
+            publicKey = "xeHVhXxyyFqUEE+nsu5Tzd/t9en+++4fVFcSFngpcAU=";
           }
         ];
       };
