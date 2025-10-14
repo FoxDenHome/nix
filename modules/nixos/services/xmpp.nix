@@ -112,6 +112,10 @@ in
           trusted_proxies = { "127.0.0.1" }
 
           prosodyctl_service_warnings = false
+
+          log = {
+            { levels = { min = "info" }, to = "console" },
+          }
         '';
         package = nixpkgs-unstable.outputs.legacyPackages.${systemArch}.prosody.override {
           withCommunityModules = [
