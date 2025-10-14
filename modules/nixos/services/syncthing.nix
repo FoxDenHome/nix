@@ -53,8 +53,8 @@ in
           webdav /dav/* {
             prefix /dav
           }
-          basicauth {
-            doridian "{$WEBDAV_PASSWORD_DORIDIAN}"
+          basic_auth {
+            doridian {$WEBDAV_PASSWORD_DORIDIAN}
           }
         }
       '';
