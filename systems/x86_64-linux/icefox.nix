@@ -249,6 +249,9 @@ in
     ];
 
     networkConfig = {
+      IPv4Forwarding = true;
+      IPv6Forwarding = true;
+
       DHCP = "no";
       IPv6AcceptRA = false;
     };
