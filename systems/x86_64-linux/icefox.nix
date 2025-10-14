@@ -440,7 +440,7 @@ in
     }
     {
       zone = "doridian.net";
-      name = "cachyos";
+      name = "archlinux";
       type = "CNAME";
       ttl = 3600;
       value = "mirror.doridian.net.";
@@ -449,6 +449,14 @@ in
     {
       zone = "foxden.network";
       name = "xmpp";
+      type = "CNAME";
+      ttl = 3600;
+      value = "foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "foxden.network";
+      name = "upload.xmpp";
       type = "CNAME";
       ttl = 3600;
       value = "foxden.network.";
