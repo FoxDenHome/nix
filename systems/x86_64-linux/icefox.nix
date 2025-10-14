@@ -219,12 +219,12 @@ in
       content = ''
         chain postrouting {
           type nat hook postrouting priority srcnat; policy accept;
-          ip saddr 10.99.12.0/24 oifname br-default snat to 95.216.116.140
+          ip saddr 10.99.12.0/24 oifname "br-default" snat to 95.216.116.140
         }
 
         chain prerouting {
           type nat hook prerouting priority dstnat; policy accept;
-          ip daddr 95.216.116.140/32 iifname br-default jump sharedip
+          ip daddr 95.216.116.140/32 iifname "br-default" jump sharedip
         }
 
         chain sharedip {
@@ -249,7 +249,7 @@ in
       content = ''
         chain forward {
           type filter hook forward priority 0; policy accept;
-          oifname ${phyIface} ether saddr & ff:ff:00:00:00:00 == e6:21:00:00:00:00 drop
+          oifname "${phyIface}" ether saddr & ff:ff:00:00:00:00 == e6:21:00:00:00:00 drop
         }
       '';
       family = "bridge";
