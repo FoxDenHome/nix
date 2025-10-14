@@ -399,7 +399,7 @@ in
       enable = true;
       host = "xmpp";
       tls = true;
-      auxHosts = [ "xmpp.foxden.network" ];
+      auxHosts = [ "xmpp.foxden.network" "upload.xmpp.foxden.network" ];
     };
   };
 
