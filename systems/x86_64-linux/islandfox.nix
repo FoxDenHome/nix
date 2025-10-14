@@ -160,7 +160,7 @@ in
       host = "syncthing";
       tls = true;
       syncthingHost = "syncthing.foxden.network";
-      webdavHost = "dav.foxden.network";
+      webdavHost = "webdav.syncthing.foxden.network";
     };
     kanidm.server = {
       enable = true;
