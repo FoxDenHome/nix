@@ -460,7 +460,7 @@ in
       {
         interfaces.default.routes = [
           { Destination = "0.0.0.0/0"; Gateway = "95.216.116.129"; }
-          { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::2"; }
+          { Destination = "::/0"; Gateway = "fe80::1"; }
         ];
       }
     ]);
