@@ -42,6 +42,10 @@ in
       };
     };
 
+    environment.systemPackages = [
+      pkgs.virtiofsd
+    ];
+
     systemd.services = {
       libvirt-autocreator = {
         description = "Libvirt AutoCreator Service";
