@@ -102,6 +102,8 @@ in
           -- https://modules.prosody.im/mod_mam.html
           archive_expires_after = "1y"
 
+          http_max_content_size = 1024 * 1024 * 1000
+
           prosodyctl_service_warnings = false
         '';
         package = nixpkgs-unstable.outputs.legacyPackages.${systemArch}.prosody.override {
