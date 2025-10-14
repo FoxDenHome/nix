@@ -471,6 +471,7 @@ in
         interfaces.default = {
           dns.auxAddresses = [ "95.216.116.180" ];
           routes = [
+            { Destination = "2a01:4f9:2b:1a42::2"; }
             { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::2"; }
           ];
           driver = "routed";
