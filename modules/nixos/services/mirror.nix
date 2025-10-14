@@ -15,7 +15,8 @@ let
     ];
   };
 
-  svcRootName = if (primaryInterface.dns.name == "mirror") then "@" else (lib.strings.removePrefix "mirror." primaryInterface.dns.name);
+  svcRootName = if svcConfig.rootName != "" then svcConfig.rootName else
+    if (primaryInterface.dns.name == "mirror") then "@" else (lib.strings.removePrefix "mirror." primaryInterface.dns.name);
   svcRootDomain = foxDenLib.global.dns.mkHost {
     zone = primaryInterface.dns.zone;
     name = svcRootName;
@@ -51,6 +52,11 @@ in
 
     sources = lib.mkOption {
       type = lib.types.attrsOf sourceType;
+    };
+
+    rootName = lib.mkOption {
+      type = lib.types.str;
+      default = "";
     };
   } // (services.http.mkOptions { svcName = "mirror"; name = "Mirror server"; });
 

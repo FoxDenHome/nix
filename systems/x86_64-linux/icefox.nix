@@ -345,6 +345,7 @@ in
       sources.foxdenaur = {
         rsyncUrl = "rsync://mirror.foxden.network/foxdenaur";
       };
+      rootName = "doridian.net";
     };
     foxingress = {
       enable = true;
