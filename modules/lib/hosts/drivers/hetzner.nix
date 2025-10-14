@@ -2,7 +2,7 @@
 let
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
-  mkIfaceName = (iface: "vehz${iface.suffix}");
+  mkIfaceName = (iface: "vehz-${iface.suffix}");
 in
 {
   driverOptsType = with nixpkgs.lib.types; submodule {

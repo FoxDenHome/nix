@@ -1,7 +1,7 @@
 { nixpkgs, ... } :
 let
   eSA = nixpkgs.lib.strings.escapeShellArg;
-  mkIfaceName = (interface: "vert${interface.suffix}");
+  mkIfaceName = (interface: "vert-${interface.suffix}");
 in
 {
   driverOptsType = with nixpkgs.lib.types; submodule {

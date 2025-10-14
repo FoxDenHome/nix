@@ -193,7 +193,7 @@ in
 
             mkHooks = (interface: let
               ifaceDriver = foxDenLib.hosts.drivers.${interface.driver};
-              serviceInterface = (ifaceDriver.serviceInterface or (interface: "host${interface.suffix}")) interface;
+              serviceInterface = (ifaceDriver.serviceInterface or (interface: "host-${interface.suffix}")) interface;
 
               driverRunParams = { inherit ipCmd ipInNsCmd netnsExecCmd serviceInterface interface; };
               hooks = ifaceDriver.hooks driverRunParams;
