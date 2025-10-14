@@ -225,7 +225,7 @@ in
           ip accept
           arp accept
           iifname ${phyIface} accept
-          oifname not ${phyIface} accept
+          oifname != ${phyIface} accept
           saddr ether ${ifcfg.mac} accept
           drop
         }
