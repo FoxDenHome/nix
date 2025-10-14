@@ -224,7 +224,7 @@ in
     watchdog.enable = true;
 
     wireguard."wg-deluge" = {
-      host = "deluge";
+      host = "deluge"; # solid snake
       interface = {
         ips = [ "10.70.175.10/32" "fc00:bbbb:bbbb:bb01::7:af09/128" ];
         peers = [

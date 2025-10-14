@@ -329,9 +329,9 @@ in
     ];
 
     wireguard."wg-deluge" = {
-      host = "deluge";
+      host = "deluge"; # lawful dove
       interface = {
-        ips = [ "10.70.175.10/32" "fc00:bbbb:bbbb:bb01::7:af09/128" ];
+        ips = [ "10.73.218.165/32" "fc00:bbbb:bbbb:bb01::a:daa4/128" ];
         peers = [
           {
             allowedIPs = [ "0.0.0.0/0" "::/0" "10.64.0.1/32" ];
