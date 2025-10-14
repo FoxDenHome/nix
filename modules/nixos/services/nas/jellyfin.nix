@@ -49,7 +49,7 @@ in
           ];
           BindReadOnlyPaths = [
             "${svcConfig.mediaDir}:/media"
-          ] ++ foxDenLib.services.mkEtcPaths [
+          ] ++ services.mkEtcPaths [
             "fonts"
           ];
         };

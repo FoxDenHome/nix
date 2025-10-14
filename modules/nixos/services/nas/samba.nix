@@ -93,7 +93,7 @@ in
           ];
           BindReadOnlyPaths = [
             "-/var/run/nscd"
-          ] ++ foxDenLib.services.mkEtcPaths [
+          ] ++ services.mkEtcPaths [
             "nsswitch.conf"
           ];
         };

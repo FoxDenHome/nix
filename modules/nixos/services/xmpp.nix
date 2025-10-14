@@ -47,9 +47,8 @@ in
           BindReadOnlyPaths = [
             tlsChain
             tlsKey
-          ] ++ (foxDenLib.services.mkEtcPaths [
-            "prosody"
-          ]);
+            "/etc/prosody/prosody.cfg.lua"
+          ];
         };
       };
 
