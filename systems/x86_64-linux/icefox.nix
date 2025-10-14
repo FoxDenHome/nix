@@ -42,34 +42,34 @@ in
   };
 
   boot.initrd.luks.devices = {
-      nixroot = {
-        device = "/dev/md0";
-        allowDiscards = true;
-      };
+    nixroot = {
+      device = "/dev/md0";
+      allowDiscards = true;
+    };
   };
 
-  fileSystems."/" =
-    { device = "none";
-      fsType = "tmpfs";
-      options = [ "mode=755" ];
-    };
+  fileSystems."/" = {
+    device = "none";
+    fsType = "tmpfs";
+    options = [ "mode=755" ];
+  };
 
-  fileSystems."/nix" =
-    { device = "/dev/mapper/nixroot";
-      fsType = "xfs";
-    };
+  fileSystems."/nix" = {
+    device = "/dev/mapper/nixroot";
+    fsType = "xfs";
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/nvme0n1p1";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" "nofail" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/nvme0n1p1";
+    fsType = "vfat";
+    options = [ "fmask=0022" "dmask=0022" "nofail" ];
+  };
 
-  fileSystems."/boot2" =
-    { device = "/dev/nvme1n1p1";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" "nofail" ];
-    };
+  fileSystems."/boot2" = {
+    device = "/dev/nvme1n1p1";
+    fsType = "vfat";
+    options = [ "fmask=0022" "dmask=0022" "nofail" ];
+  };
 
   fileSystems."/mnt/ztank" = {
     device = "ztank/ROOT";

@@ -63,28 +63,28 @@ in
     };
   };
 
-  fileSystems."/" =
-    { device = "none";
-      fsType = "tmpfs";
-      options = [ "mode=755" ];
-    };
+  fileSystems."/" = {
+    device = "none";
+    fsType = "tmpfs";
+    options = [ "mode=755" ];
+  };
 
-  fileSystems."/nix" =
-    { device = "/dev/mapper/nixroot";
-      fsType = "xfs";
-    };
+  fileSystems."/nix" = {
+    device = "/dev/mapper/nixroot";
+    fsType = "xfs";
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/nvme0n1p1";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" "nofail" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/nvme0n1p1";
+    fsType = "vfat";
+    options = [ "fmask=0022" "dmask=0022" "nofail" ];
+  };
 
-  fileSystems."/boot2" =
-    { device = "/dev/sda1";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" "nofail" ];
-    };
+  fileSystems."/boot2" = {
+    device = "/dev/sda1";
+    fsType = "vfat";
+    options = [ "fmask=0022" "dmask=0022" "nofail" ];
+  };
 
   systemd.network.networks."30-${ifcfg.interface}" = {
     name = ifcfg.interface;
