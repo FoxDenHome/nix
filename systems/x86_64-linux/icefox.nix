@@ -371,6 +371,11 @@ in
       enable = true;
       host = "";
     };
+    syncthing = {
+      enable = true;
+      host = "syncthing";
+      tls = true;
+    };
     kiwix = {
       enable = true;
       host = "kiwix";
@@ -392,6 +397,12 @@ in
         clientId = "nas-icefox";
         bypassInternal = true;
       };
+    };
+    jellyfin = {
+      host = "jellyfin";
+      enable = true;
+      mediaDir = "/mnt/zhdd/nas";
+      tls = true;
     };
     mirror = {
       enable = true;
