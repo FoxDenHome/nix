@@ -3,7 +3,7 @@ let
   services = foxDenLib.services;
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
-  mkOauthProxy = (inputs@{ config, svcConfig, pkgs, target, ... }: let
+  mkOauthProxy = (inputs@{ config, svcConfig, pkgs, ... }: let
     name = inputs.name;
     serviceName = "oauth2-proxy-${name}";
 
@@ -119,7 +119,7 @@ in
     };
   } // (services.mkOptions inputs));
 
-  make = (inputs@{ config, svcConfig, pkgs, target, webdav ? false, rawConfig ? null, ... }:
+  make = (inputs@{ config, svcConfig, pkgs, webdav ? false, rawConfig ? null, ... }:
     let
       name = inputs.name;
 
@@ -178,7 +178,7 @@ in
                 # Custom config can be injected here
                 ${inputs.extraConfig or ""}
                 # Auto generated config below
-                ${mkCaddyHandler target svcConfig}
+                ${mkCaddyHandler inputs.target svcConfig}
               }
             '');
             mode = "0600";
