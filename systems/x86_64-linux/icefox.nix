@@ -433,8 +433,8 @@ in
       interfaces.default = {
         inherit (iface) dns mac;
         addresses = lib.filter (ip: !(foxDenLib.util.isPrivateIP ip)) iface.addresses;
-        driver = "hetzner";
-        driverOpts = {
+        driver = lib.mkDefault "hetzner";
+        driverOpts = lib.mkDefault {
           network = "30-${ifcfg.interface}";
           bridge = ifcfg.interface;
         };
@@ -468,10 +468,14 @@ in
     mkSniHost = (iface: lib.mkMerge [
       (mkIntHost ({ mac = null; } // iface))
       {
-        interfaces.default.dns.auxAddresses = [ "95.216.116.180" ];
-        interfaces.default.routes = [
-          { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::2"; }
-        ];
+        interfaces.default = {
+          dns.auxAddresses = [ "95.216.116.180" ];
+          routes = [
+            { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::2"; }
+          ];
+          driver = "routed";
+          driverOpts.bridge = lib.mkNull;
+        };
         interfaces.s2s.routes = [
           { Destination = "0.0.0.0/0"; Gateway = "10.99.12.1"; }
         ];
