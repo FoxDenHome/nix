@@ -26,7 +26,6 @@ in
       systemd.services.foxingress = {
         serviceConfig = {
           Type = "simple";
-          Restart = "no";
           BindReadOnlyPaths = [ configFile ];
           Environment = [
             "CONFIG_FILE=${configFile}"
