@@ -4,6 +4,7 @@ keys:
   - &server_testvm_fennec age1tgv02ark8aq0knagyt7tdpgdc2e6rds9c2rm8uumuqj6vr3ngujqg8eqr6
   - &server_bengalfox age1hdgjgrzk9lq88f3vwxtf4p9fnmjkuzdf4ykcg8p7kgf3t8hgxqvqenv5fl
   - &server_islandfox age142dhgtgtgm6kv252pd8ypt3xnvvzl2qavycvme9yqzyesktcwuyq8w3u22
+  - &server_icefox age1cs2u7xvd88ukwh9hptpzdxq728a692jxxajtqtqkrqxyv0ld2a6s2mgxvm
 # First hit rule counts
 creation_rules:
   - path_regex: '^secrets/testvm\.'
@@ -26,6 +27,7 @@ creation_rules:
         - *server_testvm_fennec
         - *server_bengalfox
         - *server_islandfox
+        - *server_icefox
   - path_regex: '^secrets/bengalfox\.'
     key_groups:
       - age:
@@ -38,6 +40,12 @@ creation_rules:
         - *admin_doridian_fennec
         - *admin_doridian_capefox
         - *server_bengalfox
+  - path_regex: '^secrets/zfs-ztank\.'
+    key_groups:
+      - age:
+        - *admin_doridian_fennec
+        - *admin_doridian_capefox
+        - *server_icefox
   - path_regex: '^secrets/islandfox\.'
     key_groups:
       - age:
@@ -49,6 +57,7 @@ creation_rules:
       - age:
         - *admin_doridian_fennec
         - *admin_doridian_capefox
+        - *server_icefox
   - path_regex: '^secrets/'
     key_groups:
       - age:
