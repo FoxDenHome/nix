@@ -340,6 +340,12 @@ in
     };
 
     backupmgr.enable = true;
+    deluge = {
+      enable = true;
+      host = "deluge";
+      enableHttp = false;
+      downloadsDir = "/mnt/ztank/local/torrent";
+    };
     gitbackup = {
       enable = true;
       host = "";
