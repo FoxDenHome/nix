@@ -6,6 +6,8 @@ in
   options.foxDen.services.tapemgr.enable = lib.mkEnableOption "tapemgr";
 
   config = lib.mkIf svcConfig.enable {
+    boot.kernelModules = [ "sg" ];
+
     environment.systemPackages = [
       pkgs.tapemgr
       pkgs.tapemgr-ltfs
