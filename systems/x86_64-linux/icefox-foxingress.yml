@@ -47,6 +47,8 @@ hosts:
 
   syncthing.doridian.net:
     template: syncthing
+  webdav.syncthing.doridian.net:
+    template: syncthing
 
   restic.doridian.net:
     template: restic
