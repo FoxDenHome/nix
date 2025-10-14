@@ -231,7 +231,7 @@ in
           tcp dport { 80, 443 } dnat to 10.99.12.2 comment "foxIngress"
           udp dport { 443 } dnat to 10.99.12.2 comment "foxIngress"
 
-          tcp dport { 5222, 5223, 5269 } dnat to 10.99.12.4 comment "XMPP"
+          tcp dport { 5222, 5223, 5269 } dnat to 10.99.12.4 comment "Prosody"
 
           tcp dport { 22000 } dnat to 10.99.12.6 comment "Syncthing"
           udp dport { 22000 } dnat to 10.99.12.6 comment "Syncthing"
