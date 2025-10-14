@@ -16,7 +16,7 @@ let
     routes = mkRoutes 2;
     nameservers = mkNameservers 2;
     interface = "br-default";
-    macAddress = "04:7b:cb:44:c0:dd";
+    mac = "04:7b:cb:44:c0:dd";
   };
 in
 {
@@ -108,7 +108,7 @@ in
     netdevConfig = {
       Name = ifcfg.interface;
       Kind = "bridge";
-      MACAddress = ifcfg.macAddress;
+      MACAddress = ifcfg.mac;
     };
 
     bridgeConfig = {

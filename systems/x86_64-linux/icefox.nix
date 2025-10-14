@@ -17,7 +17,7 @@ let
       "213.133.98.99"
       "213.133.98.100"
     ];
-    macAddress = "fc:34:97:68:1e:07";
+    mac = "fc:34:97:68:1e:07";
     interface = "br-default";
   };
 
@@ -218,7 +218,7 @@ in
   #         arp accept
   #         iif ${phyIface} accept
   #         not oif ${phyIface} accept
-  #         ether saddr ${ifcfg.macAddress} accept
+  #         ether saddr ${ifcfg.mac} accept
   #         drop
   #       }
   #     '';
@@ -230,7 +230,7 @@ in
     netdevConfig = {
       Name = ifcfg.interface;
       Kind = "bridge";
-      MACAddress = ifcfg.macAddress;
+      MACAddress = ifcfg.mac;
     };
 
     bridgeConfig = {
@@ -385,7 +385,7 @@ in
     mkHost = iface: {
       inherit (ifcfg) nameservers;
       interfaces.default = {
-        inherit (iface) dns macAddress;
+        inherit (iface) dns mac;
         addresses = lib.filter (ip: !(foxDenLib.util.isPrivateIP ip)) iface.addresses;
         driver = "hetzner";
         driverOpts = {
