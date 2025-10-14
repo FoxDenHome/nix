@@ -51,39 +51,29 @@ let
     path = "${system}/${name}/";
   }) systemModules;
 
-  systems = nixpkgs.lib.attrsets.listToAttrs (map (info: {
-    name = info.name;
-    value = {
-      system = info.system;
-      modules = nixpkgs.lib.filter
-        (mod: let
-          relPath = mkRelPath ./systems mod;
-        in
-          nixpkgs.lib.strings.hasPrefix info.path relPath)
-        systemModules;
-    };
-  }) systemInfos);
+  systems = map (info: {
+    inherit (info) name system;
+    modules = nixpkgs.lib.filter
+      (mod: let
+        relPath = mkRelPath ./systems mod;
+      in
+        nixpkgs.lib.strings.hasPrefix info.path relPath)
+      systemModules;
+  }) systemInfos;
 
-  mkSystemConfig = system: let
-    splitPath = nixpkgs.lib.path.splitRoot system;
-    components = nixpkgs.lib.path.subpath.components splitPath.subpath;
-    componentsLength = nixpkgs.lib.lists.length components;
-
-    hostName = nixpkgs.lib.strings.removeSuffix ".nix"
-                (nixpkgs.lib.strings.elemAt components (componentsLength - 1)); # e.g. bengalfox
-    systemArch = nixpkgs.lib.strings.elemAt components (componentsLength - 2); # e.g. x86_64-linux
-  in
-  {
-    name = hostName;
+  mkSystemConfig = system: {
+    name = system.name;
     value = nixpkgs.lib.nixosSystem {
-      specialArgs = allLibs // { inherit systemArch hostName; };
+      specialArgs = allLibs // {
+        systemArch = system.system;
+        systemName = system.name;
+      };
       modules = [
         ({ ... }: {
-          config.networking.hostName = hostName;
-          config.sops.defaultSopsFile = ./secrets/${hostName}.yaml;
+          config.networking.hostName = system.name;
+          config.sops.defaultSopsFile = ./secrets/${system.name}.yaml;
         })
-        system
-      ] ++ modules;
+      ] ++ system.modules ++ modules;
     };
   };
   nixosConfigurations = (nixpkgs.lib.attrsets.listToAttrs (map mkSystemConfig systems));
