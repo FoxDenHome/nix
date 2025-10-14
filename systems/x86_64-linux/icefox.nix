@@ -421,6 +421,12 @@ in
       tls = true;
       auxHosts = [ "xmpp.foxden.network" "upload.xmpp.foxden.network" ];
     };
+    restic-server = {
+      enable = true;
+      host = "restic";
+      dataDir = "/mnt/ztank/restic";
+      tls = true;
+    };
   };
 
   foxDen.dns.records = [

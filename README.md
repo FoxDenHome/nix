@@ -85,7 +85,7 @@
 		- [x] syncthing
 		- [x] arcticfox
 		- [x] snirouter
-		- [ ] xmpp
+		- [x] xmpp
 		- [ ] sanoid
 
 ## Notes
