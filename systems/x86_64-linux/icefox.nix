@@ -546,7 +546,7 @@ in
         zone = "foxden.network";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::5/64"
+        "2a01:4f9:2b:1a42::5/128"
         "10.99.12.5/24"
         "fd2c:f4cb:63be::a63:c05/120"
       ];
@@ -557,7 +557,7 @@ in
         zone = "doridian.net";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::6/64"
+        "2a01:4f9:2b:1a42::6/128"
         "10.99.12.6/24"
         "fd2c:f4cb:63be::a63:c06/120"
       ];
@@ -568,7 +568,7 @@ in
         zone = "doridian.net";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::7/64"
+        "2a01:4f9:2b:1a42::7/128"
         "10.99.12.7/24"
         "fd2c:f4cb:63be::a63:c07/120"
       ];
@@ -579,7 +579,7 @@ in
         zone = "foxden.network";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::9/64"
+        "2a01:4f9:2b:1a42::9/128"
         "10.99.12.9/24"
         "fd2c:f4cb:63be::a63:c09/120"
       ];
@@ -590,7 +590,7 @@ in
         zone = "foxden.network";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::a/64"
+        "2a01:4f9:2b:1a42::a/128"
         "10.99.12.10/24"
         "fd2c:f4cb:63be::a63:c0a/120"
       ];
