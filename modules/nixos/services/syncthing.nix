@@ -71,6 +71,9 @@ in
 
       systemd.services.caddy-syncthing = {
         serviceConfig = {
+          BindPaths = [
+            "${svcConfig.dataDir}:/syncthing"
+          ];
           EnvironmentFile = [ config.sops.secrets.caddy-syncthing.path ];
         };
       };
