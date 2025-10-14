@@ -22,7 +22,6 @@ in
             networkConfig = {
               IPv6Forwarding = true;
               IPv6ProxyNDP = true;
-
               IPv6ProxyNDPAddress = nixpkgs.lib.filter foxDenLib.util.isIPv6 iface.addresses;
             };
           };
