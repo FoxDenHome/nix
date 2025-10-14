@@ -598,18 +598,16 @@ in
         addresses = ifcfg-s2s.addresses;
       };
     };
-    icefox-http = mkHost {
+    icefox-http = mkV6Host {
       dns = {
         name = "icefox-http";
         zone = "foxden.network";
       };
       addresses = [
-        "95.216.116.180/26"
-        "2a01:4f9:2b:1a42::0:2/112"
+        "2a01:4f9:2b:1a42::1:2/112"
         "10.99.12.2/24"
         "fd2c:f4cb:63be::a63:c02/120"
       ];
-      mac = "00:50:56:00:81:B8";
     };
     mirror = mkHost {
       dns = {
