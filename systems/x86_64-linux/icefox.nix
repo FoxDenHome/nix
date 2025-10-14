@@ -673,4 +673,11 @@ in
       interfaces.s2s = host.interfaces.s2s;
     };
   };
+
+  users.users.kilian = {
+    isNormalUser = true;
+    autoSubUidGidRange = false;
+    group = "kilian";
+  };
+  users.groups.kilian = {};
 }
