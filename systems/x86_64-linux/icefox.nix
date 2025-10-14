@@ -187,6 +187,7 @@ in
     autoSubUidGidRange = false;
     group = "kilian";
     uid = 1009;
+    home = "/mnt/ztank/users/kilian";
     shell = "${pkgs.fish}/bin/fish";
   };
   users.groups.kilian = {
