@@ -389,7 +389,6 @@ in
       sources.foxdenaur = {
         rsyncUrl = "rsync://mirror.foxden.network/foxdenaur";
       };
-      rootDomain = "doridian.net";
     };
     foxingress = {
       enable = true;
@@ -401,10 +400,10 @@ in
   foxDen.dns.records = [
     {
       zone = "doridian.net";
-      name = "mirror";
+      name = "cachyos";
       type = "CNAME";
       ttl = 3600;
-      value = "mirror-offsite.foxden.network.";
+      value = "mirror.doridian.net.";
       horizon = "*";
     }
     {
@@ -412,15 +411,7 @@ in
       name = "cachyos";
       type = "CNAME";
       ttl = 3600;
-      value = "mirror-offsite.foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "doridian.net";
-      name = "cachyos";
-      type = "CNAME";
-      ttl = 3600;
-      value = "mirror-offsite.foxden.network.";
+      value = "mirror.doridian.net.";
       horizon = "*";
     }
   ];
@@ -511,8 +502,8 @@ in
     };
     mirror = mkHost {
       dns = {
-        name = "mirror-offsite";
-        zone = "foxden.network";
+        name = "mirror";
+        zone = "doridian.net";
       };
       addresses = [
         "95.216.116.139/26"
