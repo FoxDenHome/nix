@@ -79,7 +79,6 @@ in
         } ];
         httpFileShare = {
           domain = "upload.xmpp.foxden.network";
-          http_external_url = "https://upload.xmpp.foxden.network";
           http_host = "xmpp.foxden.network";
           size_limit = 1024 * 1024 * 1000;
           daily_quota = 10 * 1024 * 1024 * 1000;
@@ -89,8 +88,8 @@ in
           default_storage = "sql"
 
           sql = {
-            driver = "SQLite3";
-            database = "prosody.sqlite";
+            driver = "SQLite3"
+            database = "prosody.sqlite"
           }
 
           -- make 0.10-distributed mod_mam use sql store
@@ -98,7 +97,7 @@ in
 
           storage = {
             -- this makes mod_mam use the sql storage backend
-            archive2 = "sql";
+            archive2 = "sql"
           }
 
           -- https://modules.prosody.im/mod_mam.html
@@ -109,6 +108,9 @@ in
           trusted_proxies = { "127.0.0.1" }
 
           prosodyctl_service_warnings = false
+
+          Component "upload.xmpp.foxden.network" "http_file_share"
+            http_external_url = "https://upload.xmpp.foxden.network"
         '';
         package = nixpkgs-unstable.outputs.legacyPackages.${systemArch}.prosody.override {
           withCommunityModules = [
