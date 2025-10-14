@@ -399,6 +399,7 @@ in
       enable = true;
       host = "xmpp";
       tls = true;
+      auxHosts = [ "foxden.network" ];
     };
   };
 
