@@ -223,7 +223,7 @@ in
         }
 
         chain prerouting {
-          type nat hook prerouting priority -100;
+          type nat hook prerouting priority dstnat; policy accept;
           tcp dport { 80, 443 } ip daddr 95.216.116.140 dnat to 10.99.12.2
           udp dport { 443 } ip daddr 95.216.116.140 dnat to 10.99.12.2
         }
