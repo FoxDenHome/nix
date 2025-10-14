@@ -35,7 +35,7 @@ in
       webdav = true;
       package = pkgs.caddy.withPlugins {
         plugins = [ "github.com/caddy-dns/caddy-webdav@v0.0.0-20250805175825-7a5c90d8bf90" ];
-        hash = "sha256-F/jqR4iEsklJFycTjSaW8B/V3iTGqqGOzwYBUXxRKrc=";
+        hash = lib.fakeHash;
       };
       rawConfig = ''
         ${svcConfig.syncthingHost} {
