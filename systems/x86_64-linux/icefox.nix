@@ -10,7 +10,7 @@ let
   ifcfg = {
     addresses = [
       "95.216.116.140/26"
-      "2a01:4f9:2b:1a42::2/64"
+      "2a01:4f9:2b:1a42::0:1/112"
     ];
     nameservers = [
       "213.133.98.98"
@@ -202,9 +202,7 @@ in
       { Destination = "0.0.0.0/0"; Gateway = "95.216.116.129"; }
       { Destination = "::/0"; Gateway = "fe80::1"; }
     ];
-    address = ifcfg.addresses ++ [
-      "2a01:4f9:2b:1a42:ffff::1/64"
-    ];
+    address = ifcfg.addresses;
     dns = ifcfg.nameservers;
 
     networkConfig = {
@@ -294,7 +292,7 @@ in
   systemd.network.networks."30-br-routed" = {
     name = "br-routed";
     address = [
-      "2a01:4f9:2b:1a42::1:1/120"
+      "2a01:4f9:2b:1a42::1:1/112"
     ];
 
     networkConfig = {
@@ -530,7 +528,7 @@ in
       {
         interfaces.default.routes = [
           { Destination = "0.0.0.0/0"; Gateway = "95.216.116.129"; }
-          { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::2"; }
+          { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::0:1"; }
         ];
       }
     ]);
@@ -582,7 +580,7 @@ in
       };
       addresses = [
         "95.216.116.180/26"
-        "2a01:4f9:2b:1a42::8/64"
+        "2a01:4f9:2b:1a42::0:2/112"
         "10.99.12.2/24"
         "fd2c:f4cb:63be::a63:c02/120"
       ];
@@ -595,7 +593,7 @@ in
       };
       addresses = [
         "95.216.116.139/26"
-        "2a01:4f9:2b:1a42::3/64"
+        "2a01:4f9:2b:1a42::0:3/112"
         "10.99.12.3/24"
         "fd2c:f4cb:63be::a63:c03/120"
       ];
@@ -608,7 +606,7 @@ in
       };
       addresses = [
         "95.216.116.173/26"
-        "2a01:4f9:2b:1a42::4/64"
+        "2a01:4f9:2b:1a42::0:4/112"
         "10.99.12.4/24"
         "fd2c:f4cb:63be::a63:c04/120"
       ];
@@ -620,7 +618,7 @@ in
         zone = "foxden.network";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::1:5/120"
+        "2a01:4f9:2b:1a42::1:5/112"
         "10.99.12.5/24"
         "fd2c:f4cb:63be::a63:c05/120"
       ];
@@ -631,7 +629,7 @@ in
         zone = "doridian.net";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::1:6/120"
+        "2a01:4f9:2b:1a42::1:6/112"
         "10.99.12.6/24"
         "fd2c:f4cb:63be::a63:c06/120"
       ];
@@ -642,7 +640,7 @@ in
         zone = "doridian.net";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::1:7/120"
+        "2a01:4f9:2b:1a42::1:7/112"
         "10.99.12.7/24"
         "fd2c:f4cb:63be::a63:c07/120"
       ];
@@ -653,7 +651,7 @@ in
         zone = "foxden.network";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::1:9/120"
+        "2a01:4f9:2b:1a42::1:9/112"
         "10.99.12.9/24"
         "fd2c:f4cb:63be::a63:c09/120"
       ];
@@ -664,7 +662,7 @@ in
         zone = "foxden.network";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::1:a/120"
+        "2a01:4f9:2b:1a42::1:a/112"
         "10.99.12.10/24"
         "fd2c:f4cb:63be::a63:c0a/120"
       ];
