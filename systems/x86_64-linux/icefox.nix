@@ -198,11 +198,6 @@ in
     networkConfig = {
       IPv4Forwarding = true;
       IPv6Forwarding = true;
-      IPv6ProxyNDP = true;
-
-      IPv6ProxyNDPAddress = [
-        "2a01:4f9:2b:1a42:ffff::2" # arcticfox
-      ];
 
       DHCP = "no";
       IPv6AcceptRA = true;
