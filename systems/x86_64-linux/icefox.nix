@@ -541,7 +541,7 @@ in
       }
     ]);
 
-    mkSniHost = (iface: lib.mkMerge [
+    mkV6Host = (iface: lib.mkMerge [
       (mkIntHost ({ mac = null; } // iface))
       {
         interfaces.default = {
@@ -624,7 +624,7 @@ in
       ];
       mac = "00:50:56:00:D3:62";
     };
-    nas = mkSniHost {
+    nas = mkV6Host {
       dns = {
         name = "nas-offsite";
         zone = "foxden.network";
@@ -635,7 +635,7 @@ in
         "fd2c:f4cb:63be::a63:c05/120"
       ];
     };
-    syncthing = mkSniHost {
+    syncthing = mkV6Host {
       dns = {
         name = "syncthing";
         zone = "doridian.net";
@@ -646,7 +646,7 @@ in
         "fd2c:f4cb:63be::a63:c06/120"
       ];
     };
-    restic = mkSniHost {
+    restic = mkV6Host {
       dns = {
         name = "restic";
         zone = "doridian.net";
@@ -657,7 +657,7 @@ in
         "fd2c:f4cb:63be::a63:c07/120"
       ];
     };
-    jellyfin = mkSniHost {
+    jellyfin = mkV6Host {
       dns = {
         name = "jellyfin-offsite";
         zone = "foxden.network";
@@ -668,7 +668,7 @@ in
         "fd2c:f4cb:63be::a63:c09/120"
       ];
     };
-    kiwix = mkSniHost {
+    kiwix = mkV6Host {
       dns = {
         name = "kiwix-offsite";
         zone = "foxden.network";
