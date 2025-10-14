@@ -38,6 +38,8 @@
 			- [ ] backend
 		- [ ] hashtopolis-agent
 		- [ ] owncast
+		- [ ] syncoid
+		- [ ] sanoid
 	- [ ] islandfox
 		- [x] restic
 		- [x] syncthing
@@ -73,7 +75,7 @@
 				- [ ] Make StarLord + SteamCMD a flake, too
 			- [x] website
 		- [ ] affine
-	- [ ] icefox
+	- [x] icefox
 		- [x] nas (see bengalfox)
 		- [x] restic
 		- [x] rest-server
@@ -82,8 +84,9 @@
 		- [x] gitbackup
 		- [x] syncthing
 		- [x] arcticfox
-		- [ ] snirouter
+		- [x] snirouter
 		- [ ] xmpp
+		- [ ] sanoid
 
 ## Notes
 
