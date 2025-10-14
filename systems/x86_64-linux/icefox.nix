@@ -36,9 +36,7 @@ in
 
   boot.swraid = {
     enable = true;
-    mdadmConf = [
-      "ARRAY /dev/md0 metadata=1.2 UUID=f8fef6b4:264144e8:1d611b0a:ba263ab2"
-    ];
+    mdadmConf = "ARRAY /dev/md0 metadata=1.2 UUID=f8fef6b4:264144e8:1d611b0a:ba263ab2";
   };
 
   boot.initrd.luks.devices = {
