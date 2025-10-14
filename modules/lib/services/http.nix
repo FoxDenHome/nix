@@ -119,7 +119,7 @@ in
     };
   } // (services.mkOptions inputs));
 
-  make = (inputs@{ config, svcConfig, pkgs, target, ... }:
+  make = (inputs@{ config, svcConfig, pkgs, target, webdav ? false, rawConfig ? null, ... }:
     let
       name = inputs.name;
 
@@ -166,19 +166,21 @@ in
                   trusted_proxies_strict
                   ${mkTrustedProxies "trusted_proxies static"}
                 }
+                ${if webdav then "order webdav before file_server" else ""}
               }
 
               http:// {
                 # Required dummy empty section
               }
-
+            ''
+            + (if rawConfig != null then rawConfig else ''
               ${builtins.concatStringsSep ", " (dnsMatchers ++ hostMatchers)} {
                 # Custom config can be injected here
                 ${inputs.extraConfig or ""}
                 # Auto generated config below
                 ${mkCaddyHandler target svcConfig}
               }
-            '';
+            '');
             mode = "0600";
           };
 
