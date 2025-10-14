@@ -71,6 +71,9 @@ in
 
       systemd.services.caddy-syncthing = {
         serviceConfig = {
+          DynamicUser = lib.mkForce false;
+          User = "syncthing";
+          Group = "syncthing";
           BindPaths = [
             "${svcConfig.dataDir}:/syncthing"
           ];
