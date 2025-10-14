@@ -524,10 +524,8 @@ in
         inherit sysctls;
         addresses = lib.filter (foxDenLib.util.isPrivateIP) iface.addresses;
         driver = "bridge";
-        driverOpts = {
-          bridge = ifcfg-s2s.interface;
-          vlan = 0;
-        };
+        driverOpts.bridge = ifcfg-s2s.interface;
+        driverOpts.vlan = 0;
         routes = [
           { Destination = "10.0.0.0/8"; Gateway = "10.99.12.1"; }
           { Destination = "fd2c:f4cb:63be::/60"; Gateway = "fd2c:f4cb:63be::a63:c01"; }
