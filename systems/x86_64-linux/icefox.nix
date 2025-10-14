@@ -346,6 +346,17 @@ in
       enable = true;
       host = "";
     };
+    kiwix = {
+      enable = true;
+      host = "kiwix";
+      dataDir = "/mnt/zhdd/kiwix";
+      tls = true;
+      oAuth = {
+        enable = true;
+        clientId = "kiwix-icefox";
+        bypassInternal = true;
+      };
+    };
     mirror = {
       enable = true;
       host = "mirror";
