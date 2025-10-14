@@ -66,7 +66,7 @@ let
     value = nixpkgs.lib.nixosSystem {
       specialArgs = allLibs // {
         systemArch = system.system;
-        systemName = system.name;
+        hostName = system.name;
       };
       modules = [
         ({ ... }: {
