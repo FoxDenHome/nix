@@ -41,7 +41,28 @@ let
       (nixpkgs.lib.attrsets.attrValues foxDenLibsRaw.flat)
   ));
 
-  systems = mkModuleList ./systems;
+  systemModules = mkModuleList ./systems;
+  systemInfos = map (path: let
+    relPath = mkRelPath ./systems path;
+    splitPath = nixpkgs.lib.strings.splitString "/" relPath;
+  in rec {
+    system = builtins.elemAt splitPath 0;
+    name = builtins.elemAt splitPath 1;
+    path = "${system}/${name}/";
+  }) systemModules;
+
+  systems = nixpkgs.lib.attrsets.listToAttrs (map (info: {
+    name = info.name;
+    value = {
+      system = info.system;
+      modules = nixpkgs.lib.filter
+        (mod: let
+          relPath = mkRelPath ./systems mod;
+        in
+          nixpkgs.lib.strings.hasPrefix info.path relPath)
+        systemModules;
+    };
+  }) systemInfos);
 
   mkSystemConfig = system: let
     splitPath = nixpkgs.lib.path.splitRoot system;
@@ -76,6 +97,9 @@ let
 in
 {
   nixosConfigurations = nixosConfigurations;
+
+  n = systemInfos;
+  s = systems;
 
   dnsRecords = {
     attrset = dnsRecords;
