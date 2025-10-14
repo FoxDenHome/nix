@@ -219,12 +219,12 @@ in
       content = ''
         chain postrouting {
           type nat hook postrouting priority srcnat; policy accept;
-          ip saddr 10.99.12.0/24 oifname "br-default" snat to 95.216.116.140
+          ip saddr 10.99.12.0/24 oifname "${ifcfg.interface}" snat to 95.216.116.140
         }
 
         chain prerouting {
           type nat hook prerouting priority dstnat; policy accept;
-          ip daddr 95.216.116.140/32 iifname "br-default" jump sharedip
+          ip daddr 95.216.116.140/32 iifname "${ifcfg.interface}" jump sharedip
         }
 
         chain sharedip {
