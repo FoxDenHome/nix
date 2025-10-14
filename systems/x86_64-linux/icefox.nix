@@ -390,7 +390,7 @@ in
         addresses = lib.filter (ip: !(foxDenLib.util.isPrivateIP ip)) iface.addresses;
         driver = "hetzner";
         driverOpts = {
-          network = ifcfg.interface;
+          network = "30-${ifcfg.interface}";
           bridge = ifcfg.interface;
         };
         routes = [ ];
