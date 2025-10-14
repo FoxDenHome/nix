@@ -300,7 +300,7 @@ in
       host = "";
       interface = {
         ips = [ "10.99.10.2/32" ];
-        listenPort = "13232";
+        listenPort = 13232;
         peers = [
           {
             allowedIPs = [ "10.99.1.1/32" "fd2c:f4cb:63be::a63:101/128" "10.0.0.0/8" "fd2c:f4cb:63be::/60" ];
