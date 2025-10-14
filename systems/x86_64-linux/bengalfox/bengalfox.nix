@@ -193,7 +193,7 @@ in
 
   sops.secrets."zfs-zhdd.key" = config.lib.foxDen.sops.mkIfAvailable {
     format = "binary";
-    sopsFile = ../../secrets/zfs-zhdd.key;
+    sopsFile = ../../../secrets/zfs-zhdd.key;
   };
 
   users.users.homeassistant = {

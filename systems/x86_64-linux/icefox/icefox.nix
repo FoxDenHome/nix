@@ -179,7 +179,7 @@ in
 
   sops.secrets."zfs-ztank.key" = config.lib.foxDen.sops.mkIfAvailable {
     format = "binary";
-    sopsFile = ../../secrets/zfs-ztank.key;
+    sopsFile = ../../../secrets/zfs-ztank.key;
   };
 
   users.users.kilian = {
