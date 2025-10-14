@@ -375,6 +375,8 @@ in
       enable = true;
       host = "syncthing";
       tls = true;
+      syncthingHost = "syncthing.doridian.net";
+      webdavHost = "dav.doridian.net";
     };
     kiwix = {
       enable = true;
