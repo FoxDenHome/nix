@@ -217,10 +217,15 @@ in
   networking.firewall.allowedTCPPorts = [
     80
     443
+    5222
+    5223
+    5269
+    22000
   ];
   networking.firewall.allowedUDPPorts = [
     443
     13232
+    22000
   ];
 
   networking.nftables.tables = {
@@ -239,7 +244,7 @@ in
           iifname br-default ip daddr 95.216.116.140 udp dport { 443 } dnat to 10.99.12.2
 
           # XMPP
-          iifname br-default ip daddr 95.216.116.140 udp dport { 5222, 5269, 5223 } dnat to 10.99.12.4
+          iifname br-default ip daddr 95.216.116.140 udp dport { 5222, 5223, 5269 } dnat to 10.99.12.4
 
           # Syncthing
           iifname br-default ip daddr 95.216.116.140 tcp dport { 22000 } dnat to 10.99.12.6
