@@ -182,6 +182,17 @@ in
     sopsFile = ../../secrets/zfs-ztank.key;
   };
 
+  users.users.kilian = {
+    isNormalUser = true;
+    autoSubUidGidRange = false;
+    group = "kilian";
+    uid = 1009;
+    shell = "${pkgs.fish}/bin/fish";
+  };
+  users.groups.kilian = {
+    gid = 1009;
+  };
+
   virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ];
 
   systemd.network.networks."30-${ifcfg.interface}" = {
@@ -672,16 +683,5 @@ in
       nameservers = [ "10.64.0.1" ];
       interfaces.s2s = host.interfaces.s2s;
     };
-  };
-
-  users.users.kilian = {
-    isNormalUser = true;
-    autoSubUidGidRange = false;
-    group = "kilian";
-    uid = 1009;
-    shell = "${pkgs.fish}/bin/fish";
-  };
-  users.groups.kilian = {
-    gid = 1009;
   };
 }
