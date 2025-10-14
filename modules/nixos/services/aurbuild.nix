@@ -3,17 +3,13 @@ let
   svcConfig = config.foxDen.services.aurbuild;
   mirrorCfg = config.foxDen.services.mirror;
 
-  packagesTxt = pkgs.writers.writeText "packages.txt" (lib.concatStringsSep "\n" (svcConfig.packages ++ [ "" ]));
+  packagesTxt = ./aurbuild-packages.txt;
+  makepkgConf = ./aurbuild-makepkg.conf;
 
   builderArch = "x86_64";
 in
 {
   options.foxDen.services.aurbuild = {
-    packages = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ ];
-      description = "Which packages to build";
-    };
     makepkgConf = lib.mkOption {
       type = lib.types.str;
       default = "";
@@ -29,13 +25,12 @@ in
         image = "ghcr.io/doridian/aurbuild/aurbuild:latest";
         volumes = [
           "${packagesTxt}:/aur/packages.txt:ro"
+          "${makepkgConf}:/etc/makepkg.conf:ro"
           "/run/pcscd:/run/pcscd:ro"
           (config.lib.foxDen.sops.mkIfAvailable "${config.sops.secrets."aurbuild-gpg-passphrase".path}:/gpg/passphrase:ro")
           "aurbuild_cache_${builderArch}:/aur/cache"
           "${mirrorCfg.dataDir}/foxdenaur/${builderArch}:/aur/repo"
-        ] ++ (if svcConfig.makepkgConf != "" then [
-          "${pkgs.writeText "makepkg.conf" svcConfig.makepkgConf}:/etc/makepkg.conf:ro"
-        ] else []);
+        ];
         extraOptions = [
           "--mount=type=tmpfs,tmpfs-size=128M,destination=/aur/tmp"
         ];
