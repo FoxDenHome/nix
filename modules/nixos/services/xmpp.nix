@@ -83,6 +83,9 @@ in
           size_limit = 1024 * 1024 * 1000;
           daily_quota = 10 * 1024 * 1024 * 1000;
           expires_after = 60 * 60 * 24 * 7;
+          extraConfig =  ''
+            http_external_url = "https://upload.xmpp.foxden.network"
+          '';
         };
         extraConfig = ''
           default_storage = "sql"
@@ -108,9 +111,6 @@ in
           trusted_proxies = { "127.0.0.1" }
 
           prosodyctl_service_warnings = false
-
-          Component "upload.xmpp.foxden.network" "http_file_share"
-            http_external_url = "https://upload.xmpp.foxden.network"
         '';
         package = nixpkgs-unstable.outputs.legacyPackages.${systemArch}.prosody.override {
           withCommunityModules = [
