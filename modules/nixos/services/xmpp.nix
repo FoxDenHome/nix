@@ -79,6 +79,7 @@ in
         } ];
         httpFileShare = {
           domain = "upload.xmpp.foxden.network";
+          http_external_url = "https://upload.xmpp.foxden.network";
           http_host = "xmpp.foxden.network";
           size_limit = 1024 * 1024 * 1000;
           daily_quota = 10 * 1024 * 1024 * 1000;
@@ -105,7 +106,6 @@ in
 
           http_max_content_size = 1024 * 1024 * 1000
 
-          http_external_url = "https://xmpp.foxden.network"
           trusted_proxies = { "127.0.0.1" }
 
           prosodyctl_service_warnings = false
