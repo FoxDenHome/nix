@@ -240,6 +240,24 @@
         "type": "github"
       }
     },
+    "flake-utils_15": {
+      "inputs": {
+        "systems": "systems_15"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "flake-utils_2": {
       "inputs": {
         "systems": "systems_2"
@@ -691,6 +709,7 @@
         "spaceage-tts": "spaceage-tts",
         "spaceage-website": "spaceage-website",
         "superfan": "superfan",
+        "tapemgr": "tapemgr",
         "uds-proxy": "uds-proxy"
       }
     },
@@ -907,6 +926,21 @@
         "type": "github"
       }
     },
+    "systems_15": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
     "systems_2": {
       "locked": {
         "lastModified": 1681028828,
@@ -1027,9 +1061,30 @@
         "type": "github"
       }
     },
-    "uds-proxy": {
+    "tapemgr": {
       "inputs": {
         "flake-utils": "flake-utils_14",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1760462022,
+        "narHash": "sha256-s7zz1sOEfdGyFdv7oucbFidszwLc0RsfY10jPf491wM=",
+        "owner": "FoxDenHome",
+        "repo": "tapemgr",
+        "rev": "e405739c6bdcc420cd08aadbf35b0d639026490b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "FoxDenHome",
+        "repo": "tapemgr",
+        "type": "github"
+      }
+    },
+    "uds-proxy": {
+      "inputs": {
+        "flake-utils": "flake-utils_15",
         "nixpkgs": [
           "nixpkgs"
         ]

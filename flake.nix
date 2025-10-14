@@ -36,6 +36,8 @@
     spaceage-website.url = "github:SpaceAgeMP/website";
     spaceage-tts.url = "github:SpaceAgeMP/TTS";
     spaceage-tts.inputs.nixpkgs.follows = "nixpkgs";
+    tapemgr.url = "github:FoxDenHome/tapemgr";
+    tapemgr.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = (inputs: import ./outputs.nix inputs);

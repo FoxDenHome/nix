@@ -246,6 +246,7 @@ in
       makepkgConf = builtins.readFile ../../files/aurbuild-makepkg.conf;
     };
     backupmgr.enable = true;
+    tapemgr.enable = true;
     deluge = {
       enable = true;
       host = "deluge";
