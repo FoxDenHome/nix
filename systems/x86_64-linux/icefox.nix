@@ -395,6 +395,11 @@ in
       host = "icefox-http";
       configText = builtins.readFile ./icefox-foxingress.yml;
     };
+    xmpp = {
+      enable = true;
+      host = "xmpp";
+      dataDir = "/mnt/zhdd/kiwix";
+    };
   };
 
   foxDen.dns.records = [
