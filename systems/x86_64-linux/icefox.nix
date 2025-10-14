@@ -398,7 +398,6 @@ in
     xmpp = {
       enable = true;
       host = "xmpp";
-      dataDir = "/mnt/zhdd/kiwix";
     };
   };
 
