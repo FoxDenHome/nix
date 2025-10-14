@@ -399,7 +399,7 @@ in
       enable = true;
       host = "xmpp";
       tls = true;
-      auxHosts = [ "foxden.network" ];
+      auxHosts = [ "xmpp.foxden.network" ];
     };
   };
 
@@ -521,7 +521,7 @@ in
     };
     xmpp = mkHost {
       dns = {
-        name = "xmpp";
+        name = "@";
         zone = "foxden.network";
       };
       addresses = [

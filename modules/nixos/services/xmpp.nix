@@ -17,9 +17,6 @@ let
 
   tlsChain = "/var/lib/foxden/caddy-prosody/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.crt";
   tlsKey = "/var/lib/foxden/caddy-prosody/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.key";
-  foxDenHost = "xmpp.foxden.network";
-  foxDenTlsChain = "/var/lib/foxden/caddy-prosody/certificates/acme-v02.api.letsencrypt.org-directory/${foxDenHost}/${foxDenHost}.crt";
-  foxDenTlsKey = "/var/lib/foxden/caddy-prosody/certificates/acme-v02.api.letsencrypt.org-directory/${foxDenHost}/${foxDenHost}.key";
 in
 {
   options.foxDen.services.xmpp = {
@@ -50,8 +47,6 @@ in
           BindReadOnlyPaths = [
             tlsChain
             tlsKey
-            foxDenTlsChain
-            foxDenTlsKey
             "/etc/prosody/prosody.cfg.lua"
           ];
         };
@@ -62,19 +57,19 @@ in
         admins = [
           "doridian@foxden.network"
         ];
-        ssl.cert = foxDenTlsChain;
-        ssl.key = foxDenTlsKey;
+        ssl.cert = tlsChain;
+        ssl.key = tlsKey;
         virtualHosts."foxden.network" = {
           enabled = true;
           domain = "foxden.network";
-          ssl.cert = foxDenTlsChain;
-          ssl.key = foxDenTlsKey;
+          ssl.cert = tlsChain;
+          ssl.key = tlsKey;
         };
         muc = [ {
           domain = "muc.xmpp.foxden.network";          
         } ];
         httpFileShare = {
-          domain = "upload.xmpp.foxden.network";
+          domain = "https://upload.xmpp.foxden.network";
           size_limit = 1024 * 1024 * 1000;
           daily_quota = 10 * 1024 * 1024 * 1000;
           expires_after = 60 * 60 * 24 * 7;
