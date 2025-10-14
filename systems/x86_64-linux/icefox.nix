@@ -1,4 +1,4 @@
-{ config, foxDenLib, lib, ... }:
+{ config, foxDenLib, pkgs, lib, ... }:
 let
   ifcfg-s2s = {
     addresses = [
@@ -678,6 +678,10 @@ in
     isNormalUser = true;
     autoSubUidGidRange = false;
     group = "kilian";
+    uid = 1009;
+    shell = "${pkgs.fish}/bin/fish";
   };
-  users.groups.kilian = {};
+  users.groups.kilian = {
+    gid = 1009;
+  };
 }

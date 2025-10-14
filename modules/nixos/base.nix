@@ -27,6 +27,7 @@
     mdadm
     ncdu
     openssl
+    rsync
     screen
     smartmontools
     ssh-to-age
