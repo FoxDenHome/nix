@@ -10,8 +10,9 @@
 		- [ ] backend
 	- [ ] hashtopolis-agent
 	- [ ] owncast
-	- [ ] syncoid
 	- [ ] sanoid
+	- [ ] syncoid
+	- [ ] tapemgr
 - [ ] islandfox
 	- [ ] git
 		- [ ] mysql (right now on sqlite3)
