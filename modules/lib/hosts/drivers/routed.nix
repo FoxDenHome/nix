@@ -1,4 +1,4 @@
-{ nixpkgs, foxDenLib, ... } :
+{ nixpkgs, ... } :
 let
   eSA = nixpkgs.lib.strings.escapeShellArg;
   mkIfaceName = (interface: "vert${interface.suffix}");

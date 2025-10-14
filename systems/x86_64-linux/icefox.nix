@@ -497,6 +497,10 @@ in
             { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::1:1"; }
           ];
           driver = "bridge";
+          driverOpts = {
+            bridge = "br-routed";
+            vlan = 0;
+          };
         };
         interfaces.s2s.routes = [
           { Destination = "0.0.0.0/0"; Gateway = "10.99.12.1"; }
