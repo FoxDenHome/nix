@@ -196,6 +196,7 @@ in
     dns = ifcfg.nameservers;
 
     networkConfig = {
+      IPv4Forwarding = true;
       IPv6Forwarding = true;
       IPv6ProxyNDP = true;
 
