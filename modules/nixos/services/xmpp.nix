@@ -59,6 +59,7 @@ in
         admins = [
           "doridian@foxden.network"
         ];
+
         ssl.cert = tlsChain;
         ssl.key = tlsKey;
         virtualHosts."foxden.network" = {
@@ -67,6 +68,12 @@ in
           ssl.cert = tlsChain;
           ssl.key = tlsKey;
         };
+
+        httpInterfaces = [ "127.0.0.1" ];
+        httpsInterfaces = [ "127.0.0.1" ];
+        httpPorts = [ 5280 ];
+        httpsPorts = [ 5281 ];
+
         muc = [ {
           domain = "muc.xmpp.foxden.network";          
         } ];
