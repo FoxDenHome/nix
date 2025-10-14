@@ -83,9 +83,9 @@ in
           size_limit = 1024 * 1024 * 1000;
           daily_quota = 10 * 1024 * 1024 * 1000;
           expires_after = 60 * 60 * 24 * 7;
-          extraConfig =  ''
+          extraConfig =  ''"
             http_external_url = "https://upload.xmpp.foxden.network"
-          '';
+          --"'';
         };
         extraConfig = ''
           default_storage = "sql"
