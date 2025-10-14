@@ -94,6 +94,8 @@ in
 
           -- https://modules.prosody.im/mod_mam.html
           archive_expires_after = "1y"
+
+          prosodyctl_service_warnings = false
         '';
         package = nixpkgs-unstable.outputs.legacyPackages.${systemArch}.prosody.override {
           withCommunityModules = [
