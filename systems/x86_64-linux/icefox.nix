@@ -216,22 +216,23 @@ in
     };
   };
 
-  # networking.nftables.tables = {
-  #   filter = {
-  #     content = ''
-  #       chain forward {
-  #         type filter hook forward priority 0;
-  #         ip accept
-  #         arp accept
-  #         iif ${phyIface} accept
-  #         not oif ${phyIface} accept
-  #         ether saddr ${ifcfg.mac} accept
-  #         drop
-  #       }
-  #     '';
-  #     family = "bridge";
-  #   };
-  # };
+  networking.nftables.tables = {
+    filter = {
+      content = ''
+        chain forward {
+          type filter hook forward priority 0;
+          oifname ${phyIface} ether saddr & ff:ff:00:00:00:00 == e6:21:00:00:00:00 drop
+          ip accept
+          arp accept
+          iifname ${phyIface} accept
+          not oifname ${phyIface} accept
+          ether saddr ${ifcfg.mac} accept
+          drop
+        }
+      '';
+      family = "bridge";
+    };
+  };
 
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = "1";
@@ -495,19 +496,6 @@ in
         addresses = ifcfg-s2s.addresses;
       };
     };
-    mirror = mkHost {
-      dns = {
-        name = "mirror-offsite";
-        zone = "foxden.network";
-      };
-      addresses = [
-        "95.216.116.139/26"
-        "2a01:4f9:2b:1a42::3/64"
-        "10.99.12.3/24"
-        "fd2c:f4cb:63be::a63:c03/120"
-      ];
-      mac = "00:50:56:00:C1:7A";
-    };
     icefox-http = mkHost {
       dns = {
         name = "icefox-http";
@@ -521,26 +509,28 @@ in
       ];
       mac = "00:50:56:00:81:B8";
     };
-    syncthing = mkSniHost {
+    mirror = mkHost {
       dns = {
-        name = "syncthing-offsite";
+        name = "mirror-offsite";
         zone = "foxden.network";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::6/64"
-        "10.99.12.6/24"
-        "fd2c:f4cb:63be::a63:c06/120"
+        "95.216.116.139/26"
+        "2a01:4f9:2b:1a42::3/64"
+        "10.99.12.3/24"
+        "fd2c:f4cb:63be::a63:c03/120"
       ];
+      mac = "00:50:56:00:C1:7A";
     };
-    restic = mkSniHost {
+    xmpp = mkSniHost {
       dns = {
-        name = "restic-offsite";
+        name = "xmpp";
         zone = "foxden.network";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::7/64"
-        "10.99.12.7/24"
-        "fd2c:f4cb:63be::a63:c07/120"
+        "2a01:4f9:2b:1a42::4/64"
+        "10.99.12.4/24"
+        "fd2c:f4cb:63be::a63:c04/120"
       ];
     };
     nas = mkSniHost {
@@ -554,15 +544,26 @@ in
         "fd2c:f4cb:63be::a63:c05/120"
       ];
     };
-    xmpp = mkSniHost {
+    syncthing = mkSniHost {
       dns = {
-        name = "xmpp";
-        zone = "foxden.network";
+        name = "syncthing";
+        zone = "doridian.net";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::4/64"
-        "10.99.12.4/24"
-        "fd2c:f4cb:63be::a63:c04/120"
+        "2a01:4f9:2b:1a42::6/64"
+        "10.99.12.6/24"
+        "fd2c:f4cb:63be::a63:c06/120"
+      ];
+    };
+    restic = mkSniHost {
+      dns = {
+        name = "restic";
+        zone = "doridian.net";
+      };
+      addresses = [
+        "2a01:4f9:2b:1a42::7/64"
+        "10.99.12.7/24"
+        "fd2c:f4cb:63be::a63:c07/120"
       ];
     };
     jellyfin = mkSniHost {
