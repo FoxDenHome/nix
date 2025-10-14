@@ -16,7 +16,10 @@ let
     dependency = if cfgHostName != "" then [ host.unit ] else [];
     resolvConf = if cfgHostName != "" then host.resolvConf else "/etc/resolv.conf";
 
-    canGpu = gpu && (config.hardware.graphics.package or null) != null;
+    canGpu = let
+      pkgEval = builtins.tryEval (config.hardware.graphics.package or null);
+      pkgOk = pkgEval.success && pkgEval.value != null;
+    in gpu && pkgOk;
 
     gpuPackages = if canGpu then [
       config.hardware.graphics.package
