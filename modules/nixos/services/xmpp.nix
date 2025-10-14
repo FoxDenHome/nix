@@ -79,6 +79,7 @@ in
         } ];
         httpFileShare = {
           domain = "upload.xmpp.foxden.network";
+          http_host = "upload.xmpp.foxden.network";
           size_limit = 1024 * 1024 * 1000;
           daily_quota = 10 * 1024 * 1024 * 1000;
           expires_after = 60 * 60 * 24 * 7;
