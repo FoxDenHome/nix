@@ -398,6 +398,7 @@ in
     xmpp = {
       enable = true;
       host = "xmpp";
+      tls = true;
     };
   };
 
