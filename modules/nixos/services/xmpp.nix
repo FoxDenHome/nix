@@ -1,4 +1,4 @@
-{ foxDenLib, pkgs, lib, config, ... }:
+{ foxDenLib, pkgs, lib, config, nixpkgs-unstable, systemArch, ... }:
 let
   services = foxDenLib.services;
 
@@ -93,7 +93,7 @@ in
           -- https://modules.prosody.im/mod_mam.html
           archive_expires_after = "1y"
         '';
-        package = pkgs.prosody.override {
+        package = nixpkgs-unstable.outputs.legacyPackages.${systemArch}.prosody.override {
           withCommunityModules = [
             "cloud_notify_extensions"
             "cloud_notify_encrypted"
