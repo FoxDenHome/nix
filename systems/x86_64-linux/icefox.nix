@@ -514,11 +514,9 @@ in
         inherit (iface) dns mac;
         inherit sysctls;
         addresses = lib.filter (ip: !(foxDenLib.util.isPrivateIP ip)) iface.addresses;
-        driver = lib.mkDefault "hetzner";
-        driverOpts = lib.mkDefault {
-          network = "30-${ifcfg.interface}";
-          bridge = ifcfg.interface;
-        };
+        driver = "bridge";
+        driverOpts.bridge = lib.mkDefault ifcfg.interface;
+        driverOpts.vlan = 0;
         routes = [ ];
       };
       interfaces.s2s = {
@@ -555,11 +553,7 @@ in
           routes = [
             { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::1:1"; }
           ];
-          driver = "bridge";
-          driverOpts = {
-            bridge = "br-routed";
-            vlan = 0;
-          };
+          driverOpts.bridge = "br-routed";
         };
         interfaces.s2s.routes = [
           { Destination = "0.0.0.0/0"; Gateway = "10.99.12.1"; }
