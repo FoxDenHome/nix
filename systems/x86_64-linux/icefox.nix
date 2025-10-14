@@ -434,6 +434,12 @@ in
         bypassInternal = true;
       };
     };
+    nzbget = {
+      enable = true;
+      host = "nzbget";
+      enableHttp = false;
+      downloadsDir = "/mnt/ztank/local/usenet";
+    };
     jellyfin = {
       host = "jellyfin";
       enable = true;
@@ -674,6 +680,17 @@ in
         "2a01:4f9:2b:1a42::1:7/112"
         "10.99.12.7/24"
         "fd2c:f4cb:63be::a63:c07/120"
+      ];
+    };
+    nzbget = mkV6Host {
+      dns = {
+        name = "nzbget-offsite";
+        zone = "foxden.network";
+      };
+      addresses = [
+        "2a01:4f9:2b:1a42::1:8/112"
+        "10.99.12.8/24"
+        "fd2c:f4cb:63be::a63:c08/120"
       ];
     };
     jellyfin = mkV6Host {
