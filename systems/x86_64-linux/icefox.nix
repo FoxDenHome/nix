@@ -214,6 +214,15 @@ in
     };
   };
 
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
+  networking.firewall.allowedUDPPorts = [
+    443
+    13232
+  ];
+
   networking.nftables.tables = {
     nat = {
       content = ''
