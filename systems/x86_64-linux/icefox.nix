@@ -216,7 +216,7 @@ in
       content = ''
         chain postrouting {
           type nat hook postrouting priority srcnat; policy accept;
-          ip saddr 10.99.12.0/24 oif "br-default" snat to 95.216.116.140
+          ip saddr 10.99.12.0/24 oif br-default snat to 95.216.116.140
         }
       '';
       family = "ip";
