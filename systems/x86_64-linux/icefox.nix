@@ -420,6 +420,14 @@ in
       value = "mirror.doridian.net.";
       horizon = "*";
     }
+    {
+      zone = "foxden.network";
+      name = "xmpp";
+      type = "CNAME";
+      ttl = 3600;
+      value = "foxden.network.";
+      horizon = "*";
+    }
   ];
 
   foxDen.hosts.hosts = let
