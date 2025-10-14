@@ -222,8 +222,8 @@ in
         chain forward {
           type filter hook forward priority 0;
           oifname ${phyIface} ether saddr & ff:ff:00:00:00:00 == e6:21:00:00:00:00 drop
-          ip accept
-          arp accept
+          ether protocol ip accept
+          ether protocol arp accept
           iifname ${phyIface} accept
           oifname != ${phyIface} accept
           ether saddr ${ifcfg.mac} accept
