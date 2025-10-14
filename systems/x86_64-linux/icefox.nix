@@ -208,9 +208,6 @@ in
     };
   };
 
-  networking.firewall = {
-    filterForward = true;
-  };
   networking.nftables.tables = {
     nat = {
       content = ''
