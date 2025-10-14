@@ -47,7 +47,9 @@ in
           BindReadOnlyPaths = [
             tlsChain
             tlsKey
-          ];
+          ] ++ (foxDenLib.services.mkEtcPaths [
+            "prosody"
+          ]);
         };
       };
 
