@@ -221,6 +221,12 @@ in
           type nat hook postrouting priority srcnat; policy accept;
           ip saddr 10.99.12.0/24 oifname br-default snat to 95.216.116.140
         }
+
+        chain prerouting {
+          type nat hook prerouting priority -100;
+          tcp dport { 80, 443 } ip daddr 95.216.116.140 dnat to 10.99.12.2
+          udp dport { 443 } ip daddr 95.216.116.140 dnat to 10.99.12.2
+        }
       '';
       family = "ip";
     };
@@ -609,14 +615,13 @@ in
       ];
       mac = "00:50:56:00:C1:7A";
     };
-    xmpp = mkHost {
+    xmpp = mkV6Host {
       dns = {
         name = "@";
         zone = "foxden.network";
       };
       addresses = [
-        "95.216.116.173/26"
-        "2a01:4f9:2b:1a42::0:4/112"
+        "2a01:4f9:2b:1a42::1:4/112"
         "10.99.12.4/24"
         "fd2c:f4cb:63be::a63:c04/120"
       ];

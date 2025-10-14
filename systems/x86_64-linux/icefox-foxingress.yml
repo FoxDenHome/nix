@@ -16,6 +16,10 @@ defaults:
       port: 443
 
 templates:
+  xmpp:
+    default:
+      host: 10.99.12.4
+      proxy_protocol: true
   nas:
     default:
       host: 10.99.12.5
@@ -52,3 +56,12 @@ hosts:
 
   restic.doridian.net:
     template: restic
+
+  foxden.network:
+    template: xmpp
+  www.foxden.network:
+    template: xmpp
+  xmpp.foxden.network:
+    template: xmpp
+  upload.xmpp.foxden.network:
+    template: xmpp
