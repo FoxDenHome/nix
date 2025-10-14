@@ -208,6 +208,22 @@ in
     };
   };
 
+  networking.firewall = {
+    filterForward = true;
+  };
+  networking.nftables.tables = {
+    nat = {
+      content = ''
+        chain postrouting {
+          type nat hook postrouting priority srcnat; policy accept;
+          ip saddr 10.99.12.0/24 oif "br-default" snat to 95.216.116.140
+        }
+      '';
+
+      type = "ip";
+    };
+  };
+
   # networking.nftables.tables = {
   #   filter = {
   #     content = ''
