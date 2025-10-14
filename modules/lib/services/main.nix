@@ -16,10 +16,12 @@ let
     dependency = if cfgHostName != "" then [ host.unit ] else [];
     resolvConf = if cfgHostName != "" then host.resolvConf else "/etc/resolv.conf";
 
-    gpuPackages = if gpu && config.hardware.graphics.package then [
+    canGpu = gpu && (config.hardware.graphics.package or null) != null;
+
+    gpuPackages = if canGpu then [
       config.hardware.graphics.package
     ] ++ config.hardware.graphics.extraPackages else [];
-    gpuPaths = if gpu && config.hardware.graphics.package then [
+    gpuPaths = if canGpu then [
       "-/run/opengl-driver"
       "-/run/opengl-driver-32"
     ] else [];
@@ -42,11 +44,11 @@ let
           NetworkNamespacePath = nixpkgs.lib.mkIf (cfgHostName != "") host.namespacePath;
           DevicePolicy = nixpkgs.lib.mkForce "closed";
           PrivateDevices = nixpkgs.lib.mkForce true;
-          DeviceAllow = nixpkgs.lib.mkIf gpu (map (dev: "${dev} rw") config.foxDen.services.gpuDevices);
+          DeviceAllow = nixpkgs.lib.mkIf canGpu (map (dev: "${dev} rw") config.foxDen.services.gpuDevices);
           ProtectProc = "invisible";
           Restart = nixpkgs.lib.mkDefault "always";
 
-          BindPaths = nixpkgs.lib.mkIf gpu (map (dev: "-${dev}") config.foxDen.services.gpuDevices);
+          BindPaths = nixpkgs.lib.mkIf canGpu (map (dev: "-${dev}") config.foxDen.services.gpuDevices);
 
           BindReadOnlyPaths = [
             "/run/systemd/notify"
