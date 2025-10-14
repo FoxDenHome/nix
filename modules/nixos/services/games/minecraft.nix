@@ -7,6 +7,7 @@ let
   defaultDataDir = "/var/lib/minecraft";
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
 
+  jrePackage = pkgs.corretto17;
   serverPackage = (pkgs.stdenv.mkDerivation {
     name = "minecraft-server-package";
     version = "1.0.0";
@@ -55,10 +56,6 @@ let
 in
 {
   options.foxDen.services.minecraft = with lib.types; {
-    jrePackage = lib.mkOption {
-      type = package;
-      description = "JRE package to use for running Minecraft server";
-    };
     dataDir = lib.mkOption {
       type = path;
       default = defaultDataDir;
@@ -84,7 +81,7 @@ in
 
       systemd.services.minecraft = {
         confinement.packages = [
-          svcConfig.jrePackage
+          jrePackage
           pkgs.coreutils
           pkgs.findutils
           pkgs.bash
@@ -96,7 +93,7 @@ in
           pkgs.unzip
         ];
         path = [
-          svcConfig.jrePackage
+          jrePackage
           pkgs.coreutils
           pkgs.findutils
           pkgs.bash
