@@ -62,7 +62,6 @@ in
           (mkDir config.services.jellyfin.configDir)
           (mkDir config.services.jellyfin.dataDir)
           (mkDir config.services.jellyfin.logDir)
-          (mkDir "/var/lib/jellyfin")
         ];
       };
     }
