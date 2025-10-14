@@ -27,11 +27,11 @@ in
       name = "prosody";
       inherit svcConfig pkgs config;
     }).config
-    (lib.mkIf svcConfig.enableHttp (services.http.make {
+    (services.http.make {
       inherit svcConfig pkgs config;
       name = "caddy-prosody";
       target = "reverse_proxy 127.0.0.1:8000";
-    }).config)
+    }).config
     {
       systemd.services.caddy-prosody = {
         serviceConfig = {
