@@ -31,7 +31,7 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "caddy-prosody";
-      target = "reverse_proxy 127.0.0.1:8000";
+      target = "reverse_proxy 127.0.0.1:5280";
     }).config
     {
       systemd.services.caddy-prosody = {
