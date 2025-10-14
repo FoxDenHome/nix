@@ -25,6 +25,7 @@ in
     {
       systemd.services.foxingress = {
         serviceConfig = {
+          DynamicUser = true;
           Type = "simple";
           BindReadOnlyPaths = [ configFile ];
           Environment = [
