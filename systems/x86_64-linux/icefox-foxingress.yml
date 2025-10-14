@@ -16,9 +16,6 @@ defaults:
       port: 443
 
 templates:
-  xmpp:
-    default:
-      host: 10.99.12.4
   nas:
     default:
       host: 10.99.12.5
@@ -41,19 +38,6 @@ templates:
       proxy_protocol: true
 
 hosts:
-  foxden.network:
-    template: xmpp
-  xmpp.foxden.network:
-    template: xmpp
-  upload.xmpp.foxden.network:
-    template: xmpp
-  muc.xmpp.foxden.network:
-    template: xmpp
-  proxy.xmpp.foxden.network:
-    template: xmpp
-  pubsub.xmpp.foxden.network:
-    template: xmpp
-
   nas-offsite.foxden.network:
     template: nas
   kiwix-offsite.foxden.network:

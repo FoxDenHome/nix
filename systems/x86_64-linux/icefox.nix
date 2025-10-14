@@ -513,16 +513,18 @@ in
       ];
       mac = "00:50:56:00:C1:7A";
     };
-    xmpp = mkSniHost {
+    xmpp = mkHost {
       dns = {
         name = "xmpp";
         zone = "foxden.network";
       };
       addresses = [
+        "95.216.116.173/26"
         "2a01:4f9:2b:1a42::4/64"
         "10.99.12.4/24"
         "fd2c:f4cb:63be::a63:c04/120"
       ];
+      mac = "00:50:56:00:D3:62";
     };
     nas = mkSniHost {
       dns = {
