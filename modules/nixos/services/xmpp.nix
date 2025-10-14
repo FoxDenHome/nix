@@ -85,7 +85,7 @@ in
           expires_after = 60 * 60 * 24 * 7;
           extraConfig =  ''"
             http_external_url = "https://upload.xmpp.foxden.network"
-          --"'';
+          --'';
         };
         extraConfig = ''
           default_storage = "sql"
