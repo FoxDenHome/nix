@@ -376,7 +376,7 @@ in
       host = "syncthing";
       tls = true;
       syncthingHost = "syncthing.doridian.net";
-      webdavHost = "dav.doridian.net";
+      webdavHost = "webdav.syncthing.doridian.net";
     };
     kiwix = {
       enable = true;
@@ -473,6 +473,14 @@ in
       type = "CNAME";
       ttl = 3600;
       value = "foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "foxden.network";
+      name = "webdav.syncthing";
+      type = "CNAME";
+      ttl = 3600;
+      value = "syncthing.foxden.network.";
       horizon = "*";
     }
   ];
