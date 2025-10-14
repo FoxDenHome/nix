@@ -1,4 +1,4 @@
-{ config, foxDenLib, pkgs, lib, ... }:
+{ config, foxDenLib, lib, ... }:
 let
   ifcfg-s2s = {
     addresses = [
@@ -380,7 +380,7 @@ in
   ];
 
   foxDen.hosts.hosts = let
-    mkHost = iface: {
+    mkIntHost = iface: {
       inherit (ifcfg) nameservers;
       interfaces.default = {
         inherit (iface) dns mac;
@@ -390,11 +390,7 @@ in
           network = ifcfg.interface;
           bridge = ifcfg.interface;
         };
-        routes = [
-          { Destination = "2a01:4f9:2b:1a42::2"; }
-          { Destination = "0.0.0.0/0"; Gateway = "95.216.116.129"; }
-          { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::2"; }
-        ];
+        routes = [ ];
       };
       interfaces.s2s = {
         inherit (iface) dns;
@@ -411,10 +407,24 @@ in
       };
     };
 
+    mkHost = (iface: lib.mkMerge [
+      (mkIntHost iface)
+      {
+        interfaces.default.routes = [
+          { Destination = "0.0.0.0/0"; Gateway = "95.216.116.129"; }
+          { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::2"; }
+        ];
+      }
+    ]);
+
     mkSniHost = (iface: lib.mkMerge [
-      (mkHost ({ mac = null; } // iface))
+      (mkIntHost ({ mac = null; } // iface))
       {
         interfaces.default.dns.auxAddresses = [ "95.216.116.180" ];
+        interfaces.default.routes = [
+          { Destination = "0.0.0.0/0"; Gateway = "10.99.12.1"; }
+          { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::2"; }
+        ];
       }
     ]);
   in
@@ -530,16 +540,20 @@ in
         "fd2c:f4cb:63be::a63:c0a/120"
       ];
     };
-    deluge = mkSniHost {
-      dns = {
-        name = "deluge-offsite";
-        zone = "foxden.network";
+    deluge = let
+      host = mkIntHost {
+        dns = {
+          name = "deluge-offsite";
+          zone = "foxden.network";
+        };
+        addresses = [
+          "10.99.12.11/24"
+          "fd2c:f4cb:63be::a63:c0b/120"
+        ];
       };
-      addresses = [
-        "2a01:4f9:2b:1a42::7/64"
-        "10.99.12.11/24"
-        "fd2c:f4cb:63be::a63:c0b/120"
-      ];
+    in {
+      nameservers = [ "10.64.0.1" ];
+      interfaces.s2s = host.interfaces.s2s;
     };
   };
 }
