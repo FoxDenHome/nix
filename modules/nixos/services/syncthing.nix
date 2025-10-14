@@ -54,7 +54,7 @@ in
             prefix /dav
           }
           basicauth {
-            doridian {$WEBDAV_PASSWORD_DORIDIAN}
+            doridian "{$WEBDAV_PASSWORD_DORIDIAN}"
           }
         }
       '';
