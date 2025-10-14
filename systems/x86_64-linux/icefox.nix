@@ -106,22 +106,22 @@ in
     };
   };
 
-  networking.nftables.tables = {
-    filter = {
-      content = ''
-        chain forward {
-          type filter hook forward priority 0;
-          ip accept
-          arp accept
-          iif ${phyIface} accept
-          not oif ${phyIface} accept
-          ether saddr ${ifcfg.macAddress} accept
-          drop
-        }
-      '';
-      family = "bridge";
-    };
-  };
+  # networking.nftables.tables = {
+  #   filter = {
+  #     content = ''
+  #       chain forward {
+  #         type filter hook forward priority 0;
+  #         ip accept
+  #         arp accept
+  #         iif ${phyIface} accept
+  #         not oif ${phyIface} accept
+  #         ether saddr ${ifcfg.macAddress} accept
+  #         drop
+  #       }
+  #     '';
+  #     family = "bridge";
+  #   };
+  # };
 
   systemd.network.netdevs."${ifcfg.interface}" = {
     netdevConfig = {
