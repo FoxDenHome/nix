@@ -219,8 +219,7 @@ in
           ip saddr 10.99.12.0/24 oif "br-default" snat to 95.216.116.140
         }
       '';
-
-      type = "ip";
+      family = "ip";
     };
   };
 
