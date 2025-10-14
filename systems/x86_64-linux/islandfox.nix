@@ -1,4 +1,4 @@
-{ modulesPath, pkgs, config, ... }:
+{ modulesPath, config, ... }:
 let
   mkNameservers = (vlan: [
     "10.${builtins.toString vlan}.0.53"
