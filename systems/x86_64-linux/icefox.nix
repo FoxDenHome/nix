@@ -224,7 +224,7 @@ in
 
         chain prerouting {
           type nat hook prerouting priority dstnat; policy accept;
-          iifname br-default ip daddr 95.216.116.140 jump sharedip
+          ip daddr 95.216.116.140/32 iifname br-default jump sharedip
         }
 
         chain sharedip {
