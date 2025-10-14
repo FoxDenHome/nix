@@ -33,6 +33,8 @@ in
           ];
           ExecStart = [ "${pkgs.foxingress}/bin/foxIngress" ];
         };
+
+        wantedBy = [ "multi-user.target" ];
       };
     }
   ]);
