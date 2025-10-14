@@ -560,6 +560,10 @@ in
         ];
       }
     ]);
+
+    # Due to Hetzner routing, we have two IPv6 subnets
+    # - 2a01:4f9:2b:1a42::0:/112 for hosts which have public IPv4
+    # - 2a01:4f9:2b:1a42::1:/112 for hosts without public IPv4 (routed out via 95.216.116.140)
   in
   {
     icefox = {
