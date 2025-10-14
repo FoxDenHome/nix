@@ -15,8 +15,9 @@ let
   primaryInterface = lib.lists.head (lib.attrsets.attrValues hostCfg.interfaces);
   hostName = foxDenLib.global.dns.mkHost primaryInterface.dns;
 
-  tlsChain = "/var/lib/foxden/caddy-prosody/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.crt";
-  tlsKey = "/var/lib/foxden/caddy-prosody/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.key";
+  tlsRoot = "/var/lib/foxden/caddy-prosody/certificates/acme-v02.api.letsencrypt.org-directory";
+  tlsChain = "${tlsRoot}/${hostName}/${hostName}.crt";
+  tlsKey = "${tlsRoot}/${hostName}/${hostName}.key";
 in
 {
   options.foxDen.services.xmpp = {
@@ -45,6 +46,7 @@ in
         serviceConfig = {
           StateDirectory = "prosody";
           BindReadOnlyPaths = [
+            "${tlsRoot}:/etc/prosody/certs"
             tlsChain
             tlsKey
             "/etc/prosody/prosody.cfg.lua"
