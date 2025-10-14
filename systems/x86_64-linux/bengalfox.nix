@@ -1,4 +1,4 @@
-{ modulesPath, pkgs, lib, config, ... }:
+{ modulesPath, lib, config, ... }:
 let
   mkNameservers = (vlan: [
     "10.${builtins.toString vlan}.0.53"
@@ -202,7 +202,7 @@ in
     isNormalUser = true;
     autoSubUidGidRange = false;
     uid = 1005;
-    shell = "${pkgs.util-linux}/bin/nologin";
+    shell = "/run/current-system/sw/bin/nologin";
   };
   users.groups.homeassistant = {
     gid = 1005;

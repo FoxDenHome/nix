@@ -20,9 +20,9 @@
       "/usr/bin/bash"
     ];
     systemd.tmpfiles.rules = [
-      "L /usr/bin/bash - - - - ${pkgs.bash}/bin/bash"
-      "L /usr/bin/fish - - - - ${pkgs.fish}/bin/fish"
-      "L /usr/bin/zsh - - - - ${pkgs.zsh}/bin/zsh"
+      "L /usr/bin/bash - - - - /run/current-system/sw/bin/bash"
+      "L /usr/bin/fish - - - - /run/current-system/sw/bin/fish"
+      "L /usr/bin/zsh - - - - /run/current-system/sw/bin/zsh"
     ];
 
     systemd.services.kanidm-unixd = {
@@ -51,7 +51,7 @@
       unixSettings = {
         pam_allowed_login_groups = [ "login-users" ];
         allow_local_account_override = [ "share" ];
-        default_shell = "${pkgs.fish}/bin/fish";
+        default_shell = "/run/current-system/sw/bin/fish";
         uid_attr_map = "name";
         gid_attr_map = "name";
         home_attr = "name";

@@ -1,4 +1,4 @@
-{ config, foxDenLib, pkgs, lib, ... }:
+{ config, foxDenLib, lib, ... }:
 let
   ifcfg-s2s = {
     addresses = [
@@ -188,7 +188,7 @@ in
     group = "kilian";
     uid = 1009;
     home = "/mnt/ztank/users/kilian";
-    shell = "${pkgs.fish}/bin/fish";
+    shell = "/run/current-system/sw/bin/fish";
   };
   users.groups.kilian = {
     gid = 1009;
