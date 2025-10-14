@@ -74,9 +74,7 @@ in
         httpPorts = [ 5280 ];
         httpsPorts = [ 5281 ];
 
-        log = {
-          { min = "info"; to = "*syslog"; };
-        };
+        log = "{ { min = \"info\"; to = \"*syslog\"; }; }";
 
         muc = [ {
           domain = "muc.xmpp.foxden.network";          
