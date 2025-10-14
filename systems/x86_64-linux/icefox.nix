@@ -201,9 +201,6 @@ in
 
       DHCP = "no";
       IPv6AcceptRA = true;
-
-      IPv6ProxyNDP = true;
-      IPv6ProxyNDPAddress = [ "2a01:4f9:2b:1a42:ffff::2" ];
     };
   };
 
@@ -249,6 +246,18 @@ in
     };
   };
 
+  systemd.network.netdevs.br-routed = {
+    netdevConfig = {
+      Name = "br-routed";
+      Kind = "bridge";
+      MACAddress = "e6:21:ff:00:00:01";
+    };
+
+    bridgeConfig = {
+      VLANFiltering = false;
+    };
+  };
+
   systemd.network.networks."40-${ifcfg.interface}-root" = {
     name = phyIface;
     bridge = [ifcfg.interface];
@@ -263,6 +272,20 @@ in
 
     networkConfig = {
       IPv4Forwarding = true;
+      IPv6Forwarding = true;
+
+      DHCP = "no";
+      IPv6AcceptRA = false;
+    };
+  };
+
+  systemd.network.networks."30-br-routed" = {
+    name = "br-routed";
+    address = [
+      "2a01:4f9:2b:1a42::1:1/120"
+    ];
+
+    networkConfig = {
       IPv6Forwarding = true;
 
       DHCP = "no";
@@ -471,10 +494,9 @@ in
         interfaces.default = {
           dns.auxAddresses = [ "95.216.116.180" ];
           routes = [
-            { Destination = "2a01:4f9:2b:1a42::2"; }
-            { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::2"; }
+            { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::1:1"; }
           ];
-          driver = "routed";
+          driver = "bridge";
         };
         interfaces.s2s.routes = [
           { Destination = "0.0.0.0/0"; Gateway = "10.99.12.1"; }
@@ -547,7 +569,7 @@ in
         zone = "foxden.network";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::5/128"
+        "2a01:4f9:2b:1a42::1:5/120"
         "10.99.12.5/24"
         "fd2c:f4cb:63be::a63:c05/120"
       ];
@@ -558,7 +580,7 @@ in
         zone = "doridian.net";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::6/128"
+        "2a01:4f9:2b:1a42::1:6/120"
         "10.99.12.6/24"
         "fd2c:f4cb:63be::a63:c06/120"
       ];
@@ -569,7 +591,7 @@ in
         zone = "doridian.net";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::7/128"
+        "2a01:4f9:2b:1a42::1:7/120"
         "10.99.12.7/24"
         "fd2c:f4cb:63be::a63:c07/120"
       ];
@@ -580,7 +602,7 @@ in
         zone = "foxden.network";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::9/128"
+        "2a01:4f9:2b:1a42::1:9/120"
         "10.99.12.9/24"
         "fd2c:f4cb:63be::a63:c09/120"
       ];
@@ -591,7 +613,7 @@ in
         zone = "foxden.network";
       };
       addresses = [
-        "2a01:4f9:2b:1a42::a/128"
+        "2a01:4f9:2b:1a42::1:a/120"
         "10.99.12.10/24"
         "fd2c:f4cb:63be::a63:c0a/120"
       ];

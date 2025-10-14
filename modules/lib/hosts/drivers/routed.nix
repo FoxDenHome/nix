@@ -18,10 +18,6 @@ in
             networkConfig = {
               IPv4Forwarding = true;
               IPv6Forwarding = true;
-              IPv4ProxyARP = true;
-              IPv6ProxyNDP = true;
-
-              IPv6ProxyNDPAddress = nixpkgs.lib.filter foxDenLib.util.isIPv6 iface.addresses;
             };
           };
         }) interfaces) ++
