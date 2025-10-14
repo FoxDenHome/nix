@@ -28,6 +28,7 @@
     systemd.services.kanidm-unixd = {
       serviceConfig = {
         BindReadOnlyPaths = [
+          "-/run/current-system/sw/bin"
           "-/usr/bin"
         ] ++ (foxDenLib.services.mkEtcPaths [
           "shells"
