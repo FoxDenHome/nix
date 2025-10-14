@@ -303,19 +303,19 @@ in
         peers = [
           {
             allowedIPs = [ "10.99.1.1/32" "fd2c:f4cb:63be::a63:101/128" "10.0.0.0/8" "fd2c:f4cb:63be::/60" ];
-            endpoint = "router.foxden.network:13231";
+            endpoint = "router.foxden.network:13232";
             persistentKeepalive = 25;
             publicKey = "nCTAIMDv50QhwjCw72FwP2u2pKGMcqxJ09DQ9wJdxH0=";
           }
           {
             allowedIPs = [ "10.99.10.1/32" "fd2c:f4cb:63be::a63:a01/128" ];
-            endpoint = "redfox.doridian.net:13231";
+            endpoint = "redfox.doridian.net:13232";
             persistentKeepalive = 25;
             publicKey = "s1COjkpfpzfQ05ZLNLGQrlEhomlzwHv+APvUABzbSh8=";
           }
           {
             allowedIPs = [ "10.99.1.2/32" "fd2c:f4cb:63be::a63:102/128" ];
-            endpoint = "router-backup.foxden.network:13231";
+            endpoint = "router-backup.foxden.network:13232";
             persistentKeepalive = 25;
             publicKey = "8zUl7b1frvuzcBrIA5lNsegzzyAOniaZ4tczSdoqcWM=";
           }
