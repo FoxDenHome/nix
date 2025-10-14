@@ -228,16 +228,13 @@ in
         }
 
         chain sharedip {
-          # foxIngress
-          tcp dport { 80, 443 } dnat to 10.99.12.2
-          udp dport { 443 } dnat to 10.99.12.2
+          tcp dport { 80, 443 } dnat to 10.99.12.2 comment "foxIngress"
+          udp dport { 443 } dnat to 10.99.12.2 comment "foxIngress"
 
-          # XMPP
-          tcp dport { 5222, 5223, 5269 } dnat to 10.99.12.4
+          tcp dport { 5222, 5223, 5269 } dnat to 10.99.12.4 comment "XMPP"
 
-          # Syncthing
-          tcp dport { 22000 } dnat to 10.99.12.6
-          udp dport { 22000 } dnat to 10.99.12.6
+          tcp dport { 22000 } dnat to 10.99.12.6 comment "Syncthing"
+          udp dport { 22000 } dnat to 10.99.12.6 comment "Syncthing"
         }
       '';
       family = "ip";
