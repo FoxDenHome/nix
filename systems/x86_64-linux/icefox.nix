@@ -221,12 +221,12 @@ in
       content = ''
         chain forward {
           type filter hook forward priority 0;
-          oifname ${phyIface} saddr ether & ff:ff:00:00:00:00 == e6:21:00:00:00:00 drop
+          oifname ${phyIface} ether saddr & ff:ff:00:00:00:00 == e6:21:00:00:00:00 drop
           ip accept
           arp accept
           iifname ${phyIface} accept
           oifname != ${phyIface} accept
-          saddr ether ${ifcfg.mac} accept
+          ether saddr ${ifcfg.mac} accept
           drop
         }
       '';
