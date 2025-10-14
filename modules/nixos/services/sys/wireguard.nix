@@ -43,7 +43,7 @@ in
   in
   {
     name = "wireguard-${name}";
-    value = {
+    value = if value.host == "" then {} else {
       requires = [ hostCfg.unit ];
       bindsTo = [ hostCfg.unit ];
       after = [ hostCfg.unit ];
