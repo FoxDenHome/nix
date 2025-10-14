@@ -474,7 +474,6 @@ in
             { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::2"; }
           ];
           driver = "routed";
-          driverOpts.bridge = lib.mkNull;
         };
         interfaces.s2s.routes = [
           { Destination = "0.0.0.0/0"; Gateway = "10.99.12.1"; }
