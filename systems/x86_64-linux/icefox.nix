@@ -450,7 +450,7 @@ in
       (mkIntHost ({ mac = null; } // iface))
       {
         interfaces.default.dns.auxAddresses = [ "95.216.116.180" ];
-        interfaces.default.routes = [
+        interfaces.s2s.routes = [
           { Destination = "0.0.0.0/0"; Gateway = "10.99.12.1"; }
           { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::2"; }
         ];
