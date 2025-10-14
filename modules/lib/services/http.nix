@@ -119,7 +119,15 @@ in
     };
   } // (services.mkOptions inputs));
 
-  make = (inputs@{ config, svcConfig, pkgs, webdav ? false, rawConfig ? null, ... }:
+  make = (inputs@{
+    config,
+    svcConfig,
+    pkgs,
+    package ? pkgs.caddy,
+    webdav ? false,
+    rawConfig ? null,
+    ...
+  }:
     let
       name = inputs.name;
 
@@ -134,7 +142,6 @@ in
 
       svc = services.mkNamed name inputs;
       caddyFilePath = "${svc.configDir}/Caddyfile.${name}";
-      cmd = (eSA "${pkgs.caddy}/bin/caddy");
 
       trustedProxies = config.foxDen.services.trustedProxies;
       mkTrustedProxies = (prefix:
@@ -198,7 +205,7 @@ in
                 "\"HOME=${caddyStorageRoot}\""
               ];
 
-              ExecStart = "${cmd} run --config \"\${CREDENTIALS_DIRECTORY}/Caddyfile\"";
+              ExecStart = "${package}/bin/caddy run --config \"\${CREDENTIALS_DIRECTORY}/Caddyfile\"";
             };
             wantedBy = ["multi-user.target"];
           };

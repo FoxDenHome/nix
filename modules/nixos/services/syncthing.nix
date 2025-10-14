@@ -33,6 +33,10 @@ in
       inherit svcConfig pkgs config;
       name = "caddy-syncthing";
       webdav = true;
+      package = pkgs.caddy.withPlugins {
+        plugins = [ "github.com/caddy-dns/caddy-webdav@v0.0.0-20250805175825-7a5c90d8bf90" ];
+        hash = "sha256-F/jqR4iEsklJFycTjSaW8B/V3iTGqqGOzwYBUXxRKrc=";
+      };
       rawConfig = ''
         ${svcConfig.syncthingHost} {
           reverse_proxy http://127.0.0.1:8384 {
