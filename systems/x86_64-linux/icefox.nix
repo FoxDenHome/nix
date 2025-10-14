@@ -365,9 +365,9 @@ in
         rsyncUrl = "rsync://mirror.23m.com/archlinux";
         httpsUrl = "https://mirror.23m.com/archlinux";
       };
-      sources.cachyos = {
-        rsyncUrl = "rsync://202.61.194.133:8958/cachy";
-      };
+      # sources.cachyos = {
+      #   rsyncUrl = "rsync://202.61.194.133:8958/cachy";
+      # };
       sources.foxdenaur = {
         rsyncUrl = "rsync://mirror.foxden.network/foxdenaur";
       };
