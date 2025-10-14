@@ -61,7 +61,7 @@ in
           BindPaths = [config.services.deluge.dataDir];
 
           ExecStart = [
-            "${pkgs.coreutils}/bin/mkdir -p ${config.services.deluge.dataDir}/downloads"
+            "${pkgs.coreutils}/bin/mkdir -p ${config.services.deluge.dataDir}/downloads ${config.services.deluge.dataDir}/.config/deluge"
           ];
 
           User = config.services.deluge.user;
