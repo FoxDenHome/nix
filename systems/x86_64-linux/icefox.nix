@@ -450,7 +450,7 @@ in
     };
     foxingress = {
       enable = true;
-      host = "icefox-http";
+      host = "foxingress";
       configText = builtins.readFile ./icefox-foxingress.yml;
     };
     xmpp = {
@@ -598,9 +598,9 @@ in
         addresses = ifcfg-s2s.addresses;
       };
     };
-    icefox-http = mkV6Host {
+    foxingress = mkV6Host {
       dns = {
-        name = "icefox-http";
+        name = "icefox-foxingress";
         zone = "foxden.network";
       };
       addresses = [
