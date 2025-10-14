@@ -224,17 +224,20 @@ in
 
         chain prerouting {
           type nat hook prerouting priority dstnat; policy accept;
+          iifname br-default ip daddr 95.216.116.140 jump sharedip
+        }
 
+        chain sharedip {
           # foxIngress
-          iifname br-default ip daddr 95.216.116.140 tcp dport { 80, 443 } dnat to 10.99.12.2
-          iifname br-default ip daddr 95.216.116.140 udp dport { 443 } dnat to 10.99.12.2
+          tcp dport { 80, 443 } dnat to 10.99.12.2
+          udp dport { 443 } dnat to 10.99.12.2
 
           # XMPP
-          iifname br-default ip daddr 95.216.116.140 tcp dport { 5222, 5223, 5269 } dnat to 10.99.12.4
+          tcp dport { 5222, 5223, 5269 } dnat to 10.99.12.4
 
           # Syncthing
-          iifname br-default ip daddr 95.216.116.140 tcp dport { 22000 } dnat to 10.99.12.6
-          iifname br-default ip daddr 95.216.116.140 udp dport { 22000 } dnat to 10.99.12.6
+          tcp dport { 22000 } dnat to 10.99.12.6
+          udp dport { 22000 } dnat to 10.99.12.6
         }
       '';
       family = "ip";
