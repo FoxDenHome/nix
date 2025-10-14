@@ -457,7 +457,7 @@ in
     foxingress = {
       enable = true;
       host = "foxingress";
-      configText = builtins.readFile ./icefox-foxingress.yml;
+      configText = builtins.readFile ./foxingress.yml;
     };
     xmpp = {
       enable = true;
