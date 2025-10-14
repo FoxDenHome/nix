@@ -30,7 +30,7 @@ in
     lib.mkMerge [
       {
         mtu = lib.mkDefault 1280;
-        interfaceNamespace = hostCfg.namespace;
+        interfaceNamespace = if host != "" then hostCfg.namespace else null;
         generatePrivateKeyFile = true;
         privateKeyFile = "/var/lib/wireguard/${name}.key";
       }
