@@ -33,6 +33,7 @@ in
       onShutdown = "shutdown";
       onBoot = "ignore";
       qemu = {
+        vhostUserPackages = [ pkgs.virtiofsd ];
         package = pkgs.qemu_kvm;
         runAsRoot = false;
         swtpm.enable = true;
@@ -41,10 +42,6 @@ in
         };
       };
     };
-
-    environment.systemPackages = [
-      pkgs.virtiofsd
-    ];
 
     systemd.services = {
       libvirt-autocreator = {
