@@ -450,7 +450,7 @@ in
         "10.99.12.3/24"
         "fd2c:f4cb:63be::a63:c03/120"
       ];
-      macAddress = "TODO";
+      macAddress = "00:50:56:00:C1:7A";
     };
     icefox-http = mkHost {
       dns = {
