@@ -504,10 +504,15 @@ in
   ];
 
   foxDen.hosts.hosts = let
+    sysctls = {
+      "net.ipv6.conf.INTERFACE.accept_ra" = "0";
+    };
+
     mkIntHost = iface: {
       inherit (ifcfg) nameservers;
       interfaces.default = {
         inherit (iface) dns mac;
+        inherit sysctls;
         addresses = lib.filter (ip: !(foxDenLib.util.isPrivateIP ip)) iface.addresses;
         driver = lib.mkDefault "hetzner";
         driverOpts = lib.mkDefault {
@@ -518,6 +523,7 @@ in
       };
       interfaces.s2s = {
         inherit (iface) dns;
+        inherit sysctls;
         addresses = lib.filter (foxDenLib.util.isPrivateIP) iface.addresses;
         driver = "bridge";
         driverOpts = {
