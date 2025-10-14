@@ -15,12 +15,11 @@ let
     ];
   };
 
-  svcRootName = if svcConfig.rootName != "" then svcConfig.rootName else
-    if (primaryInterface.dns.name == "mirror") then "@" else (lib.strings.removePrefix "mirror." primaryInterface.dns.name);
-  svcRootDomain = foxDenLib.global.dns.mkHost {
+  svcRootName = if (primaryInterface.dns.name == "mirror") then "@" else (lib.strings.removePrefix "mirror." primaryInterface.dns.name);
+  svcRootDomain = if svcConfig.rootDomain != "" then svcConfig.rootDomain else (foxDenLib.global.dns.mkHost {
     zone = primaryInterface.dns.zone;
     name = svcRootName;
-  };
+  });
 
   sourceType = with lib.types; submodule {
     options = {
@@ -54,7 +53,7 @@ in
       type = lib.types.attrsOf sourceType;
     };
 
-    rootName = lib.mkOption {
+    rootDomain = lib.mkOption {
       type = lib.types.str;
       default = "";
     };
