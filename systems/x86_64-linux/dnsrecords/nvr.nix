@@ -2,8 +2,7 @@
 {
   config.foxDen.hosts.hosts = let
     mkIntf = (intf: {
-      driver = "null";
-      interfaces.default = intf;
+      interfaces.default = { driver = "null"; } // intf;
     });
   in {
     nvr = mkIntf {
