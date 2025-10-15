@@ -49,7 +49,7 @@ in
     records = globalConfig.getList ["foxDen" "dns" "records"] nixosConfigurations;
     # TODO: Go back to uniqueStrings once next NixOS stable
     horizons = nixpkgs.lib.filter (h: h != "*")
-        nixpkgs.lib.lists.unique (map (record: record.horizon) records);
+        (nixpkgs.lib.lists.unique (map (record: record.horizon) records));
     zones = nixpkgs.lib.lists.unique (map (record: record.zone) records);
   in
   (nixpkgs.lib.attrsets.genAttrs horizons (horizon:
