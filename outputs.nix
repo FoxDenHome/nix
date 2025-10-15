@@ -77,25 +77,13 @@ let
     };
   };
   nixosConfigurations = (nixpkgs.lib.attrsets.listToAttrs (map mkSystemConfig systems));
-  dnsRecords = (foxDenLib.global.dns.mkRecords nixosConfigurations);
-
-  mkZoneFile = (records: builtins.toFile "records.db"
-                (nixpkgs.lib.concatLines
-                  (map
-                    (record: "${record.name} ${builtins.toString record.ttl} IN ${record.type} ${record.value}")
-                    records)));
+  dnsRecords = foxDenLib.global.dns.mkRecords nixosConfigurations;
 in
 {
   nixosConfigurations = nixosConfigurations;
 
-  n = systemInfos;
-  s = systems;
-
-  dnsRecords = {
+  dnsRecordsJson = {
     attrset = dnsRecords;
     json = builtins.toFile "dns-records.json" (builtins.toJSON dnsRecords);
   };
-
-  internalZone = mkZoneFile dnsRecords.internal."foxden.network";
-  inputs = inputs;
 }
