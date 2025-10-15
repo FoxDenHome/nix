@@ -96,5 +96,7 @@ in
         driver = "null";
       } // (vms.${name}.config.interface);
     });
+
+    foxDen.dns.records = lib.mkMerge (map (vm: vm.config.records or []) (lib.attrsets.attrValues vms));
   };
 }

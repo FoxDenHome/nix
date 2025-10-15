@@ -476,6 +476,14 @@ in
   foxDen.dns.records = [
     {
       zone = "doridian.net";
+      name = "icefox";
+      type = "CNAME";
+      ttl = 3600;
+      value = "icefox.foxden.network.";
+      horizon = "*";
+    }
+    {
+      zone = "doridian.net";
       name = "cachyos";
       type = "CNAME";
       ttl = 3600;

@@ -12,4 +12,19 @@
     ];
     mac = "00:50:56:00:D8:C7";
   };
+  records = map(name: {
+      zone = "doridian.net";
+      name = name;
+      type = "CNAME";
+      ttl = 3600;
+      value = "arcticfox.doridian.net.";
+      horizon = "*";
+    }) [
+      "pma"
+      "ftp"
+      "mail"
+      "www.pma"
+      "www.ftp"
+      "www.mail"
+    ];
 }
