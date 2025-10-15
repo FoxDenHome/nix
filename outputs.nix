@@ -82,7 +82,7 @@ in
 {
   nixosConfigurations = nixosConfigurations;
 
-  dnsRecordsJson = {
+  dnsRecords = {
     attrset = dnsRecords;
     json = builtins.toFile "dns-records.json" (builtins.toJSON dnsRecords);
   };
