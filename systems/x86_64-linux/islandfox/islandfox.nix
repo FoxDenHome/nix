@@ -344,6 +344,14 @@ in
       value = "spaceage-api.foxden.network.";
       horizon = "*";
     }
+    {
+      zone = "foxden.network";
+      name = "mc";
+      type = "CNAME";
+      ttl = 3600;
+      value = "minecraft.foxden.network.";
+      horizon = "*";
+    }
   ];
 
   foxDen.hosts.hosts = let
