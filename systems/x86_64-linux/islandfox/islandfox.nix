@@ -500,6 +500,7 @@ in
       dns = {
         name = "unifi";
         zone = "foxden.network";
+        dynDns = true;
       };
       addresses = [
         "10.1.10.1/16"
