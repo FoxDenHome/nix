@@ -112,21 +112,24 @@ in
     ifaceHasV4 = (iface: nixpkgs.lib.any util.isIPv4 iface.addresses);
     ifaceHasV6 = (iface: nixpkgs.lib.any util.isIPv6 iface.addresses);
 
+    ifaceFirstV4 = (iface: nixpkgs.lib.findFirst util.isIPv4 iface.addresses);
+    ifaceFirstV6 = (iface: nixpkgs.lib.findFirst util.isIPv6 iface.addresses);
+
     mkIfaceDynDnsOne = (iface: check: type: value: if (check iface) then [
       {
         zone = iface.dns.zone;
         name = iface.dns.name;
         type = type;
         ttl = iface.dns.dynDnsTtl;
-        value = value;
+        value = value iface;
         dynDns = true;
         horizon = "external";
       }
     ] else []);
 
     mkIfaceDynDns = (iface: if iface.dns.dynDns then
-      (mkIfaceDynDnsOne iface ifaceHasV4 "A" "127.0.0.1") ++
-      (mkIfaceDynDnsOne iface ifaceHasV6 "AAAA" "fe80::1")
+      (mkIfaceDynDnsOne iface ifaceHasV4 "A" ifaceFirstV4) ++
+      (mkIfaceDynDnsOne iface ifaceHasV6 "AAAA" ifaceFirstV6)
     else []);
   in
   {
