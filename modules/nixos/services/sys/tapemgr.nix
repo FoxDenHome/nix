@@ -20,6 +20,10 @@ in
       source = config.sops.secrets.tapemgr.path;
     };
 
+    systemd.tmpfiles.rules = [
+      "D /mnt/tapemgr 0700 root root"
+    ];
+
     environment.persistence."/nix/persist/tapemgr" = {
       hideMounts = true;
       directories = [
