@@ -1,6 +1,5 @@
 https://github.com/FoxDenHome/foxdenaur-keyring
 https://github.com/FoxDenHome/foxdenaur-mirrorlist
-mcelog
 ttf-nanum
 orca-slicer-bin
 perl-config-inifiles
