@@ -54,7 +54,6 @@ in
 
     sops.secrets.backupmgr = config.lib.foxDen.sops.mkIfAvailable {};
 
-
     systemd.tmpfiles.rules = [
       "D /mnt/backupmgr 0700 root root"
     ];
