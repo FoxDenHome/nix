@@ -6,6 +6,7 @@
     dns = {
       name = "homeassistant";
       zone = "foxden.network";
+      dynDns = true;
     };
     addresses = [
       "10.2.12.2/16"
