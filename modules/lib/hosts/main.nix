@@ -112,8 +112,8 @@ in
     ifaceHasV4 = (iface: nixpkgs.lib.any util.isIPv4 iface.addresses);
     ifaceHasV6 = (iface: nixpkgs.lib.any util.isIPv6 iface.addresses);
 
-    ifaceFirstV4 = (iface: nixpkgs.lib.findFirst util.isIPv4 iface.addresses);
-    ifaceFirstV6 = (iface: nixpkgs.lib.findFirst util.isIPv6 iface.addresses);
+    ifaceFirstV4 = (iface: nixpkgs.lib.findFirst util.isIPv4 "127.0.0.1" iface.addresses);
+    ifaceFirstV6 = (iface: nixpkgs.lib.findFirst util.isIPv6 "::1" iface.addresses);
 
     mkIfaceDynDnsOne = (iface: check: type: value: if (check iface) then [
       {
@@ -121,7 +121,7 @@ in
         name = iface.dns.name;
         type = type;
         ttl = iface.dns.dynDnsTtl;
-        value = value iface;
+        value = util.removeIPCidr (value iface);
         dynDns = true;
         horizon = "external";
       }
