@@ -12,7 +12,24 @@
     ];
     mac = "00:50:56:00:D8:C7";
   };
-  records = map(name: {
+  records = [
+    {
+      zone = "doridian.net";
+      name = "arcticfox";
+      type = "TXT";
+      ttl = 3600;
+      value = "v=spf1 +a:arcticfox.doridian.net include:amazonses.com mx ~all";
+      horizon = "*";
+    }
+    {
+      zone = "doridian.net";
+      name = "_dmarc.arcticfox";
+      type = "TXT";
+      ttl = 3600;
+      value = "v=DMARC1;p=quarantine;pct=100";
+      horizon = "*";
+    }
+  ] ++ map(name: {
       zone = "doridian.net";
       name = name;
       type = "CNAME";
