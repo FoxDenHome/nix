@@ -347,6 +347,8 @@ in
       "10.99.12.2/32"
     ];
 
+    watchdog.enable = true;
+
     wireguard."wg-deluge" = {
       host = "deluge"; # lawful dove
       interface = {
