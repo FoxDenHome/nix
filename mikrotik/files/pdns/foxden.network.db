@@ -10,6 +10,7 @@ ns4 IN A 10.3.0.53
 
 icefox IN A 10.99.10.2
 nas-offsite IN A 10.99.12.5
+nzbget-offsite IN A 10.99.12.8
 jellyfin-offsite IN A 10.99.12.9
 kiwix-offsite IN A 10.99.12.10
 deluge-offsite IN A 10.99.12.11
