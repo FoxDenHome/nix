@@ -1,4 +1,4 @@
-# FoxDen Homelab Nix configuration
+# FoxDen core configuration
 
 ## TODO
 
