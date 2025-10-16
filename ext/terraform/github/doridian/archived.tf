@@ -154,6 +154,10 @@ locals {
     sevenroom-scraper = {
       description = "I really like food."
     }
+    meshtastic-firmware = {
+      description = "Firmware for Meshtastic devices"
+      homepage_url = "https://meshtastic.org"
+    }
   }
 }
 
