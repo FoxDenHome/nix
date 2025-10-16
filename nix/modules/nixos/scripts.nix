@@ -48,5 +48,5 @@
         (map (dev: "enroll_disk ${dev.device}")
           (lib.attrsets.attrValues config.boot.initrd.luks.devices)));
     mode = "0755";
-  }
+  };
 }
