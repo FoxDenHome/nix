@@ -330,6 +330,12 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
+      cnames = [
+        {
+          name = "webdav.syncthing";
+          zone = "foxden.network";
+        }
+      ];
       addresses = [
         "10.2.11.2/16"
         "fd2c:f4cb:63be:2::b02/64"
