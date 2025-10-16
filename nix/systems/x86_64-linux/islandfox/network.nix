@@ -13,7 +13,7 @@ let
 in
 {
   config = {
-    lib.mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
+    lib.foxDenSys.mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
 
     systemd.network.networks."30-${ifcfg.interface}" = {
       name = ifcfg.interface;
