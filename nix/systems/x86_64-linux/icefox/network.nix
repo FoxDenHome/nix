@@ -167,18 +167,7 @@ in
     };
 
     foxDen.services = {
-      trustedProxies = [
-        "10.1.0.0/23"
-        "10.2.0.0/23"
-        "10.3.0.0/23"
-        "10.4.0.0/23"
-        "10.5.0.0/23"
-        "10.6.0.0/23"
-        "10.7.0.0/23"
-        "10.8.0.0/23"
-        "10.9.0.0/23"
-        "10.99.12.2/32"
-      ];
+      trustedProxies = [ "10.99.12.2/32" ];
 
       wireguard."wg-s2s" = config.lib.foxDen.sops.mkIfAvailable {
         host = "";
