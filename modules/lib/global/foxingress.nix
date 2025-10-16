@@ -93,15 +93,16 @@ in
 {
   nixosModule = { config, ... } : let
     renderInterface = (hostName: ifaceObj: let
+      gateway = config.foxDen.hosts.gateway;
       iface = ifaceObj.value;
-      template = "nix-${iface.snirouter.gateway}-${hostName}-${ifaceObj.name}";
+      template = "nix-${gateway}-${hostName}-${ifaceObj.name}";
 
       privateIPv4 = lib.findFirst (ip: let
         ipNoCidr = util.removeIPCidr ip;
       in (util.isIPv4 ipNoCidr) && (util.isPrivateIP ipNoCidr)) "" iface.addresses;
     in lib.mkIf (privateIPv4 != "" && iface.snirouter.enable) {
       templates."${template}" = {
-        inherit (iface.snirouter) gateway;
+        inherit gateway;
         default = {
           host = util.removeIPCidr privateIPv4;
           proxyProtocol = iface.snirouter.proxyProtocol or false;
@@ -120,8 +121,7 @@ in
       hosts = lib.attrsets.listToAttrs (map (record: {
         name = mkHost record;
         value = {
-          inherit (iface.snirouter) gateway;
-          inherit template;
+          inherit gateway template;
         };
       }) ([iface.dns] ++ iface.cnames));
     });

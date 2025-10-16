@@ -22,7 +22,6 @@ let
       mac = null;
       addresses = lib.filter (foxDenLib.util.isPrivateIP) iface.addresses;
       driver = "bridge";
-      snirouter = { gateway = "icefox"; } // (iface.snirouter or {});
       driverOpts.bridge = ifcfg-s2s.interface;
       driverOpts.vlan = 0;
       routes = [

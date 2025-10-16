@@ -52,10 +52,6 @@ let
           type = ints.u16;
           default = 443;
         };
-        gateway = nixpkgs.lib.mkOption {
-          type = str;
-          default = "";
-        };
       };
       dns = {
         name = nixpkgs.lib.mkOption {
@@ -182,6 +178,10 @@ in
       hosts = nixpkgs.lib.mkOption {
         type = attrsOf hostType;
         default = {};
+      };
+      gateway = nixpkgs.lib.mkOption {
+        type = str;
+        default = "default";
       };
       usedMacAddresses = nixpkgs.lib.mkOption {
         type = addCheck (listOf str) (macs: let

@@ -369,6 +369,7 @@ in
 
   foxDen.hosts.index = 1;
 
+  foxDen.hosts.gateway = "router";
   foxDen.hosts.hosts = {
     bengalfox = {
       interfaces.default = {

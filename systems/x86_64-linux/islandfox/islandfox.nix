@@ -236,6 +236,7 @@ in
 
   foxDen.hosts.index = 2;
 
+  foxDen.hosts.gateway = "router";
   foxDen.hosts.hosts = {
     islandfox = {
       interfaces.default = {

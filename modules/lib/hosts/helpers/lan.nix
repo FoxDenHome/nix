@@ -18,7 +18,6 @@ rec {
         vlan = vlan;
       };
       routes = mkRoutes vlan;
-      snirouter = { gateway = "router"; } // (cfg.snirouter or {});
     };
   });
 }
