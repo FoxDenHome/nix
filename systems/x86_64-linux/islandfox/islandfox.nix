@@ -137,7 +137,6 @@ in
     ];
 
     watchdog.enable = true;
-
     apcupsd.enable = true;
     backupmgr.enable = true;
     darksignsonline = {

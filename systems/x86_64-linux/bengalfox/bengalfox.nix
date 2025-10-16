@@ -215,8 +215,6 @@ in
       "10.9.0.0/23"
     ];
 
-    watchdog.enable = true;
-
     wireguard."wg-deluge" = {
       host = "deluge"; # solid snake
       interface = {
@@ -232,6 +230,7 @@ in
       };
     };
 
+    watchdog.enable = true;
     apcupsd.enable = true;
     aurbuild = {
       enable = true;
