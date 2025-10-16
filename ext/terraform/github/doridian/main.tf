@@ -135,7 +135,7 @@ locals {
   }
 }
 
-# tfimp() { tofu import "module.repo[\"$1\"].github_repository.repo" "$1"; tofu import "module.repo[\"$1\"].github_branch_protection.main[0]" "$1:main"; }
+# function tfimp -a repo; tofu import "module.repo[\"$repo\"].github_repository.repo" "$repo"; tofu import "module.repo[\"$repo\"].github_branch_protection.main[0]" "$repo:main"; end
 
 module "repo" {
   for_each = local.repositores

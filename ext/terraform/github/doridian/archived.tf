@@ -157,7 +157,7 @@ locals {
   }
 }
 
-# function tfimp -a repo; tofu import "module.archived_repo[\"$repo\"].github_repository.repo" "$repo"; end
+# function tfimparc -a repo; tofu import "module.archived_repo[\"$repo\"].github_repository.repo" "$repo"; end
 # function tfarc -a repo; tofu state mv "module.repo[\"$repo\"]" "module.archived_repo[\"$repo\"]"; end
 
 module "archived_repo" {
