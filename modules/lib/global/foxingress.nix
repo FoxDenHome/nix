@@ -95,7 +95,7 @@ in
     renderInterface = (hostName: ifaceObj: let
       gateway = config.foxDen.hosts.gateway;
       iface = ifaceObj.value;
-      template = "nix-${gateway}-${hostName}-${ifaceObj.name}";
+      template = "${hostName}-${ifaceObj.name}";
 
       privateIPv4 = lib.findFirst (ip: let
         ipNoCidr = util.removeIPCidr ip;
