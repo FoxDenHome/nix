@@ -1,220 +1,193 @@
-listeners:
-  http: :80
-  https: :443
-  quic: :443
-  prometheus: :9001
 defaults:
   backends:
     default:
-      host: 172.17.0.1
+      host: 169.254.169.254
     http:
       port: 80
     https:
       port: 443
     quic:
       port: 443
+hosts:
+  api.spaceage.mp:
+    template: spaceage-api-default
+  archlinux.foxden.network:
+    template: mirror-default
+  cachyos.foxden.network:
+    template: mirror-default
+  e621.foxden.network:
+    template: e621dumper-default
+  f0x.es:
+    template: foxcaves-default
+  foxcav.es:
+    template: foxcaves-default
+  foxcaves.foxden.network:
+    template: foxcaves-default
+  furaffinity.foxden.network:
+    template: fadumper-default
+  git.foxden.network:
+    template: git-default
+  homeassistant.foxden.network:
+    template: homeassistant-default
+  jellyfin.foxden.network:
+    template: jellyfin-default
+  kiwix.foxden.network:
+    template: kiwix-default
+  mirror.foxden.network:
+    template: mirror-default
+  nas.foxden.network:
+    template: nas-default
+  restic.foxden.network:
+    template: restic-default
+  spaceage-api.foxden.network:
+    template: spaceage-api-default
+  spaceage-tts.foxden.network:
+    template: spaceage-tts-default
+  spaceage-website.foxden.network:
+    template: spaceage-website-default
+  spaceage.mp:
+    template: spaceage-website-default
+  tts.spaceage.mp:
+    template: spaceage-tts-default
+  www.f0x.es:
+    template: foxcaves-default
+  www.foxcav.es:
+    template: foxcaves-default
+  www.spaceage.mp:
+    template: spaceage-website-default
+listeners:
+  http: :80
+  https: :443
+  prometheus: :9001
+  quic: :443
 templates:
-  host:
-    default:
-      host: 172.17.0.1
-  router:
-    default:
-      host: 10.3.1.1
-  router-backup:
-    default:
-      host: 10.3.1.2
-  nas:
-    default:
-      host: 10.2.11.1
-      proxy_protocol: true
-  jellyfin:
-    default:
-      host: 10.2.11.3
-      proxy_protocol: true
-  kiwix:
-    default:
-      host: 10.2.11.6
-      proxy_protocol: true
-  grafana:
-    default:
-      host: 10.2.11.5
-      proxy_protocol: true
-  spaceage-api:
-    default:
-      host: 10.3.10.5
-      proxy_protocol: true
-  spaceage-tts:
-    default:
-      host: 10.3.10.6
-      proxy_protocol: true
-  foxcaves:
-    default:
-      host: 10.3.10.1
-      proxy_protocol: true
-    http:
-      port: 81
-    https:
-      port: 444
-  git:
-    default:
-      host: 10.3.10.2
-      proxy_protocol: true
-  hashtopolis:
-    default:
-      host: 10.2.11.17
-      proxy_protocol: true
-  homeassistant:
-    default:
-      host: 10.2.12.2
-  spaceage-website:
-    default:
-      host: 10.3.10.9
-  website:
-    default:
-      host: 10.3.10.10
-  syncthing:
-    default:
-      host: 10.2.11.2
-  restic:
-    default:
-      host: 10.2.11.12
-  mirror:
-    default:
-      host: 10.3.10.11
-      proxy_protocol: true
-    http:
-      port: 81
-    https:
-      port: 444
-  furaffinity:
-    default:
-      host: 10.3.10.13
-      proxy_protocol: true
-  e621:
+  e621dumper-default:
     default:
       host: 10.3.10.12
-      proxy_protocol: true
-  owncast:
-    default:
-      host: 10.3.10.14
-      proxy_protocol: true
-  auth:
-    default:
-      host: 10.1.14.1
-      proxy_protocol: true
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
     quic:
-      disabled: true
-  radius-auth:
+      port: 443
+  fadumper-default:
     default:
-      host: 10.1.14.2
-      proxy_protocol: true
+      host: 10.3.10.13
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
     quic:
-      disabled: true
-  unifi:
+      port: 443
+  foxcaves-default:
     default:
-      host: 10.1.10.1
+      host: 10.3.10.1
+      proxyProtocol: true
+    http:
+      port: 81
+    https:
+      port: 444
     quic:
-      disabled: true
-  darksignsonline:
+      port: 443
+  git-default:
     default:
-      host: 10.3.10.15
-      proxy_protocol: true
-hosts:
-  # Home network
-  nas.foxden.network:
-    template: nas
-  kiwix.foxden.network:
-    template: kiwix
-  jellyfin.foxden.network:
-    template: jellyfin
-
-  grafana.foxden.network:
-    template: grafana
-  homeassistant.foxden.network:
-    template: homeassistant
-  syncthing.foxden.network:
-    template: syncthing
-  webdav.syncthing.foxden.network:
-    template: syncthing
-  htpl.foxden.network:
-    template: hashtopolis
-  furaffinity.foxden.network:
-    template: furaffinity
-  e621.foxden.network:
-    template: e621
-  git.foxden.network:
-    template: git
-  restic.foxden.network:
-    template: restic
-  unifi.foxden.network:
-    template: unifi
-
-  auth.foxden.network:
-    template: auth
-  radius.auth.foxden.network:
-    template: radius-auth
-
-  archlinux.foxden.network:
-    template: mirror
-  cachyos.foxden.network:
-    template: mirror
-  mirror.foxden.network:
-    template: mirror
-
-  owncast.foxden.network:
-    template: owncast
-  live.doridian.net:
-    template: owncast
-
-  router.foxden.network:
-    template: router
-  router-backup.foxden.network:
-    template: router-backup
-
-  # SpaceAge
-  api.spaceage.mp:
-    template: spaceage-api
-  tts.spaceage.mp:
-    template: spaceage-tts
-  spaceage.mp:
-    template: spaceage-website
-  www.spaceage.mp:
-    template: spaceage-website
-  spaceage-api.foxden.network:
-    template: spaceage-api
-  spaceage-tts.foxden.network:
-    template: spaceage-tts
-  spaceage-website.foxden.network:
-    template: spaceage-website
-
-  # foxCaves
-  foxcav.es:
-    template: foxcaves
-  www.foxcav.es:
-    template: foxcaves
-  f0x.es:
-    template: foxcaves
-  www.f0x.es:
-    template: foxcaves
-  foxcaves.foxden.network:
-    template: foxcaves
-
-  # DarkSignsOnline
-  darksignsonline.com:
-    template: darksignsonline
-  www.darksignsonline.com:
-    template: darksignsonline
-  darksignsonline.foxden.network:
-    template: darksignsonline
-
-  # Personal website
-  doridian.de:
-    template: website
-  www.doridian.de:
-    template: website
-  doridian.net:
-    template: website
-  www.doridian.net:
-    template: website
-  website.foxden.network:
-    template: website
+      host: 10.3.10.2
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
+  homeassistant-default:
+    default:
+      host: 10.2.12.2
+      proxyProtocol: false
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
+  jellyfin-default:
+    default:
+      host: 10.2.11.3
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
+  kiwix-default:
+    default:
+      host: 10.2.11.6
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
+  mirror-default:
+    default:
+      host: 10.3.10.11
+      proxyProtocol: true
+    http:
+      port: 81
+    https:
+      port: 444
+    quic:
+      port: 443
+  nas-default:
+    default:
+      host: 10.2.11.1
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
+  restic-default:
+    default:
+      host: 10.2.11.12
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
+  spaceage-api-default:
+    default:
+      host: 10.3.10.5
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
+  spaceage-tts-default:
+    default:
+      host: 10.3.10.6
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
+  spaceage-website-default:
+    default:
+      host: 10.3.10.9
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
