@@ -112,6 +112,48 @@ locals {
       visibility     = "private"
       default_branch = "trunk"
     }
+
+    website = {}
+    LuaJIT = {
+      description = "Mirror of the LuaJIT git repository"
+    }
+    fakerfs = {
+      description = "FUSE filesystem that can overlay fake files on top of a real filesystem"
+    }
+    Joybus-PIO         = {}
+    hak5-wifi-coconut  = {}
+    deffs              = {}
+    fakeuinput         = {}
+    homebrew-tap       = {}
+    hammerspoon-config = {}
+    MuxyProxy = {
+      description = "Multi-Protocol reverse proxy detecting a client's protocol intelligently for dynamic forwarding"
+    }
+    os-config = {
+      description = "Various OS configuration/customization files"
+    }
+    libMSRx05          = {}
+    hashtopolis-docker = {}
+    factorio-docker = {
+      description = "Factorio headless server in a Docker container"
+    }
+    dockerheal = {}
+    foxTorrent = {}
+    GM67 = {
+      description = "RP2040 code and Python library for interacting with GROW GM67 barcode scanner"
+    }
+    fox             = {}
+    linuxptp-client = {}
+    mscob = {
+      description = "GNUCobol implementation of MSNP :3"
+    }
+    UKWeaponTris = {}
+    unsaflok = {
+      visibility = "private"
+    }
+    sevenroom-scraper = {
+      description = "I really like food."
+    }
   }
 }
 
