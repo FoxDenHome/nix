@@ -18,6 +18,13 @@ let
 
   isIPv6 = nixpkgs.lib.strings.hasInfix ":";
 
+  ipv4Ptr = (ip: let
+    segments = nixpkgs.lib.strings.splitString "." (removeIPCidr ip);
+    host = nixpkgs.lib.strings.concatStringsSep "." (nixpkgs.lib.lists.reverseList segments);
+  in "${host}.in-addr.arpa");
+
+  ipv6Ptr = (ip: "TODO");
+
   removeIPCidr = (ip: builtins.elemAt (nixpkgs.lib.strings.splitString "/" ip) 0);
 in
 {
@@ -34,4 +41,6 @@ in
   in if (isIPv6 ip) then "${ip}/128" else "${ip}/32");
 
   bracketIPv6 = (ip: if (isIPv6 ip) then "[${ip}]" else ip);
+
+  mkPtr = (ip: if (isIPv6 ip) then ipv6Ptr ip else ipv4Ptr ip);
 }
