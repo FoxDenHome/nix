@@ -3,6 +3,21 @@ let
   util = foxDenLib.util;
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
+  cnameType = with nixpkgs.lib.types; submodule {
+    options = {
+      name = nixpkgs.lib.mkOption {
+        type = str;
+      };
+      zone = nixpkgs.lib.mkOption {
+        type = str;
+      };
+      type = nixpkgs.lib.mkOption {
+        type = enum [ "CNAME" "ALIAS" ];
+        default = "CNAME";
+      };
+    };
+  };
+
   interfaceType = with nixpkgs.lib.types; submodule {
     options = {
       driver = nixpkgs.lib.mkOption {
@@ -15,6 +30,28 @@ let
       mac = nixpkgs.lib.mkOption {
         type = nullOr str;
         default = null;
+      };
+      snirouter = {
+        enable = nixpkgs.lib.mkOption {
+          type = bool;
+          default = false;
+        };
+        proxyProtocol = nixpkgs.lib.mkOption {
+          type = bool;
+          default = true;
+        };
+        httpPort = nixpkgs.lib.mkOption {
+          type = ints.u16;
+          default = 80;
+        };
+        httpsPort = nixpkgs.lib.mkOption {
+          type = ints.u16;
+          default = 443;
+        };
+        quicPort = nixpkgs.lib.mkOption {
+          type = ints.u16;
+          default = 433;
+        };
       };
       dns = {
         name = nixpkgs.lib.mkOption {
@@ -41,6 +78,10 @@ let
           type = nullOr ints.positive;
           default = 300;
         };
+      };
+      cnames = nixpkgs.lib.mkOption {
+        type = listOf cnameType;
+        default = [];
       };
       addresses = nixpkgs.lib.mkOption {
         type = uniq (listOf foxDenLib.types.ip);
@@ -151,12 +192,16 @@ in
         type = ints.u8;
         default = 0;
       };
+      networkGateway = nixpkgs.lib.mkOption {
+        type = str;
+        default = "router";
+      };
     };
 
     config = {
       foxDen.hosts.usedMacAddresses = map (iface: iface.mac) interfaces;
 
-      foxDen.dns.records = nixpkgs.lib.flatten (map
+      foxDen.dns.records = (nixpkgs.lib.flatten (map
           (iface: let
             mkRecord = (addr: nixpkgs.lib.mkIf (iface.dns.name != "") {
               zone = iface.dns.zone;
@@ -166,12 +211,18 @@ in
               value = util.removeIPCidr addr;
               horizon = if (util.isPrivateIP addr) then "internal" else "external";
             });
+            ifaceCnames = map (cname: {
+              inherit (cname) name zone type;
+              ttl = iface.dns.ttl;
+              value = "${foxDenLib.global.dns.mkHost iface.dns}.";
+              horizon = "*"; # TODO: This might need to be conditional if there is v4/v6 only hosts with CNAMEs
+            }) iface.cnames;
           in
           (
             (map mkRecord (iface.addresses ++ iface.dns.auxAddresses))
-            ++ (mkIfaceDynDns iface)
+            ++ (mkIfaceDynDns iface) ++ ifaceCnames
           ))
-        interfaces);
+        interfaces));
 
       environment.etc = nixpkgs.lib.listToAttrs (map (host: {
         name = nixpkgs.lib.strings.removePrefix "/etc/" host.resolvConf;

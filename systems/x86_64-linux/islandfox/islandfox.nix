@@ -192,7 +192,6 @@ in
     doridian-website = {
       enable = true;
       host = "doridian-website";
-      auxHosts = [ "doridian.net" ];
       tls = true;
     };
     minecraft = {
@@ -224,19 +223,16 @@ in
     spaceage-api = {
       enable = true;
       host = "spaceage-api";
-      auxHosts = [ "api.spaceage.mp" ];
       tls = true;
     };
     spaceage-website = {
       enable = true;
       host = "spaceage-website";
-      auxHosts = [ "spaceage.mp" "www.spaceage.mp" ];
       tls = true;
     };
     spaceage-tts = {
       enable = true;
       host = "spaceage-tts";
-      auxHosts = [ "tts.spaceage.mp" ];
       tls = true;
     };
     spaceage-gmod = {
@@ -246,121 +242,6 @@ in
   };
 
   foxDen.hosts.index = 2;
-
-  foxDen.dns.records = [
-    {
-      zone = "doridian.net";
-      name = "@";
-      type = "ALIAS";
-      ttl = 3600;
-      value = "website.foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "doridian.net";
-      name = "www";
-      type = "ALIAS";
-      ttl = 3600;
-      value = "website.foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "darksignsonline.com";
-      name = "@";
-      type = "ALIAS";
-      ttl = 3600;
-      value = "darksignsonline.foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "darksignsonline.com";
-      name = "www";
-      type = "ALIAS";
-      ttl = 3600;
-      value = "darksignsonline.foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "f0x.es";
-      name = "@";
-      type = "ALIAS";
-      ttl = 3600;
-      value = "foxcaves.foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "foxcav.es";
-      name = "@";
-      type = "ALIAS";
-      ttl = 3600;
-      value = "foxcaves.foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "f0x.es";
-      name = "www";
-      type = "ALIAS";
-      ttl = 3600;
-      value = "foxcaves.foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "foxcav.es";
-      name = "www";
-      type = "ALIAS";
-      ttl = 3600;
-      value = "foxcaves.foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "spaceage.mp";
-      name = "@";
-      type = "ALIAS";
-      ttl = 3600;
-      value = "spaceage-website.foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "spaceage.mp";
-      name = "www";
-      type = "ALIAS";
-      ttl = 3600;
-      value = "spaceage-website.foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "spaceage.mp";
-      name = "tts";
-      type = "ALIAS";
-      ttl = 3600;
-      value = "spaceage-tts.foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "spaceage.mp";
-      name = "api";
-      type = "ALIAS";
-      ttl = 3600;
-      value = "spaceage-api.foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "foxden.network";
-      name = "mc";
-      type = "CNAME";
-      ttl = 3600;
-      value = "minecraft.foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "doridian.net";
-      name = "mc";
-      type = "CNAME";
-      ttl = 3600;
-      value = "minecraft.foxden.network.";
-      horizon = "*";
-    }
-  ];
 
   foxDen.hosts.hosts = let
     driver = "bridge";
@@ -396,6 +277,17 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
+      cnames = [
+        {
+          name = "@";
+          zone = "darksignsonline.com";
+          type = "ALIAS";
+        }
+        {
+          name = "www";
+          zone = "darksignsonline.com";
+        }
+      ];
       addresses = [
         "10.3.10.15/16"
         "fd2c:f4cb:63be:3::a0f/64"
@@ -407,6 +299,26 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
+      cnames = [
+        {
+          name = "@";
+          zone = "f0x.es";
+          type = "ALIAS";
+        }
+        {
+          name = "www";
+          zone = "f0x.es";
+        }
+        {
+          name = "@";
+          zone = "foxcav.es";
+          type = "ALIAS";
+        }
+        {
+          name = "www";
+          zone = "foxcav.es";
+        }
+      ];
       addresses = [
         "10.3.10.1/16"
         "fd2c:f4cb:63be:3::a01/64"
@@ -513,6 +425,17 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
+      cnames = [
+        {
+          name = "@";
+          zone = "doridian.net";
+          type = "ALIAS";
+        }
+        {
+          name = "www";
+          zone = "doridian.net";
+        }
+      ];
       addresses = [
         "10.3.10.10/16"
         "fd2c:f4cb:63be:3::a0a/64"
@@ -524,6 +447,16 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
+      cnames = [
+        {
+          name = "mc";
+          zone = "foxden.network";
+        }
+        {
+          name = "mc";
+          zone = "doridian.net";
+        }
+      ];
       addresses = [
         "10.3.10.8/16"
         "fd2c:f4cb:63be:3::a08/64"
@@ -546,6 +479,16 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
+      cnames = [
+        {
+          name = "gmod";
+          zone = "spaceage.mp";
+        }
+        {
+          name = "play";
+          zone = "spaceage.mp";
+        }
+      ];
       addresses = [
         "10.3.10.4/16"
         "fd2c:f4cb:63be:3::a04/64"
@@ -557,6 +500,12 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
+      cnames = [
+        {
+          name = "api";
+          zone = "spaceage.mp";
+        }
+      ];
       addresses = [
         "10.3.10.5/16"
         "fd2c:f4cb:63be:3::a05/64"
@@ -568,6 +517,12 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
+      cnames = [
+        {
+          name = "tts";
+          zone = "spaceage.mp";
+        }
+      ];
       addresses = [
         "10.3.10.6/16"
         "fd2c:f4cb:63be:3::a06/64"
@@ -579,6 +534,17 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
+      cnames = [
+        {
+          name = "www";
+          zone = "spaceage.mp";
+        }
+        {
+          name = "@";
+          zone = "spaceage.mp";
+          type = "ALIAS";
+        }
+      ];
       addresses = [
         "10.3.10.9/16"
         "fd2c:f4cb:63be:3::a09/64"

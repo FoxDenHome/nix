@@ -113,10 +113,6 @@ in
         type = str;
       };
     };
-    auxHosts = nixpkgs.lib.mkOption {
-      type = listOf str;
-      default = [];
-    };
   } // (services.mkOptions inputs));
 
   make = (inputs@{
@@ -138,7 +134,7 @@ in
       dnsMatchers = (map (iface: "${matchPrefix}${foxDenLib.global.dns.mkHost iface.dns}")
                     (nixpkgs.lib.filter (iface: iface.dns.name != "")
                       (nixpkgs.lib.attrsets.attrValues host.interfaces)));
-      hostMatchers = map (host: "${matchPrefix}${host}") svcConfig.auxHosts;
+      hostMatchers = map (cname: "${matchPrefix}${foxDenLib.global.dns.mkHost cname}") host.cnames;
 
       svc = services.mkNamed name inputs;
       caddyFilePath = "${svc.configDir}/Caddyfile.${name}";

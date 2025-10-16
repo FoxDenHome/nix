@@ -463,7 +463,6 @@ in
       enable = true;
       host = "xmpp";
       tls = true;
-      auxHosts = [ "xmpp.foxden.network" "upload.xmpp.foxden.network" ];
     };
     restic-server = {
       enable = true;
@@ -496,54 +495,6 @@ in
       type = "CNAME";
       ttl = 3600;
       value = "icefox.foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "doridian.net";
-      name = "cachyos";
-      type = "CNAME";
-      ttl = 3600;
-      value = "mirror.doridian.net.";
-      horizon = "*";
-    }
-    {
-      zone = "doridian.net";
-      name = "archlinux";
-      type = "CNAME";
-      ttl = 3600;
-      value = "mirror.doridian.net.";
-      horizon = "*";
-    }
-    {
-      zone = "foxden.network";
-      name = "xmpp";
-      type = "CNAME";
-      ttl = 3600;
-      value = "foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "foxden.network";
-      name = "www";
-      type = "CNAME";
-      ttl = 3600;
-      value = "foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "foxden.network";
-      name = "upload.xmpp";
-      type = "CNAME";
-      ttl = 3600;
-      value = "foxden.network.";
-      horizon = "*";
-    }
-    {
-      zone = "foxden.network";
-      name = "webdav.syncthing";
-      type = "CNAME";
-      ttl = 3600;
-      value = "syncthing.foxden.network.";
       horizon = "*";
     }
     {
@@ -580,6 +531,8 @@ in
       value = "xmpp.foxden.network";
     }
   ];
+
+  foxDen.hosts.networkGateway = "icefox";
 
   foxDen.hosts.hosts = let
     sysctls = {
@@ -677,6 +630,16 @@ in
         name = "mirror";
         zone = "doridian.net";
       };
+      cnames = [
+        {
+          name = "cachyos";
+          zone = "doridian.net";
+        }
+        {
+          name = "archlinux";
+          zone = "doridian.net";
+        }
+      ];
       addresses = [
         "95.216.116.139/26"
         "2a01:4f9:2b:1a42::0:3/112"
@@ -690,6 +653,17 @@ in
         name = "@";
         zone = "foxden.network";
       };
+      cnames = [
+        {
+          name = "xmpp";
+          zone = "foxden.network";
+        }
+        {
+          name = "upload.xmpp";
+          zone = "foxden.network";
+        }
+      ];
+      snirouter.enable = true;
       addresses = [
         "2a01:4f9:2b:1a42::1:4/112"
         "10.99.12.4/24"
@@ -701,6 +675,7 @@ in
         name = "nas-offsite";
         zone = "foxden.network";
       };
+      snirouter.enable = true;
       addresses = [
         "2a01:4f9:2b:1a42::1:5/112"
         "10.99.12.5/24"
@@ -712,6 +687,13 @@ in
         name = "syncthing";
         zone = "doridian.net";
       };
+      cnames = [
+        {
+          name = "webdav.syncthing";
+          zone = "doridian.net";
+        }
+      ];
+      snirouter.enable = true;
       addresses = [
         "2a01:4f9:2b:1a42::1:6/112"
         "10.99.12.6/24"
@@ -723,6 +705,7 @@ in
         name = "restic";
         zone = "doridian.net";
       };
+      snirouter.enable = true;
       addresses = [
         "2a01:4f9:2b:1a42::1:7/112"
         "10.99.12.7/24"
@@ -745,6 +728,7 @@ in
         name = "jellyfin-offsite";
         zone = "foxden.network";
       };
+      snirouter.enable = true;
       addresses = [
         "2a01:4f9:2b:1a42::1:9/112"
         "10.99.12.9/24"
@@ -756,6 +740,7 @@ in
         name = "kiwix-offsite";
         zone = "foxden.network";
       };
+      snirouter.enable = true;
       addresses = [
         "2a01:4f9:2b:1a42::1:a/112"
         "10.99.12.10/24"
