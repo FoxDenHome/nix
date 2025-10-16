@@ -131,10 +131,12 @@ in
 
       host = foxDenLib.hosts.getByName config svcConfig.host;
       matchPrefix = if svcConfig.tls then "" else "http://";
-      dnsMatchers = nixpkgs.lib.flatten (map (iface:
+
+      # TODO: Go back to uniqueStrings once next NixOS stable
+      dnsMatchers = nixpkgs.lib.lists.unique (nixpkgs.lib.flatten (map (iface:
                       (map (dns: "${matchPrefix}${foxDenLib.global.dns.mkHost dns}") ([iface.dns] ++ iface.cnames)))
                         (nixpkgs.lib.filter (iface: iface.dns.name != "")
-                          (nixpkgs.lib.attrsets.attrValues host.interfaces)));
+                          (nixpkgs.lib.attrsets.attrValues host.interfaces))));
 
       svc = services.mkNamed name inputs;
       caddyFilePath = "${svc.configDir}/Caddyfile.${name}";
