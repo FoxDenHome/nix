@@ -1,0 +1,85 @@
+$TTL 300
+$INCLUDE /etc/pdns/authority.db
+$INCLUDE /etc/pdns/foxden.network.txt
+
+ns1 IN A 10.3.0.53
+ns2 IN A 10.3.0.53
+ns3 IN A 10.3.0.53
+ns4 IN A 10.3.0.53
+@ IN A 10.99.12.4
+
+icefox IN A 10.99.10.2
+nas-offsite IN A 10.99.12.5
+jellyfin-offsite IN A 10.99.12.9
+kiwix-offsite IN A 10.99.12.10
+deluge-offsite IN A 10.99.12.11
+
+xmpp IN A 10.99.12.4
+upload.xmpp IN CNAME xmpp.foxden.network.
+muc.xmpp IN CNAME xmpp.foxden.network.
+proxy.xmpp IN CNAME xmpp.foxden.network.
+pubsub.xmpp IN CNAME xmpp.foxden.network.
+_xmpp-client._tcp IN SRV 5 0 5222 xmpp.foxden.network.
+_xmpps-client._tcp SRV 5 0 5223 xmpp.foxden.network.
+_xmpp-server._tcp SRV 5 0 5269 xmpp.foxden.network.
+
+webdav.syncthing IN CNAME syncthing.foxden.network.
+
+archlinux IN CNAME mirror.foxden.network.
+cachyos IN CNAME mirror.foxden.network.
+aur IN CNAME mirror.foxden.network.
+archzfs IN CNAME mirror.foxden.network.
+
+config IN LUA LUA  ("if not foxden_local4 then"
+                    "  foxden_local4 = {}"
+                    "  foxden_local6 = {}"
+                    "  local function make_foxden_local(host, suffix4, suffix6)"
+                    "    local loc4 = {}"
+                    "    local loc6 = {}"
+                    "    local defDest4"
+                    "    local defDest6"
+                    "    for subnet = 1,9 do"
+                    "      local src = {'10.' .. subnet .. '.0.0/16', 'fd2c:f4cb:63be:' .. subnet .. '::/64'}"
+                    "      local dest4 = {'10.' .. subnet .. '.' .. suffix4}"
+                    "      local dest6 = {'fd2c:f4cb:63be:' .. subnet .. '::' .. suffix6}"
+                    "      table.insert(loc4, {src, dest4})"
+                    "      table.insert(loc6, {src, dest6})"
+                    "      if subnet == 2 then"
+                    "        defDest4 = dest4"
+                    "        defDest6 = dest6"
+                    "      end"
+                    "    end"
+                    "    if suffix4:sub(1, 2) == '1.' then"
+                    "      local shortSuffix4 = suffix4:sub(3)"
+                    "      table.insert(loc4, {{'100.96.41.0/24'}, {'100.96.41.'..shortSuffix4}})"
+                    "    end"
+                    "    table.insert(loc4, {{'0.0.0.0/0', '::/0'}, defDest4})"
+                    "    table.insert(loc6, {{'0.0.0.0/0', '::/0'}, defDest6})"
+                    "    foxden_local4[host] = loc4"
+                    "    foxden_local6[host] = loc6"
+                    "  end"
+                    "  make_foxden_local('gateway', '0.1', '0001')"
+                    "  make_foxden_local('dns', '0.53', '0035')"
+                    "  make_foxden_local('ntp', '0.123', '007b')"
+                    "  make_foxden_local('router', '1.1', '0101')"
+                    "  make_foxden_local('routerbackup', '1.2', '0102')"
+                    "  make_foxden_local('ntpi', '1.123', '017b')"
+                    "end")
+
+gateway       IN LUA A       (";include('config'); return view(foxden_local4.gateway)")
+gateway       IN LUA AAAA    (";include('config'); return view(foxden_local6.gateway)")
+dns           IN LUA A       (";include('config'); return view(foxden_local4.dns)")
+dns           IN LUA AAAA    (";include('config'); return view(foxden_local6.dns)")
+ntp           IN LUA A       (";include('config'); return view(foxden_local4.ntp)")
+ntp           IN LUA AAAA    (";include('config'); return view(foxden_local6.ntp)")
+router        IN LUA A       (";include('config'); return view(foxden_local4.router)")
+router        IN LUA AAAA    (";include('config'); return view(foxden_local6.router)")
+router-backup IN LUA A       (";include('config'); return view(foxden_local4.routerbackup)")
+router-backup IN LUA AAAA    (";include('config'); return view(foxden_local6.routerbackup)")
+ntpi          IN LUA A       (";include('config'); return view(foxden_local4.ntpi)")
+ntpi          IN LUA AAAA    (";include('config'); return view(foxden_local6.ntpi)")
+vpn           IN LUA A       (";include('config'); return view(foxden_local4.router)")
+vpn           IN LUA AAAA    (";include('config'); return view(foxden_local6.router)")
+
+
+ecstest 0 IN LUA TXT ("bestwho:toString()")

@@ -1,0 +1,220 @@
+listeners:
+  http: :80
+  https: :443
+  quic: :443
+  prometheus: :9001
+defaults:
+  backends:
+    default:
+      host: 172.17.0.1
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
+templates:
+  host:
+    default:
+      host: 172.17.0.1
+  router:
+    default:
+      host: 10.3.1.1
+  router-backup:
+    default:
+      host: 10.3.1.2
+  nas:
+    default:
+      host: 10.2.11.1
+      proxy_protocol: true
+  jellyfin:
+    default:
+      host: 10.2.11.3
+      proxy_protocol: true
+  kiwix:
+    default:
+      host: 10.2.11.6
+      proxy_protocol: true
+  grafana:
+    default:
+      host: 10.2.11.5
+      proxy_protocol: true
+  spaceage-api:
+    default:
+      host: 10.3.10.5
+      proxy_protocol: true
+  spaceage-tts:
+    default:
+      host: 10.3.10.6
+      proxy_protocol: true
+  foxcaves:
+    default:
+      host: 10.3.10.1
+      proxy_protocol: true
+    http:
+      port: 81
+    https:
+      port: 444
+  git:
+    default:
+      host: 10.3.10.2
+      proxy_protocol: true
+  hashtopolis:
+    default:
+      host: 10.2.11.17
+      proxy_protocol: true
+  homeassistant:
+    default:
+      host: 10.2.12.2
+  spaceage-website:
+    default:
+      host: 10.3.10.9
+  website:
+    default:
+      host: 10.3.10.10
+  syncthing:
+    default:
+      host: 10.2.11.2
+  restic:
+    default:
+      host: 10.2.11.12
+  mirror:
+    default:
+      host: 10.3.10.11
+      proxy_protocol: true
+    http:
+      port: 81
+    https:
+      port: 444
+  furaffinity:
+    default:
+      host: 10.3.10.13
+      proxy_protocol: true
+  e621:
+    default:
+      host: 10.3.10.12
+      proxy_protocol: true
+  owncast:
+    default:
+      host: 10.3.10.14
+      proxy_protocol: true
+  auth:
+    default:
+      host: 10.1.14.1
+      proxy_protocol: true
+    quic:
+      disabled: true
+  radius-auth:
+    default:
+      host: 10.1.14.2
+      proxy_protocol: true
+    quic:
+      disabled: true
+  unifi:
+    default:
+      host: 10.1.10.1
+    quic:
+      disabled: true
+  darksignsonline:
+    default:
+      host: 10.3.10.15
+      proxy_protocol: true
+hosts:
+  # Home network
+  nas.foxden.network:
+    template: nas
+  kiwix.foxden.network:
+    template: kiwix
+  jellyfin.foxden.network:
+    template: jellyfin
+
+  grafana.foxden.network:
+    template: grafana
+  homeassistant.foxden.network:
+    template: homeassistant
+  syncthing.foxden.network:
+    template: syncthing
+  webdav.syncthing.foxden.network:
+    template: syncthing
+  htpl.foxden.network:
+    template: hashtopolis
+  furaffinity.foxden.network:
+    template: furaffinity
+  e621.foxden.network:
+    template: e621
+  git.foxden.network:
+    template: git
+  restic.foxden.network:
+    template: restic
+  unifi.foxden.network:
+    template: unifi
+
+  auth.foxden.network:
+    template: auth
+  radius.auth.foxden.network:
+    template: radius-auth
+
+  archlinux.foxden.network:
+    template: mirror
+  cachyos.foxden.network:
+    template: mirror
+  mirror.foxden.network:
+    template: mirror
+
+  owncast.foxden.network:
+    template: owncast
+  live.doridian.net:
+    template: owncast
+
+  router.foxden.network:
+    template: router
+  router-backup.foxden.network:
+    template: router-backup
+
+  # SpaceAge
+  api.spaceage.mp:
+    template: spaceage-api
+  tts.spaceage.mp:
+    template: spaceage-tts
+  spaceage.mp:
+    template: spaceage-website
+  www.spaceage.mp:
+    template: spaceage-website
+  spaceage-api.foxden.network:
+    template: spaceage-api
+  spaceage-tts.foxden.network:
+    template: spaceage-tts
+  spaceage-website.foxden.network:
+    template: spaceage-website
+
+  # foxCaves
+  foxcav.es:
+    template: foxcaves
+  www.foxcav.es:
+    template: foxcaves
+  f0x.es:
+    template: foxcaves
+  www.f0x.es:
+    template: foxcaves
+  foxcaves.foxden.network:
+    template: foxcaves
+
+  # DarkSignsOnline
+  darksignsonline.com:
+    template: darksignsonline
+  www.darksignsonline.com:
+    template: darksignsonline
+  darksignsonline.foxden.network:
+    template: darksignsonline
+
+  # Personal website
+  doridian.de:
+    template: website
+  www.doridian.de:
+    template: website
+  doridian.net:
+    template: website
+  www.doridian.net:
+    template: website
+  website.foxden.network:
+    template: website
