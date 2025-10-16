@@ -27,7 +27,7 @@
 
   config.foxDen.dns.records = [
     {
-      zone = "foxden.network";
+      zone = "doridian.net";
       name = "v4-redfox";
       type = "A";
       ttl = 3600;
@@ -35,7 +35,7 @@
       horizon = "external";
     }
     {
-      zone = "foxden.network";
+      zone = "doridian.net";
       name = "v4-redfox";
       type = "CNAME";
       ttl = 3600;

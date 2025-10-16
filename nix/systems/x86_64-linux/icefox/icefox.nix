@@ -364,7 +364,7 @@ in
     wireguard."wg-s2s" = {
       host = "";
       interface = {
-        ips = [ "10.99.10.2/32" ];
+        ips = ifcfg-s2s.addresses;
         listenPort = 13232;
         peers = [
           {
