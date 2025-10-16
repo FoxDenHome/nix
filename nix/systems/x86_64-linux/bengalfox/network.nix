@@ -13,7 +13,7 @@ let
 in
 {
   config = {
-    lib.mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
+    lib.foxDenSys.mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
 
     virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ];
     foxDen.hosts.index = 1;
