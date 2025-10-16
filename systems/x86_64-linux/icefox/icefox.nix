@@ -1,9 +1,5 @@
 { config, foxDenLib, lib, ... }:
 let
-  mkHost = foxDenLib.hosts.helpers.hetzner.mkHost ifcfg ifcfg-s2s;
-  mkV6Host = foxDenLib.hosts.helpers.hetzner.mkV6Host ifcfg ifcfg-s2s;
-  mkMinHost = foxDenLib.hosts.helpers.hetzner.mkMinHost ifcfg ifcfg-s2s;
-
   ifcfg-s2s = {
     addresses = [
       "10.99.10.2/16"
@@ -26,6 +22,10 @@ let
   };
 
   phyIface = "enp7s0";
+
+  mkHost = foxDenLib.hosts.helpers.hetzner.mkHost ifcfg ifcfg-s2s;
+  mkV6Host = foxDenLib.hosts.helpers.hetzner.mkV6Host ifcfg ifcfg-s2s;
+  mkMinHost = foxDenLib.hosts.helpers.hetzner.mkMinHost ifcfg ifcfg-s2s;
 in
 {
   # These are set when you reinstall the system

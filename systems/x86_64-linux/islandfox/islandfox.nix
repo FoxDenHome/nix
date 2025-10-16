@@ -1,19 +1,17 @@
 { modulesPath, foxDenLib, config, ... }:
 let
-  mkNameservers = foxDenLib.hosts.helpers.lan.mkNameservers ifcfg;
-  mkRoutes = foxDenLib.hosts.helpers.lan.mkRoutes ifcfg;
-  mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
-
   ifcfg = {
     addresses = [
       "10.2.10.11/16"
       "fd2c:f4cb:63be:2::a0b/64"
     ];
-    routes = mkRoutes 2;
-    nameservers = mkNameservers 2;
+    routes = foxDenLib.hosts.helpers.lan.mkRoutes 2;
+    nameservers = foxDenLib.hosts.helpers.lan.mkNameservers 2;
     interface = "br-default";
     mac = "04:7b:cb:44:c0:dd";
   };
+
+  mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
 in
 {
   # These are set when you reinstall the system
