@@ -50,7 +50,7 @@ let
         };
         quicPort = nixpkgs.lib.mkOption {
           type = ints.u16;
-          default = 433;
+          default = 443;
         };
       };
       dns = {
@@ -144,10 +144,10 @@ in
 
     hosts = map (getByName config) (nixpkgs.lib.attrsets.attrNames config.foxDen.hosts.hosts);
     mapIfaces = (host: map ({ name, value }:  value // rec {
-        inherit host name;
-        suffix = util.mkShortHash 6 (host.name + "|" + name);
-        mac = if value.mac != null then value.mac else (mkHashMac suffix);
-      }) (nixpkgs.lib.attrsets.attrsToList host.interfaces));
+      inherit host name;
+      suffix = util.mkShortHash 6 (host.name + "|" + name);
+      mac = if value.mac != null then value.mac else (mkHashMac suffix);
+    }) (nixpkgs.lib.attrsets.attrsToList host.interfaces));
     interfaces = nixpkgs.lib.flatten (map mapIfaces hosts);
 
     ifaceHasV4 = (iface: nixpkgs.lib.any util.isIPv4 iface.addresses);

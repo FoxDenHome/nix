@@ -77,14 +77,17 @@ let
     };
   };
   nixosConfigurations = (nixpkgs.lib.attrsets.listToAttrs (map mkSystemConfig systems));
-  dnsRecords = foxDenLib.global.dns.mkRecords nixosConfigurations;
 in
 {
   nixosConfigurations = nixosConfigurations;
 
-  dnsRecords = {
-    attrset = dnsRecords;
-    json = builtins.toFile "dns-records.json" (builtins.toJSON dnsRecords);
+  dnsRecords = rec {
+    attrset = foxDenLib.global.dns.mkRecords nixosConfigurations;
+    json = builtins.toFile "dns-records.json" (builtins.toJSON attrset);
+  };
+  snirouter = rec {
+    attrset = foxDenLib.global.snirouter.make nixosConfigurations;
+    json = builtins.toFile "snirouter.json" (builtins.toJSON attrset);
   };
 
   foxDenLib = foxDenLib;

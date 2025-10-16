@@ -541,8 +541,7 @@ in
 
     mkIntHost = iface: {
       inherit (ifcfg) nameservers;
-      interfaces.default = {
-        inherit (iface) dns mac;
+      interfaces.default = iface // {
         inherit sysctls;
         addresses = lib.filter (ip: !(foxDenLib.util.isPrivateIP ip)) iface.addresses;
         driver = "bridge";
@@ -550,9 +549,9 @@ in
         driverOpts.vlan = 0;
         routes = [ ];
       };
-      interfaces.s2s = {
-        inherit (iface) dns;
+      interfaces.s2s = iface // {
         inherit sysctls;
+        mac = null;
         addresses = lib.filter (foxDenLib.util.isPrivateIP) iface.addresses;
         driver = "bridge";
         driverOpts.bridge = ifcfg-s2s.interface;
