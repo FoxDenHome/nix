@@ -23,6 +23,18 @@ let
         type = ints.positive;
         default = defaultTtl;
       };
+      priority = lib.mkOption {
+        type = nullOr ints.unsigned;
+        default = null;
+      };
+      port = lib.mkOption {
+        type = nullOr ints.u16;
+        default = null;
+      };
+      weight = lib.mkOption {
+        type = nullOr ints.unsigned;
+        default = null;
+      };
       dynDns = lib.mkOption {
         type = bool;
         default = false;
