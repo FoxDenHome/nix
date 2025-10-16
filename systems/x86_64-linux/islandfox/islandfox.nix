@@ -319,6 +319,11 @@ in
           zone = "foxcav.es";
         }
       ];
+      snirouter = {
+        enable = true;
+        httpPort = 81;
+        httpsPort = 444;
+      };
       addresses = [
         "10.3.10.1/16"
         "fd2c:f4cb:63be:3::a01/64"
@@ -474,6 +479,7 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
+      snirouter.enable = true;
       addresses = [
         "10.3.10.2/16"
         "fd2c:f4cb:63be:3::a02/64"
@@ -506,6 +512,7 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
+      snirouter.enable = true;
       cnames = [
         {
           name = "api";
@@ -523,6 +530,7 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
+      snirouter.enable = true;
       cnames = [
         {
           name = "tts";
@@ -540,6 +548,7 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
+      snirouter.enable = true;
       cnames = [
         {
           name = "www";

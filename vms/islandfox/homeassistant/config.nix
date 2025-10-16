@@ -8,6 +8,10 @@
       zone = "foxden.network";
       dynDns = true;
     };
+    snirouter = {
+      enable = true;
+      proxyProtocol = false;
+    };
     addresses = [
       "10.2.12.2/16"
       "fd2c:f4cb:63be:2::c02/64"
