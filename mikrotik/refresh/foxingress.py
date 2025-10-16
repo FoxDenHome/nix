@@ -1,9 +1,9 @@
 from subprocess import check_call
 from json import load as json_load
-from refresh.util import unlink_safe, NIX_DIR
+from refresh.util import unlink_safe, NIX_DIR, mtik_path
 from yaml import dump as yaml_dump
 
-FILENAME = "files/foxingress/config.yml"
+FILENAME = mtik_path("files/foxingress/config.yml")
 
 def refresh_foxingress():
     unlink_safe("result")

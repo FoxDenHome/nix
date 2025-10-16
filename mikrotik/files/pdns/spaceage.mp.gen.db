@@ -1,0 +1,6 @@
+@ 3600 IN ALIAS spaceage-website.foxden.network.
+api 3600 IN CNAME spaceage-api.foxden.network.
+gmod 3600 IN CNAME spaceage-gmod.foxden.network.
+play 3600 IN CNAME spaceage-gmod.foxden.network.
+tts 3600 IN CNAME spaceage-tts.foxden.network.
+www 3600 IN CNAME spaceage-website.foxden.network.

@@ -1,35 +1,11 @@
 $TTL 300
 $INCLUDE /etc/pdns/authority.db
-$INCLUDE /etc/pdns/foxden.network.txt
+$INCLUDE /etc/pdns/foxden.network.gen.db
 
 ns1 IN A 10.3.0.53
 ns2 IN A 10.3.0.53
 ns3 IN A 10.3.0.53
 ns4 IN A 10.3.0.53
-@ IN A 10.99.12.4
-
-icefox IN A 10.99.10.2
-nas-offsite IN A 10.99.12.5
-nzbget-offsite IN A 10.99.12.8
-jellyfin-offsite IN A 10.99.12.9
-kiwix-offsite IN A 10.99.12.10
-deluge-offsite IN A 10.99.12.11
-
-xmpp IN A 10.99.12.4
-upload.xmpp IN CNAME xmpp.foxden.network.
-muc.xmpp IN CNAME xmpp.foxden.network.
-proxy.xmpp IN CNAME xmpp.foxden.network.
-pubsub.xmpp IN CNAME xmpp.foxden.network.
-_xmpp-client._tcp IN SRV 5 0 5222 xmpp.foxden.network.
-_xmpps-client._tcp SRV 5 0 5223 xmpp.foxden.network.
-_xmpp-server._tcp SRV 5 0 5269 xmpp.foxden.network.
-
-webdav.syncthing IN CNAME syncthing.foxden.network.
-
-archlinux IN CNAME mirror.foxden.network.
-cachyos IN CNAME mirror.foxden.network.
-aur IN CNAME mirror.foxden.network.
-archzfs IN CNAME mirror.foxden.network.
 
 config IN LUA LUA  ("if not foxden_local4 then"
                     "  foxden_local4 = {}"
@@ -79,8 +55,5 @@ router-backup IN LUA A       (";include('config'); return view(foxden_local4.rou
 router-backup IN LUA AAAA    (";include('config'); return view(foxden_local6.routerbackup)")
 ntpi          IN LUA A       (";include('config'); return view(foxden_local4.ntpi)")
 ntpi          IN LUA AAAA    (";include('config'); return view(foxden_local6.ntpi)")
-vpn           IN LUA A       (";include('config'); return view(foxden_local4.router)")
-vpn           IN LUA AAAA    (";include('config'); return view(foxden_local6.router)")
-
 
 ecstest 0 IN LUA TXT ("bestwho:toString()")

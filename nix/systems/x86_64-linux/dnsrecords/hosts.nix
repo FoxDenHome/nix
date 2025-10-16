@@ -16,5 +16,16 @@
         "fd2c:f4cb:63be:5::a01/64"
       ];
     };
+    fennec = mkIntf {
+      dns = {
+        name = "fennec";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      addresses = [
+        "10.5.10.1/16"
+        "fd2c:f4cb:63be:5::a01/64"
+      ];
+    };
   };
 }

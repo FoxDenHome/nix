@@ -1,7 +1,3 @@
 $TTL 300
 $INCLUDE /etc/pdns/authority.db
-
-@ IN CNAME foxcaves.foxden.network.
-www IN CNAME foxcaves.foxden.network.
-
-c0de IN CNAME c0defox.es.
+$INCLUDE /etc/pdns/f0x.es.gen.db

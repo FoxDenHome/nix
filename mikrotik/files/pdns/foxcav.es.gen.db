@@ -1,0 +1,2 @@
+@ 3600 IN ALIAS foxcaves.foxden.network.
+www 3600 IN CNAME foxcaves.foxden.network.

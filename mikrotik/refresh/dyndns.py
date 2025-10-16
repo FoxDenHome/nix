@@ -4,9 +4,10 @@ import re
 from subprocess import check_output
 from json import loads as json_loads
 from urllib.parse import parse_qs, urlparse
+from refresh.util import mtik_path
 
-TEMPLATE = "scripts/dyndns-update-template.rsc"
-FILENAME = "scripts/dyndns-update.rsc"
+TEMPLATE = mtik_path("scripts/dyndns-update-template.rsc")
+FILENAME = mtik_path("scripts/dyndns-update.rsc")
 ROUTERS = ["router.foxden.network", "router-backup.foxden.network"]
 
 SPECIAL_HOSTS = ROUTERS + [f"v4-{router}" for router in ROUTERS]

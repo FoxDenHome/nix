@@ -1,0 +1,4 @@
+dummy 3600 IN A 192.168.122.203
+dummy 3600 IN AAAA fd00:dead:beef:122::203
+dummy2 3600 IN A 192.168.122.204
+dummy2 3600 IN AAAA fd00:dead:beef:122::204

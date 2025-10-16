@@ -1,3 +1,4 @@
 $TTL 300
 $INCLUDE /etc/pdns/authority.db
 $INCLUDE /etc/pdns/10.in-addr.arpa.txt
+$INCLUDE /etc/pdns/10.in-addr.arpa.gen.db
