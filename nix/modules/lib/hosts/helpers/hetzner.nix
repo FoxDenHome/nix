@@ -2,7 +2,7 @@
 let
   lib = nixpkgs.lib;
 
-  mkMinHost = (ifcfg: ifcfg-s2s: iface: {
+  mkMinHost = (ifcfg: ifcfg-foxden: iface: {
     inherit (ifcfg) nameservers;
     interfaces.default = iface // {
       sysctls = {
@@ -15,14 +15,14 @@ let
       driverOpts.vlan = 0;
       routes = [ ];
     };
-    interfaces.s2s = iface // {
+    interfaces.foxden = iface // {
       sysctls = {
         "net.ipv6.conf.INTERFACE.accept_ra" = "0";
       } // (iface.sysctls or {});
       mac = null;
       addresses = lib.filter (foxDenLib.util.isPrivateIP) iface.addresses;
       driver = "bridge";
-      driverOpts.bridge = ifcfg-s2s.interface;
+      driverOpts.bridge = ifcfg-foxden.interface;
       driverOpts.vlan = 0;
       routes = [
         { Destination = "10.0.0.0/8"; Gateway = "10.99.12.1"; }
@@ -36,8 +36,8 @@ in
 {
   inherit mkMinHost routedInterface;
 
-  mkHost = (ifcfg: ifcfg-s2s: iface: lib.mkMerge [
-    (mkMinHost ifcfg ifcfg-s2s iface)
+  mkHost = (ifcfg: ifcfg-foxden: iface: lib.mkMerge [
+    (mkMinHost ifcfg ifcfg-foxden iface)
     {
       interfaces.default.routes = [
         { Destination = "0.0.0.0/0"; Gateway = "95.216.116.129"; }
@@ -46,8 +46,8 @@ in
     }
   ]);
 
-  mkV6Host = (ifcfg: ifcfg-s2s: iface: lib.mkMerge [
-    (mkMinHost ifcfg ifcfg-s2s ({ mac = null; } // iface))
+  mkV6Host = (ifcfg: ifcfg-foxden: iface: lib.mkMerge [
+    (mkMinHost ifcfg ifcfg-foxden ({ mac = null; } // iface))
     {
       interfaces.default = {
         dns.auxAddresses = [ "95.216.116.180" ];
@@ -56,7 +56,7 @@ in
         ];
         driverOpts.bridge = routedInterface;
       };
-      interfaces.s2s.routes = [
+      interfaces.foxden.routes = [
         { Destination = "0.0.0.0/0"; Gateway = "10.99.12.1"; }
       ];
     }

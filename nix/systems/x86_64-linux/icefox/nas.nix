@@ -122,7 +122,7 @@ in
       };
     in {
       nameservers = [ "10.64.0.1" ];
-      interfaces.s2s = host.interfaces.s2s;
+      interfaces.foxden = host.interfaces.foxden;
     };
   };
 }

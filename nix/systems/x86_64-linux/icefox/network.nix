@@ -1,11 +1,11 @@
 { config, foxDenLib, ... }:
 let
-  ifcfg-s2s = {
+  ifcfg-foxden = {
     addresses = [
       "10.99.10.2/16"
       "fd2c:f4cb:63be::a63:a02/112"
     ];
-    interface = "br-s2s";
+    interface = "br-foxden";
   };
   ifcfg = {
     addresses = [
@@ -28,9 +28,9 @@ in
 {
   config = {
     lib.foxDenSys = {
-      mkHost = foxDenLib.hosts.helpers.hetzner.mkHost ifcfg ifcfg-s2s;
-      mkV6Host = foxDenLib.hosts.helpers.hetzner.mkV6Host ifcfg ifcfg-s2s;
-      mkMinHost = foxDenLib.hosts.helpers.hetzner.mkMinHost ifcfg ifcfg-s2s;
+      mkHost = foxDenLib.hosts.helpers.hetzner.mkHost ifcfg ifcfg-foxden;
+      mkV6Host = foxDenLib.hosts.helpers.hetzner.mkV6Host ifcfg ifcfg-foxden;
+      mkMinHost = foxDenLib.hosts.helpers.hetzner.mkMinHost ifcfg ifcfg-foxden;
     };
 
     networking.nftables.tables = {
@@ -125,8 +125,8 @@ in
       bridge = [ifcfg.interface];
     };
 
-    systemd.network.networks."30-${ifcfg-s2s.interface}" = {
-      name = ifcfg-s2s.interface;
+    systemd.network.networks."30-${ifcfg-foxden.interface}" = {
+      name = ifcfg-foxden.interface;
       address = [
         "10.99.12.1/24"
         "fd2c:f4cb:63be::a63:c01/120"
@@ -155,9 +155,9 @@ in
       };
     };
 
-    systemd.network.netdevs."${ifcfg-s2s.interface}" = {
+    systemd.network.netdevs."${ifcfg-foxden.interface}" = {
       netdevConfig = {
-        Name = ifcfg-s2s.interface;
+        Name = ifcfg-foxden.interface;
         Kind = "bridge";
       };
 
@@ -166,15 +166,15 @@ in
       };
     };
 
-    virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ifcfg-s2s.interface routedInterface ];
+    virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ifcfg-foxden.interface routedInterface ];
 
     foxDen.services = {
       trustedProxies = [ "10.99.12.2/32" ];
 
-      wireguard."wg-s2s" = config.lib.foxDen.sops.mkIfAvailable {
+      wireguard."wg-foxden" = config.lib.foxDen.sops.mkIfAvailable {
         host = "";
         interface = {
-          ips = ifcfg-s2s.addresses;
+          ips = ifcfg-foxden.addresses;
           listenPort = 13232;
           peers = [
             {
@@ -242,7 +242,7 @@ in
       in {
         inherit (ifcfg) nameservers;
         interfaces.default = mkIntf ifcfg.addresses;
-        interfaces.s2s = mkIntf ifcfg-s2s.addresses;
+        interfaces.foxden = mkIntf ifcfg-foxden.addresses;
       };
     };
   };
