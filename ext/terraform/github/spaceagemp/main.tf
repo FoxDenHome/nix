@@ -1,6 +1,5 @@
 locals {
   repositores = {
-    docker  = {}
     website = {}
     StarLord = {
       description = "GMod server manager with updates from git"

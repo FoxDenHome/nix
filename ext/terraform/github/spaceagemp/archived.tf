@@ -1,9 +1,10 @@
 locals {
   archived_repositores = {
-    SpaceAgeCentral = {},
+    docker = {}
+    SpaceAgeCentral = {}
     SpaceAge_Old_Archive = {
       visibility = "private",
-    },
+    }
     ansible = {
       visibility        = "private"
       branch_protection = false
