@@ -3,30 +3,7 @@ let
   services = foxDenLib.services;
   svcConfig = config.foxDen.services.foxIngress;
 
-  boilerplateCfg = {
-    listeners = {
-      http = ":80";
-      https = ":443";
-      quic = ":443";
-      prometheus = ":9001";
-    };
-    defaults = {
-      backends = {
-        default = {
-          host = "169.254.169.254";
-        };
-        http = {
-          port = 80;
-        };
-        https = {
-          port = 443;
-        };
-        quic = {
-          port = 443;
-        };
-      };
-    };
-  };
+  boilerplateCfg = foxDenLib.global.foxingress.boilerplateCfg;
 
   # TODO: Gateway config might need global config in the future, but only icefox uses this
   #       and icefox only serves itself

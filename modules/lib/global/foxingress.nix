@@ -121,6 +121,31 @@ in
   getForGateway = config: gateway: mkForGateway gateway config.foxDen.foxIngress;
   getForDefault = config: mkForGateway config.foxDen.foxIngress.defaultGateway config.foxDen.foxIngress;
 
+  boilerplateCfg = {
+    listeners = {
+      http = ":80";
+      https = ":443";
+      quic = ":443";
+      prometheus = ":9001";
+    };
+    defaults = {
+      backends = {
+        default = {
+          host = "169.254.169.254";
+        };
+        http = {
+          port = 80;
+        };
+        https = {
+          port = 443;
+        };
+        quic = {
+          port = 443;
+        };
+      };
+    };
+  };
+
   make = nixosConfigurations: let
     cfg = {
       templates = globalConfig.getAttrSet ["foxDen" "foxIngress" "templates"] nixosConfigurations;
