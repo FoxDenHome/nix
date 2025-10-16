@@ -193,6 +193,7 @@ in
         default = [
           "c.1.2.2.0.f.8.e.0.a.2.ip6.arpa"
           "0.f.4.4.d.7.e.0.a.2.ip6.arpa"
+          "e.b.3.6.b.c.4.f.c.2.d.f.ip6.arpa"
           "10.in-addr.arpa"
         ];
       };

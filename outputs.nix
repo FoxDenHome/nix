@@ -86,4 +86,6 @@ in
     attrset = dnsRecords;
     json = builtins.toFile "dns-records.json" (builtins.toJSON dnsRecords);
   };
+
+  foxDenLib = foxDenLib;
 }
