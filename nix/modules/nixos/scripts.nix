@@ -4,8 +4,8 @@
     text = ''
       #!/usr/bin/env bash
       set -xeuo pipefail
-      nix flake update --flake 'github:FoxDenHome/nix' || true
-      nixos-rebuild switch --flake "github:FoxDenHome/nix#$(hostname)"
+      nix flake update --flake 'github:FoxDenHome/core/nix' || true
+      nixos-rebuild switch --flake "github:FoxDenHome/core/nix#$(hostname)"
       /etc/nix/sync-boot.sh
     '';
     mode = "0755";
