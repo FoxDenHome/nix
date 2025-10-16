@@ -1,12 +1,8 @@
-{ modulesPath, config, ... }:
+{ modulesPath, foxDenLib, config, ... }:
 let
-  mkNameservers = (vlan: [
-    "10.${builtins.toString vlan}.0.53"
-    "fd2c:f4cb:63be:${builtins.toString vlan}\::35"
-  ]);
-  mkRoutes = (vlan: [
-    { Destination = "0.0.0.0/0"; Gateway = "10.${builtins.toString vlan}.0.1"; }
-  ]);
+  mkNameservers = foxDenLib.hosts.helpers.lan.mkNameservers ifcfg;
+  mkRoutes = foxDenLib.hosts.helpers.lan.mkRoutes ifcfg;
+  mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
 
   ifcfg = {
     addresses = [
@@ -243,20 +239,7 @@ in
 
   foxDen.hosts.index = 2;
 
-  foxDen.hosts.hosts = let
-    mkVlanHost = (vlan: cfg: {
-      nameservers = mkNameservers vlan;
-      interfaces.default = cfg // {
-        driver = "bridge";
-        driverOpts = {
-          bridge = ifcfg.interface;
-          vlan = vlan;
-        };
-        routes = mkRoutes vlan;
-        snirouter = { gateway = "router"; } // (cfg.snirouter or {});
-      };
-    });
-  in {
+  foxDen.hosts.hosts = {
     islandfox = {
       interfaces.default = {
         driver = "null";

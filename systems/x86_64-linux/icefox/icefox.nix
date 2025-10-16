@@ -1,5 +1,9 @@
 { config, foxDenLib, lib, ... }:
 let
+  mkHost = foxDenLib.hosts.helpers.hetzner.mkHost ifcfg ifcfg-s2s;
+  mkV6Host = foxDenLib.hosts.helpers.hetzner.mkV6Host ifcfg ifcfg-s2s;
+  mkMinHost = foxDenLib.hosts.helpers.hetzner.mkMinHost ifcfg ifcfg-s2s;
+
   ifcfg-s2s = {
     addresses = [
       "10.99.10.2/16"
@@ -533,14 +537,12 @@ in
   ];
 
   foxDen.hosts.hosts = let
-    sysctls = {
-      "net.ipv6.conf.INTERFACE.accept_ra" = "0";
-    };
-
     mkIntHost = iface: {
       inherit (ifcfg) nameservers;
       interfaces.default = iface // {
-        inherit sysctls;
+        sysctls = {
+          "net.ipv6.conf.INTERFACE.accept_ra" = "0";
+        } // (iface.sysctls or {});
         addresses = lib.filter (ip: !(foxDenLib.util.isPrivateIP ip)) iface.addresses;
         driver = "bridge";
         snirouter.enable = false;
@@ -549,7 +551,9 @@ in
         routes = [ ];
       };
       interfaces.s2s = iface // {
-        inherit sysctls;
+        sysctls = {
+          "net.ipv6.conf.INTERFACE.accept_ra" = "0";
+        } // (iface.sysctls or {});
         mac = null;
         addresses = lib.filter (foxDenLib.util.isPrivateIP) iface.addresses;
         driver = "bridge";
@@ -747,7 +751,7 @@ in
       ];
     };
     deluge = let
-      host = mkIntHost {
+      host = mkMinHost {
         dns = {
           name = "deluge-offsite";
           zone = "foxden.network";
