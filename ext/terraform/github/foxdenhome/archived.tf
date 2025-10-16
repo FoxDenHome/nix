@@ -35,6 +35,7 @@ locals {
     linuxptp = {
       description = "Linux PTP Project"
     }
+    initcpio-copy-efi2 = {}
   }
 }
 
