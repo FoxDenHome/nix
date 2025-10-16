@@ -169,8 +169,6 @@ in
     virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ifcfg-foxden.interface routedInterface ];
 
     foxDen.services = {
-      trustedProxies = [ "10.99.12.2/32" ];
-
       wireguard."wg-foxden" = config.lib.foxDen.sops.mkIfAvailable {
         host = "";
         interface = {

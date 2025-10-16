@@ -3,7 +3,8 @@ let
   mkV6Host = config.lib.foxDenSys.mkV6Host;
 in
 {
-  foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
+  foxDen.services = {
+    trustedProxies = [ "10.99.12.2/32" ];
     foxIngress = {
       enable = true;
       host = "foxingress";
