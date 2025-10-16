@@ -21,6 +21,8 @@ let
     interface = "br-default";
   };
 
+  routedInterface = foxDenLib.hosts.helpers.hetzner.routedInterface;
+
   phyIface = "enp7s0";
 in
 {
@@ -29,26 +31,6 @@ in
       mkHost = foxDenLib.hosts.helpers.hetzner.mkHost ifcfg ifcfg-s2s;
       mkV6Host = foxDenLib.hosts.helpers.hetzner.mkV6Host ifcfg ifcfg-s2s;
       mkMinHost = foxDenLib.hosts.helpers.hetzner.mkMinHost ifcfg ifcfg-s2s;
-    };
-
-    virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ];
-
-    systemd.network.networks."30-${ifcfg.interface}" = {
-      name = ifcfg.interface;
-      routes = [
-        { Destination = "0.0.0.0/0"; Gateway = "95.216.116.129"; }
-        { Destination = "::/0"; Gateway = "fe80::1"; }
-      ];
-      address = ifcfg.addresses;
-      dns = ifcfg.nameservers;
-
-      networkConfig = {
-        IPv4Forwarding = true;
-        IPv6Forwarding = true;
-
-        DHCP = "no";
-        IPv6AcceptRA = true;
-      };
     };
 
     networking.nftables.tables = {
@@ -96,6 +78,24 @@ in
       "net.ipv6.conf.default.forwarding" = "1";
     };
 
+    systemd.network.networks."30-${ifcfg.interface}" = {
+      name = ifcfg.interface;
+      routes = [
+        { Destination = "0.0.0.0/0"; Gateway = "95.216.116.129"; }
+        { Destination = "::/0"; Gateway = "fe80::1"; }
+      ];
+      address = ifcfg.addresses;
+      dns = ifcfg.nameservers;
+
+      networkConfig = {
+        IPv4Forwarding = true;
+        IPv6Forwarding = true;
+
+        DHCP = "no";
+        IPv6AcceptRA = true;
+      };
+    };
+
     systemd.network.netdevs."${ifcfg.interface}" = {
       netdevConfig = {
         Name = ifcfg.interface;
@@ -108,9 +108,9 @@ in
       };
     };
 
-    systemd.network.netdevs.br-routed = {
+    systemd.network.netdevs."${routedInterface}" = {
       netdevConfig = {
-        Name = "br-routed";
+        Name = routedInterface;
         Kind = "bridge";
         MACAddress = "e6:21:ff:00:00:01";
       };
@@ -141,8 +141,8 @@ in
       };
     };
 
-    systemd.network.networks."30-br-routed" = {
-      name = "br-routed";
+    systemd.network.networks."30-${routedInterface}" = {
+      name = routedInterface;
       address = [
         "2a01:4f9:2b:1a42::1:1/112"
       ];
@@ -165,6 +165,8 @@ in
         VLANFiltering = false;
       };
     };
+
+    virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ifcfg-s2s.interface routedInterface ];
 
     foxDen.services = {
       trustedProxies = [ "10.99.12.2/32" ];

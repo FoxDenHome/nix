@@ -30,9 +30,11 @@ let
       ];
     };
   });
+
+  routedInterface = "br-routed";
 in
 {
-  inherit mkMinHost;
+  inherit mkMinHost routedInterface;
 
   mkHost = (ifcfg: ifcfg-s2s: iface: lib.mkMerge [
     (mkMinHost ifcfg ifcfg-s2s iface)
@@ -52,7 +54,7 @@ in
         routes = [
           { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::1:1"; }
         ];
-        driverOpts.bridge = "br-routed";
+        driverOpts.bridge = routedInterface;
       };
       interfaces.s2s.routes = [
         { Destination = "0.0.0.0/0"; Gateway = "10.99.12.1"; }
