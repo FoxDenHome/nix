@@ -1,7 +1,7 @@
 { config, ... }:
 let
-  mkV6Host = config.lib.system.mkV6Host;
-  mkMinHost = config.lib.system.mkMinHost;
+  mkV6Host = config.lib.foxDenSys.mkV6Host;
+  mkMinHost = config.lib.foxDenSys.mkMinHost;
 in
 {
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {

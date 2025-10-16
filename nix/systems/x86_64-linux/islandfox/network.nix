@@ -10,14 +10,10 @@ let
     interface = "br-default";
     mac = "04:7b:cb:44:c0:dd";
   };
-
-  mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
 in
 {
   config = {
-    lib.system = {
-      inherit ifcfg mkVlanHost;
-    };
+    lib.mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
 
     systemd.network.networks."30-${ifcfg.interface}" = {
       name = ifcfg.interface;

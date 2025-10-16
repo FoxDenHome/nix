@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  mkVlanHost = config.lib.system.mkVlanHost;
+  mkVlanHost = config.lib.foxDenSys.mkVlanHost;
 in
 {
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {

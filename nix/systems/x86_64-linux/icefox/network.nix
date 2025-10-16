@@ -22,15 +22,13 @@ let
   };
 
   phyIface = "enp7s0";
-
-  mkHost = foxDenLib.hosts.helpers.hetzner.mkHost ifcfg ifcfg-s2s;
-  mkV6Host = foxDenLib.hosts.helpers.hetzner.mkV6Host ifcfg ifcfg-s2s;
-  mkMinHost = foxDenLib.hosts.helpers.hetzner.mkMinHost ifcfg ifcfg-s2s;
 in
 {
   config = {
-    lib.system = {
-      inherit ifcfg ifcfg-s2s mkHost mkV6Host mkMinHost;
+    lib.foxDenSys = {
+      mkHost = foxDenLib.hosts.helpers.hetzner.mkHost ifcfg ifcfg-s2s;
+      mkV6Host = foxDenLib.hosts.helpers.hetzner.mkV6Host ifcfg ifcfg-s2s;
+      mkMinHost = foxDenLib.hosts.helpers.hetzner.mkMinHost ifcfg ifcfg-s2s;
     };
 
     virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ];

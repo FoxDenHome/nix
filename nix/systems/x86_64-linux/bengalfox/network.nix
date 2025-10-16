@@ -10,13 +10,10 @@ let
     interface = "br-default";
     mac = "e8:eb:d3:08:d2:98";
   };
-  mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
 in
 {
   config = {
-    lib.system = {
-      inherit ifcfg mkVlanHost;
-    };
+    lib.mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
 
     virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ];
     foxDen.hosts.index = 1;
