@@ -59,7 +59,7 @@ let
 
   mkForGateway = gateway: { templates, hosts, ... }: let
     filterForGateway = lib.attrsets.filterAttrs (_: val: (val.gateway == gateway));
-    removeGateway = lib.attrsets.mapAttrs (_: val: lib.attrsets.filterAttrs (name: val: val != null && name != "gateway") val);
+    removeGateway = lib.attrsets.mapAttrs (_: val: lib.attrsets.filterAttrsRecursive (name: val: val != null && name != "gateway") val);
   in {
     templates = removeGateway (filterForGateway templates);
     hosts = removeGateway (filterForGateway hosts);
