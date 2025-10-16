@@ -1,6 +1,6 @@
 locals {
   archived_repositores = {
-    docker = {}
+    docker          = {}
     SpaceAgeCentral = {}
     SpaceAge_Old_Archive = {
       visibility = "private",
