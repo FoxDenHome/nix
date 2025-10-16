@@ -115,8 +115,8 @@ locals {
   }
 }
 
-# tfimp() { tofu import "module.archived_repo[\"$1\"].github_repository.repo" "$1"; }
-# tfarc() { tofu state mv "module.repo[\"$1\"]" "module.archived_repo[\"$1\"]"; }
+# function tfimp -a repo; tofu import "module.archived_repo[\"$repo\"].github_repository.repo" "$repo"; end
+# function tfarc -a repo; tofu state mv "module.repo[\"$repo\"]" "module.archived_repo[\"$repo\"]"; end
 
 module "archived_repo" {
   source = "../modules/repo/archived"
