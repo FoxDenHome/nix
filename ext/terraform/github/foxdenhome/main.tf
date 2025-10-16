@@ -8,20 +8,20 @@ locals {
       branch_protection = false
       visibility        = "private"
     }
-    NixieClockDori = {}
-    PaperESP32     = {}
-    LCDify         = {}
-    e621dumper = {}
-    tapemgr    = {}
-    CC1101Duino = {}
-    ntpi        = {}
+    NixieClockDori    = {}
+    PaperESP32        = {}
+    LCDify            = {}
+    e621dumper        = {}
+    tapemgr           = {}
+    CC1101Duino       = {}
+    ntpi              = {}
     shutdownd         = {}
     BlissLightControl = {}
     hassio-ecoflow = {
       description = "EcoFlow Portable Power Station Integration for Home Assistant"
     }
     keepass-unlocker = {}
-    backupmgr = {}
+    backupmgr        = {}
   }
 
   members = {

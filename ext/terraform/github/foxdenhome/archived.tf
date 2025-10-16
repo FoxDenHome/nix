@@ -6,31 +6,31 @@ locals {
     redfox             = {}
 
     terraform = {
-      visibility        = "private"
+      visibility = "private"
     }
     docker = {
-      visibility        = "private"
+      visibility = "private"
     }
     docker-sriov-plugin = {}
     router = {
-      visibility        = "private"
+      visibility = "private"
     }
     islandfox = {
-      visibility        = "private"
+      visibility = "private"
     }
     bengalfox = {
-      visibility        = "private"
+      visibility = "private"
     }
     scripts = {}
     sshkeys = {
-      visibility        = "private"
+      visibility = "private"
     }
     icefox = {
-      visibility        = "private"
+      visibility = "private"
     }
 
     diagrams = {
-      visibility        = "private"
+      visibility = "private"
     }
     linuxptp = {
       description = "Linux PTP Project"

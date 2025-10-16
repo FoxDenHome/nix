@@ -35,7 +35,7 @@ locals {
 
 data "external" "nix_records_json" {
   program = ["${path.module}/nix.sh"]
-  query = { }
+  query   = {}
 }
 
 module "domain" {
