@@ -2,6 +2,7 @@
 
 ## Left TODO
 
+- [ ] apcupsd fails startup on boot, likely too early. just add better restart logic
 - [ ] Firewall management (on foxDen.hosts.gateway aka router)
 - bengalfox
 	- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
