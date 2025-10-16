@@ -20,7 +20,6 @@
       dns = {
         name = "fennec";
         zone = "foxden.network";
-        dynDns = true;
       };
       addresses = [
         "10.5.10.1/16"
