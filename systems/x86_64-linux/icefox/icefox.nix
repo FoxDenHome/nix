@@ -532,8 +532,6 @@ in
     }
   ];
 
-  foxDen.foxIngress.defaultGateway = "icefox";
-
   foxDen.hosts.hosts = let
     sysctls = {
       "net.ipv6.conf.INTERFACE.accept_ra" = "0";
@@ -545,6 +543,7 @@ in
         inherit sysctls;
         addresses = lib.filter (ip: !(foxDenLib.util.isPrivateIP ip)) iface.addresses;
         driver = "bridge";
+        snirouter.enable = false;
         driverOpts.bridge = lib.mkDefault ifcfg.interface;
         driverOpts.vlan = 0;
         routes = [ ];
@@ -554,6 +553,7 @@ in
         mac = null;
         addresses = lib.filter (foxDenLib.util.isPrivateIP) iface.addresses;
         driver = "bridge";
+        snirouter = { gateway = "icefox"; } // (iface.snirouter or {});
         driverOpts.bridge = ifcfg-s2s.interface;
         driverOpts.vlan = 0;
         routes = [

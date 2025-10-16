@@ -60,66 +60,10 @@ let
   mkForGateway = gateway: { templates, hosts, ... }: let
     filterForGateway = lib.attrsets.filterAttrs (_: val: (val.gateway == gateway));
     removeInvalidValues = lib.attrsets.mapAttrs (_: val: lib.attrsets.filterAttrsRecursive (name: val: val != null && name != "gateway") val);
-  in {
+  in boilerplateCfg // {
     templates = removeInvalidValues (filterForGateway templates);
     hosts = removeInvalidValues (filterForGateway hosts);
   };
-in
-{
-  nixosModule = { config, ... } : let
-    renderInterface = (hostName: ifaceObj: let
-      iface = ifaceObj.value;
-      privateIPv4 = lib.findFirst (ip: let
-        ipNoCidr = util.removeIPCidr ip;
-      in (util.isIPv4 ipNoCidr) && (util.isPrivateIP ipNoCidr)) "" iface.addresses;
-      gateway = if (iface.snirouter.gateway != "") then iface.snirouter.gateway else config.foxDen.foxIngress.defaultGateway;
-      template = "nix-${gateway}-${hostName}-${ifaceObj.name}";
-    in lib.mkIf (privateIPv4 != "" && iface.snirouter.enable) {
-      templates."${template}" = {
-        inherit gateway;
-        default = {
-          host = util.removeIPCidr privateIPv4;
-          proxyProtocol = iface.snirouter.proxyProtocol or false;
-        };
-        http = {
-          port = iface.snirouter.httpPort or 80;
-        };
-        https = {
-          port = iface.snirouter.httpsPort or 443;
-        };
-        quic = {
-          port = iface.snirouter.quicPort or 443;
-        };
-      };
-
-      hosts = lib.attrsets.listToAttrs (map (record: {
-        name = mkHost record;
-        value = {
-          inherit template gateway;
-        };
-      }) ([iface.dns] ++ iface.cnames));
-    });
-
-    renderHost = { name, value }: lib.mkMerge (map (iface: renderInterface name iface) (lib.attrsets.attrsToList value.interfaces));
-  in
-  {
-    options.foxDen.foxIngress.templates = with lib.types; lib.mkOption {
-      type = attrsOf templateType;
-      default = {};
-    };
-    options.foxDen.foxIngress.hosts = with lib.types; lib.mkOption {
-      type = attrsOf hostType;
-      default = {};
-    };
-    options.foxDen.foxIngress.defaultGateway = with lib.types; lib.mkOption {
-      type = str;
-      default = "default";
-    };
-    config.foxDen.foxIngress = lib.mkMerge (map renderHost (nixpkgs.lib.attrsets.attrsToList config.foxDen.hosts.hosts));
-  };
-
-  getForGateway = config: gateway: mkForGateway gateway config.foxDen.foxIngress;
-  getForDefault = config: mkForGateway config.foxDen.foxIngress.defaultGateway config.foxDen.foxIngress;
 
   boilerplateCfg = {
     listeners = {
@@ -145,6 +89,60 @@ in
       };
     };
   };
+in
+{
+  nixosModule = { config, ... } : let
+    renderInterface = (hostName: ifaceObj: let
+      iface = ifaceObj.value;
+      template = "nix-${iface.snirouter.gateway}-${hostName}-${ifaceObj.name}";
+
+      privateIPv4 = lib.findFirst (ip: let
+        ipNoCidr = util.removeIPCidr ip;
+      in (util.isIPv4 ipNoCidr) && (util.isPrivateIP ipNoCidr)) "" iface.addresses;
+    in lib.mkIf (privateIPv4 != "" && iface.snirouter.enable) {
+      templates."${template}" = {
+        inherit (iface.snirouter) gateway;
+        default = {
+          host = util.removeIPCidr privateIPv4;
+          proxyProtocol = iface.snirouter.proxyProtocol or false;
+        };
+        http = {
+          port = iface.snirouter.httpPort or 80;
+        };
+        https = {
+          port = iface.snirouter.httpsPort or 443;
+        };
+        quic = {
+          port = iface.snirouter.quicPort or 443;
+        };
+      };
+
+      hosts = lib.attrsets.listToAttrs (map (record: {
+        name = mkHost record;
+        value = {
+          inherit (iface.snirouter) gateway;
+          inherit template;
+        };
+      }) ([iface.dns] ++ iface.cnames));
+    });
+
+    renderHost = { name, value }: lib.mkMerge (map (iface: renderInterface name iface) (lib.attrsets.attrsToList value.interfaces));
+  in
+  {
+    options.foxDen.foxIngress.templates = with lib.types; lib.mkOption {
+      type = attrsOf templateType;
+      default = {};
+    };
+    options.foxDen.foxIngress.hosts = with lib.types; lib.mkOption {
+      type = attrsOf hostType;
+      default = {};
+    };
+    config.foxDen.foxIngress = lib.mkMerge (map renderHost (nixpkgs.lib.attrsets.attrsToList config.foxDen.hosts.hosts));
+  };
+
+  inherit boilerplateCfg;
+
+  getForGateway = config: gateway: mkForGateway gateway config.foxDen.foxIngress;
 
   make = nixosConfigurations: let
     cfg = {

@@ -244,21 +244,17 @@ in
   foxDen.hosts.index = 2;
 
   foxDen.hosts.hosts = let
-    driver = "bridge";
-    mkDriverOpts = (vlan: {
-      bridge = ifcfg.interface;
-      vlan = vlan;
-    });
-
-    mkVlanIntf = (vlan: cfg: {
-      inherit driver;
-      driverOpts = mkDriverOpts vlan;
-      routes = mkRoutes vlan;
-    } // cfg);
-
     mkVlanHost = (vlan: cfg: {
       nameservers = mkNameservers vlan;
-      interfaces.default = mkVlanIntf vlan cfg;
+      interfaces.default = cfg // {
+        driver = "bridge";
+        driverOpts = {
+          bridge = ifcfg.interface;
+          vlan = vlan;
+        };
+        routes = mkRoutes vlan;
+        snirouter = { gateway = "router"; } // (cfg.snirouter or {});
+      };
     });
   in {
     islandfox = {

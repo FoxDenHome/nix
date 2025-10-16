@@ -87,7 +87,7 @@ in
   };
   foxIngress = rec {
     attrset = foxDenLib.global.foxingress.make nixosConfigurations;
-    json = nixpkgs.lib.attrsets.mapAttrs (name: cfg: builtins.toFile "foxIngress.json" (builtins.toJSON (foxDenLib.global.foxingress.boilerplateCfg // cfg))) attrset;
+    json = nixpkgs.lib.attrsets.mapAttrs (name: cfg: builtins.toFile "foxIngress.json" (builtins.toJSON cfg)) attrset;
   };
 
   foxDenLib = foxDenLib;

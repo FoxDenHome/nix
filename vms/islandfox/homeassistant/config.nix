@@ -11,6 +11,7 @@
     snirouter = {
       enable = true;
       proxyProtocol = false;
+      gateway = "router";
     };
     mac = "52:54:00:e9:7e:50";
     addresses = [

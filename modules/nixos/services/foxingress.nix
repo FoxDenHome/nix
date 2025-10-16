@@ -3,17 +3,15 @@ let
   services = foxDenLib.services;
   svcConfig = config.foxDen.services.foxIngress;
 
-  boilerplateCfg = foxDenLib.global.foxingress.boilerplateCfg;
-
   # TODO: Gateway config might need global config in the future, but only icefox uses this
   #       and icefox only serves itself
   configData = if svcConfig.configFromGateway != ""
                  then foxDenLib.global.foxingress.getForGateway config svcConfig.configFromGateway
-                 else svcConfig.config;
+                 else foxDenLib.global.foxingress.boilerplateCfg // svcConfig.config;
 
   configFile = if svcConfig.configText != ""
                   then pkgs.writers.writeText "config.yml" svcConfig.configText
-                  else pkgs.writers.writeYAML "config.yml" (boilerplateCfg // configData);
+                  else pkgs.writers.writeYAML "config.yml" configData;
 in
 {
   options.foxDen.services.foxIngress = {
