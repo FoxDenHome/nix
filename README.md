@@ -19,11 +19,11 @@
 	- git
 		- [ ] mysql (right now on sqlite3)
 	- monitoring
-		- [ ] grafana
+		- grafana
 			- [ ] manage more declaratively
 			- [ ] mysql (right now on sqlite3)
 	- SpaceAge
-		- [ ] gmod
+		- gmod
 			- [ ] Make StarLord + SteamCMD a flake, too
 	- [ ] affine
 - icefox
