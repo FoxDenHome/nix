@@ -5,10 +5,11 @@ from subprocess import check_output
 from json import loads as json_loads
 from urllib.parse import parse_qs, urlparse
 
+TEMPLATE = "scripts/dyndns-update-template.rsc"
 FILENAME = "scripts/dyndns-update.rsc"
 ROUTERS = ["router.foxden.network", "router-backup.foxden.network"]
 
-SPECIAL_HOSTS = ROUTERS + [f"v4-{router}" for router in ROUTERS] + ["wan.foxden.network", "v4-wan.foxden.network"]
+SPECIAL_HOSTS = ROUTERS + [f"v4-{router}" for router in ROUTERS]
 
 _dyndns_hosts_value = None
 def load_dyndns_hosts():
@@ -59,7 +60,7 @@ def write_all_hosts(indent: str) -> list[str]:
     return lines
 
 def write_script():
-    with open(FILENAME, "r") as file:
+    with open(TEMPLATE, "r") as file:
         lines = file.readlines()
     
     outlines = []

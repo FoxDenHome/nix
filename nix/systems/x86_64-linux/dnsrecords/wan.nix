@@ -1,11 +1,11 @@
 { ... } :
 let
-  mkWanRecs = (suffix: [
+  mkWanRecs = (suffix: v4: v6: [
     {
       zone = "foxden.network";
       name = suffix;
       type = "A";
-      value = "127.0.0.1";
+      value = v4;
       ttl = 300;
       dynDns = true;
       horizon = "external";
@@ -14,7 +14,7 @@ let
       zone = "foxden.network";
       name = suffix;
       type = "AAAA";
-      value = "::1";
+      value = v6;
       ttl = 300;
       dynDns = true;
       horizon = "external";
@@ -23,7 +23,7 @@ let
       zone = "foxden.network";
       name = "v4-${suffix}";
       type = "A";
-      value = "127.0.0.1";
+      value = v4;
       ttl = 300;
       dynDns = true;
       horizon = "external";
@@ -81,7 +81,7 @@ in
       horizon = "external";
     }
   ]
-  ++ (mkWanRecs "wan")
-  ++ (mkWanRecs "router")
-  ++ (mkWanRecs "router-backup");
+  ++ (mkWanRecs "wan" "10.2.0.1" "fd2c:f4cb:63be:2::1")
+  ++ (mkWanRecs "router" "10.2.1.1" "fd2c:f4cb:63be:2::0101")
+  ++ (mkWanRecs "router-backup" "10.2.1.2" "fd2c:f4cb:63be:2::0102");
 }

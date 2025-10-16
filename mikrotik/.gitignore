@@ -1,5 +1,6 @@
 .DS_Store
 /tmp
 /files/pdns/*.txt
+/scripts/dyndns-update.rsc
 *.backup
 *-secret.rsc
