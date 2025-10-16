@@ -23,7 +23,16 @@ let
     host = nixpkgs.lib.strings.concatStringsSep "." (nixpkgs.lib.lists.reverseList segments);
   in "${host}.in-addr.arpa");
 
-  ipv6Ptr = (ip: "TODO");
+  ipv6Ptr = (ip: let
+    expanded = (nixpkgs.lib.network.ipv6.fromString ip).address; # This removes any "::" contractions
+    parts = nixpkgs.lib.strings.splitString ":" expanded; # Split it into the [0-4]-hex segments
+    partsWithDot = map (part: let
+      partPadded = "0000${part}";
+      digits = nixpkgs.lib.substring (builtins.stringLength partPadded - 4) 4 partPadded;
+    in (nixpkgs.lib.strings.stringToCharacters digits)) parts;
+  in (nixpkgs.lib.strings.concatStringsSep "."
+        (nixpkgs.lib.lists.reverseList
+          (nixpkgs.lib.lists.flatten partsWithDot))) + ".ip6.arpa");
 
   removeIPCidr = (ip: builtins.elemAt (nixpkgs.lib.strings.splitString "/" ip) 0);
 in
