@@ -52,6 +52,10 @@ let
           type = ints.u16;
           default = 443;
         };
+        gateway = nixpkgs.lib.mkOption {
+          type = str;
+          default = "";
+        };
       };
       dns = {
         name = nixpkgs.lib.mkOption {
@@ -200,10 +204,6 @@ in
       index = nixpkgs.lib.mkOption {
         type = ints.u8;
         default = 0;
-      };
-      networkGateway = nixpkgs.lib.mkOption {
-        type = str;
-        default = "router";
       };
     };
 

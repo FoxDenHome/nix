@@ -86,7 +86,7 @@ in
     json = builtins.toFile "dns-records.json" (builtins.toJSON attrset);
   };
   foxIngress = rec {
-    attrset = foxDenLib.global.foxIngress.make nixosConfigurations;
+    attrset = foxDenLib.global.foxingress.make nixosConfigurations;
     json = builtins.toFile "foxIngress.json" (builtins.toJSON attrset);
   };
 

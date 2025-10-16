@@ -71,7 +71,7 @@ in
       privateIPv4 = lib.findFirst (ip: let
         ipNoCidr = util.removeIPCidr ip;
       in (util.isIPv4 ipNoCidr) && (util.isPrivateIP ipNoCidr)) "" iface.addresses;
-      gateway = config.foxDen.hosts.networkGateway;
+      gateway = if (iface.snirouter.gateway != "") then iface.snirouter.gateway else config.foxDen.foxIngress.defaultGateway;
       template = "nix-${gateway}-${hostName}-${ifaceObj.name}";
     in lib.mkIf (privateIPv4 != "" && iface.snirouter.enable) {
       templates."${template}" = {
@@ -110,11 +110,15 @@ in
       type = attrsOf hostType;
       default = {};
     };
-
+    options.foxDen.foxIngress.defaultGateway = with lib.types; lib.mkOption {
+      type = str;
+      default = "default";
+    };
     config.foxDen.foxIngress = lib.mkMerge (map renderHost (nixpkgs.lib.attrsets.attrsToList config.foxDen.hosts.hosts));
   };
 
-  getForConfig = config: mkForGateway config.foxDen.hosts.networkGateway config.foxDen.foxIngress;
+  getForGateway = config: gateway: mkForGateway gateway config.foxDen.foxIngress;
+  getForDefault = config: mkForGateway config.foxDen.foxIngress.defaultGateway config.foxDen.foxIngress;
 
   make = nixosConfigurations: let
     cfg = {

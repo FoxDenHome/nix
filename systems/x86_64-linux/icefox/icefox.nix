@@ -532,7 +532,7 @@ in
     }
   ];
 
-  foxDen.hosts.networkGateway = "icefox";
+  foxDen.foxIngress.defaultGateway = "icefox";
 
   foxDen.hosts.hosts = let
     sysctls = {
