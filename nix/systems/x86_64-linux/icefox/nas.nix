@@ -4,6 +4,16 @@ let
   mkMinHost = config.lib.foxDenSys.mkMinHost;
 in
 {
+  fileSystems."/mnt/zhdd/nas/torrent" = {
+    device = "/mnt/ztank/local/torrent";
+    options = [ "bind" "nofail" ];
+  };
+
+  fileSystems."/mnt/zhdd/nas/usenet" = {
+    device = "/mnt/ztank/local/usenet";
+    options = [ "bind" "nofail" ];
+  };
+
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
     wireguard."wg-deluge" = {
       host = "deluge"; # lawful dove
