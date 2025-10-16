@@ -85,9 +85,9 @@ in
     attrset = foxDenLib.global.dns.mkRecords nixosConfigurations;
     json = builtins.toFile "dns-records.json" (builtins.toJSON attrset);
   };
-  snirouter = rec {
-    attrset = foxDenLib.global.snirouter.make nixosConfigurations;
-    json = builtins.toFile "snirouter.json" (builtins.toJSON attrset);
+  foxIngress = rec {
+    attrset = foxDenLib.global.foxIngress.make nixosConfigurations;
+    json = builtins.toFile "foxIngress.json" (builtins.toJSON attrset);
   };
 
   foxDenLib = foxDenLib;

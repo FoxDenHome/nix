@@ -102,24 +102,24 @@ in
     renderHost = { name, value }: lib.mkMerge (map (iface: renderInterface name iface) (lib.attrsets.attrsToList value.interfaces));
   in
   {
-    options.foxDen.snirouter.templates = with lib.types; lib.mkOption {
+    options.foxDen.foxIngress.templates = with lib.types; lib.mkOption {
       type = attrsOf templateType;
       default = {};
     };
-    options.foxDen.snirouter.hosts = with lib.types; lib.mkOption {
+    options.foxDen.foxIngress.hosts = with lib.types; lib.mkOption {
       type = attrsOf hostType;
       default = {};
     };
 
-    config.foxDen.snirouter = lib.mkMerge (map renderHost (nixpkgs.lib.attrsets.attrsToList config.foxDen.hosts.hosts));
+    config.foxDen.foxIngress = lib.mkMerge (map renderHost (nixpkgs.lib.attrsets.attrsToList config.foxDen.hosts.hosts));
   };
 
-  getForConfig = config: mkForGateway config.foxDen.hosts.networkGateway config.foxDen.snirouter;
+  getForConfig = config: mkForGateway config.foxDen.hosts.networkGateway config.foxDen.foxIngress;
 
   make = nixosConfigurations: let
     cfg = {
-      templates = globalConfig.getAttrSet ["foxDen" "snirouter" "templates"] nixosConfigurations;
-      hosts = globalConfig.getAttrSet ["foxDen" "snirouter" "hosts"] nixosConfigurations;
+      templates = globalConfig.getAttrSet ["foxDen" "foxIngress" "templates"] nixosConfigurations;
+      hosts = globalConfig.getAttrSet ["foxDen" "foxIngress" "hosts"] nixosConfigurations;
     };
 
     # TODO: Go back to uniqueStrings once next NixOS stable
