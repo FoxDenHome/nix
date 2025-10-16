@@ -8,27 +8,27 @@
     };
     cnames = [
       {
-        name = "pma";
+        name = "pma.arcticfox";
         zone = "doridian.net";
       }
       {
-        name = "ftp";
+        name = "ftp.arcticfox";
         zone = "doridian.net";
       }
       {
-        name = "mail";
+        name = "mail.arcticfox";
         zone = "doridian.net";
       }
       {
-        name = "www.pma";
+        name = "www.pma.arcticfox";
         zone = "doridian.net";
       }
       {
-        name = "www.ftp";
+        name = "www.ftp.arcticfox";
         zone = "doridian.net";
       }
       {
-        name = "www.mail";
+        name = "www.mail.arcticfox";
         zone = "doridian.net";
       }
     ];
