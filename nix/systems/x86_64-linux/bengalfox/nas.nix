@@ -3,6 +3,16 @@ let
   mkVlanHost = config.lib.foxDenSys.mkVlanHost;
 in
 {
+  fileSystems."/mnt/zhdd/nas/torrent" = {
+    device = "/mnt/zssd/nas/torrent";
+    options = [ "bind" "nofail" ];
+  };
+
+  fileSystems."/mnt/zhdd/nas/usenet" = {
+    device = "/mnt/zssd/nas/usenet";
+    options = [ "bind" "nofail" ];
+  };
+
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
     deluge = {
       enable = true;
