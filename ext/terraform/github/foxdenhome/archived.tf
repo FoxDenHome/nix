@@ -4,6 +4,37 @@ locals {
     "3dprinter-config" = {}
     desk-control       = {}
     redfox             = {}
+
+    terraform = {
+      visibility        = "private"
+    }
+    docker = {
+      visibility        = "private"
+    }
+    docker-sriov-plugin = {}
+    router = {
+      visibility        = "private"
+    }
+    islandfox = {
+      visibility        = "private"
+    }
+    bengalfox = {
+      visibility        = "private"
+    }
+    scripts = {}
+    sshkeys = {
+      visibility        = "private"
+    }
+    icefox = {
+      visibility        = "private"
+    }
+
+    diagrams = {
+      visibility        = "private"
+    }
+    linuxptp = {
+      description = "Linux PTP Project"
+    }
   }
 }
 
