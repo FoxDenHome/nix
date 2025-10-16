@@ -2,7 +2,8 @@
 
 ## Left TODO
 
-- [ ] bengalfox
+- [ ] Firewall management (on foxDen.hosts.gateway aka router)
+- bengalfox
 	- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
 	- [ ] ollama
 	- [ ] hashtopolis
@@ -12,19 +13,18 @@
 	- [ ] owncast
 	- [ ] sanoid
 	- [ ] syncoid
-	- [ ] tapemgr
-- [ ] islandfox
-	- [ ] git
+- islandfox
+	- git
 		- [ ] mysql (right now on sqlite3)
-	- [ ] monitoring
+	- monitoring
 		- [ ] grafana
 			- [ ] manage more declaratively
 			- [ ] mysql (right now on sqlite3)
-	- [ ] SpaceAge
+	- SpaceAge
 		- [ ] gmod
 			- [ ] Make StarLord + SteamCMD a flake, too
 	- [ ] affine
-- [ ] icefox
+- icefox
 	- [ ] sanoid
 
 ## Notes
