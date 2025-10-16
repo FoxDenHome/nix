@@ -22,6 +22,7 @@ locals {
     }
     keepass-unlocker = {}
     backupmgr        = {}
+    core             = {}
   }
 
   members = {
