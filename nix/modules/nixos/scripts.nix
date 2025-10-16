@@ -1,4 +1,4 @@
-{ ... } :
+{ config, lib, ... } :
 {
   environment.etc."nix/update.sh" = {
     text = ''
@@ -35,4 +35,18 @@
     '';
     mode = "0755";
   };
+
+  environment.etc."nix/cryptenroll.sh" = {
+    text = ''
+      #!/usr/bin/env bash
+      set -xeuo pipefail
+      enroll_disk() {
+        systemd-cryptenroll --wipe-slot tpm2 --tpm2-device auto --tpm2-pcrs '0:sha256+7:sha256+14:sha256' "$1"
+      }
+    ''
+    + (lib.concatMapStringsSep "\n"
+        (map (dev: "enroll_disk ${dev.device}")
+          (lib.attrsets.attrValues config.boot.initrd.luks.devices)));
+    mode = "0755";
+  }
 }
