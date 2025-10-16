@@ -4,30 +4,28 @@ let
 in
 {
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
-    tapemgr.enable = true;
     gitbackup = {
       enable = true;
       host = "";
     };
-    restic-server = {
+    forgejo = {
       enable = true;
-      host = "restic";
-      dataDir = "/mnt/zhdd/restic";
+      host = "git";
       tls = true;
     };
   };
 
   foxDen.hosts.hosts = {
-    restic = mkVlanHost 2 {
+    git = mkVlanHost 3 {
       dns = {
-        name = "restic";
+        name = "git";
         zone = "foxden.network";
         dynDns = true;
       };
       snirouter.enable = true;
       addresses = [
-        "10.2.11.12/16"
-        "fd2c:f4cb:63be:2::b0c/64"
+        "10.3.10.2/16"
+        "fd2c:f4cb:63be:3::a02/64"
       ];
     };
   };

@@ -4,30 +4,24 @@ let
 in
 {
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
-    tapemgr.enable = true;
-    gitbackup = {
+    unifi = {
       enable = true;
-      host = "";
-    };
-    restic-server = {
-      enable = true;
-      host = "restic";
-      dataDir = "/mnt/zhdd/restic";
+      host = "unifi";
+      enableHttp = true;
       tls = true;
     };
   };
 
   foxDen.hosts.hosts = {
-    restic = mkVlanHost 2 {
+    unifi = mkVlanHost 1 {
       dns = {
-        name = "restic";
+        name = "unifi";
         zone = "foxden.network";
         dynDns = true;
       };
-      snirouter.enable = true;
       addresses = [
-        "10.2.11.12/16"
-        "fd2c:f4cb:63be:2::b0c/64"
+        "10.1.10.1/16"
+        "fd2c:f4cb:63be:1::a01/64"
       ];
     };
   };

@@ -137,7 +137,8 @@
 
   foxDen.services = {
     watchdog.enable = true;
-    apcupsd.enable = config.lib.foxDen.sops.mkIfAvailable true;
     superfan.enable = true;
+    backupmgr.enable = config.lib.foxDen.sops.mkIfAvailable true;
+    apcupsd.enable = config.lib.foxDen.sops.mkIfAvailable true;
   };
 }
