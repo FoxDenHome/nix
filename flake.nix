@@ -19,8 +19,8 @@
     gitbackup.inputs.nixpkgs.follows = "nixpkgs";
     superfan.url = "github:Doridian/superfan";
     superfan.inputs.nixpkgs.follows = "nixpkgs";
-    foxingress.url = "github:Doridian/foxIngress";
-    foxingress.inputs.nixpkgs.follows = "nixpkgs";
+    foxIngress.url = "github:Doridian/foxIngress";
+    foxIngress.inputs.nixpkgs.follows = "nixpkgs";
     e621dumper.url = "github:FoxDenHome/e621dumper";
     e621dumper.inputs.nixpkgs.follows = "nixpkgs";
     backupmgr.url = "github:FoxDenHome/backupmgr";

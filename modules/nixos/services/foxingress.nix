@@ -1,12 +1,45 @@
 { pkgs, lib, config, foxDenLib, ... }:
 let
   services = foxDenLib.services;
-  svcConfig = config.foxDen.services.foxingress;
+  svcConfig = config.foxDen.services.foxIngress;
 
-  configFile = if svcConfig.configText != "" then (pkgs.writers.writeText "config.yml" svcConfig.configText) else (pkgs.writers.writeYAML "config.yml" svcConfig.config);
+  boilerplateCfg = {
+    listeners = {
+      http = ":80";
+      https = ":443";
+      quic = ":443";
+      prometheus = ":9001";
+    };
+    defaults = {
+      backends = {
+        default = {
+          host = "169.254.169.254";
+        };
+        http = {
+          port = 80;
+        };
+        https = {
+          port = 443;
+        };
+        quic = {
+          port = 443;
+        };
+      };
+    };
+  };
+
+  # TODO: Gateway config might need global config in the future, but only icefox uses this
+  #       and icefox only serves itself
+  configData = if svcConfig.configFromGateway != ""
+                 then foxDenLib.global.foxingress.getForGateway config svcConfig.configFromGateway
+                 else svcConfig.config;
+
+  configFile = if svcConfig.configText != ""
+                  then pkgs.writers.writeText "config.yml" svcConfig.configText
+                  else pkgs.writers.writeYAML "config.yml" (boilerplateCfg // configData);
 in
 {
-  options.foxDen.services.foxingress = {
+  options.foxDen.services.foxIngress = {
     config = lib.mkOption {
       type = lib.types.attrsOf lib.types.any;
     };
@@ -15,7 +48,11 @@ in
       description = "Raw text configuration for foxIngress, alternative to 'config' option.";
       default = "";
     };
-  } // services.mkOptions { svcName = "foxingress"; name = "foxIngress"; };
+    configFromGateway = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+    };
+  } // services.mkOptions { svcName = "foxIngress"; name = "foxIngress"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (foxDenLib.services.make {

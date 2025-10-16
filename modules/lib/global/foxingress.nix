@@ -57,7 +57,7 @@ let
     };
   };
 
-  mkForGateway = gateway: { templates, hosts }: let
+  mkForGateway = gateway: { templates, hosts, ... }: let
     filterForGateway = lib.attrsets.filterAttrs (_: val: (val.gateway == gateway));
   in {
     templates = filterForGateway templates;

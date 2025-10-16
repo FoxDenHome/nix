@@ -454,10 +454,10 @@ in
         rsyncUrl = "rsync://mirror.foxden.network/foxdenaur";
       };
     };
-    foxingress = {
+    foxIngress = {
       enable = true;
       host = "foxingress";
-      configText = builtins.readFile ./foxingress.yml;
+      configFromGateway = "icefox";
     };
     xmpp = {
       enable = true;

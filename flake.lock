@@ -402,7 +402,7 @@
         "type": "github"
       }
     },
-    "foxingress": {
+    "foxIngress": {
       "inputs": {
         "flake-utils": "flake-utils_5",
         "nixpkgs": [
@@ -696,7 +696,7 @@
         "doridian-website": "doridian-website",
         "e621dumper": "e621dumper",
         "fadumper": "fadumper",
-        "foxingress": "foxingress",
+        "foxIngress": "foxIngress",
         "gitbackup": "gitbackup",
         "impermanence": "impermanence",
         "lanzaboote": "lanzaboote",
