@@ -46,7 +46,7 @@
     ''
     + (builtins.concatStringsSep "\n"
         (map (dev: "enroll_disk ${dev.device}")
-          (lib.attrsets.attrValues config.boot.initrd.luks.devices)));
+          (lib.attrsets.attrValues config.boot.initrd.luks.devices))) + "\n";
     mode = "0755";
   };
 }
