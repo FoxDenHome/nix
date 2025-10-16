@@ -19,27 +19,27 @@ templates:
   xmpp:
     default:
       host: 10.99.12.4
-      proxy_protocol: true
+      proxyProtocol: true
   nas:
     default:
       host: 10.99.12.5
-      proxy_protocol: true
+      proxyProtocol: true
   syncthing:
     default:
       host: 10.99.12.6
-      proxy_protocol: true
+      proxyProtocol: true
   restic:
     default:
       host: 10.99.12.7
-      proxy_protocol: true
+      proxyProtocol: true
   jellyfin:
     default:
       host: 10.99.12.9
-      proxy_protocol: true
+      proxyProtocol: true
   kiwix:
     default:
       host: 10.99.12.10
-      proxy_protocol: true
+      proxyProtocol: true
 
 hosts:
   nas-offsite.foxden.network:

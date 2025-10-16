@@ -410,11 +410,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1760399679,
-        "narHash": "sha256-0INi2lTWIcYT/XZ2Ldqm4qsRt+qBpAhAgXwKi9VFkVQ=",
+        "lastModified": 1760585740,
+        "narHash": "sha256-ffAJQ/Nt7tRJYXEJciiovWjCHiHNE13+K6v3NI1hWdA=",
         "owner": "Doridian",
         "repo": "foxIngress",
-        "rev": "50636bdd98219c4d2b27e2f3d42b3d79ed09cdff",
+        "rev": "a92c116b3c0b23d96d6e0d4d65c344e731460f42",
         "type": "github"
       },
       "original": {
