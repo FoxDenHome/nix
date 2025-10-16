@@ -1,0 +1,35 @@
+{ config, ... }:
+let
+  mkVlanHost = config.lib.system.mkVlanHost;
+in
+{
+  foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
+    backupmgr.enable = true;
+    tapemgr.enable = true;
+    gitbackup = {
+      enable = true;
+      host = "";
+    };
+    restic-server = {
+      enable = true;
+      host = "restic";
+      dataDir = "/mnt/zhdd/restic";
+      tls = true;
+    };
+  };
+
+  foxDen.hosts.hosts = {
+    restic = mkVlanHost 2 {
+      dns = {
+        name = "restic";
+        zone = "foxden.network";
+        dynDns = true;
+      };
+      snirouter.enable = true;
+      addresses = [
+        "10.2.11.12/16"
+        "fd2c:f4cb:63be:2::b0c/64"
+      ];
+    };
+  };
+}
