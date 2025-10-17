@@ -210,6 +210,8 @@ in
     };
 
     config = {
+      lib.foxDen.mkHashMac = mkHashMac;
+
       foxDen.hosts.usedMacAddresses = map (iface: iface.mac) interfaces;
 
       foxDen.dns.records = (nixpkgs.lib.flatten (map

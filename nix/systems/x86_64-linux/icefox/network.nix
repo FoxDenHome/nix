@@ -115,7 +115,7 @@ in
     netdevConfig = {
       Name = routedInterface;
       Kind = "bridge";
-      MACAddress = "e6:21:ff:00:00:01";
+      MACAddress = config.lib.foxDen.mkHashMac "000001";
     };
 
     bridgeConfig = {

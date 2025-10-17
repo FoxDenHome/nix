@@ -1,6 +1,6 @@
 { ... }:
 {
-  foxDen.hosts.index = 254;
+  foxDen.hosts.index = 0;
   foxDen.hosts.gateway = "router";
   foxDen.hosts.useDHCP = true;
 }
