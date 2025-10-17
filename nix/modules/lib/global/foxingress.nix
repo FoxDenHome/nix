@@ -94,7 +94,7 @@ in
   nixosModule = { config, ... } : let
     renderInterface = (hostName: ifaceObj: let
       iface = ifaceObj.value;
-      template = "${hostName}-${ifaceObj.name}";
+      template = if ifaceObj.name == "default" then hostName else "${hostName}-${ifaceObj.name}";
 
       privateIPv4 = lib.findFirst (ip: let
         ipNoCidr = util.removeIPCidr ip;
