@@ -1,11 +1,11 @@
 $TTL 300
 $INCLUDE /etc/pdns/authority.db
 @ 3600 IN ALIAS website.foxden.network.
-_atproto 3600 IN TXT did=did:plc:imzcu3nra2hq3ibksykj7i6x
-_dmarc.arcticfox 3600 IN TXT v=DMARC1;p=quarantine;pct=100
+_atproto 3600 IN TXT "did=did:plc:imzcu3nra2hq3ibksykj7i6x"
+_dmarc.arcticfox 3600 IN TXT "v=DMARC1;p=quarantine;pct=100"
 archlinux 3600 IN CNAME mirror.doridian.net.
 archlinux 3600 IN CNAME mirror.doridian.net.
-arcticfox 3600 IN TXT v=spf1 +a:arcticfox.doridian.net include:amazonses.com mx ~all
+arcticfox 3600 IN TXT "v=spf1 +a:arcticfox.doridian.net include:amazonses.com mx ~all"
 cachyos 3600 IN CNAME mirror.doridian.net.
 cachyos 3600 IN CNAME mirror.doridian.net.
 ftp.arcticfox 3600 IN CNAME arcticfox.doridian.net.

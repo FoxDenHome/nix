@@ -6,23 +6,20 @@ from yaml import safe_load as yaml_load, dump as yaml_dump
 
 ZONE_DIR = mtik_path("files/pdns")
 
-SPECIAL_ZONES = {}
-
 def foreach_vlan(records: list[str]) -> list[str]:
     lines = []
     for vlan in range(0, 10):
         for record in records:
             lines.append(record % vlan)
     return lines
-
+SPECIAL_ZONES = {}
 SPECIAL_ZONES["foxden.network"] = lambda: [
-    "$INCLUDE /etc/pdns/foxden.network.local.db"
-    "ns1 IN A 10.2.0.53"
-    "ns2 IN A 10.2.0.53"
-    "ns3 IN A 10.2.0.53"
-    "ns4 IN A 10.2.0.53"
+    "$INCLUDE /etc/pdns/foxden.network.local.db",
+    "ns1 IN A 10.2.0.53",
+    "ns2 IN A 10.2.0.53",
+    "ns3 IN A 10.2.0.53",
+    "ns4 IN A 10.2.0.53",
 ]
-
 SPECIAL_ZONES["10.in-addr.arpa"] = lambda: foreach_vlan([
     "1.0.%d IN PTR gateway.foxden.network.",
     "53.0.%d IN PTR dns.foxden.network.",
@@ -31,7 +28,6 @@ SPECIAL_ZONES["10.in-addr.arpa"] = lambda: foreach_vlan([
     "2.1.%d IN PTR router-backup.foxden.network.",
     "123.1.%d IN PTR ntpi.foxden.network.",
 ])
-
 SPECIAL_ZONES["e.b.3.6.b.c.4.f.c.2.d.f.ip6.arpa"] = lambda: foreach_vlan([
     "1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.%x.0.0.0 IN PTR gateway.foxden.network.",
     "5.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.%x.0.0.0 IN PTR dns.foxden.network.",
@@ -41,10 +37,9 @@ SPECIAL_ZONES["e.b.3.6.b.c.4.f.c.2.d.f.ip6.arpa"] = lambda: foreach_vlan([
     "b.7.0.0.0.0.0.0.0.0.0.0.0.0.0.0.%x.0.0.0 IN PTR ntpi.foxden.network.",
 ])
 
-"""zone "%s" IN {
-    type native;
-    file "/etc/pdns/%s.db";
-};"""
+RECORD_TYPE_HANDLERS = {}
+RECORD_TYPE_HANDLERS["SRV"] = lambda record: f"{record['priority']} {record['weight']} {record['port']} {record['value']}"
+RECORD_TYPE_HANDLERS["TXT"] = lambda record: f'"{record["value"]}"'
 
 def refresh_pdns():
     unlink_safe("result")
@@ -82,7 +77,10 @@ def refresh_pdns():
 
         lines = []
         for record in records:
-            lines.append(f"{record['name']} {record['ttl']} IN {record['type']} {record['value']}")
+            value = record["value"]
+            if record["type"] in RECORD_TYPE_HANDLERS:
+                value = RECORD_TYPE_HANDLERS[record["type"]](record)
+            lines.append(f"{record['name']} {record['ttl']} IN {record['type']} {value}")
         data = "\n".join(fixed_lines + sorted(lines)) + "\n"
 
         with open(zone_file, "w") as file:
