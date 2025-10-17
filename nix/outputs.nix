@@ -93,6 +93,10 @@ in
     attrset = foxDenLib.global.dhcp.make nixosConfigurations;
     json = nixpkgs.lib.attrsets.mapAttrs (name: cfg: builtins.toFile "dhcp.json" (builtins.toJSON cfg)) attrset;
   };
+  firewall = rec {
+    attrset = foxDenLib.global.firewall.make nixosConfigurations;
+    json = nixpkgs.lib.attrsets.mapAttrs (name: cfg: builtins.toFile "firewall.json" (builtins.toJSON cfg)) attrset;
+  };
 
   foxDenLib = foxDenLib;
 }

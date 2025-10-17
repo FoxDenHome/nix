@@ -33,6 +33,22 @@ in
       };
     };
 
+    portType = with nixpkgs.lib.types; submodule {
+      options = {
+        port = nixpkgs.lib.mkOption {
+          type = ints.u16;
+        };
+        protocol = nixpkgs.lib.mkOption {
+          type = enum [ "tcp" "udp" ];
+          default = "tcp";
+        };
+        internalOnly = nixpkgs.lib.mkOption {
+          type = bool;
+          default = false;
+        };
+      };
+    };
+
     interfaceType = with nixpkgs.lib.types; submodule {
       options = {
         driver = nixpkgs.lib.mkOption {
@@ -66,6 +82,12 @@ in
           quicPort = nixpkgs.lib.mkOption {
             type = ints.u16;
             default = 443;
+          };
+        };
+        firewall = {
+          openPorts = nixpkgs.lib.mkOption {
+            type = listOf portType;
+            default = [];
           };
         };
         dns = {
