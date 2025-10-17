@@ -21,7 +21,7 @@
         name = "capefox-wired";
         zone = "foxden.network";
       };
-      mac = "00:30:93:12:12:38";
+      mac = "00:30:93:12:12:39"; # TODO: Update MAC
       addresses = [
         "10.2.10.4/16"
         "fd2c:f4cb:63be:2::0a04/64"

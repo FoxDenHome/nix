@@ -1,5 +1,4 @@
-:put "Adjusting lease times"
-/ip/dhcp-server/lease set [/ip/dhcp-server/lease find dynamic=no] lease-time=1d
+/system/script/run dhcp-leases-reload
 :put Done
 
 :do {

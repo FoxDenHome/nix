@@ -41,8 +41,6 @@ F="$(mktemp)"
 chmod 600 "$F"
 echo > "$F"
 
-transfer_section '/ip/dns/static'
-transfer_section_notdynamic_rmall '/ip/dhcp-server/lease'
 transfer_section_notdynamic_rmall '/ipv6/dhcp-server/binding'
 transfer_section_notdynamic_expall '/ip/firewall/filter'
 transfer_section_notdynamic_expall '/ip/firewall/mangle'
@@ -68,6 +66,9 @@ transfer_files() {
     ssh "$1" '/file/add name=container-restart-all' || true
     cd ..
 }
+
+uv run refresh.py
+./scripts.sh
 
 transfer_files router.foxden.network
 ssh router.foxden.network '/system/script/run reconfigure'

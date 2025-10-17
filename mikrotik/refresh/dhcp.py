@@ -4,7 +4,17 @@ from subprocess import check_call
 from json import load as json_load
 from refresh.util import unlink_safe, NIX_DIR, mtik_path, get_ipv4_netname
 
-FILENAME = mtik_path("scripts/dhcp-leases.rsc")
+FILENAME = mtik_path("scripts/dhcp-leases-reload.rsc")
+
+def refresh_dhcpv4(dhcp_leases):
+    lines = []
+    lines.append("/ip/dhcp-server/lease/remove [find dynamic=no]")
+    for lease in dhcp_leases:
+        if "ipv4" in lease:
+            netname = get_ipv4_netname(lease["ipv4"])
+            lines.append(f'/ip/dhcp-server/lease/add address={lease["ipv4"]} comment="{lease["name"]}" lease-time=1d mac-address={lease["mac"]} server=dhcp-{netname}')
+    with open(FILENAME, "w") as file:
+        file.write("\n".join(lines) + "\n")
 
 def refresh_dhcp():
     unlink_safe("result")
@@ -13,4 +23,13 @@ def refresh_dhcp():
         dhcp_leases = json_load(file)
     unlink_safe("result")
 
-    print(dhcp_leases)
+    header_lines = [
+        "/ip/dhcp-server/lease/remove [find dynamic=no]"
+    ]
+    lines = []
+    for lease in dhcp_leases:
+        if "ipv4" in lease:
+            netname = get_ipv4_netname(lease["ipv4"])
+            lines.append(f'/ip/dhcp-server/lease/add mac-address={lease["mac"]} address={lease["ipv4"]} comment="{lease["name"]}" lease-time=1d server=dhcp-{netname}')
+    with open(FILENAME, "w") as file:
+        file.write(("\n".join(header_lines + sorted(lines))) + "\n")
