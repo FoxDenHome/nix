@@ -5,24 +5,24 @@
       interfaces.default = { driver = "null"; } // intf;
     });
   in {
-    ups-dori-office = mkIntf {
+    amp-living-room = mkIntf {
       dns = {
-        name = "ups-dori-office";
+        name = "amp-living-room";
         zone = "foxden.network";
       };
-      mac = "00:0C:15:04:39:93";
+      mac = "EC:F4:51:D0:8C:AF";
       addresses = [
-        "10.1.11.3/16"
+        "10.2.12.10/16"
       ];
     };
-    printer = mkIntf {
+    ecoflow-delta-pro = mkIntf {
       dns = {
-        name = "printer";
+        name = "ecoflow-delta-pro";
         zone = "foxden.network";
       };
-      mac = "64:C6:D2:E5:91:45";
+      mac = "4C:EB:D6:D6:3C:9C";
       addresses = [
-        "10.2.12.3/16"
+        "10.2.12.31/16"
       ];
     };
     hue = mkIntf {
@@ -35,26 +35,6 @@
         "10.2.12.1/16"
       ];
     };
-    amp-living-room = mkIntf {
-      dns = {
-        name = "amp-living-room";
-        zone = "foxden.network";
-      };
-      mac = "EC:F4:51:D0:8C:AF";
-      addresses = [
-        "10.2.12.10/16"
-      ];
-    };
-    tesla-wall-charger = mkIntf {
-      dns = {
-        name = "tesla-wall-charger";
-        zone = "foxden.network";
-      };
-      mac = "98:ED:5C:9B:79:CF";
-      addresses = [
-        "10.2.12.16/16"
-      ];
-    };
     hue-sync-box = mkIntf {
       dns = {
         name = "hue-sync-box";
@@ -63,6 +43,16 @@
       mac = "C4:29:96:0B:9C:82";
       addresses = [
         "10.2.12.18/16"
+      ];
+    };
+    led-strip-dori-office-ceiling = mkIntf {
+      dns = {
+        name = "led-strip-dori-office-ceiling";
+        zone = "foxden.network";
+      };
+      mac = "C4:DE:E2:B2:D2:C7";
+      addresses = [
+        "10.2.13.21/16"
       ];
     };
     nanoleaf-lines-wizzy = mkIntf {
@@ -85,6 +75,16 @@
         "10.2.12.28/16"
       ];
     };
+    printer = mkIntf {
+      dns = {
+        name = "printer";
+        zone = "foxden.network";
+      };
+      mac = "64:C6:D2:E5:91:45";
+      addresses = [
+        "10.2.12.3/16"
+      ];
+    };
     streamdeckpi = mkIntf {
       dns = {
         name = "streamdeckpi";
@@ -95,24 +95,24 @@
         "10.2.12.30/16"
       ];
     };
-    ecoflow-delta-pro = mkIntf {
+    tesla-wall-charger = mkIntf {
       dns = {
-        name = "ecoflow-delta-pro";
+        name = "tesla-wall-charger";
         zone = "foxden.network";
       };
-      mac = "4C:EB:D6:D6:3C:9C";
+      mac = "98:ED:5C:9B:79:CF";
       addresses = [
-        "10.2.12.31/16"
+        "10.2.12.16/16"
       ];
     };
-    led-strip-dori-office-ceiling = mkIntf {
+    ups-dori-office = mkIntf {
       dns = {
-        name = "led-strip-dori-office-ceiling";
+        name = "ups-dori-office";
         zone = "foxden.network";
       };
-      mac = "C4:DE:E2:B2:D2:C7";
+      mac = "00:0C:15:04:39:93";
       addresses = [
-        "10.2.13.21/16"
+        "10.1.11.3/16"
       ];
     };
   };

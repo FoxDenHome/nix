@@ -5,14 +5,14 @@
       interfaces.default = { driver = "null"; } // intf;
     });
   in {
-    wii = mkIntf {
+    mister = mkIntf {
       dns = {
-        name = "wii";
+        name = "mister";
         zone = "foxden.network";
       };
-      mac = "00:27:09:8A:A7:49";
+      mac = "02:03:04:05:06:07";
       addresses = [
-        "100.96.41.101/24"
+        "100.96.41.253/24"
       ];
     };
     ps2 = mkIntf {
@@ -25,14 +25,14 @@
         "100.96.41.102/24"
       ];
     };
-    mister = mkIntf {
+    wii = mkIntf {
       dns = {
-        name = "mister";
+        name = "wii";
         zone = "foxden.network";
       };
-      mac = "02:03:04:05:06:07";
+      mac = "00:27:09:8A:A7:49";
       addresses = [
-        "100.96.41.253/24"
+        "100.96.41.101/24"
       ];
     };
   };

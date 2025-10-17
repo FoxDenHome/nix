@@ -16,28 +16,6 @@
         "fd2c:f4cb:63be:2::0a03/64"
       ];
     };
-    fennec = mkIntf {
-      dns = {
-        name = "fennec";
-        zone = "foxden.network";
-      };
-      mac = "7C:FE:90:31:7B:0E";
-      addresses = [
-        "10.2.10.1/16"
-        "fd2c:f4cb:63be:2::0a01/64"
-      ];
-    };
-    wizzy-desktop = mkIntf {
-      dns = {
-        name = "wizzy-desktop";
-        zone = "foxden.network";
-      };
-      mac = "7C:FE:90:39:20:9A";
-      addresses = [
-        "10.2.10.2/16"
-        "fd2c:f4cb:63be:2::0a02/64"
-      ];
-    };
     capefox-wired = mkIntf {
       dns = {
         name = "capefox-wired";
@@ -58,6 +36,28 @@
       addresses = [
         "10.5.10.3/16"
         "fd2c:f4cb:63be:5::0a03/64"
+      ];
+    };
+    fennec = mkIntf {
+      dns = {
+        name = "fennec";
+        zone = "foxden.network";
+      };
+      mac = "7C:FE:90:31:7B:0E";
+      addresses = [
+        "10.2.10.1/16"
+        "fd2c:f4cb:63be:2::0a01/64"
+      ];
+    };
+    wizzy-desktop = mkIntf {
+      dns = {
+        name = "wizzy-desktop";
+        zone = "foxden.network";
+      };
+      mac = "7C:FE:90:39:20:9A";
+      addresses = [
+        "10.2.10.2/16"
+        "fd2c:f4cb:63be:2::0a02/64"
       ];
     };
   };

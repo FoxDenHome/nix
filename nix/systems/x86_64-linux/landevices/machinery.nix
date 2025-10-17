@@ -15,16 +15,6 @@
         "10.4.10.1/16"
       ];
     };
-    carvera-controller = mkIntf {
-      dns = {
-        name = "carvera-controller";
-        zone = "foxden.network";
-      };
-      mac = "6C:6E:07:1B:1D:24";
-      addresses = [
-        "10.4.10.2/16"
-      ];
-    };
     carvera = mkIntf {
       dns = {
         name = "carvera";
@@ -33,6 +23,16 @@
       mac = "EC:C7:00:1C:E3:2D";
       addresses = [
         "10.4.10.3/16"
+      ];
+    };
+    carvera-controller = mkIntf {
+      dns = {
+        name = "carvera-controller";
+        zone = "foxden.network";
+      };
+      mac = "6C:6E:07:1B:1D:24";
+      addresses = [
+        "10.4.10.2/16"
       ];
     };
     laser-controller = mkIntf {
