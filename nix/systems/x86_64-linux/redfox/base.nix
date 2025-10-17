@@ -1,6 +1,8 @@
 { ... } :
 {
-  config.foxDen.hosts.hosts = let
+  foxDen.hosts.gateway = "redfox";
+
+  foxDen.hosts.hosts = let
     mkIntf = (intf: {
       interfaces.default = { driver = "null"; } // intf;
     });
@@ -25,7 +27,7 @@
     };
   };
 
-  config.foxDen.dns.records = [
+  foxDen.dns.records = [
     {
       zone = "doridian.net";
       name = "v4-redfox";
