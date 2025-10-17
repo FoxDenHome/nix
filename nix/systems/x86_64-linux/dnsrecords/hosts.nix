@@ -10,6 +10,7 @@
         name = "capefox";
         zone = "foxden.network";
       };
+      mac = "00:30:93:12:12:38";
       addresses = [
         "10.2.10.3/16"
         "fd2c:f4cb:63be:2::0a03/64"
@@ -20,6 +21,7 @@
         name = "fennec";
         zone = "foxden.network";
       };
+      mac = "7C:FE:90:31:7B:0E";
       addresses = [
         "10.2.10.1/16"
         "fd2c:f4cb:63be:2::0a01/64"
@@ -30,6 +32,7 @@
         name = "wizzy-desktop";
         zone = "foxden.network";
       };
+      mac = "7C:FE:90:39:20:9A";
       addresses = [
         "10.2.10.2/16"
         "fd2c:f4cb:63be:2::0a02/64"
@@ -40,6 +43,7 @@
         name = "bengalfox-ipmi";
         zone = "foxden.network";
       };
+      mac = "00:25:90:FF:CF:5B";
       addresses = [
         "10.1.12.1/16"
         "fd2c:f4cb:63be:1::0c01/64"
@@ -50,9 +54,9 @@
         name = "pdu-rack";
         zone = "foxden.network";
       };
+      mac = "70:A7:41:F8:13:09";
       addresses = [
         "10.1.11.1/16"
-        "fd2c:f4cb:63be:1::0b01/64"
       ];
     };
     switch-den = mkIntf {
@@ -60,9 +64,9 @@
         name = "switch-den";
         zone = "foxden.network";
       };
+      mac = "24:5A:4C:A6:6B:9A";
       addresses = [
         "10.1.10.2/16"
-        "fd2c:f4cb:63be:1::0a02/64"
       ];
     };
     switch-rack-agg = mkIntf {
@@ -70,9 +74,9 @@
         name = "switch-rack-agg";
         zone = "foxden.network";
       };
+      mac = "24:5A:4C:56:41:C4";
       addresses = [
         "10.1.10.3/16"
-        "fd2c:f4cb:63be:1::0a03/64"
       ];
     };
     ups-rack = mkIntf {
@@ -80,9 +84,9 @@
         name = "ups-rack";
         zone = "foxden.network";
       };
+      mac = "00:C0:B7:E8:B2:A0";
       addresses = [
         "10.1.11.2/16"
-        "fd2c:f4cb:63be:1::0b02/64"
       ];
     };
     ap-backyard = mkIntf {
@@ -90,9 +94,9 @@
         name = "ap-backyard";
         zone = "foxden.network";
       };
+      mac = "68:D7:9A:1F:57:E2";
       addresses = [
         "10.1.10.6/16"
-        "fd2c:f4cb:63be:1::0a06/64"
       ];
     };
     ap-corridor-upper = mkIntf {
@@ -100,9 +104,9 @@
         name = "ap-corridor-upper";
         zone = "foxden.network";
       };
+      mac = "60:22:32:1D:48:15";
       addresses = [
         "10.1.10.7/16"
-        "fd2c:f4cb:63be:1::0a07/64"
       ];
     };
     switch-dori-office-agg = mkIntf {
@@ -110,9 +114,9 @@
         name = "switch-dori-office-agg";
         zone = "foxden.network";
       };
+      mac = "AC:8B:A9:A6:E7:EE";
       addresses = [
         "10.1.10.10/16"
-        "fd2c:f4cb:63be:1::0a0a/64"
       ];
     };
     ups-dori-office = mkIntf {
@@ -120,9 +124,9 @@
         name = "ups-dori-office";
         zone = "foxden.network";
       };
+      mac = "00:0C:15:04:39:93";
       addresses = [
         "10.1.11.3/16"
-        "fd2c:f4cb:63be:1::0b03/64"
       ];
     };
     printer = mkIntf {
@@ -130,9 +134,9 @@
         name = "printer";
         zone = "foxden.network";
       };
+      mac = "64:C6:D2:E5:91:45";
       addresses = [
         "10.2.12.3/16"
-        "fd2c:f4cb:63be:2::0c03/64"
       ];
     };
     hue = mkIntf {
@@ -140,9 +144,9 @@
         name = "hue";
         zone = "foxden.network";
       };
+      mac = "C4:29:96:B5:2B:8F";
       addresses = [
         "10.2.12.1/16"
-        "fd2c:f4cb:63be:2::0c01/64"
       ];
     };
     camera-living-room = mkIntf {
@@ -150,9 +154,9 @@
         name = "camera-living-room";
         zone = "foxden.network";
       };
+      mac = "68:D7:9A:CF:30:09";
       addresses = [
         "10.5.11.2/16"
-        "fd2c:f4cb:63be:5::0b02/64"
       ];
     };
     amp-living-room = mkIntf {
@@ -160,9 +164,9 @@
         name = "amp-living-room";
         zone = "foxden.network";
       };
+      mac = "EC:F4:51:D0:8C:AF";
       addresses = [
         "10.2.12.10/16"
-        "fd2c:f4cb:63be:2::0c0a/64"
       ];
     };
     capefox-wired = mkIntf {
@@ -170,6 +174,7 @@
         name = "capefox-wired";
         zone = "foxden.network";
       };
+      mac = "00:30:93:12:12:38";
       addresses = [
         "10.2.10.4/16"
         "fd2c:f4cb:63be:2::0a04/64"
@@ -180,9 +185,9 @@
         name = "camera-front-door";
         zone = "foxden.network";
       };
+      mac = "E4:38:83:0E:1F:D3";
       addresses = [
         "10.5.11.1/16"
-        "fd2c:f4cb:63be:5::0b01/64"
       ];
     };
     tesla-wall-charger = mkIntf {
@@ -190,9 +195,9 @@
         name = "tesla-wall-charger";
         zone = "foxden.network";
       };
+      mac = "98:ED:5C:9B:79:CF";
       addresses = [
         "10.2.12.16/16"
-        "fd2c:f4cb:63be:2::0c10/64"
       ];
     };
     nvr = mkIntf {
@@ -200,6 +205,7 @@
         name = "nvr";
         zone = "foxden.network";
       };
+      mac = "60:22:32:F1:BF:71";
       addresses = [
         "10.5.10.1/16"
         "fd2c:f4cb:63be:5::0a01/64"
@@ -210,9 +216,9 @@
         name = "bambu-x1";
         zone = "foxden.network";
       };
+      mac = "08:FB:EA:02:64:96";
       addresses = [
         "10.4.10.1/16"
-        "fd2c:f4cb:63be:4::0a01/64"
       ];
     };
     hue-sync-box = mkIntf {
@@ -220,9 +226,9 @@
         name = "hue-sync-box";
         zone = "foxden.network";
       };
+      mac = "C4:29:96:0B:9C:82";
       addresses = [
         "10.2.12.18/16"
-        "fd2c:f4cb:63be:2::0c12/64"
       ];
     };
     camera-back-right = mkIntf {
@@ -230,9 +236,9 @@
         name = "camera-back-right";
         zone = "foxden.network";
       };
+      mac = "D0:21:F9:99:60:DA";
       addresses = [
         "10.5.11.4/16"
-        "fd2c:f4cb:63be:5::0b04/64"
       ];
     };
     camera-front-right = mkIntf {
@@ -240,9 +246,9 @@
         name = "camera-front-right";
         zone = "foxden.network";
       };
+      mac = "70:A7:41:5F:DB:54";
       addresses = [
         "10.5.11.3/16"
-        "fd2c:f4cb:63be:5::0b03/64"
       ];
     };
     camera-front-left = mkIntf {
@@ -250,9 +256,9 @@
         name = "camera-front-left";
         zone = "foxden.network";
       };
+      mac = "70:A7:41:0B:11:36";
       addresses = [
         "10.5.11.5/16"
-        "fd2c:f4cb:63be:5::0b05/64"
       ];
     };
     nanoleaf-lines-wizzy = mkIntf {
@@ -260,9 +266,9 @@
         name = "nanoleaf-lines-wizzy";
         zone = "foxden.network";
       };
+      mac = "80:8A:F7:03:55:58";
       addresses = [
         "10.2.12.19/16"
-        "fd2c:f4cb:63be:2::0c13/64"
       ];
     };
     ap-living-room = mkIntf {
@@ -270,9 +276,9 @@
         name = "ap-living-room";
         zone = "foxden.network";
       };
+      mac = "60:22:32:83:6D:9E";
       addresses = [
         "10.1.10.11/16"
-        "fd2c:f4cb:63be:1::0a0b/64"
       ];
     };
     nanoleaf-shapes-dori = mkIntf {
@@ -280,9 +286,9 @@
         name = "nanoleaf-shapes-dori";
         zone = "foxden.network";
       };
+      mac = "80:8A:F7:03:E2:1A";
       addresses = [
         "10.2.12.28/16"
-        "fd2c:f4cb:63be:2::0c1c/64"
       ];
     };
     carvera-controller = mkIntf {
@@ -290,19 +296,9 @@
         name = "carvera-controller";
         zone = "foxden.network";
       };
+      mac = "6C:6E:07:1B:1D:24";
       addresses = [
         "10.4.10.2/16"
-        "fd2c:f4cb:63be:4::0a02/64"
-      ];
-    };
-    hue-upstairs = mkIntf {
-      dns = {
-        name = "hue-upstairs";
-        zone = "foxden.network";
-      };
-      addresses = [
-        "10.2.12.27/16"
-        "fd2c:f4cb:63be:2::0c1b/64"
       ];
     };
     switch-living-room = mkIntf {
@@ -310,9 +306,9 @@
         name = "switch-living-room";
         zone = "foxden.network";
       };
+      mac = "E4:38:83:8C:AA:DA";
       addresses = [
         "10.1.10.13/16"
-        "fd2c:f4cb:63be:1::0a0d/64"
       ];
     };
     switch-rack = mkIntf {
@@ -320,9 +316,9 @@
         name = "switch-rack";
         zone = "foxden.network";
       };
+      mac = "D8:B3:70:1E:9E:3A";
       addresses = [
         "10.1.10.12/16"
-        "fd2c:f4cb:63be:1::0a0c/64"
       ];
     };
     switch-dori-office = mkIntf {
@@ -330,9 +326,9 @@
         name = "switch-dori-office";
         zone = "foxden.network";
       };
+      mac = "60:22:32:39:77:9C";
       addresses = [
         "10.1.10.5/16"
-        "fd2c:f4cb:63be:1::0a05/64"
       ];
     };
     camera-back-door-upper = mkIntf {
@@ -340,9 +336,9 @@
         name = "camera-back-door-upper";
         zone = "foxden.network";
       };
+      mac = "D0:21:F9:94:97:13";
       addresses = [
         "10.5.11.6/16"
-        "fd2c:f4cb:63be:5::0b06/64"
       ];
     };
     switch-den-desk = mkIntf {
@@ -350,9 +346,9 @@
         name = "switch-den-desk";
         zone = "foxden.network";
       };
+      mac = "74:83:C2:FF:87:16";
       addresses = [
         "10.1.10.14/16"
-        "fd2c:f4cb:63be:1::0a0e/64"
       ];
     };
     camera-den = mkIntf {
@@ -360,9 +356,9 @@
         name = "camera-den";
         zone = "foxden.network";
       };
+      mac = "E4:38:83:0E:E4:A3";
       addresses = [
         "10.5.11.7/16"
-        "fd2c:f4cb:63be:5::0b07/64"
       ];
     };
     carvera = mkIntf {
@@ -370,9 +366,9 @@
         name = "carvera";
         zone = "foxden.network";
       };
+      mac = "EC:C7:00:1C:E3:2D";
       addresses = [
         "10.4.10.3/16"
-        "fd2c:f4cb:63be:4::0a03/64"
       ];
     };
     wii = mkIntf {
@@ -380,6 +376,7 @@
         name = "wii";
         zone = "foxden.network";
       };
+      mac = "00:27:09:8A:A7:49";
       addresses = [
         "100.96.41.101/24"
       ];
@@ -389,9 +386,9 @@
         name = "tape-library";
         zone = "foxden.network";
       };
+      mac = "00:0E:11:14:70:8B";
       addresses = [
         "10.1.13.1/16"
-        "fd2c:f4cb:63be:1::0d01/64"
       ];
     };
     ps2 = mkIntf {
@@ -399,6 +396,7 @@
         name = "ps2";
         zone = "foxden.network";
       };
+      mac = "00:27:09:FF:A7:49";
       addresses = [
         "100.96.41.102/24"
       ];
@@ -408,9 +406,9 @@
         name = "streamdeckpi";
         zone = "foxden.network";
       };
+      mac = "D8:3A:DD:40:CA:F1";
       addresses = [
         "10.2.12.30/16"
-        "fd2c:f4cb:63be:2::0c1e/64"
       ];
     };
     camera-garage = mkIntf {
@@ -418,9 +416,9 @@
         name = "camera-garage";
         zone = "foxden.network";
       };
+      mac = "F4:E2:C6:0C:3F:C3";
       addresses = [
         "10.5.11.8/16"
-        "fd2c:f4cb:63be:5::0b08/64"
       ];
     };
     laser-controller = mkIntf {
@@ -428,9 +426,9 @@
         name = "laser-controller";
         zone = "foxden.network";
       };
+      mac = "8C:16:45:46:05:22";
       addresses = [
         "10.4.10.5/16"
-        "fd2c:f4cb:63be:4::0a05/64"
       ];
     };
     ecoflow-delta-pro = mkIntf {
@@ -438,9 +436,9 @@
         name = "ecoflow-delta-pro";
         zone = "foxden.network";
       };
+      mac = "4C:EB:D6:D6:3C:9C";
       addresses = [
         "10.2.12.31/16"
-        "fd2c:f4cb:63be:2::0c1f/64"
       ];
     };
     switch-dori-office-tv = mkIntf {
@@ -448,9 +446,9 @@
         name = "switch-dori-office-tv";
         zone = "foxden.network";
       };
+      mac = "F4:E2:C6:AC:81:3D";
       addresses = [
         "10.1.10.15/16"
-        "fd2c:f4cb:63be:1::0a0f/64"
       ];
     };
     switch-dori-office-desk = mkIntf {
@@ -458,9 +456,9 @@
         name = "switch-dori-office-desk";
         zone = "foxden.network";
       };
+      mac = "F4:E2:C6:AC:81:DC";
       addresses = [
         "10.1.10.16/16"
-        "fd2c:f4cb:63be:1::0a10/64"
       ];
     };
     camera-server-room = mkIntf {
@@ -468,9 +466,9 @@
         name = "camera-server-room";
         zone = "foxden.network";
       };
+      mac = "F4:E2:C6:0C:E8:3C";
       addresses = [
         "10.5.11.9/16"
-        "fd2c:f4cb:63be:5::0b09/64"
       ];
     };
     pikvm-rack = mkIntf {
@@ -478,6 +476,7 @@
         name = "pikvm-rack";
         zone = "foxden.network";
       };
+      mac = "D8:3A:DD:A3:82:A8";
       addresses = [
         "10.1.13.2/16"
         "fd2c:f4cb:63be:1::0d02/64"
@@ -488,6 +487,7 @@
         name = "crossfox";
         zone = "foxden.network";
       };
+      mac = "B8:27:EB:ED:0F:4B";
       addresses = [
         "10.5.10.3/16"
         "fd2c:f4cb:63be:5::0a03/64"
@@ -498,9 +498,9 @@
         name = "led-strip-dori-office-ceiling";
         zone = "foxden.network";
       };
+      mac = "C4:DE:E2:B2:D2:C7";
       addresses = [
         "10.2.13.21/16"
-        "fd2c:f4cb:63be:2::0d15/64"
       ];
     };
     camera-side-right = mkIntf {
@@ -508,9 +508,9 @@
         name = "camera-side-right";
         zone = "foxden.network";
       };
+      mac = "1C:6A:1B:81:B9:D4";
       addresses = [
         "10.5.11.10/16"
-        "fd2c:f4cb:63be:5::0b0a/64"
       ];
     };
     mister = mkIntf {
@@ -518,6 +518,7 @@
         name = "mister";
         zone = "foxden.network";
       };
+      mac = "02:03:04:05:06:07";
       addresses = [
         "100.96.41.253/24"
       ];
