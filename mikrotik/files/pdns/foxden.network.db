@@ -144,7 +144,6 @@ tesla-wall-charger 3600 IN A 10.2.12.16
 unifi 3600 IN A 10.1.10.1
 unifi 3600 IN AAAA fd2c:f4cb:63be:1::a01
 upload.xmpp 3600 IN CNAME foxden.network.
-upload.xmpp 3600 IN CNAME foxden.network.
 ups-dori-office 3600 IN A 10.1.11.3
 ups-rack 3600 IN A 10.1.11.2
 v4-router 300 IN CNAME router.foxden.network.
@@ -158,5 +157,4 @@ website 3600 IN AAAA fd2c:f4cb:63be:3::a0a
 wii 3600 IN A 100.96.41.101
 wizzy-desktop 3600 IN A 10.2.10.2
 wizzy-desktop 3600 IN AAAA fd2c:f4cb:63be:2::0a02
-xmpp 3600 IN CNAME foxden.network.
 xmpp 3600 IN CNAME foxden.network.

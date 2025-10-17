@@ -5,14 +5,11 @@ $INCLUDE /etc/pdns/authority.db
 _atproto 3600 IN TXT "did=did:plc:imzcu3nra2hq3ibksykj7i6x"
 _dmarc.arcticfox 3600 IN TXT "v=DMARC1;p=quarantine;pct=100"
 archlinux 3600 IN CNAME mirror.doridian.net.
-archlinux 3600 IN CNAME mirror.doridian.net.
 arcticfox 3600 IN A 95.216.116.135
 arcticfox 3600 IN AAAA 2a01:4f9:2b:1a42::0:ff01
 arcticfox 3600 IN TXT "v=spf1 +a:arcticfox.doridian.net include:amazonses.com mx ~all"
 cachyos 3600 IN CNAME mirror.doridian.net.
-cachyos 3600 IN CNAME mirror.doridian.net.
 ftp.arcticfox 3600 IN CNAME arcticfox.doridian.net.
-icefox 3600 IN CNAME icefox.foxden.network.
 icefox 3600 IN CNAME icefox.foxden.network.
 mail.arcticfox 3600 IN CNAME arcticfox.doridian.net.
 mc 3600 IN CNAME minecraft.foxden.network.
@@ -26,7 +23,6 @@ syncthing 3600 IN A 10.99.12.6
 syncthing 3600 IN AAAA fd2c:f4cb:63be::a63:c06
 v4-icefox 3600 IN CNAME icefox.foxden.network.
 v4-redfox 3600 IN CNAME redfox.foxden.network.
-webdav.syncthing 3600 IN CNAME syncthing.doridian.net.
 webdav.syncthing 3600 IN CNAME syncthing.doridian.net.
 www 3600 IN CNAME website.foxden.network.
 www.ftp.arcticfox 3600 IN CNAME arcticfox.doridian.net.

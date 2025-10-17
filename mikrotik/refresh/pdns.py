@@ -98,7 +98,7 @@ def refresh_pdns():
                     lines.append(f"{record['name']} {record['ttl']} IN {val['type']} {val['value']}")
                 else:
                     lines.append(f"{record['name']} {record['ttl']} IN {record['type']} {val}")
-        data = "\n".join(fixed_lines + sorted(lines)) + "\n"
+        data = "\n".join(fixed_lines + sorted(list(set(lines)))) + "\n"
 
         with open(zone_file, "w") as file:
             file.write(data)
