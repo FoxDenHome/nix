@@ -148,9 +148,9 @@ ups-dori-office 3600 IN A 10.1.11.3
 ups-rack 3600 IN A 10.1.11.2
 v4-router 300 IN CNAME router.foxden.network.
 v4-router-backup 300 IN CNAME router-backup.foxden.network.
-v4-vpn 3600 IN CNAME router.foxden.network.
+v4-vpn 3600 IN A 10.2.0.1
 v4-wan 300 IN CNAME wan.foxden.network.
-vpn 3600 IN CNAME router.foxden.network.
+vpn 3600 IN A 10.2.0.1
 webdav.syncthing 3600 IN CNAME syncthing.foxden.network.
 website 3600 IN A 10.3.10.10
 website 3600 IN AAAA fd2c:f4cb:63be:3::a0a
