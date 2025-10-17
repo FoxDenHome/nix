@@ -58,27 +58,27 @@ in
     }
     {
       zone = "foxden.network";
-      name = "vpn";
-      type = "CNAME";
-      ttl = 3600;
-      value = "router.foxden.network.";
-      horizon = "internal";
-    }
-    {
-      zone = "foxden.network";
-      name = "v4-vpn";
-      type = "CNAME";
-      ttl = 3600;
-      value = "router.foxden.network.";
-      horizon = "internal";
-    }
-    {
-      zone = "foxden.network";
       name = "ntp";
       type = "CNAME";
       ttl = 3600;
       value = "wan.foxden.network.";
       horizon = "external";
+    }
+    {
+      zone = "foxden.network";
+      name = "vpn";
+      type = "A";
+      ttl = 3600;
+      value = "10.2.0.1";
+      horizon = "internal";
+    }
+    {
+      zone = "foxden.network";
+      name = "v4-vpn";
+      type = "A";
+      ttl = 3600;
+      value = "10.2.0.1";
+      horizon = "internal";
     }
   ]
   ++ (mkWanRecs "wan" "10.2.0.1" "fd2c:f4cb:63be:2::1")
