@@ -137,7 +137,7 @@ in
 
   nixosModule = ({ config, pkgs, foxDenLib, ... }:
   let
-    hostIndexHex1 = nixpkgs.lib.toHexString (config.foxDen.hosts.index or 0);
+    hostIndexHex1 = nixpkgs.lib.toHexString config.foxDen.hosts.index;
     hostIndexHex = if (nixpkgs.lib.stringLength hostIndexHex1 == 1) then "0${hostIndexHex1}" else hostIndexHex1;
 
     mkHashMac = (hash: "e6:21:${hostIndexHex}:${builtins.substring 0 2 hash}:${builtins.substring 2 2 hash}:${builtins.substring 4 2 hash}");
@@ -205,7 +205,6 @@ in
       };
       index = nixpkgs.lib.mkOption {
         type = ints.u8;
-        default = 0;
       };
     };
 
