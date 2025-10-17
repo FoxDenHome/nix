@@ -2,7 +2,7 @@
 let
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
-  mkIfaceName = (iface: "vebr-${iface.suffix}");
+  mkIfaceName = (iface: "vebr${iface.suffix}");
 in
 {
   driverOptsType = with nixpkgs.lib.types; submodule {

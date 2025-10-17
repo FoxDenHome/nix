@@ -143,11 +143,13 @@ in
     mkHashMac = (hash: "e6:21:${hostIndexHex}:${builtins.substring 0 2 hash}:${builtins.substring 2 2 hash}:${builtins.substring 4 2 hash}");
 
     hosts = map (getByName config) (nixpkgs.lib.attrsets.attrNames config.foxDen.hosts.hosts);
-    mapIfaces = (host: map ({ name, value }:  value // rec {
-      inherit host name;
-      suffix = util.mkShortHash 6 (host.name + "|" + name);
-      mac = if value.mac != null then value.mac else (mkHashMac suffix);
-    }) (nixpkgs.lib.attrsets.attrsToList host.interfaces));
+    mapIfaces = (host: map ({ name, value }: let
+        hash = util.mkShortHash 6 (host.name + "|" + name);
+      in value // {
+        inherit host name;
+        suffix = "${hostIndexHex}${hash}";
+        mac = if value.mac != null then value.mac else (mkHashMac hash);
+      }) (nixpkgs.lib.attrsets.attrsToList host.interfaces));
     interfaces = nixpkgs.lib.flatten (map mapIfaces hosts);
 
     ifaceHasV4 = (iface: nixpkgs.lib.any util.isIPv4 iface.addresses);
@@ -270,7 +272,7 @@ in
 
             mkHooks = (interface: let
               ifaceDriver = foxDenLib.hosts.drivers.${interface.driver};
-              serviceInterface = (ifaceDriver.serviceInterface or (interface: "host-${interface.suffix}")) interface;
+              serviceInterface = (ifaceDriver.serviceInterface or (interface: "host${interface.suffix}")) interface;
 
               driverRunParams = { inherit ipCmd ipInNsCmd netnsExecCmd serviceInterface interface; };
               hooks = ifaceDriver.hooks driverRunParams;
