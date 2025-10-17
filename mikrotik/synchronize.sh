@@ -70,7 +70,7 @@ transfer_files() {
 }
 
 transfer_files router.foxden.network
-ssh router.foxden.network '/system/script/run dhcp-propagate-changes'
+ssh router.foxden.network '/system/script/run reconfigure'
 
 transfer_files router-backup.foxden.network
-ssh router-backup.foxden.network '/system/script/run dhcp-propagate-changes'
+ssh router-backup.foxden.network '/system/script/run reconfigure'
