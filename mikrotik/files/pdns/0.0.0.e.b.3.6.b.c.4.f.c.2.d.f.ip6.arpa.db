@@ -1,3 +1,0 @@
-$TTL 300
-$INCLUDE /etc/pdns/authority.db
-$INCLUDE /etc/pdns/0.0.0.e.b.3.6.b.c.4.f.c.2.d.f.ip6.arpa.txt
