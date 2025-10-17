@@ -1,5 +1,6 @@
 $TTL 300
 $INCLUDE /etc/pdns/authority.db
+$INCLUDE /etc/pdns/41.96.100.in-addr.arpa.gen.db
 
 1 IN PTR router.foxden.network.
 2 IN PTR router-backup.foxden.network.
