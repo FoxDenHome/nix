@@ -55,16 +55,6 @@
         "10.2.13.21/16"
       ];
     };
-    nanoleaf-lines-wizzy = mkIntf {
-      dns = {
-        name = "nanoleaf-lines-wizzy";
-        zone = "foxden.network";
-      };
-      mac = "80:8A:F7:03:55:58";
-      addresses = [
-        "10.2.12.19/16"
-      ];
-    };
     nanoleaf-shapes-dori = mkIntf {
       dns = {
         name = "nanoleaf-shapes-dori";
@@ -73,6 +63,16 @@
       mac = "80:8A:F7:03:E2:1A";
       addresses = [
         "10.2.12.28/16"
+      ];
+    };
+    nanoleaf-lines-wizzy = mkIntf {
+      dns = {
+        name = "nanoleaf-lines-wizzy";
+        zone = "foxden.network";
+      };
+      mac = "80:8A:F7:03:55:58";
+      addresses = [
+        "10.2.12.19/16"
       ];
     };
     printer = mkIntf {
