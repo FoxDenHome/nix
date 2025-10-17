@@ -8,4 +8,4 @@ addNTA('zattoo.com', 'GLFX')
 addNTA('zahs.tv', 'GLFX')
 
 addNTA('10.in-addr.arpa', 'HOME')
-addNTA('0.0.0.e.b.3.6.b.c.4.f.c.2.d.f.ip6.arpa', 'HOME')
+addNTA('e.b.3.6.b.c.4.f.c.2.d.f.ip6.arpa', 'HOME')
