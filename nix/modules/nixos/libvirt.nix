@@ -92,9 +92,7 @@ in
     '';
 
     foxDen.hosts.hosts = lib.attrsets.genAttrs vmNames (name: {
-      interfaces.default = {
-        driver = "null";
-      } // (vms.${name}.config.interface);
+      interfaces = lib.attrsets.mapAttrs (_: iface: { driver = "null"; } // iface) vms.${name}.config.interfaces;
     });
 
     foxDen.dns.records = lib.mkMerge (map (vm: vm.config.records or []) (lib.attrsets.attrValues vms));

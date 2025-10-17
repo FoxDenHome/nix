@@ -1,7 +1,7 @@
 {
   rootDiskSize = "80G";
   autostart = true;
-  interface = {
+  interfaces.default = {
     dns = {
       name = "bengalfox-win";
       zone = "foxden.network";

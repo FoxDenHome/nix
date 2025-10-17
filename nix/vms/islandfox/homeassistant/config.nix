@@ -1,7 +1,7 @@
 {
   rootDiskSize = "64G";
   autostart = true;
-  interface = {
+  interfaces.default = {
     driver = "null";
     dns = {
       name = "homeassistant";
