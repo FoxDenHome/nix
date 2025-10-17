@@ -1,3 +1,4 @@
 $TTL 300
 $INCLUDE /etc/pdns/authority.db
-$INCLUDE /etc/pdns/darksignsonline.com.gen.db
+@ 3600 IN ALIAS darksignsonline.foxden.network.
+www 3600 IN CNAME darksignsonline.foxden.network.

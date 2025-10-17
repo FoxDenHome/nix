@@ -1,3 +1,4 @@
 $TTL 300
 $INCLUDE /etc/pdns/authority.db
-$INCLUDE /etc/pdns/doridian.de.gen.db
+@ 3600 IN ALIAS website.foxden.network.
+www 3600 IN CNAME website.foxden.network.

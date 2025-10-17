@@ -2,7 +2,6 @@
 
 ## TODO
 
-- [ ] DNS management (on router)
 - [ ] DHCP lease management (on router)
 - [ ] Firewall management (on foxDen.hosts.gateway aka router)
 - [ ] apcupsd fails startup on boot, likely too early. just add better restart logic

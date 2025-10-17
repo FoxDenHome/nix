@@ -1,20 +1,8 @@
 $TTL 300
 $INCLUDE /etc/pdns/authority.db
-
-config IN LUA LUA  ("if not spaceage_local4 then"
-                    "  spaceage_local4 = {}"
-                    "  local function make_sa_local(host, suffix4, ip4)"
-                    "    local loc4 = {}"
-                    "    table.insert(loc4, {{'10.3.0.0/16', 'fd2c:f4cb:63be:3::/64'}, {ip4}})"
-                    "    table.insert(loc4, {{'0.0.0.0/0', '::/0'}, {'55.69.1.' .. suffix4}})"
-                    "    spaceage_local4[host] = loc4"
-                    "  end"
-                    "  make_sa_local('www', '1', '10.3.10.9')"
-                    "  make_sa_local('api', '2', '10.3.10.5')"
-                    "  make_sa_local('tts', '3', '10.3.10.6')"
-                    "end")
-
-@   IN LUA A (";include('config'); return view(spaceage_local4.www)")
-www IN LUA A (";include('config'); return view(spaceage_local4.www)")
-api IN LUA A (";include('config'); return view(spaceage_local4.api)")
-tts IN LUA A (";include('config'); return view(spaceage_local4.tts)")
+@ 3600 IN ALIAS spaceage-website.foxden.network.
+api 3600 IN CNAME spaceage-api.foxden.network.
+gmod 3600 IN CNAME spaceage-gmod.foxden.network.
+play 3600 IN CNAME spaceage-gmod.foxden.network.
+tts 3600 IN CNAME spaceage-tts.foxden.network.
+www 3600 IN CNAME spaceage-website.foxden.network.
