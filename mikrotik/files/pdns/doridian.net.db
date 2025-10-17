@@ -6,16 +6,21 @@ _atproto 3600 IN TXT "did=did:plc:imzcu3nra2hq3ibksykj7i6x"
 _dmarc.arcticfox 3600 IN TXT "v=DMARC1;p=quarantine;pct=100"
 archlinux 3600 IN CNAME mirror.doridian.net.
 archlinux 3600 IN CNAME mirror.doridian.net.
+arcticfox 3600 IN A 10.99.12.201
+arcticfox 3600 IN AAAA fd2c:f4cb:63be::a63:c9
 arcticfox 3600 IN TXT "v=spf1 +a:arcticfox.doridian.net include:amazonses.com mx ~all"
 cachyos 3600 IN CNAME mirror.doridian.net.
 cachyos 3600 IN CNAME mirror.doridian.net.
 ftp.arcticfox 3600 IN CNAME arcticfox.doridian.net.
+ftp.arcticfox 3600 IN CNAME arcticfox.doridian.net.
 icefox 3600 IN CNAME icefox.foxden.network.
 icefox 3600 IN CNAME icefox.foxden.network.
+mail.arcticfox 3600 IN CNAME arcticfox.doridian.net.
 mail.arcticfox 3600 IN CNAME arcticfox.doridian.net.
 mc 3600 IN CNAME minecraft.foxden.network.
 mirror 3600 IN A 10.99.12.3
 mirror 3600 IN AAAA fd2c:f4cb:63be::a63:c03
+pma.arcticfox 3600 IN CNAME arcticfox.doridian.net.
 pma.arcticfox 3600 IN CNAME arcticfox.doridian.net.
 redfox 3600 IN CNAME redfox.foxden.network.
 restic 3600 IN A 10.99.12.7
@@ -28,5 +33,8 @@ webdav.syncthing 3600 IN CNAME syncthing.doridian.net.
 webdav.syncthing 3600 IN CNAME syncthing.doridian.net.
 www 3600 IN CNAME website.foxden.network.
 www.ftp.arcticfox 3600 IN CNAME arcticfox.doridian.net.
+www.ftp.arcticfox 3600 IN CNAME arcticfox.doridian.net.
 www.mail.arcticfox 3600 IN CNAME arcticfox.doridian.net.
+www.mail.arcticfox 3600 IN CNAME arcticfox.doridian.net.
+www.pma.arcticfox 3600 IN CNAME arcticfox.doridian.net.
 www.pma.arcticfox 3600 IN CNAME arcticfox.doridian.net.
