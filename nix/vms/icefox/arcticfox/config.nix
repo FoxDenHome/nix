@@ -37,15 +37,15 @@
       inherit dns cnames;
       addresses = [
         "95.216.116.135/26"
-        "2a01:4f9:2b:1a42::0:f1/112"
+        "2a01:4f9:2b:1a42::0:c9/112"
       ];
       mac = "00:50:56:00:D8:C7";
     };
     foxden = {
       inherit dns cnames;
       addresses = [
-        "10.99.12.241/24"
-        "fd2c:f4cb:63be::a63:f1/112"
+        "10.99.12.201/24"
+        "fd2c:f4cb:63be::a63:c9/112"
       ];
       mac = "00:50:56:00:D8:C8";
     };
