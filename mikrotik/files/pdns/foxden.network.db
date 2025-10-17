@@ -36,13 +36,10 @@ camera-living-room 3600 IN A 10.5.11.2
 camera-server-room 3600 IN A 10.5.11.9
 camera-side-right 3600 IN A 10.5.11.10
 capefox 3600 IN A 10.2.10.3
-capefox 3600 IN AAAA fd2c:f4cb:63be:2::0a03
 capefox-wired 3600 IN A 10.2.10.4
-capefox-wired 3600 IN AAAA fd2c:f4cb:63be:2::0a04
 carvera 3600 IN A 10.4.10.3
 carvera-controller 3600 IN A 10.4.10.2
 crossfox 3600 IN A 10.5.10.3
-crossfox 3600 IN AAAA fd2c:f4cb:63be:5::0a03
 darksignsonline 3600 IN A 10.3.10.15
 darksignsonline 3600 IN AAAA fd2c:f4cb:63be:3::a0f
 deluge 3600 IN A 10.2.11.8
@@ -53,7 +50,6 @@ e621 3600 IN A 10.3.10.12
 e621 3600 IN AAAA fd2c:f4cb:63be:3::a0c
 ecoflow-delta-pro 3600 IN A 10.2.12.31
 fennec 3600 IN A 10.2.10.1
-fennec 3600 IN AAAA fd2c:f4cb:63be:2::0a01
 foxcaves 3600 IN A 10.3.10.1
 foxcaves 3600 IN AAAA fd2c:f4cb:63be:3::a01
 furaffinity 3600 IN A 10.3.10.13
@@ -156,5 +152,4 @@ website 3600 IN A 10.3.10.10
 website 3600 IN AAAA fd2c:f4cb:63be:3::a0a
 wii 3600 IN A 100.96.41.101
 wizzy-desktop 3600 IN A 10.2.10.2
-wizzy-desktop 3600 IN AAAA fd2c:f4cb:63be:2::0a02
 xmpp 3600 IN CNAME foxden.network.

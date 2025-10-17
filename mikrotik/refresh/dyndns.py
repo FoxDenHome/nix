@@ -65,24 +65,17 @@ def write_dyndns_script():
         lines = file.readlines()
     
     outlines = []
-    in_hosts = False
     found_hosts = False
     for line in lines:
         line_strip = line.strip()
-        if in_hosts:
-            if line_strip == "# END HOSTS":
-                in_hosts = False
-            else:
-                continue
-        outlines.append(line)
-        if line_strip == "# BEGIN HOSTS":
+        if line_strip == "# HOSTS #":
             if found_hosts:
-                raise RuntimeError("Multiple # BEGIN HOSTS found in script")
+                raise RuntimeError("Multiple # HOSTS # found in script")
             indent = re.match(r"^(\s*)", line).group(1)
-            in_hosts = True
             found_hosts = True
             outlines += write_all_hosts(indent)
             continue
+        outlines.append(line)
 
     if not found_hosts:
         raise RuntimeError("No # BEGIN HOSTS found in script")

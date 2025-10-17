@@ -7,11 +7,11 @@ from refresh.dhcp import refresh_dhcp
 
 def main():
     print("# DynDNS configuration")
-    #refresh_dyndns()
+    refresh_dyndns()
     print("# foxIngress configuration")
-    #refresh_foxingress()
+    refresh_foxingress()
     print("# PowerDNS configuration")
-    #refresh_pdns()
+    refresh_pdns()
     print("# DHCP configuration")
     refresh_dhcp()
 

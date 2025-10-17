@@ -78,6 +78,5 @@ $dyndnsUpdate host=$DynDNSHost key=$DynDNSKey key6=$DynDNSKey6 priv6addr=$DynDNS
 $dyndnsUpdate host=$DynDNSHost4 key=$DynDNSKey4 ipaddr=$ipaddr
 
 if ($isprimary) do={
-    # BEGIN HOSTS
-    # END HOSTS
+    # HOSTS #
 }
