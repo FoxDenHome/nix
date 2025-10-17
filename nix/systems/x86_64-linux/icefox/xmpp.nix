@@ -21,7 +21,7 @@ in
       horizon = "*";
       priority = 5;
       weight = 0;
-      value = "xmpp.foxden.network";
+      value = "xmpp.foxden.network.";
     }
     {
       zone = "foxden.network";
@@ -32,7 +32,7 @@ in
       horizon = "*";
       priority = 5;
       weight = 0;
-      value = "xmpp.foxden.network";
+      value = "xmpp.foxden.network.";
     }
     {
       zone = "foxden.network";
@@ -43,7 +43,7 @@ in
       horizon = "*";
       priority = 5;
       weight = 0;
-      value = "xmpp.foxden.network";
+      value = "xmpp.foxden.network.";
     }
   ];
 

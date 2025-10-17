@@ -6,7 +6,7 @@ locals {
   static_hosts = { for name, record in local.record_map : name => record if !record.dynDns }
   dyndns_hosts = { for name, record in local.record_map : name => record if record.dynDns }
 
-  dotname_refer_types = toset(["CNAME", "ALIAS", "NS"])
+  dotname_refer_types = toset(["CNAME", "ALIAS", "NS", "SRV", "MX"])
 
   dyndns_value_map = {
     A    = "127.0.0.1"
