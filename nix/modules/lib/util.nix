@@ -10,7 +10,8 @@ let
   in
     (first == 10) ||
     (first == 172 && (second >= 16 && second <= 31)) ||
-    (first == 192 && second == 168));
+    (first == 192 && second == 168) ||
+    (first == 100 && (second >= 64 && second <= 127))); # Technically CGNAT, but also internal
 
   isPrivateIPv6 = (ip:
     (nixpkgs.lib.strings.hasPrefix "fd" ip) ||

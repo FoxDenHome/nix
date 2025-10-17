@@ -80,6 +80,7 @@ minecraft 3600 IN A 10.3.10.8
 minecraft 3600 IN AAAA fd2c:f4cb:63be:3::a08
 mirror 3600 IN A 10.3.10.11
 mirror 3600 IN AAAA fd2c:f4cb:63be:3::a0b
+mister 3600 IN A 100.96.41.253
 mktxp 3600 IN A 10.2.11.22
 mktxp 3600 IN AAAA fd2c:f4cb:63be:2::b16
 nanoleaf-lines-wizzy 3600 IN A 10.2.12.19
@@ -100,6 +101,7 @@ pikvm-rack 3600 IN AAAA fd2c:f4cb:63be:1::0d02
 printer 3600 IN A 10.2.12.3
 prometheus 3600 IN A 10.2.11.20
 prometheus 3600 IN AAAA fd2c:f4cb:63be:2::b14
+ps2 3600 IN A 100.96.41.102
 radius.auth 3600 IN A 10.1.14.2
 radius.auth 3600 IN AAAA fd2c:f4cb:63be:1::e02
 redfox 3600 IN A 10.99.10.1
@@ -146,6 +148,7 @@ vpn 3600 IN CNAME router.foxden.network.
 webdav.syncthing 3600 IN CNAME syncthing.foxden.network.
 website 3600 IN A 10.3.10.10
 website 3600 IN AAAA fd2c:f4cb:63be:3::a0a
+wii 3600 IN A 100.96.41.101
 wizzy-desktop 3600 IN A 10.2.10.2
 wizzy-desktop 3600 IN AAAA fd2c:f4cb:63be:2::0a02
 xmpp 3600 IN CNAME foxden.network.
