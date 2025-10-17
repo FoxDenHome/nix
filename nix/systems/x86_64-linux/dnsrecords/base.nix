@@ -1,0 +1,4 @@
+{ ... }:
+{
+  foxDen.hosts.useDHCP = true;
+}

@@ -183,6 +183,10 @@ in
         type = str;
         default = "default";
       };
+      useDHCP = nixpkgs.lib.mkOption {
+        type = bool;
+        default = false;
+      };
       usedMacAddresses = nixpkgs.lib.mkOption {
         type = addCheck (listOf str) (macs: let
           uniqueMacs = nixpkgs.lib.lists.uniqueString macs;
