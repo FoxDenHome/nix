@@ -40,12 +40,19 @@ SPECIAL_ZONES["e.b.3.6.b.c.4.f.c.2.d.f.ip6.arpa"] = lambda: foreach_vlan([
     "b.7.0.0.0.0.0.0.0.0.0.0.0.0.0.0.%x.0.0.0 IN PTR ntpi.foxden.network.",
 ])
 
+"""zone "%s" IN {
+    type native;
+    file "/etc/pdns/%s.db";
+};"""
+
 def refresh_pdns():
     # TODO: Most of this
     unlink_safe("result")
     check_call(["nix", "build", f"{NIX_DIR}#dnsRecords.json"])
     with open("result", "r") as file:
         all_records = json_load(file)
+
+    bind_conf = []
 
     zones = all_records["internal"]
     for zone in sorted(zones.keys()):
@@ -67,3 +74,11 @@ def refresh_pdns():
 
         with open(zone_file, "w") as out_file:
             out_file.write(data)
+
+        bind_conf.append('zone "%s" IN {' % zone)
+        bind_conf.append('    type native;')
+        bind_conf.append('    file "/etc/pdns/%s.db";' % zone)
+        bind_conf.append('};')
+
+    with open(path_join(ZONE_DIR, "bind.conf"), "w") as out_file:
+        out_file.write("\n".join(bind_conf) + "\n")
