@@ -2,6 +2,7 @@ from subprocess import check_call
 from json import load as json_load
 from os.path import join as path_join
 from refresh.util import unlink_safe, NIX_DIR, mtik_path
+from yaml import safe_load as yaml_load, dump as yaml_dump
 
 ZONE_DIR = mtik_path("files/pdns")
 
@@ -46,14 +47,28 @@ SPECIAL_ZONES["e.b.3.6.b.c.4.f.c.2.d.f.ip6.arpa"] = lambda: foreach_vlan([
 };"""
 
 def refresh_pdns():
-    # TODO: Most of this
     unlink_safe("result")
     check_call(["nix", "build", f"{NIX_DIR}#dnsRecords.json"])
     with open("result", "r") as file:
         all_records = json_load(file)
+    unlink_safe("result")
 
     bind_conf = []
 
+    print("## Reading recursor.conf")
+    with open(path_join(ZONE_DIR, "recursor.conf"), "r") as file:
+        recursor_data = yaml_load(file)
+
+    if "forward_zones" not in recursor_data:
+        recursor_data["forward_zones"] = []
+
+    for zone in recursor_data["forward_zones"]:
+        forwarders = zone["forwarders"]
+        if len(forwarders) == 1 and forwarders[0] == "127.0.0.1:530":
+            print("### Removing old zone from recursor:", zone["zone"])
+            recursor_data["forward_zones"].remove(zone)
+
+    print("## Writing zone files")
     zones = all_records["internal"]
     for zone in sorted(zones.keys()):
         records = zones[zone]
@@ -72,13 +87,24 @@ def refresh_pdns():
             lines.append(f"{record['name']} {record['ttl']} IN {record['type']} {record['value']}")
         data = "\n".join(fixed_lines + sorted(lines)) + "\n"
 
-        with open(zone_file, "w") as out_file:
-            out_file.write(data)
+        with open(zone_file, "w") as file:
+            file.write(data)
 
         bind_conf.append('zone "%s" IN {' % zone)
         bind_conf.append('    type native;')
         bind_conf.append('    file "/etc/pdns/%s.db";' % zone)
         bind_conf.append('};')
 
-    with open(path_join(ZONE_DIR, "bind.conf"), "w") as out_file:
-        out_file.write("\n".join(bind_conf) + "\n")
+        print("### Adding new zone to recursor:", zone)
+        recursor_data["forward_zones"].append({
+            "zone": zone,
+            "forwarders": ["127.0.0.1:530"]
+        })
+
+    print("## Writing bind.conf")
+    with open(path_join(ZONE_DIR, "bind.conf"), "w") as file:
+        file.write("\n".join(bind_conf) + "\n")
+
+    print("## Writing recursor.conf")
+    with open(path_join(ZONE_DIR, "recursor.conf"), "w") as file:
+        yaml_dump(recursor_data, file)
