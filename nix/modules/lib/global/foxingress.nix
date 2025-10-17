@@ -93,7 +93,6 @@ in
 {
   nixosModule = { config, ... } : let
     renderInterface = (hostName: ifaceObj: let
-      gateway = config.foxDen.hosts.gateway;
       iface = ifaceObj.value;
       template = "${hostName}-${ifaceObj.name}";
 
@@ -102,7 +101,7 @@ in
       in (util.isIPv4 ipNoCidr) && (util.isPrivateIP ipNoCidr)) "" iface.addresses;
     in lib.mkIf (privateIPv4 != "" && iface.snirouter.enable) {
       templates."${template}" = {
-        inherit gateway;
+        inherit (iface) gateway;
         default = {
           host = util.removeIPCidr privateIPv4;
           proxyProtocol = iface.snirouter.proxyProtocol or false;
@@ -121,7 +120,8 @@ in
       hosts = lib.attrsets.listToAttrs (map (record: {
         name = mkHost record;
         value = {
-          inherit gateway template;
+          inherit (iface) gateway;
+          inherit template;
         };
       }) ([iface.dns] ++ iface.cnames));
     });
@@ -149,9 +149,7 @@ in
       templates = globalConfig.getAttrSet ["foxDen" "foxIngress" "templates"] nixosConfigurations;
       hosts = globalConfig.getAttrSet ["foxDen" "foxIngress" "hosts"] nixosConfigurations;
     };
-
-    # TODO: Go back to uniqueStrings once next NixOS stable
-    gateways = lib.lists.unique (map (host: host.gateway) (lib.attrsets.attrValues cfg.hosts));
+    gateways = foxDenLib.global.hosts.getGateways nixosConfigurations;
   in lib.attrsets.genAttrs gateways (gateway:
     mkForGateway gateway cfg
   );

@@ -3,125 +3,6 @@ let
   util = foxDenLib.util;
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
-  cnameType = with nixpkgs.lib.types; submodule {
-    options = {
-      name = nixpkgs.lib.mkOption {
-        type = str;
-      };
-      zone = nixpkgs.lib.mkOption {
-        type = str;
-      };
-      type = nixpkgs.lib.mkOption {
-        type = enum [ "CNAME" "ALIAS" ];
-        default = "CNAME";
-      };
-    };
-  };
-
-  interfaceType = with nixpkgs.lib.types; submodule {
-    options = {
-      driver = nixpkgs.lib.mkOption {
-        type = enum (nixpkgs.lib.attrsets.attrNames foxDenLib.hosts.drivers);
-      };
-      driverOpts = nixpkgs.lib.mkOption {
-        type = attrsOf anything; # TODO: Host driver schema
-        default = {};
-      };
-      mac = nixpkgs.lib.mkOption {
-        type = nullOr str;
-        default = null;
-      };
-      snirouter = {
-        enable = nixpkgs.lib.mkOption {
-          type = bool;
-          default = false;
-        };
-        proxyProtocol = nixpkgs.lib.mkOption {
-          type = bool;
-          default = true;
-        };
-        httpPort = nixpkgs.lib.mkOption {
-          type = ints.u16;
-          default = 80;
-        };
-        httpsPort = nixpkgs.lib.mkOption {
-          type = ints.u16;
-          default = 443;
-        };
-        quicPort = nixpkgs.lib.mkOption {
-          type = ints.u16;
-          default = 443;
-        };
-      };
-      dns = {
-        name = nixpkgs.lib.mkOption {
-          type = str;
-          default = "";
-        };
-        auxAddresses = nixpkgs.lib.mkOption {
-          type = uniq (listOf foxDenLib.types.ip);
-          default = [];
-        };
-        zone = nixpkgs.lib.mkOption {
-          type = str;
-          default = "foxden.network";
-        };
-        ttl = nixpkgs.lib.mkOption {
-          type = ints.positive;
-          default = 3600;
-        };
-        dynDns = nixpkgs.lib.mkOption {
-          type = bool;
-          default = false;
-        };
-        dynDnsTtl = nixpkgs.lib.mkOption {
-          type = nullOr ints.positive;
-          default = 300;
-        };
-      };
-      cnames = nixpkgs.lib.mkOption {
-        type = listOf cnameType;
-        default = [];
-      };
-      addresses = nixpkgs.lib.mkOption {
-        type = uniq (listOf foxDenLib.types.ip);
-      };
-      routes = nixpkgs.lib.mkOption {
-        type = nullOr (listOf routeType);
-        default = [];
-      };
-      sysctls = nixpkgs.lib.mkOption {
-        type = attrsOf str;
-        default = {};
-      };
-    };
-  };
-
-  routeType = with nixpkgs.lib.types; submodule {
-    options = {
-      Destination = nixpkgs.lib.mkOption {
-        type = nullOr foxDenLib.types.ip;
-        default = null;
-      };
-      Gateway = nixpkgs.lib.mkOption {
-        type = nullOr foxDenLib.types.ipWithoutCidr;
-        default = null;
-      };
-    };
-  };
-
-  hostType = with nixpkgs.lib.types; submodule {
-    options = {
-      interfaces = nixpkgs.lib.mkOption {
-        type = attrsOf interfaceType;
-      };
-      nameservers = nixpkgs.lib.mkOption {
-        type = listOf str;
-        default = [];
-      };
-    };
-  };
-
   getByName = (config: name: let
     namespace = "host-${name}";
   in {
@@ -137,6 +18,133 @@ in
 
   nixosModule = ({ config, pkgs, foxDenLib, ... }:
   let
+    cnameType = with nixpkgs.lib.types; submodule {
+      options = {
+        name = nixpkgs.lib.mkOption {
+          type = str;
+        };
+        zone = nixpkgs.lib.mkOption {
+          type = str;
+        };
+        type = nixpkgs.lib.mkOption {
+          type = enum [ "CNAME" "ALIAS" ];
+          default = "CNAME";
+        };
+      };
+    };
+
+    interfaceType = with nixpkgs.lib.types; submodule {
+      options = {
+        driver = nixpkgs.lib.mkOption {
+          type = enum (nixpkgs.lib.attrsets.attrNames foxDenLib.hosts.drivers);
+        };
+        driverOpts = nixpkgs.lib.mkOption {
+          type = attrsOf anything; # TODO: Host driver schema
+          default = {};
+        };
+        mac = nixpkgs.lib.mkOption {
+          type = nullOr str;
+          default = null;
+        };
+        snirouter = {
+          enable = nixpkgs.lib.mkOption {
+            type = bool;
+            default = false;
+          };
+          proxyProtocol = nixpkgs.lib.mkOption {
+            type = bool;
+            default = true;
+          };
+          httpPort = nixpkgs.lib.mkOption {
+            type = ints.u16;
+            default = 80;
+          };
+          httpsPort = nixpkgs.lib.mkOption {
+            type = ints.u16;
+            default = 443;
+          };
+          quicPort = nixpkgs.lib.mkOption {
+            type = ints.u16;
+            default = 443;
+          };
+        };
+        dns = {
+          name = nixpkgs.lib.mkOption {
+            type = str;
+            default = "";
+          };
+          auxAddresses = nixpkgs.lib.mkOption {
+            type = uniq (listOf foxDenLib.types.ip);
+            default = [];
+          };
+          zone = nixpkgs.lib.mkOption {
+            type = str;
+            default = "foxden.network";
+          };
+          ttl = nixpkgs.lib.mkOption {
+            type = ints.positive;
+            default = 3600;
+          };
+          dynDns = nixpkgs.lib.mkOption {
+            type = bool;
+            default = false;
+          };
+          dynDnsTtl = nixpkgs.lib.mkOption {
+            type = nullOr ints.positive;
+            default = 300;
+          };
+        };
+        cnames = nixpkgs.lib.mkOption {
+          type = listOf cnameType;
+          default = [];
+        };
+        addresses = nixpkgs.lib.mkOption {
+          type = uniq (listOf foxDenLib.types.ip);
+        };
+        routes = nixpkgs.lib.mkOption {
+          type = nullOr (listOf routeType);
+          default = [];
+        };
+        sysctls = nixpkgs.lib.mkOption {
+          type = attrsOf str;
+          default = {};
+        };
+        useDHCP = nixpkgs.lib.mkOption {
+          type = bool;
+          default = config.foxDen.hosts.useDHCP;
+        };
+        gateway = nixpkgs.lib.mkOption {
+          type = str;
+          default = config.foxDen.hosts.gateway;
+        };
+      };
+    };
+
+    routeType = with nixpkgs.lib.types; submodule {
+      options = {
+        Destination = nixpkgs.lib.mkOption {
+          type = nullOr foxDenLib.types.ip;
+          default = null;
+        };
+        Gateway = nixpkgs.lib.mkOption {
+          type = nullOr foxDenLib.types.ipWithoutCidr;
+          default = null;
+        };
+      };
+    };
+
+    hostType = with nixpkgs.lib.types; submodule {
+      options = {
+        interfaces = nixpkgs.lib.mkOption {
+          type = attrsOf interfaceType;
+        };
+        nameservers = nixpkgs.lib.mkOption {
+          type = listOf str;
+          default = [];
+        };
+      };
+    };
+
     hostIndexHex1 = nixpkgs.lib.toHexString config.foxDen.hosts.index;
     hostIndexHex = if (nixpkgs.lib.stringLength hostIndexHex1 == 1) then "0${hostIndexHex1}" else hostIndexHex1;
 

@@ -89,6 +89,10 @@ in
     attrset = foxDenLib.global.foxingress.make nixosConfigurations;
     json = nixpkgs.lib.attrsets.mapAttrs (name: cfg: builtins.toFile "foxIngress.json" (builtins.toJSON cfg)) attrset;
   };
+  dhcp = rec {
+    attrset = foxDenLib.global.dhcp.make nixosConfigurations;
+    json = nixpkgs.lib.attrsets.mapAttrs (name: cfg: builtins.toFile "dhcp.json" (builtins.toJSON cfg)) attrset;
+  };
 
   foxDenLib = foxDenLib;
 }
