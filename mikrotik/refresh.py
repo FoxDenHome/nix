@@ -5,10 +5,10 @@ from refresh.foxingress import refresh_foxingress
 from refresh.pdns import refresh_pdns
 
 def main():
-    # print("# DynDNS configuration")
-    # refresh_dyndns()
-    # print("# foxIngress configuration")
-    # refresh_foxingress()
+    print("# DynDNS configuration")
+    refresh_dyndns()
+    print("# foxIngress configuration")
+    refresh_foxingress()
     print("# PowerDNS configuration")
     refresh_pdns()
 
