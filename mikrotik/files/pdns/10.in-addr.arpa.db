@@ -109,7 +109,6 @@ $INCLUDE /etc/pdns/authority.db
 2.13.1 3600 IN PTR pikvm-rack.foxden.network.
 2.14.1 3600 IN PTR radius.auth.foxden.network.
 20.11.2 3600 IN PTR prometheus.foxden.network.
-201.12.99 3600 IN PTR arcticfox.doridian.net.
 21.11.2 3600 IN PTR telegraf.foxden.network.
 21.13.2 3600 IN PTR led-strip-dori-office-ceiling.foxden.network.
 22.11.2 3600 IN PTR mktxp.foxden.network.

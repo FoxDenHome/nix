@@ -55,5 +55,21 @@
       value = "v=DMARC1;p=quarantine;pct=100";
       horizon = "*";
     }
+    {
+      zone = "doridian.net";
+      name = "arcticfox";
+      type = "A";
+      ttl = 3600;
+      value = "95.216.116.135";
+      horizon = "internal";
+    }
+    {
+      zone = "doridian.net";
+      name = "arcticfox";
+      type = "AAAA";
+      ttl = 3600;
+      value = "2a01:4f9:2b:1a42::0:ff01";
+      horizon = "internal";
+    }
   ];
 }
