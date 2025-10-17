@@ -183,10 +183,7 @@ in
         type = str;
         default = "default";
       };
-      useDHCP = nixpkgs.lib.mkOption {
-        type = bool;
-        default = false;
-      };
+      useDHCP = nixpkgs.lib.mkEnableOption "Configure DHCP lease for hosts on this system";
       usedMacAddresses = nixpkgs.lib.mkOption {
         type = addCheck (listOf str) (macs: let
           uniqueMacs = nixpkgs.lib.lists.uniqueString macs;
