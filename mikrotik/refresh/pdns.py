@@ -55,22 +55,17 @@ def refresh_pdns():
 
     bind_conf = []
 
-    print("## Reading recursor.conf")
-    with open(path_join(ZONE_DIR, "recursor.conf"), "r") as file:
+    print("## Reading recursor-template.conf")
+    with open(path_join(ZONE_DIR, "recursor-template.conf"), "r") as file:
         recursor_data = yaml_load(file)
 
     if "forward_zones" not in recursor_data:
         recursor_data["forward_zones"] = []
 
-    for zone in recursor_data["forward_zones"]:
-        forwarders = zone["forwarders"]
-        if len(forwarders) == 1 and forwarders[0] == "127.0.0.1:530":
-            print("### Removing old zone from recursor:", zone["zone"])
-            recursor_data["forward_zones"].remove(zone)
-
     print("## Writing zone files")
     zones = all_records["internal"]
     for zone in sorted(zones.keys()):
+        print(f"### Processing zone {zone}")
         records = zones[zone]
         zone_file = path_join(ZONE_DIR, f"{zone}.db")
 
@@ -95,7 +90,6 @@ def refresh_pdns():
         bind_conf.append('    file "/etc/pdns/%s.db";' % zone)
         bind_conf.append('};')
 
-        print("### Adding new zone to recursor:", zone)
         recursor_data["forward_zones"].append({
             "zone": zone,
             "forwarders": ["127.0.0.1:530"]
