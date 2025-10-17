@@ -6,7 +6,7 @@ let
   getInterfaces = nixosConfigurations: let
     hosts = globalConfig.getAttrSet ["foxDen" "hosts" "hosts"] nixosConfigurations;
   in
-    lib.flatten (map (host: lib.attrsets.attrValues host.interfaces) (lib.attrsets.attrValues hosts));
+    lib.flatten (map (host: map (iface: iface.value // { name = iface.name; host = host.name; }) (lib.attrsets.attrsToList host.value.interfaces)) (lib.attrsets.attrsToList hosts));
 in
 {
   inherit getInterfaces;

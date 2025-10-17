@@ -6,9 +6,11 @@ from refresh.util import unlink_safe, NIX_DIR, mtik_path, get_ipv4_netname
 
 FILENAME = mtik_path("scripts/dhcp-leases.rsc")
 
-def refresh_pdns():
+def refresh_dhcp():
     unlink_safe("result")
-    check_call(["nix", "build", f"{NIX_DIR}#dnsRecords.json"])
+    check_call(["nix", "build", f"{NIX_DIR}#dhcp.json.router"])
     with open("result", "r") as file:
-        all_records = json_load(file)
+        dhcp_leases = json_load(file)
     unlink_safe("result")
+
+    print(dhcp_leases)

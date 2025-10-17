@@ -3,14 +3,17 @@
 from refresh.dyndns import refresh_dyndns
 from refresh.foxingress import refresh_foxingress
 from refresh.pdns import refresh_pdns
+from refresh.dhcp import refresh_dhcp
 
 def main():
     print("# DynDNS configuration")
-    refresh_dyndns()
+    #refresh_dyndns()
     print("# foxIngress configuration")
-    refresh_foxingress()
+    #refresh_foxingress()
     print("# PowerDNS configuration")
-    refresh_pdns()
+    #refresh_pdns()
+    print("# DHCP configuration")
+    refresh_dhcp()
 
 
 if __name__ == "__main__":
