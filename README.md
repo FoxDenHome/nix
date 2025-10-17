@@ -5,7 +5,11 @@
 - [ ] DHCP lease management (on router)
 - [ ] Firewall management (on foxDen.hosts.gateway aka router)
 - [ ] apcupsd fails startup on boot, likely too early. just add better restart logic
+- icefox
+	- [ ] sanoid
 - bengalfox
+	- [ ] sanoid
+	- [ ] syncoid
 	- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
 	- [ ] ollama
 	- [ ] hashtopolis
@@ -13,8 +17,6 @@
 		- [ ] backend
 	- [ ] hashtopolis-agent
 	- [ ] owncast
-	- [ ] sanoid
-	- [ ] syncoid
 - islandfox
 	- git
 		- [ ] mysql (right now on sqlite3)
@@ -26,8 +28,6 @@
 		- gmod
 			- [ ] Make StarLord + SteamCMD a flake, too
 	- [ ] affine
-- icefox
-	- [ ] sanoid
 
 ## Notes
 
