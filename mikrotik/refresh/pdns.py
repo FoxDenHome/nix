@@ -4,6 +4,7 @@ from os.path import join as path_join
 from refresh.util import unlink_safe, NIX_DIR, mtik_path
 from yaml import safe_load as yaml_load, dump as yaml_dump
 
+INTERNAL_RECORDS = None
 ZONE_DIR = mtik_path("files/pdns")
 
 def foreach_vlan(records: list[str]) -> list[str]:
@@ -36,12 +37,22 @@ SPECIAL_ZONES["e.b.3.6.b.c.4.f.c.2.d.f.ip6.arpa"] = lambda: foreach_vlan([
     "2.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.%x.0.0.0 IN PTR router-backup.foxden.network.",
     "b.7.0.0.0.0.0.0.0.0.0.0.0.0.0.0.%x.0.0.0 IN PTR ntpi.foxden.network.",
 ])
-
+def find_record(name: str, type: str) -> dict:
+    global INTERNAL_RECORDS
+    name = name.removesuffix(".")
+    for zone, records in INTERNAL_RECORDS.items():
+        for record in records:
+            recname = record["name"] + "." + zone if record["name"] != "@" else zone
+            if recname == name and record["type"] == type:
+                return record
+    return None
 RECORD_TYPE_HANDLERS = {}
 RECORD_TYPE_HANDLERS["SRV"] = lambda record: f"{record['priority']} {record['weight']} {record['port']} {record['value']}"
 RECORD_TYPE_HANDLERS["TXT"] = lambda record: f'"{record["value"]}"'
+RECORD_TYPE_HANDLERS["ALIAS"] = lambda record: [find_record(record["value"], "A"), find_record(record["value"], "AAAA")]
 
 def refresh_pdns():
+    global INTERNAL_RECORDS
     unlink_safe("result")
     check_call(["nix", "build", f"{NIX_DIR}#dnsRecords.json"])
     with open("result", "r") as file:
@@ -61,10 +72,10 @@ def refresh_pdns():
         recursor_data["recursor"]["forward_zones"] = []
 
     print("## Writing zone files")
-    zones = all_records["internal"]
-    for zone in sorted(zones.keys()):
+    INTERNAL_RECORDS = all_records["internal"]
+    for zone in sorted(INTERNAL_RECORDS.keys()):
         print(f"### Processing zone {zone}")
-        records = zones[zone]
+        records = INTERNAL_RECORDS[zone]
         zone_file = path_join(ZONE_DIR, f"{zone}.db")
 
         fixed_lines = [
@@ -80,7 +91,13 @@ def refresh_pdns():
             value = record["value"]
             if record["type"] in RECORD_TYPE_HANDLERS:
                 value = RECORD_TYPE_HANDLERS[record["type"]](record)
-            lines.append(f"{record['name']} {record['ttl']} IN {record['type']} {value}")
+            if not isinstance(value, list):
+                value = [value]
+            for val in value:
+                if isinstance(val, dict):
+                    lines.append(f"{record['name']} {record['ttl']} IN {val['type']} {val['value']}")
+                else:
+                    lines.append(f"{record['name']} {record['ttl']} IN {record['type']} {val}")
         data = "\n".join(fixed_lines + sorted(lines)) + "\n"
 
         with open(zone_file, "w") as file:

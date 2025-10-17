@@ -1,5 +1,6 @@
 $TTL 300
 $INCLUDE /etc/pdns/authority.db
-@ 3600 IN ALIAS foxcaves.foxden.network.
+@ 3600 IN A 10.3.10.1
+@ 3600 IN AAAA fd2c:f4cb:63be:3::a01
 c0de 3600 IN CNAME c0defox.es.
 www 3600 IN CNAME foxcaves.foxden.network.

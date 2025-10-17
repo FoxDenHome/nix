@@ -1,6 +1,7 @@
 $TTL 300
 $INCLUDE /etc/pdns/authority.db
-@ 3600 IN ALIAS spaceage-website.foxden.network.
+@ 3600 IN A 10.3.10.9
+@ 3600 IN AAAA fd2c:f4cb:63be:3::a09
 api 3600 IN CNAME spaceage-api.foxden.network.
 gmod 3600 IN CNAME spaceage-gmod.foxden.network.
 play 3600 IN CNAME spaceage-gmod.foxden.network.
