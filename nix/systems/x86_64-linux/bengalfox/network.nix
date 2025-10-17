@@ -12,81 +12,79 @@ let
   };
 in
 {
-  config = {
-    lib.foxDenSys.mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
+  lib.foxDenSys.mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
 
-    virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ];
-    foxDen.hosts.index = 1;
-    foxDen.hosts.gateway = "router";
+  foxDen.hosts.index = 1;
+  foxDen.hosts.gateway = "router";
+  virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ];
 
-    systemd.network.netdevs."${ifcfg.interface}" = {
-      netdevConfig = {
-        Name = ifcfg.interface;
-        Kind = "bridge";
-        MACAddress = ifcfg.mac;
-      };
-
-      bridgeConfig = {
-        VLANFiltering = true;
-      };
+  systemd.network.netdevs."${ifcfg.interface}" = {
+    netdevConfig = {
+      Name = ifcfg.interface;
+      Kind = "bridge";
+      MACAddress = ifcfg.mac;
     };
 
-    systemd.network.networks."30-${ifcfg.interface}" = {
-      name = ifcfg.interface;
-      routes = ifcfg.routes;
-      address = ifcfg.addresses;
-      dns = ifcfg.nameservers;
+    bridgeConfig = {
+      VLANFiltering = true;
+    };
+  };
 
-      networkConfig = {
-        DHCP = "no";
-        IPv6AcceptRA = true;
+  systemd.network.networks."30-${ifcfg.interface}" = {
+    name = ifcfg.interface;
+    routes = ifcfg.routes;
+    address = ifcfg.addresses;
+    dns = ifcfg.nameservers;
+
+    networkConfig = {
+      DHCP = "no";
+      IPv6AcceptRA = true;
+    };
+
+    bridgeVLANs = [{
+      PVID = 2;
+      EgressUntagged = 2;
+      VLAN = "2";
+    }];
+  };
+
+  systemd.network.networks."40-${ifcfg.interface}-root" = {
+    name = "ens1f0np0";
+    bridge = [ifcfg.interface];
+
+    bridgeVLANs = [{
+      PVID = 2;
+      EgressUntagged = 2;
+      VLAN = "1-10";
+    }];
+  };
+
+  foxDen.services = {
+    wireguard."wg-deluge" = config.lib.foxDen.sops.mkIfAvailable {
+      host = "deluge"; # solid snake
+      interface = {
+        ips = [ "10.70.175.10/32" "fc00:bbbb:bbbb:bb01::7:af09/128" ];
+        peers = [
+          {
+            allowedIPs = [ "0.0.0.0/0" "::/0" "10.64.0.1/32" ];
+            endpoint = "23.234.81.127:51820";
+            persistentKeepalive = 25;
+            publicKey = "G6+A375GVmuFCAtvwgx3SWCWhrMvdQ+cboXQ8zp2ang=";
+          }
+        ];
       };
-
-      bridgeVLANs = [{
-        PVID = 2;
-        EgressUntagged = 2;
-        VLAN = "2";
-      }];
     };
+  };
 
-    systemd.network.networks."40-${ifcfg.interface}-root" = {
-      name = "ens1f0np0";
-      bridge = [ifcfg.interface];
-
-      bridgeVLANs = [{
-        PVID = 2;
-        EgressUntagged = 2;
-        VLAN = "1-10";
-      }];
-    };
-
-    foxDen.services = {
-      wireguard."wg-deluge" = config.lib.foxDen.sops.mkIfAvailable {
-        host = "deluge"; # solid snake
-        interface = {
-          ips = [ "10.70.175.10/32" "fc00:bbbb:bbbb:bb01::7:af09/128" ];
-          peers = [
-            {
-              allowedIPs = [ "0.0.0.0/0" "::/0" "10.64.0.1/32" ];
-              endpoint = "23.234.81.127:51820";
-              persistentKeepalive = 25;
-              publicKey = "G6+A375GVmuFCAtvwgx3SWCWhrMvdQ+cboXQ8zp2ang=";
-            }
-          ];
+  foxDen.hosts.hosts = {
+    bengalfox = {
+      interfaces.default = {
+        driver = "null";
+        dns = {
+          name = "bengalfox";
+          zone = "foxden.network";
         };
-      };
-    };
-
-    foxDen.hosts.hosts = {
-      bengalfox = {
-        interfaces.default = {
-          driver = "null";
-          dns = {
-            name = "bengalfox";
-            zone = "foxden.network";
-          };
-          addresses = ifcfg.addresses;
-        };
+        addresses = ifcfg.addresses;
       };
     };
   };

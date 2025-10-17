@@ -12,64 +12,62 @@ let
   };
 in
 {
-  config = {
-    lib.foxDenSys.mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
+  lib.foxDenSys.mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
 
-    systemd.network.networks."30-${ifcfg.interface}" = {
-      name = ifcfg.interface;
-      routes = ifcfg.routes;
-      address = ifcfg.addresses;
-      dns = ifcfg.nameservers;
+  foxDen.hosts.index = 2;
+  foxDen.hosts.gateway = "router";
+  virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ];
 
-      networkConfig = {
-        DHCP = "no";
-        IPv6AcceptRA = true;
-      };
+  systemd.network.networks."30-${ifcfg.interface}" = {
+    name = ifcfg.interface;
+    routes = ifcfg.routes;
+    address = ifcfg.addresses;
+    dns = ifcfg.nameservers;
 
-      bridgeVLANs = [{
-        PVID = 2;
-        EgressUntagged = 2;
-        VLAN = "2";
-      }];
+    networkConfig = {
+      DHCP = "no";
+      IPv6AcceptRA = true;
     };
 
-    systemd.network.netdevs."${ifcfg.interface}" = {
-      netdevConfig = {
-        Name = ifcfg.interface;
-        Kind = "bridge";
-        MACAddress = ifcfg.mac;
-      };
+    bridgeVLANs = [{
+      PVID = 2;
+      EgressUntagged = 2;
+      VLAN = "2";
+    }];
+  };
 
-      bridgeConfig = {
-        VLANFiltering = true;
-      };
+  systemd.network.netdevs."${ifcfg.interface}" = {
+    netdevConfig = {
+      Name = ifcfg.interface;
+      Kind = "bridge";
+      MACAddress = ifcfg.mac;
     };
 
-    systemd.network.networks."40-${ifcfg.interface}-root" = {
-      name = "enp1s0f1";
-      bridge = [ifcfg.interface];
-
-      bridgeVLANs = [{
-        PVID = 2;
-        EgressUntagged = 2;
-        VLAN = "1-10";
-      }];
+    bridgeConfig = {
+      VLANFiltering = true;
     };
+  };
 
-    virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ];
+  systemd.network.networks."40-${ifcfg.interface}-root" = {
+    name = "enp1s0f1";
+    bridge = [ifcfg.interface];
 
-    foxDen.hosts.index = 2;
-    foxDen.hosts.gateway = "router";
-    foxDen.hosts.hosts = {
-      islandfox = {
-        interfaces.default = {
-          driver = "null";
-          dns = {
-            name = "islandfox";
-            zone = "foxden.network";
-          };
-          addresses = ifcfg.addresses;
+    bridgeVLANs = [{
+      PVID = 2;
+      EgressUntagged = 2;
+      VLAN = "1-10";
+    }];
+  };
+
+  foxDen.hosts.hosts = {
+    islandfox = {
+      interfaces.default = {
+        driver = "null";
+        dns = {
+          name = "islandfox";
+          zone = "foxden.network";
         };
+        addresses = ifcfg.addresses;
       };
     };
   };

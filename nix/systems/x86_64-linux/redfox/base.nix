@@ -1,7 +1,7 @@
 { ... } :
 {
+  foxDen.hosts.index = 4;
   foxDen.hosts.gateway = "redfox";
-  foxDen.hosts.index = 3;
 
   foxDen.hosts.hosts = let
     mkIntf = (intf: {
