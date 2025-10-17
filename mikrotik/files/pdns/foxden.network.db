@@ -2,10 +2,10 @@ $TTL 300
 $INCLUDE /etc/pdns/authority.db
 $INCLUDE /etc/pdns/foxden.network.gen.db
 
-ns1 IN A 10.3.0.53
-ns2 IN A 10.3.0.53
-ns3 IN A 10.3.0.53
-ns4 IN A 10.3.0.53
+ns1 IN A 10.2.0.53
+ns2 IN A 10.2.0.53
+ns3 IN A 10.2.0.53
+ns4 IN A 10.2.0.53
 
 config IN LUA LUA  ("if not foxden_local4 then"
                     "  foxden_local4 = {}"
