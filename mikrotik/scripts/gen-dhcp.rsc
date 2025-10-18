@@ -13,6 +13,8 @@
 /ip/dhcp-server/lease/add mac-address=24:5A:4C:56:41:C4 address=10.1.10.3 comment="switch-rack-agg-default" lease-time=1d server=dhcp-mgmt
 /ip/dhcp-server/lease/add mac-address=24:5A:4C:A6:6B:9A address=10.1.10.2 comment="switch-den-default" lease-time=1d server=dhcp-mgmt
 /ip/dhcp-server/lease/add mac-address=4C:EB:D6:D6:3C:9C address=10.2.12.31 comment="ecoflow-delta-pro-default" lease-time=1d server=dhcp-lan
+/ip/dhcp-server/lease/add mac-address=52:54:00:e9:7e:50 address=10.2.12.2 comment="homeassistant-default" lease-time=1d server=dhcp-lan
+/ip/dhcp-server/lease/add mac-address=5e:8c:f2:cd:c8:4a address=10.2.10.10 comment="win2k22-default" lease-time=1d server=dhcp-lan
 /ip/dhcp-server/lease/add mac-address=60:22:32:1D:48:15 address=10.1.10.7 comment="ap-corridor-upper-default" lease-time=1d server=dhcp-mgmt
 /ip/dhcp-server/lease/add mac-address=60:22:32:39:77:9C address=10.1.10.5 comment="switch-dori-office-default" lease-time=1d server=dhcp-mgmt
 /ip/dhcp-server/lease/add mac-address=60:22:32:83:6D:9E address=10.1.10.11 comment="ap-living-room-default" lease-time=1d server=dhcp-mgmt
