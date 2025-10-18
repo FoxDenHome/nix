@@ -69,9 +69,13 @@ in
 
     environment.etc."foxden/ipmiconfig.txt".text = ''
       ipmitool lan set 1 ipsrc static
-      ipmitool lan set 1 ipaddr ${netconfig.ipv4.address}
+      ipmitool lan set 1 ipaddr ${foxDenLib.util.removeIPCidr netconfig.ipv4.address}
       ipmitool lan set 1 netmask TODO
       ipmitool lan set 1 defgw ipaddr ${netconfig.ipv4.gateway}
+
+      ipmitool lan6 set 1 enables both
+      ipmitool lan6 set 1 static_addr 0 enable ${lib.replaceString "/" " " netconfig.ipv6.address}
+      ipmitool lan6 set 1 rtr_cfg dynamic
     '';
   };
 }

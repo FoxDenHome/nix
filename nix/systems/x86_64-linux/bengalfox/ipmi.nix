@@ -11,7 +11,7 @@
       };
       ipv6 = {
         address  = "fd2c:f4cb:63be:1::0c01/64";
-        gateway = "fd2c:f4cb:63be:1::1";
+        #gateway = "fd2c:f4cb:63be:1::1"; ignore for IPv6
         dns = "fd2c:f4cb:63be:1::35";
       };
     };
