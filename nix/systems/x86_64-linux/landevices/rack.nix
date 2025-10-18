@@ -5,17 +5,6 @@
       interfaces.default = { driver = "null"; } // intf;
     });
   in {
-    bengalfox-ipmi = mkIntf {
-      dns = {
-        name = "bengalfox-ipmi";
-        zone = "foxden.network";
-      };
-      mac = "00:25:90:FF:CF:5B";
-      addresses = [
-        "10.1.12.1/16"
-        "fd2c:f4cb:63be:1::0c01/64"
-      ];
-    };
     pikvm-rack = mkIntf {
       dns = {
         name = "pikvm-rack";
