@@ -63,13 +63,13 @@ let
 in
 {
   make = nixosConfigurations: let
-    hosts = foxDenLib.global.config.getAttrSet ["foxDen" "hosts" "hosts"] nixosConfigurations;
+    hostsBySystem = foxDenLib.global.config.get ["foxDen" "hosts" "hosts"] nixosConfigurations;
     gateways = foxDenLib.global.hosts.getGateways nixosConfigurations;
 
     resolveHostRef = rule: field: let
       ref = rule.${field};
       refType = builtins.typeOf ref;
-      interface = hosts.${ref.host}.interfaces.${ref.interface};
+      interface = hostsBySystem.${ref.system}.${ref.host}.interfaces.${ref.interface};
     in if refType == "string" || refType == "null"
       then
         [rule]
@@ -91,7 +91,7 @@ in
         (lib.lists.filter (rule: rule.gateway == gateway) (foxDenLib.global.config.getList ["foxDen" "firewall" "rules"] nixosConfigurations)))))
   );
 
-  nixosModule = { config, ... }: let
+  nixosModule = { config, hostName, ... }: let
     hostRefType = with lib.types; submodule {
       options = {
         host = lib.mkOption {
@@ -100,6 +100,10 @@ in
         interface = lib.mkOption {
           type = str;
           default = "default";
+        };
+        system = lib.mkOption {
+          type = str;
+          default = hostName;
         };
       };
     };

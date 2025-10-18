@@ -25,6 +25,16 @@ in
           zone = "doridian.net";
         }
       ];
+      firewall.portForwards = [
+        {
+          protocol = "tcp";
+          port = 22000;
+        }
+        {
+          protocol = "udp";
+          port = 22000;
+        }
+      ];
       snirouter.enable = true;
       addresses = [
         "2a01:4f9:2b:1a42::1:6/112"

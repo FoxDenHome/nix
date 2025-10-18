@@ -63,6 +63,20 @@ in
           zone = "foxden.network";
         }
       ];
+      firewall.portForwards = [
+        {
+          protocol = "tcp";
+          port = 5222;
+        }
+        {
+          protocol = "tcp";
+          port = 5223;
+        }
+        {
+          protocol = "tcp";
+          port = 5269;
+        }
+      ];
       snirouter.enable = true;
       addresses = [
         "2a01:4f9:2b:1a42::1:4/112"

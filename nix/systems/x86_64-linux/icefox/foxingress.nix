@@ -18,6 +18,20 @@ in
         name = "icefox-foxingress";
         zone = "foxden.network";
       };
+      firewall.portForwards = [
+        {
+          protocol = "tcp";
+          port = 80;
+        }
+        {
+          protocol = "tcp";
+          port = 443;
+        }
+        {
+          protocol = "udp";
+          port = 443;
+        }
+      ];
       addresses = [
         "2a01:4f9:2b:1a42::1:2/112"
         "10.99.12.2/24"
