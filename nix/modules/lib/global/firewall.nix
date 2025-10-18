@@ -37,7 +37,7 @@ let
               inherit (iface) gateway;
             }) addresses))
             (iface.firewall.openPorts ++ snirouterRules));
-      comment = if iface.name == "default" then iface.host else "${iface.host}-${iface.name}";
+      comment = if iface.name == "default" then "web-${iface.host}" else "web-${iface.host}-${iface.name}";
     in map (rule: rule // { inherit comment; }) rules) interfaces);
 in
 {
@@ -65,8 +65,8 @@ in
       (lib.flatten (map (rule: let
         srcRules = resolveRuleRef rule "source";
         allRules = lib.flatten (map (srcRule: resolveRuleRef srcRule "destination") srcRules);
-      in allRules)
-        (lib.lists.filter (rule: rule.gateway == gateway) (foxDenLib.global.config.getList ["foxDen" "firewall" "rules"] nixosConfigurations))))
+      in allRules) (nixpkgs.lib.lists.sortOn (rule: rule.priority)
+        (lib.lists.filter (rule: rule.gateway == gateway) (foxDenLib.global.config.getList ["foxDen" "firewall" "rules"] nixosConfigurations)))))
   );
 
   nixosModule = { config, ... }: let
@@ -99,7 +99,7 @@ in
           default = "forward";
         };
         action = lib.mkOption {
-          type = enum [ "accept" "reject" "drop" "log" "dnat" "snat" "masquerade" ];
+          type = enum [ "accept" "drop" "reject" "dnat" "masquerade" "jump" ];
           default = "accept";
         };
         srcport = lib.mkOption {
@@ -112,6 +112,7 @@ in
         };
         protocol = lib.mkOption {
           type = nullOr (enum [ "tcp" "udp" ]);
+          default = null;
         };
         source = lib.mkOption {
           type = nullOr addrType;
@@ -129,9 +130,25 @@ in
           type = str;
           default = "";
         };
+        toAddresses = lib.mkOption {
+          type = nullOr str;
+          default = null;
+        };
+        toPorts = lib.mkOption {
+          type = nullOr str;
+          default = null;
+        };
         comment = lib.mkOption {
           type = str;
           default = "";
+        };
+        priority = lib.mkOption {
+          type = int;
+          default = 0;
+        };
+        rejectWith = lib.mkOption {
+          type = nullOr str;
+          default = null;
         };
       };
     };

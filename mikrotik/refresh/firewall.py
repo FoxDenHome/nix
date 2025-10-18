@@ -11,13 +11,17 @@ def refresh_firewall():
         firewall_rules = json_load(file)
     unlink_safe("result")
 
-    header_lines = [
-        "/ip/firewall/filter/remove [find dynamic=no]",
-        "/ip/firewall/mangle/remove [find dynamic=no]",
-        "/ip/firewall/nat/remove [find dynamic=no]",
-        "/ipv6/firewall/filter/remove [find dynamic=no]",
-        "/ipv6/firewall/mangle/remove [find dynamic=no]",
-        "/ipv6/firewall/nat/remove [find dynamic=no]",
+    snout_lines = [
+        '/ip/firewall/filter/remove [find dynamic=no]',
+        '/ip/firewall/mangle/remove [find dynamic=no]',
+        '/ip/firewall/nat/remove [find dynamic=no]',
+        '/ipv6/firewall/filter/remove [find dynamic=no]',
+        '/ipv6/firewall/mangle/remove [find dynamic=no]',
+        '/ipv6/firewall/nat/remove [find dynamic=no]',
+        '/system/script/run firewall-rules-snout',
+    ]
+    tail_lines = [
+        '/system/script/run firewall-rules-tail',
     ]
     lines = []
     for rule in firewall_rules:
@@ -25,12 +29,16 @@ def refresh_firewall():
             val = rule.get(valname, "")
             return f' {name}={val}' if val else ''
         # add action=accept chain=lan-out-forward comment=Grafana dst-address=10.2.11.5 dst-port=80,443 protocol=tcp
-        family = "ip" if rule["family"] == "ipv4" else "ipv6"
+        if "family" in rule:
+            families = ["ip" if rule["family"] == "ipv4" else "ipv6"]
+        else:
+            families = ["ip", "ipv6"]
         chain = rule["chain"]
         if chain == "postrouting":
             chain = "srcnat"
         elif chain == "prerouting":
             chain = "dstnat"
-        lines.append(f'/{family}/firewall/{rule["table"]}/add chain="{chain}" comment="{rule.get("comment","")}"{optval("dst-address", "destination")}{optval("dst-port", "dstport")}{optval("protocol", "protocol")}{optval("src-address", "source")}{optval("src-port", "srcport")}{optval("jump-target", "jumpTarget")} action={rule["action"]}')
+        for family in families:
+            lines.append(f'/{family}/firewall/{rule["table"]}/add chain="{chain}" comment="{rule.get("comment","")}"{optval("dst-address", "destination")}{optval("dst-port", "dstport")}{optval("protocol", "protocol")}{optval("src-address", "source")}{optval("src-port", "srcport")}{optval("jump-target", "jumpTarget")}{optval("to-addresses", "toAddresses")}{optval("to-ports", "toPorts")}{optval("reject-with", "rejectWith")} action={rule["action"]}')
     with open(FILENAME, "w") as file:
-        file.write(("\n".join(header_lines + lines)) + "\n")
+        file.write(("\n".join(snout_lines + lines + tail_lines)) + "\n")
