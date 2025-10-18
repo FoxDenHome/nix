@@ -61,9 +61,6 @@ in
       '';
       family = "ip";
     };
-  };
-
-  networking.nftables.tables = {
     filter = {
       content = ''
         chain forward {

@@ -82,7 +82,7 @@ in
       };
     };
 
-    addrType = lib.types.oneOf [ hostRefType foxDenLib.types.ip (lib.types.enum [ "intranet" ]) ];
+    addrType = lib.types.either hostRefType lib.types.str;
 
     ruleType = with lib.types; submodule {
       options = {
@@ -124,6 +124,10 @@ in
         gateway = lib.mkOption {
           type = str;
           default = config.foxDen.hosts.gateway;
+        };
+        jumpTarget = lib.mkOption {
+          type = str;
+          default = "";
         };
         comment = lib.mkOption {
           type = str;

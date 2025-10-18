@@ -26,6 +26,11 @@ def refresh_firewall():
             return f' {name}={val}' if val else ''
         # add action=accept chain=lan-out-forward comment=Grafana dst-address=10.2.11.5 dst-port=80,443 protocol=tcp
         family = "ip" if rule["family"] == "ipv4" else "ipv6"
-        lines.append(f'/{family}/firewall/{rule["table"]}/add chain="{rule["chain"]}" comment="{rule.get("comment","")}"{optval("dst-address", "destination")}{optval("dst-port", "dstport")}{optval("protocol", "protocol")}{optval("src-address", "source")}{optval("src-port", "srcport")} action={rule["action"]}')
+        chain = rule["chain"]
+        if chain == "postrouting":
+            chain = "srcnat"
+        elif chain == "prerouting":
+            chain = "dstnat"
+        lines.append(f'/{family}/firewall/{rule["table"]}/add chain="{chain}" comment="{rule.get("comment","")}"{optval("dst-address", "destination")}{optval("dst-port", "dstport")}{optval("protocol", "protocol")}{optval("src-address", "source")}{optval("src-port", "srcport")}{optval("jump-target", "jumpTarget")} action={rule["action"]}')
     with open(FILENAME, "w") as file:
-        file.write(("\n".join(header_lines + sorted(lines))) + "\n")
+        file.write(("\n".join(header_lines + lines)) + "\n")
