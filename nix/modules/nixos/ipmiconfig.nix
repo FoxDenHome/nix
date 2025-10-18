@@ -68,7 +68,7 @@ in
       ${ipmitool} lan6 set 1 nolock static_addr 0 enable ${lib.replaceString "/" " " netconfig.ipv6.address}
       ${ipmitool} lan6 set 1 nolock rtr_cfg dynamic
 
-      # Raw code to set interface to shared/dedicated/failover mode
+      # Raw code to set interface to "${netconfig.interface}" mode
       ${ipmitool} raw 0x30 0x70 0x0c 1 ${rawInterfaceMap.${netconfig.interface}}
     '';
   in lib.mkIf ipmiconfig.enable {
