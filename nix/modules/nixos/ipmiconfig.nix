@@ -51,7 +51,7 @@ in
     ipmiconfig = config.foxDen.ipmiconfig;
     netconfig = ipmiconfig.network;
 
-    rawInterfaceMap = {
+    rawInterfaceModeMap = {
       dedicated = "0";
       shared = "1";
       failover = "2";
@@ -69,7 +69,7 @@ in
       ${ipmitool} lan6 set 1 nolock rtr_cfg dynamic
 
       # Raw code to set interface to "${netconfig.interface}" mode
-      ${ipmitool} raw 0x30 0x70 0x0c 1 ${rawInterfaceMap.${netconfig.interface}}
+      ${ipmitool} raw 0x30 0x70 0x0c 1 ${rawInterfaceModeMap.${netconfig.interface}}
     '';
   in lib.mkIf ipmiconfig.enable {
     foxDen.hosts.hosts.${netconfig.hostName} = {
