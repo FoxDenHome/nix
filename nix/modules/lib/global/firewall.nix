@@ -19,7 +19,7 @@ let
   mkPFRules = portForwards: map (fwd: {
     inherit (fwd) gateway protocol family comment;
     table = "nat";
-    chain = "prerouting";
+    chain = "port-forward";
     action = "dnat";
     dstport = fwd.port;
     toAddresses = fwd.target;

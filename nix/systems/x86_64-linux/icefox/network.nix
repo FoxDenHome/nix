@@ -89,7 +89,7 @@ in
   # We don't firewall on servers, so only use port forward type rules
   networking.nftables.tables = let
     firewallRules = firewall."${config.foxDen.hosts.gateway}";
-    portForwardrules = lib.lists.filter (rule: rule.action == "dnat" && rule.chain == "prerouting" && rule.table == "nat") firewallRules;
+    portForwardrules = lib.lists.filter (rule: rule.action == "dnat" && rule.chain == "port-forward" && rule.table == "nat") firewallRules;
 
     sharedIPRules = map (rule: "  ${rule.protocol} dport ${builtins.toString rule.dstport} dnat to ${rule.toAddresses} comment \"${rule.comment}\"") portForwardrules;
   in {
