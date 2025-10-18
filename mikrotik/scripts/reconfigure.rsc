@@ -1,4 +1,5 @@
 /system/script/run gen-dhcp
+/system/script/run gen-firewall
 /system/script/run firewall-update
 :put Done
 

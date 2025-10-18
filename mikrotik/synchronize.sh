@@ -42,12 +42,6 @@ chmod 600 "$F"
 echo > "$F"
 
 transfer_section_notdynamic_rmall '/ipv6/dhcp-server/binding'
-transfer_section_notdynamic_expall '/ip/firewall/filter'
-transfer_section_notdynamic_expall '/ip/firewall/mangle'
-transfer_section_notdynamic_expall '/ip/firewall/nat'
-transfer_section_notdynamic_expall '/ipv6/firewall/filter'
-transfer_section_notdynamic_expall '/ipv6/firewall/mangle'
-transfer_section_notdynamic_expall '/ipv6/firewall/nat'
 transfer_section_localclause '/system/scheduler'
 
 scp "$F" router-backup.foxden.network:/tmpfs-scratch/transfer.rsc
