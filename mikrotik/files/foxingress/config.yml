@@ -10,58 +10,58 @@ defaults:
       port: 443
 hosts:
   api.spaceage.mp:
-    template: spaceage-api
+    template: spaceage-api-default
   archlinux.foxden.network:
-    template: mirror
+    template: mirror-default
   cachyos.foxden.network:
-    template: mirror
+    template: mirror-default
   e621.foxden.network:
-    template: e621dumper
+    template: e621dumper-default
   f0x.es:
-    template: foxcaves
+    template: foxcaves-default
   foxcav.es:
-    template: foxcaves
+    template: foxcaves-default
   foxcaves.foxden.network:
-    template: foxcaves
+    template: foxcaves-default
   furaffinity.foxden.network:
-    template: fadumper
+    template: fadumper-default
   git.foxden.network:
-    template: git
+    template: git-default
   homeassistant.foxden.network:
-    template: homeassistant
+    template: homeassistant-default
   jellyfin.foxden.network:
-    template: jellyfin
+    template: jellyfin-default
   kiwix.foxden.network:
-    template: kiwix
+    template: kiwix-default
   mirror.foxden.network:
-    template: mirror
+    template: mirror-default
   nas.foxden.network:
-    template: nas
+    template: nas-default
   restic.foxden.network:
-    template: restic
+    template: restic-default
   spaceage-api.foxden.network:
-    template: spaceage-api
+    template: spaceage-api-default
   spaceage-tts.foxden.network:
-    template: spaceage-tts
+    template: spaceage-tts-default
   spaceage-website.foxden.network:
-    template: spaceage-website
+    template: spaceage-website-default
   spaceage.mp:
-    template: spaceage-website
+    template: spaceage-website-default
   tts.spaceage.mp:
-    template: spaceage-tts
+    template: spaceage-tts-default
   www.f0x.es:
-    template: foxcaves
+    template: foxcaves-default
   www.foxcav.es:
-    template: foxcaves
+    template: foxcaves-default
   www.spaceage.mp:
-    template: spaceage-website
+    template: spaceage-website-default
 listeners:
   http: :80
   https: :443
   prometheus: :9001
   quic: :443
 templates:
-  e621dumper:
+  e621dumper-default:
     default:
       host: 10.3.10.12
       proxyProtocol: true
@@ -71,7 +71,7 @@ templates:
       port: 443
     quic:
       port: 443
-  fadumper:
+  fadumper-default:
     default:
       host: 10.3.10.13
       proxyProtocol: true
@@ -81,7 +81,7 @@ templates:
       port: 443
     quic:
       port: 443
-  foxcaves:
+  foxcaves-default:
     default:
       host: 10.3.10.1
       proxyProtocol: true
@@ -91,7 +91,7 @@ templates:
       port: 444
     quic:
       port: 443
-  git:
+  git-default:
     default:
       host: 10.3.10.2
       proxyProtocol: true
@@ -101,7 +101,7 @@ templates:
       port: 443
     quic:
       port: 443
-  homeassistant:
+  homeassistant-default:
     default:
       host: 10.2.12.2
       proxyProtocol: false
@@ -111,7 +111,7 @@ templates:
       port: 443
     quic:
       port: 443
-  jellyfin:
+  jellyfin-default:
     default:
       host: 10.2.11.3
       proxyProtocol: true
@@ -121,7 +121,7 @@ templates:
       port: 443
     quic:
       port: 443
-  kiwix:
+  kiwix-default:
     default:
       host: 10.2.11.6
       proxyProtocol: true
@@ -131,7 +131,7 @@ templates:
       port: 443
     quic:
       port: 443
-  mirror:
+  mirror-default:
     default:
       host: 10.3.10.11
       proxyProtocol: true
@@ -141,7 +141,7 @@ templates:
       port: 444
     quic:
       port: 443
-  nas:
+  nas-default:
     default:
       host: 10.2.11.1
       proxyProtocol: true
@@ -151,7 +151,7 @@ templates:
       port: 443
     quic:
       port: 443
-  restic:
+  restic-default:
     default:
       host: 10.2.11.12
       proxyProtocol: true
@@ -161,7 +161,7 @@ templates:
       port: 443
     quic:
       port: 443
-  spaceage-api:
+  spaceage-api-default:
     default:
       host: 10.3.10.5
       proxyProtocol: true
@@ -171,7 +171,7 @@ templates:
       port: 443
     quic:
       port: 443
-  spaceage-tts:
+  spaceage-tts-default:
     default:
       host: 10.3.10.6
       proxyProtocol: true
@@ -181,7 +181,7 @@ templates:
       port: 443
     quic:
       port: 443
-  spaceage-website:
+  spaceage-website-default:
     default:
       host: 10.3.10.9
       proxyProtocol: true

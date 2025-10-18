@@ -6,7 +6,7 @@ let
   mkIfacePF = interfaces: lib.flatten (
     map (iface:
       map (pf: let
-        comment = if pf.comment == "" then "${iface.host}-${iface}" else pf.comment;
+        comment = if pf.comment == "" then "${iface.host}-${iface.name}" else pf.comment;
       in {
         target = {
           host = iface.host;
@@ -28,41 +28,38 @@ let
   }) portForwards;
   mkIfaceRules = interfaces: lib.flatten (
     map (iface: let
-      rules = let
-        addresses = map util.removeIPCidr iface.addresses;
-        snirouter = iface.snirouter;
-        snirouterRules =
-          if snirouter.enable then
-            (if snirouter.httpPort > 0 then [{
-              port = snirouter.httpPort;
-              protocol = "tcp";
-              source = null;
-            }] else []) ++
-            (if snirouter.httpsPort > 0 then [{
-              port = snirouter.httpsPort;
-              protocol = "tcp";
-              source = null;
-            }] else []) ++
-            (if snirouter.quicPort > 0 then [{
-              port = snirouter.quicPort;
-              protocol = "udp";
-              source = null;
-            }] else [])
-          else
-            [];
-        in
-          lib.flatten (map (rule:
-            (map (address: {
-              family = if util.isIPv6 address then "ipv6" else "ipv4";
-              destination = address;
-              dstport = rule.port;
-              source = rule.source or null;
-              inherit (rule) protocol;
-              inherit (iface) gateway;
-            }) addresses))
-            (iface.firewall.openPorts ++ iface.firewall.portForwards ++ snirouterRules));
-      comment = "web-${iface.host}-${iface.name}";
-    in map (rule: rule // { inherit comment; }) rules) interfaces);
+      addresses = map util.removeIPCidr iface.addresses;
+      snirouter = iface.snirouter;
+      snirouterRules =
+        if snirouter.enable then
+          (if snirouter.httpPort > 0 then [{
+            port = snirouter.httpPort;
+            protocol = "tcp";
+            source = null;
+          }] else []) ++
+          (if snirouter.httpsPort > 0 then [{
+            port = snirouter.httpsPort;
+            protocol = "tcp";
+            source = null;
+          }] else []) ++
+          (if snirouter.quicPort > 0 then [{
+            port = snirouter.quicPort;
+            protocol = "udp";
+            source = null;
+          }] else [])
+        else
+          [];
+      rules = lib.flatten (map (rule:
+        (map (address: {
+          family = if util.isIPv6 address then "ipv6" else "ipv4";
+          destination = address;
+          dstport = rule.port;
+          source = rule.source or null;
+          inherit (rule) protocol;
+          inherit (iface) gateway;
+        }) addresses))
+        (iface.firewall.openPorts ++ iface.firewall.portForwards ++ snirouterRules));
+    in map (rule: rule // { comment = "web-${iface.host}-${iface.name}"; }) rules) interfaces);
 in
 {
   make = nixosConfigurations: let
