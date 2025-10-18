@@ -56,8 +56,8 @@ in
 {
   lib.foxDenSys = {
     inherit routedInterface mkMinHost;
-    mkHost = ifcfg: ifcfg-foxden: iface: lib.mkMerge [
-      (mkMinHost ifcfg ifcfg-foxden iface)
+    mkHost = iface: lib.mkMerge [
+      (mkMinHost iface)
       {
         interfaces.default.routes = [
           { Destination = "0.0.0.0/0"; Gateway = "95.216.116.129"; }
@@ -66,7 +66,7 @@ in
       }
     ];
     mkV6Host = iface: lib.mkMerge [
-      (mkMinHost ifcfg ifcfg-foxden ({ mac = null; } // iface))
+      (mkMinHost ({ mac = null; } // iface))
       {
         interfaces.default = {
           dns.auxAddresses = [ "95.216.116.140" ];
