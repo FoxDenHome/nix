@@ -29,9 +29,9 @@ add action=dst-nat chain=port-forward comment=QUIC dst-port=443 protocol=udp to-
 
 /ipv6/firewall/nat
 add action=jump chain=dstnat comment="Local forward" dst-address-list=local-ip in-interface-list=zone-local jump-target=local-port-forward
-add action=src-nat chain=srcnat comment="VPN Masq" dst-address=!fd2c:f4cb:63be::/60 in-interface=wg-vpn to-address=2a0e:7d44:f069:a00::a64:ffff/128
-add action=netmap chain=dstnat comment="Ingress PT" dst-address=2a0e:7d44:f069:a00::/60 to-address=fd2c:f4cb:63be::/60
-add action=netmap chain=srcnat comment="Egress PT" dst-address=!fd2c:f4cb:63be::/60 in-interface-list=zone-local src-address=fd2c:f4cb:63be::/60 to-address=2a0e:7d44:f069:a00::/60
+add action=src-nat chain=srcnat comment="VPN Masq" dst-address=!fd2c:f4cb:63be::/60 in-interface=wg-vpn to-address=fd2d::ffff/128
+add action=netmap chain=dstnat comment="Ingress PT" dst-address=fd2d::/60 to-address=fd2c:f4cb:63be::/60
+add action=netmap chain=srcnat comment="Egress PT" dst-address=!fd2c:f4cb:63be::/60 in-interface-list=zone-local src-address=fd2c:f4cb:63be::/60 to-address=fd2d::/60
 add action=dst-nat chain=local-port-forward comment="DNS TCP" dst-port=53 protocol=tcp to-address=fd2c:f4cb:63be::ac11:202/128 to-ports=53
 add action=dst-nat chain=local-port-forward comment="DNS UDP" dst-port=53 protocol=udp to-address=fd2c:f4cb:63be::ac11:202/128 to-ports=53
 add action=dst-nat chain=local-port-forward comment="foxIngress Prometheus" dst-port=5303 protocol=tcp to-address=fd2c:f4cb:63be::ac11:2/128 to-ports=9001
