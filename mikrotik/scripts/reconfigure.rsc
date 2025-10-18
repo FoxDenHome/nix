@@ -1,4 +1,5 @@
-/system/script/run dhcp-leases-reload
+/system/script/run gen-dhcp
+/system/script/run gen-firewall
 :put Done
 
 :do {
