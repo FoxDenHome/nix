@@ -73,6 +73,12 @@ in
           zone = "doridian.net";
         }
       ];
+      firewall.portForwards = [
+        {
+          protocol = "tcp";
+          port = 25565;
+        }
+      ];
       addresses = [
         "10.3.10.8/16"
         "fd2c:f4cb:63be:3::a08/64"
@@ -92,6 +98,12 @@ in
         {
           name = "play";
           zone = "spaceage.mp";
+        }
+      ];
+      firewall.portForwards = [
+        {
+          protocol = "udp";
+          port = 27015;
         }
       ];
       addresses = [

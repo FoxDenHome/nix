@@ -3,7 +3,30 @@ let
   lib = nixpkgs.lib;
   util = foxDenLib.util;
 
-  mkRules = interfaces: lib.flatten (
+  mkIfacePF = interfaces: lib.flatten (
+    map (iface:
+      map (pf: let
+        comment = if pf.comment == "" then "${iface.host}-${iface}" else pf.comment;
+      in {
+        target = {
+          host = iface.host;
+          interface = iface.name;
+        };
+        inherit comment;
+        inherit (pf) port protocol;
+        inherit (iface) gateway;
+      }) iface.firewall.portForwards)
+    interfaces
+  );
+  mkPFRules = portForwards: map (fwd: {
+    inherit (fwd) gateway protocol family comment;
+    table = "nat";
+    chain = "prerouting";
+    action = "dnat";
+    dstport = fwd.port;
+    toAddresses = fwd.target;
+  }) portForwards;
+  mkIfaceRules = interfaces: lib.flatten (
     map (iface: let
       rules = let
         addresses = map util.removeIPCidr iface.addresses;
@@ -33,11 +56,12 @@ let
               family = if util.isIPv6 address then "ipv6" else "ipv4";
               destination = address;
               dstport = rule.port;
-              inherit (rule) source protocol;
+              source = rule.source or null;
+              inherit (rule) protocol;
               inherit (iface) gateway;
             }) addresses))
-            (iface.firewall.openPorts ++ snirouterRules));
-      comment = if iface.name == "default" then "web-${iface.host}" else "web-${iface.host}-${iface.name}";
+            (iface.firewall.openPorts ++ iface.firewall.portForwards ++ snirouterRules));
+      comment = "web-${iface.host}-${iface.name}";
     in map (rule: rule // { inherit comment; }) rules) interfaces);
 in
 {
@@ -45,7 +69,7 @@ in
     hosts = foxDenLib.global.config.getAttrSet ["foxDen" "hosts" "hosts"] nixosConfigurations;
     gateways = foxDenLib.global.hosts.getGateways nixosConfigurations;
 
-    resolveRuleRef = rule: field: let
+    resolveHostRef = rule: field: let
       ref = rule.${field};
       refType = builtins.typeOf ref;
       interface = hosts.${ref.host}.interfaces.${ref.interface};
@@ -63,8 +87,9 @@ in
   in lib.attrsets.genAttrs gateways (gateway:
     map (lib.attrsets.filterAttrs (name: val: val != null && name != "gateway"))
       (lib.flatten (map (rule: let
-        srcRules = resolveRuleRef rule "source";
-        allRules = lib.flatten (map (srcRule: resolveRuleRef srcRule "destination") srcRules);
+        srcRules = resolveHostRef rule "source";
+        dstRules = lib.flatten (map (srcRule: resolveHostRef srcRule "destination") srcRules);
+        allRules = lib.flatten (map (dstRule: resolveHostRef dstRule "toAddresses") dstRules);
       in allRules) (nixpkgs.lib.lists.sortOn (rule: rule.priority)
         (lib.lists.filter (rule: rule.gateway == gateway) (foxDenLib.global.config.getList ["foxDen" "firewall" "rules"] nixosConfigurations)))))
   );
@@ -131,11 +156,11 @@ in
           default = "";
         };
         toAddresses = lib.mkOption {
-          type = nullOr str;
+          type = nullOr addrType;
           default = null;
         };
         toPorts = lib.mkOption {
-          type = nullOr str;
+          type = nullOr ints.u16;
           default = null;
         };
         comment = lib.mkOption {
@@ -152,12 +177,46 @@ in
         };
       };
     };
+
+    portForwardType = with lib.types; submodule {
+      options = {
+        family = lib.mkOption {
+          type = enum [ "ipv4" ];
+          default = "ipv4";
+        };
+        target = lib.mkOption {
+          type = nullOr addrType;
+          default = null;
+        };
+        gateway = lib.mkOption {
+          type = str;
+          default = config.foxDen.hosts.gateway;
+        };
+        port = lib.mkOption {
+          type = ints.u16;
+        };
+        protocol = lib.mkOption {
+          type = enum [ "tcp" "udp" ];
+        };
+        comment = lib.mkOption {
+          type = str;
+          default = "";
+        };
+      };
+    };
   in {
     options.foxDen.firewall.rules = lib.mkOption {
       type = lib.types.listOf ruleType;
       default = [];
     };
+    options.foxDen.firewall.portForwards = lib.mkOption {
+      type = lib.types.listOf portForwardType;
+      default = [];
+    };
 
-    config.foxDen.firewall.rules = mkRules (foxDenLib.global.hosts.getInterfacesFromHosts config.foxDen.hosts.hosts);
+    config.foxDen.firewall.portForwards = mkIfacePF (foxDenLib.global.hosts.getInterfacesFromHosts config.foxDen.hosts.hosts);
+
+    config.foxDen.firewall.rules = (mkPFRules config.foxDen.firewall.portForwards)
+      ++ (mkIfaceRules (foxDenLib.global.hosts.getInterfacesFromHosts config.foxDen.hosts.hosts));
   };
 }

@@ -40,11 +40,14 @@ in
         };
         protocol = nixpkgs.lib.mkOption {
           type = enum [ "tcp" "udp" ];
-          default = "tcp";
         };
         source = nixpkgs.lib.mkOption {
-          type = oneOf foxDenLib.types.ip (util.ip enum [ "any" "private" ]);
-          default = "any";
+          type = nullOr str;
+          default = null;
+        };
+        comment = nixpkgs.lib.mkOption {
+          type = str;
+          default = "";
         };
       };
     };
@@ -86,6 +89,10 @@ in
         };
         firewall = {
           openPorts = nixpkgs.lib.mkOption {
+            type = listOf portType;
+            default = [];
+          };
+          portForwards = nixpkgs.lib.mkOption {
             type = listOf portType;
             default = [];
           };

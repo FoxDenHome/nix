@@ -13,7 +13,7 @@ let
       map (iface: let
         ipv4 = ifaceFirstV4 iface;
         ipv6 = ifaceFirstV6 iface;
-        name = if iface.name == "default" then iface.host else "${iface.host}-${iface.name}";
+        name = "${iface.host}-${iface.name}";
       in if ipv4 != "" && ipv6 != ""
         then [{ inherit (iface) mac; inherit name ipv4 ipv6; }]
         else if ipv4 != ""
