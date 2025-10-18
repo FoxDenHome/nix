@@ -63,6 +63,9 @@ in
       # TODO: This seems to crash the ipmi on repeated use
       #       the script needs to be adjusted to check values and only
       #       apply changes
+
+      ${pkgs.systemd}/bin/systemctl stop superfan || true
+
       ${ipmitool} lan set 1 ipsrc static
       ${ipmitool} lan set 1 ipaddr ${foxDenLib.util.removeIPCidr netconfig.ipv4.address}
       ${ipmitool} lan set 1 netmask ${foxDenLib.util.ipv4Netmask netconfig.ipv4.address}
@@ -74,6 +77,8 @@ in
 
       # Raw code to set interface to "${netconfig.interface}" mode
       ${ipmitool} raw 0x30 0x70 0x0c 1 ${rawInterfaceModeMap.${netconfig.interface}}
+
+      ${pkgs.systemd}/bin/systemctl start superfan || true
     '';
   in lib.mkIf ipmiconfig.enable {
     foxDen.hosts.hosts.${netconfig.hostName} = {
