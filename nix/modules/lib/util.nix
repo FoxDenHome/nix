@@ -35,22 +35,58 @@ let
         (nixpkgs.lib.lists.reverseList
           (nixpkgs.lib.lists.flatten partsWithDot))) + ".ip6.arpa");
 
+  ipv4CidrNetmaskMap = [
+    "0.0.0.0"
+    "128.0.0.0"
+    "192.0.0.0"
+    "224.0.0.0"
+    "240.0.0.0"
+    "248.0.0.0"
+    "252.0.0.0"
+    "254.0.0.0"
+    "255.0.0.0"
+    "255.128.0.0"
+    "255.192.0.0"
+    "255.224.0.0"
+    "255.240.0.0"
+    "255.248.0.0"
+    "255.252.0.0"
+    "255.254.0.0"
+    "255.255.0.0"
+    "255.255.128.0"
+    "255.255.192.0"
+    "255.255.224.0"
+    "255.255.240.0"
+    "255.255.248.0"
+    "255.255.252.0"
+    "255.255.254.0"
+    "255.255.255.0"
+    "255.255.255.128"
+    "255.255.255.192"
+    "255.255.255.224"
+    "255.255.255.240"
+    "255.255.255.248"
+    "255.255.255.252"
+    "255.255.255.254"
+    "255.255.255.255"
+  ];
+
   removeIPCidr = (ip: builtins.elemAt (nixpkgs.lib.strings.splitString "/" ip) 0);
+  getIPCidr = (ip: let
+    ipSplit = nixpkgs.lib.strings.splitString "/" ip;
+  in builtins.elemAt ipSplit ((nixpkgs.lib.lists.length ipSplit) - 1));
 in
 {
-  mkShortHash = mkShortHash;
-
+  inherit isIPv6 mkShortHash removeIPCidr getIPCidr;
   isPrivateIP = (ip: if (isIPv6 ip) then (isPrivateIPv6 ip) else (isPrivateIPv4 ip));
-
-  isIPv6 = isIPv6;
   isIPv4 = (ip: !isIPv6 ip);
-
-  removeIPCidr = removeIPCidr;
   addHostCidr = (ipRaw: let
     ip = removeIPCidr ipRaw;
   in if (isIPv6 ip) then "${ip}/128" else "${ip}/32");
+  ipv4Netmask = (ipOrCidr: let
+    cidr = nixpkgs.lib.strings.toIntBase10 (getIPCidr ipOrCidr);
+  in builtins.elemAt ipv4CidrNetmaskMap cidr);
 
   bracketIPv6 = (ip: if (isIPv6 ip) then "[${ip}]" else ip);
-
   mkPtr = (ip: if (isIPv6 ip) then ipv6Ptr ip else ipv4Ptr ip);
 }
