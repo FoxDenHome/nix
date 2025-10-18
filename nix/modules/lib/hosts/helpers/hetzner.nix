@@ -50,7 +50,7 @@ in
     (mkMinHost ifcfg ifcfg-foxden ({ mac = null; } // iface))
     {
       interfaces.default = {
-        dns.auxAddresses = [ "95.216.116.180" ];
+        dns.auxAddresses = [ "95.216.116.140" ];
         routes = [
           { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::1:1"; }
         ];
