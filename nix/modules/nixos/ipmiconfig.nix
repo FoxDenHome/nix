@@ -59,6 +59,10 @@ in
 
     ipmitool = "${pkgs.ipmitool}/bin/ipmitool";
     configScript = ''
+      set -x
+      # TODO: This seems to crash the ipmi on repeated use
+      #       the script needs to be adjusted to check values and only
+      #       apply changes
       ${ipmitool} lan set 1 ipsrc static
       ${ipmitool} lan set 1 ipaddr ${foxDenLib.util.removeIPCidr netconfig.ipv4.address}
       ${ipmitool} lan set 1 netmask ${foxDenLib.util.ipv4Netmask netconfig.ipv4.address}
@@ -88,17 +92,18 @@ in
       };
     };
 
-    systemd.services.ipmiconfig = {
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        Restart = "no";
+    environment.etc."foxden/ipmiconfig.txt".text = configScript;
+    # systemd.services.ipmiconfig = {
+    #   serviceConfig = {
+    #     Type = "oneshot";
+    #     RemainAfterExit = true;
+    #     Restart = "no";
 
-        ExecStart = [
-          (pkgs.writeShellScript "ipmiconfig.sh" configScript)
-        ];
-      };
-      wantedBy = [ "multi-user.target" ];
-    };
+    #     ExecStart = [
+    #       (pkgs.writeShellScript "ipmiconfig.sh" configScript)
+    #     ];
+    #   };
+    #   wantedBy = [ "multi-user.target" ];
+    # };
   };
 }
