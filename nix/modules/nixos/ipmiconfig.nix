@@ -60,10 +60,6 @@ in
     ipmitool = "${pkgs.ipmitool}/bin/ipmitool";
     configScript = ''
       set -x
-      # TODO: This seems to crash the ipmi on repeated use
-      #       the script needs to be adjusted to check values and only
-      #       apply changes
-
       ${pkgs.systemd}/bin/systemctl stop superfan || true
 
       ${ipmitool} lan set 1 ipsrc static
@@ -97,17 +93,16 @@ in
       };
     };
 
-    environment.etc."foxden/ipmiconfig.txt".text = configScript;
-    # systemd.services.ipmiconfig = {
-    #   serviceConfig = {
-    #     Type = "oneshot";
-    #     RemainAfterExit = true;
-    #     Restart = "no";
-    #     ExecStart = [
-    #       (pkgs.writeShellScript "ipmiconfig.sh" configScript)
-    #     ];
-    #   };
-    #   wantedBy = [ "multi-user.target" ];
-    # };
+    systemd.services.ipmiconfig = {
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        Restart = "no";
+        ExecStart = [
+          (pkgs.writeShellScript "ipmiconfig.sh" configScript)
+        ];
+      };
+      wantedBy = [ "multi-user.target" ];
+    };
   };
 }
