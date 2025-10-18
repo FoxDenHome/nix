@@ -3,49 +3,139 @@ let
   lib = nixpkgs.lib;
   util = foxDenLib.util;
 
-  mkForGateway = gateway: interfaces: let
-    mkRules = iface: let
-      addresses = map util.removeIPCidr iface.addresses;
-      snirouter = iface.snirouter;
-      snirouterRules =
-        if snirouter.enable then
-          (if snirouter.httpPort > 0 then [{
-            port = snirouter.httpPort;
-            protocol = "tcp";
-            internalOnly = false;
-          }] else []) ++
-          (if snirouter.httpsPort > 0 then [{
-            port = snirouter.httpsPort;
-            protocol = "tcp";
-            internalOnly = false;
-          }] else []) ++
-          (if snirouter.quicPort > 0 then [{
-            port = snirouter.quicPort;
-            protocol = "udp";
-            internalOnly = false;
-          }] else [])
-        else
-          [];
-      in
-        lib.flatten (map (rule:
-          (map (address: {
-            inherit (rule) port protocol internalOnly;
-            inherit address;
-            family = if util.isIPv6 address then "ipv6" else "ipv4";
-          }) addresses))
-          (iface.firewall.openPorts ++ snirouterRules));
-  in
-    lib.flatten (
-      map (iface: let
-        rules = mkRules iface;
-        targetName = if iface.name == "default" then iface.host else "${iface.host}-${iface.name}";
-      in map (rule: rule // { inherit targetName; }) rules) interfaces);
+  mkRules = interfaces: lib.flatten (
+    map (iface: let
+      rules = let
+        addresses = map util.removeIPCidr iface.addresses;
+        snirouter = iface.snirouter;
+        snirouterRules =
+          if snirouter.enable then
+            (if snirouter.httpPort > 0 then [{
+              port = snirouter.httpPort;
+              protocol = "tcp";
+              source = null;
+            }] else []) ++
+            (if snirouter.httpsPort > 0 then [{
+              port = snirouter.httpsPort;
+              protocol = "tcp";
+              source = null;
+            }] else []) ++
+            (if snirouter.quicPort > 0 then [{
+              port = snirouter.quicPort;
+              protocol = "udp";
+              source = null;
+            }] else [])
+          else
+            [];
+        in
+          lib.flatten (map (rule:
+            (map (address: {
+              family = if util.isIPv6 address then "ipv6" else "ipv4";
+              destination = address;
+              dstport = rule.port;
+              inherit (rule) source protocol;
+              inherit (iface) gateway;
+            }) addresses))
+            (iface.firewall.openPorts ++ snirouterRules));
+      comment = if iface.name == "default" then iface.host else "${iface.host}-${iface.name}";
+    in map (rule: rule // { inherit comment; }) rules) interfaces);
 in
 {
   make = nixosConfigurations: let
-    interfaces = foxDenLib.global.hosts.getInterfaces nixosConfigurations;
+    hosts = foxDenLib.global.config.getAttrSet ["foxDen" "hosts" "hosts"] nixosConfigurations;
     gateways = foxDenLib.global.hosts.getGateways nixosConfigurations;
+
+    resolveRuleRef = rule: ref: let
+      refType = builtins.typeOf ref;
+      interface = hosts.${ref.host}.interfaces.${ref.interface};
+    in if refType == "set"
+      then
+        (lib.lists.filter (subRule: rule.family == null || subRule.family == rule.family)
+          (map (address: rule // {
+              family = if util.isIPv6 address then "ipv6" else "ipv4";
+              inherit (interface) gateway;
+            }) interface.addresses))
+      else
+        [rule];
+
   in lib.attrsets.genAttrs gateways (gateway:
-    mkForGateway gateway interfaces
+    map (lib.attrsets.filterAttrs (name: val: val != null && name != "gateway"))
+      (lib.flatten (map (rule: let
+        srcRules = resolveRuleRef rule rule.source;
+        allRules = lib.flatten (map (srcRule:
+          resolveRuleRef rule rule.destination) srcRules);
+      in allRules)
+        (lib.lists.filter (rule: rule.gateway == gateway) (foxDenLib.global.config.getList ["foxDen" "firewall" "rules"] nixosConfigurations))))
   );
+
+  nixosModule = { config, ... }: let
+    hostRefType = with lib.types; submodule {
+      options = {
+        host = lib.mkOption {
+          type = str;
+        };
+        interface = lib.mkOption {
+          type = str;
+          default = "default";
+        };
+      };
+    };
+
+    addrType = lib.types.oneOf [ hostRefType foxDenLib.types.ip (lib.types.enum [ "intranet" ]) ];
+
+    ruleType = with lib.types; submodule {
+      options = {
+        family = lib.mkOption {
+          type = nullOr (enum [ "ipv4" "ipv6" ]);
+          default = null;
+        };
+        table = lib.mkOption {
+          type = enum [ "filter" "nat" "mangle" "raw" ];
+          default = "filter";
+        };
+        chain = lib.mkOption {
+          type = str;
+          default = "forward";
+        };
+        action = lib.mkOption {
+          type = enum [ "accept" "reject" "drop" "log" "dnat" "snat" "masquerade" ];
+          default = "accept";
+        };
+        srcport = lib.mkOption {
+          type = nullOr ints.u16;
+          default = null;
+        };
+        dstport = lib.mkOption {
+          type = nullOr ints.u16;
+          default = null;
+        };
+        protocol = lib.mkOption {
+          type = nullOr (enum [ "tcp" "udp" ]);
+        };
+        source = lib.mkOption {
+          type = nullOr addrType;
+          default = null;
+        };
+        destination = lib.mkOption {
+          type = nullOr addrType;
+          default = null;
+        };
+        gateway = lib.mkOption {
+          type = str;
+          default = config.foxDen.hosts.gateway;
+        };
+        comment = lib.mkOption {
+          type = str;
+          default = "";
+        };
+      };
+    };
+  in {
+    options.foxDen.firewall.rules = lib.mkOption {
+      type = lib.types.listOf ruleType;
+      default = [];
+    };
+
+    config.foxDen.firewall.rules = mkRules (foxDenLib.global.hosts.getInterfacesFromHosts config.foxDen.hosts.hosts);
+  };
 }

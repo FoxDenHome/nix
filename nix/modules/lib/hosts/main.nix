@@ -42,9 +42,9 @@ in
           type = enum [ "tcp" "udp" ];
           default = "tcp";
         };
-        internalOnly = nixpkgs.lib.mkOption {
-          type = bool;
-          default = false;
+        source = nixpkgs.lib.mkOption {
+          type = oneOf foxDenLib.types.ip (util.ip enum [ "any" "private" ]);
+          default = "any";
         };
       };
     };
