@@ -36,10 +36,12 @@ in
     portType = with nixpkgs.lib.types; submodule {
       options = {
         port = nixpkgs.lib.mkOption {
-          type = ints.u16;
+          type = nullOr ints.u16;
+          default = null;
         };
         protocol = nixpkgs.lib.mkOption {
-          type = enum [ "tcp" "udp" ];
+          type = nullOr (enum [ "tcp" "udp" ]);
+          default = null;
         };
         source = nixpkgs.lib.mkOption {
           type = nullOr str;

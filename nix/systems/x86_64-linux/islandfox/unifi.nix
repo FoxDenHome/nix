@@ -7,8 +7,6 @@ in
     unifi = {
       enable = true;
       host = "unifi";
-      enableHttp = true;
-      tls = true;
     };
   };
 
@@ -17,8 +15,15 @@ in
       dns = {
         name = "unifi";
         zone = "foxden.network";
-        dynDns = true;
       };
+      firewall.openPorts = [
+        {
+          source = "10.2.0.0/16";
+        }
+        {
+          source = "fd2c:f4cb:63be:2::/16";
+        }
+      ];
       addresses = [
         "10.1.10.1/16"
         "fd2c:f4cb:63be:1::a01/64"

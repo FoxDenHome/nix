@@ -54,9 +54,10 @@ let
           action = "accept";
           family = if util.isIPv6 address then "ipv6" else "ipv4";
           destination = address;
-          dstport = rule.port;
+          dstport = rule.port or null;
           source = rule.source or null;
-          inherit (rule) protocol comment;
+          protocol = rule.protocol or null;
+          inherit (rule) comment;
           inherit (iface) gateway;
         }) addresses))
         (iface.firewall.openPorts ++ iface.firewall.portForwards ++ snirouterRules))) interfaces);

@@ -1,4 +1,4 @@
-{ ... } :
+{ foxDenLib, ... } :
 {
   config.foxDen.hosts.hosts = let
     mkIntf = (intf: {
@@ -145,6 +145,7 @@
         "10.5.10.1/16"
         "fd2c:f4cb:63be:5::0a01/64"
       ];
+      firewall.openPorts = foxDenLib.firewall.templates.trusted;
     };
     pdu-rack = mkIntf {
       dns = {
