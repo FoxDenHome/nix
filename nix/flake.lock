@@ -823,11 +823,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1760820401,
-        "narHash": "sha256-RobGNopyX5ajY42r3zmqG2EDCYllCCPv/1Xox6EKa64=",
+        "lastModified": 1760821229,
+        "narHash": "sha256-14DQTiNiKmw30ohrT9jVa6DVY6y5sU0C2YKHEWwtKy4=",
         "owner": "Doridian",
         "repo": "superfan",
-        "rev": "57abc0c17fbf14c448344bf1fc4edb76f7e69bb3",
+        "rev": "a1b8a3ba1f2c2b31be6508916b3431055f30771b",
         "type": "github"
       },
       "original": {
