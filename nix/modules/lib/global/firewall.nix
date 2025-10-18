@@ -5,14 +5,12 @@ let
 
   mkIfacePF = interfaces: lib.flatten (
     map (iface:
-      map (pf: let
-        comment = if pf.comment == "" then "${iface.host}-${iface.name}" else pf.comment;
-      in {
+      map (pf: {
         target = {
           host = iface.host;
           interface = iface.name;
         };
-        inherit comment;
+        comment = if pf.comment == "" then "portforward-${iface.host}-${iface.name}" else pf.comment;
         inherit (pf) port protocol;
         inherit (iface) gateway;
       }) iface.firewall.portForwards)
@@ -35,31 +33,33 @@ let
           (if snirouter.httpPort > 0 then [{
             port = snirouter.httpPort;
             protocol = "tcp";
-            source = null;
+            comment = "auto-http-${iface.host}-${iface.name}";
           }] else []) ++
           (if snirouter.httpsPort > 0 then [{
             port = snirouter.httpsPort;
             protocol = "tcp";
-            source = null;
+            comment = "auto-https-${iface.host}-${iface.name}";
           }] else []) ++
           (if snirouter.quicPort > 0 then [{
             port = snirouter.quicPort;
             protocol = "udp";
-            source = null;
+            comment = "auto-quic-${iface.host}-${iface.name}";
           }] else [])
         else
           [];
-      rules = lib.flatten (map (rule:
+      in lib.flatten (map (rule:
         (map (address: {
+          table = "filter";
+          chain = "forward";
+          action = "accept";
           family = if util.isIPv6 address then "ipv6" else "ipv4";
           destination = address;
           dstport = rule.port;
           source = rule.source or null;
-          inherit (rule) protocol;
+          inherit (rule) protocol comment;
           inherit (iface) gateway;
         }) addresses))
-        (iface.firewall.openPorts ++ iface.firewall.portForwards ++ snirouterRules));
-    in map (rule: rule // { comment = "web-${iface.host}-${iface.name}"; }) rules) interfaces);
+        (iface.firewall.openPorts ++ iface.firewall.portForwards ++ snirouterRules))) interfaces);
 in
 {
   make = nixosConfigurations: let
@@ -114,15 +114,12 @@ in
         };
         table = lib.mkOption {
           type = enum [ "filter" "nat" "mangle" "raw" ];
-          default = "filter";
         };
         chain = lib.mkOption {
           type = str;
-          default = "forward";
         };
         action = lib.mkOption {
           type = enum [ "accept" "drop" "reject" "dnat" "masquerade" "jump" ];
-          default = "accept";
         };
         srcport = lib.mkOption {
           type = nullOr ints.u16;

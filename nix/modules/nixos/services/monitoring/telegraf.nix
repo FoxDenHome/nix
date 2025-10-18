@@ -53,6 +53,9 @@ in
 
       foxDen.firewall.rules = [
         {
+          table = "filter";
+          chain = "forward";
+          action = "accept";
           source = { host = svcConfig.host; };
           dstport = 161;
           protocol = "udp";
