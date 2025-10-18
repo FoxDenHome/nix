@@ -63,8 +63,6 @@ in
 
     configScript = ''
       set -x
-      systemctl stop superfan || true
-
       ipmitool lan set 1 ipsrc static
       ipmitool lan set 1 ipaddr ${foxDenLib.util.removeIPCidr netconfig.ipv4.address}
       ipmitool lan set 1 netmask ${foxDenLib.util.ipv4Netmask netconfig.ipv4.address}
@@ -82,8 +80,6 @@ in
       # BEGIN EXTRA CONFIG #
       ${ipmiconfig.extraScript}
       # END EXTRA CONFIG #
-
-      systemctl start superfan || true
     '';
   in lib.mkIf ipmiconfig.enable {
     foxDen.hosts.hosts.${netconfig.hostName} = {
@@ -103,9 +99,6 @@ in
     };
 
     systemd.services.ipmiconfig = {
-      after = [ "superfan.service" ];
-      wants = [ "superfan.service" ];
-
       path = [
         pkgs.ipmitool
         pkgs.systemd
@@ -116,7 +109,7 @@ in
         RemainAfterExit = true;
         Restart = "no";
         ExecStart = [
-          (pkgs.writeShellScript "ipmiconfig.sh" configScript)
+          "${pkgs.superfan}/bin/ipmilocked ${pkgs.writeShellScript "ipmiconfig.sh" configScript}"
         ];
       };
       wantedBy = [ "multi-user.target" ];
