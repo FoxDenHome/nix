@@ -2,7 +2,6 @@
 add action=reject chain=forward comment=invalid connection-state=invalid reject-with=icmp-admin-prohibited
 add action=fasttrack-connection chain=forward comment="related, established" connection-state=established,related hw-offload=yes
 add action=accept chain=forward comment="related, established" connection-state=established,related
-add action=accept chain=forward comment="dstnat'd" connection-nat-state=dstnat
 add action=accept chain=forward protocol=icmp
 
 /ipv6/firewall/filter
