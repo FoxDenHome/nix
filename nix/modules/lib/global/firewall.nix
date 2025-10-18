@@ -45,25 +45,26 @@ in
     hosts = foxDenLib.global.config.getAttrSet ["foxDen" "hosts" "hosts"] nixosConfigurations;
     gateways = foxDenLib.global.hosts.getGateways nixosConfigurations;
 
-    resolveRuleRef = rule: ref: let
+    resolveRuleRef = rule: field: let
+      ref = rule.${field};
       refType = builtins.typeOf ref;
       interface = hosts.${ref.host}.interfaces.${ref.interface};
-    in if refType == "set"
+    in if refType == "string" || refType == "null"
       then
+        [rule]
+      else
         (lib.lists.filter (subRule: rule.family == null || subRule.family == rule.family)
           (map (address: rule // {
+              ${field} = address;
               family = if util.isIPv6 address then "ipv6" else "ipv4";
               inherit (interface) gateway;
-            }) interface.addresses))
-      else
-        [rule];
+            }) interface.addresses));
 
   in lib.attrsets.genAttrs gateways (gateway:
     map (lib.attrsets.filterAttrs (name: val: val != null && name != "gateway"))
       (lib.flatten (map (rule: let
-        srcRules = resolveRuleRef rule rule.source;
-        allRules = lib.flatten (map (srcRule:
-          resolveRuleRef rule rule.destination) srcRules);
+        srcRules = resolveRuleRef rule "source";
+        allRules = lib.flatten (map (srcRule: resolveRuleRef srcRule "destination") srcRules);
       in allRules)
         (lib.lists.filter (rule: rule.gateway == gateway) (foxDenLib.global.config.getList ["foxDen" "firewall" "rules"] nixosConfigurations))))
   );

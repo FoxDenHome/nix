@@ -51,6 +51,14 @@ in
           }]);
         };
 
+      foxDen.firewall.rules = [
+        {
+          source = { host = svcConfig.host; };
+          dstport = 161;
+          protocol = "udp";
+        }
+      ];
+
       sops.secrets.telegraf = config.lib.foxDen.sops.mkIfAvailable {
         mode = "0400";
         owner = "telegraf";
