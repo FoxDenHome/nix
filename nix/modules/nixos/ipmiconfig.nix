@@ -85,7 +85,9 @@ in
         RemainAfterExit = true;
         Restart = "no";
 
-        ExecStart = ["${pkgs.writeShellScript "ipmiconfig.sh" configScript}"];
+        ExecStart = [
+          (pkgs.writeShellScript "ipmiconfig.sh" configScript)
+        ];
       };
       wantedBy = [ "multi-user.target" ];
     };
