@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, foxDenLib, ... }:
 let
   mkVlanHost = config.lib.foxDenSys.mkVlanHost;
 in
@@ -16,14 +16,7 @@ in
         name = "unifi";
         zone = "foxden.network";
       };
-      firewall.openPorts = [
-        {
-          source = "10.2.0.0/16";
-        }
-        {
-          source = "fd2c:f4cb:63be:2::/16";
-        }
-      ];
+      firewall.ingressAcceptRules = foxDenLib.firewall.templates.trusted;
       addresses = [
         "10.1.10.1/16"
         "fd2c:f4cb:63be:1::a01/64"

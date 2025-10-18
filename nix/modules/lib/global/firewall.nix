@@ -60,7 +60,7 @@ let
           inherit (rule) comment;
           inherit (iface) gateway;
         }) addresses))
-        (iface.firewall.openPorts ++ iface.firewall.portForwards ++ snirouterRules))) interfaces);
+        (iface.firewall.ingressAcceptRules ++ iface.firewall.portForwards ++ snirouterRules))) interfaces);
 in
 {
   make = nixosConfigurations: let

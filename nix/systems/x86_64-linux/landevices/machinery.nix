@@ -1,4 +1,4 @@
-{ ... } :
+{ foxDenLib, ... } :
 {
   config.foxDen.hosts.hosts = let
     mkIntf = (intf: {
@@ -10,6 +10,7 @@
         name = "bambu-x1";
         zone = "foxden.network";
       };
+      firewall.ingressAcceptRules = foxDenLib.firewall.templates.trusted;
       mac = "08:FB:EA:02:64:96";
       addresses = [
         "10.4.10.1/16"

@@ -90,7 +90,7 @@ in
           };
         };
         firewall = {
-          openPorts = nixpkgs.lib.mkOption {
+          ingressAcceptRules = nixpkgs.lib.mkOption {
             type = listOf portType;
             default = [];
           };
