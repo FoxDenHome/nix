@@ -36,6 +36,7 @@ in
   foxDen.hosts.gateway = "icefox";
   virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ifcfg-foxden.interface routedInterface ];
 
+  # We don't firewall on servers, so only use port forward type rules
   networking.nftables.tables = let
     firewallRules = firewall."${config.foxDen.hosts.gateway}";
     portForwardrules = lib.lists.filter (rule: rule.action == "dnat" && rule.chain == "prerouting" && rule.table == "nat") firewallRules;
