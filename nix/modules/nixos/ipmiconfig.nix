@@ -83,6 +83,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
+        Restart = "no";
 
         ExecStart = ["${pkgs.writeShellScript "ipmiconfig.sh" configScript}"];
       };
