@@ -1,6 +1,6 @@
 { ... } :
 {
-  config.oxDen.ipmiconfig = {
+  config.foxDen.ipmiconfig = {
     enable = true;
     mac = "00:25:90:FF:CF:5B";
     ipv4 = {
