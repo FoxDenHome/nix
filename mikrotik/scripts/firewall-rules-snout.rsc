@@ -17,8 +17,8 @@ add action=masquerade chain=srcnat comment=WAN out-interface=wan
 add action=masquerade chain=srcnat comment=cghmn dst-address=!100.96.41.0/24 out-interface-list=iface-cghmn src-address=!100.96.41.0/24
 add action=masquerade chain=srcnat disabled=yes out-interface=wg-s2s
 add action=masquerade chain=srcnat comment=Container src-address=172.17.0.0/16
-add action=jump chain=dstnat comment=Hairpin dst-address=50.47.251.45 jump-target=port-forward
-add action=jump chain=dstnat comment="Hairpin fallback" dst-address=50.123.106.178 jump-target=port-forward
+add action=jump chain=dstnat comment=Hairpin dst-address=127.1.1.1 jump-target=port-forward
+add action=jump chain=dstnat comment="Hairpin fallback" dst-address=127.2.2.2 jump-target=port-forward
 add action=jump chain=dstnat comment="Local forward" dst-address-list=local-ip in-interface-list=zone-local jump-target=local-port-forward
 add action=jump chain=dstnat comment=External in-interface-list=zone-wan jump-target=port-forward
 add action=dst-nat chain=local-port-forward comment="DNS TCP" dst-port=53 protocol=tcp to-addresses=172.17.2.2
