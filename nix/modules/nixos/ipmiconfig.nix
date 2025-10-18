@@ -74,7 +74,7 @@ in
       # Raw code to set interface to "${netconfig.interface}" mode
       ${ipmitool} raw 0x30 0x70 0x0c 1 ${rawInterfaceModeMap.${netconfig.interface}}
 
-      ${ipmitool} pmitool dcmi set_mc_id_string "${netconfig.hostName}"
+      ${ipmitool} dcmi set_mc_id_string "${netconfig.hostName}"
 
       ${pkgs.systemd}/bin/systemctl start superfan || true
     '';
