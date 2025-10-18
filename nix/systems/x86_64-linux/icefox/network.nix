@@ -1,4 +1,4 @@
-{ config, foxDenLib, ... }:
+{ config, lib, foxDenLib, firewall, ... }:
 let
   ifcfg-foxden = {
     addresses = [
@@ -36,7 +36,12 @@ in
   foxDen.hosts.gateway = "icefox";
   virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ifcfg-foxden.interface routedInterface ];
 
-  networking.nftables.tables = {
+  networking.nftables.tables = let
+    firewallRules = firewall."${config.foxDen.hosts.gateway}";
+    portForwardrules = lib.lists.filter (rule: rule.action == "dnat" && rule.chain == "prerouting" && rule.table == "nat") firewallRules;
+
+    sharedIPRules = map (rule: "  ${rule.protocol} dport ${builtins.toString rule.dstport} dnat to ${rule.toAddresses} comment \"${rule.comment}\"") portForwardrules;
+  in {
     nat = {
       content = ''
         chain postrouting {
@@ -50,13 +55,7 @@ in
         }
 
         chain sharedip {
-          tcp dport { 80, 443 } dnat to 10.99.12.2 comment "foxIngress"
-          udp dport { 443 } dnat to 10.99.12.2 comment "foxIngress"
-
-          tcp dport { 5222, 5223, 5269 } dnat to 10.99.12.4 comment "Prosody"
-
-          tcp dport { 22000 } dnat to 10.99.12.6 comment "Syncthing"
-          udp dport { 22000 } dnat to 10.99.12.6 comment "Syncthing"
+        ${builtins.concatStringsSep "\n" sharedIPRules}
         }
       '';
       family = "ip";

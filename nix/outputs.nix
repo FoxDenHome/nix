@@ -61,12 +61,18 @@ let
       systemModules;
   }) systemInfos;
 
+  dnsRecords = foxDenLib.global.dns.mkRecords nixosConfigurations;
+  foxIngress = foxDenLib.global.foxingress.make nixosConfigurations;
+  dhcp = foxDenLib.global.dhcp.make nixosConfigurations;
+  firewall = foxDenLib.global.firewall.make nixosConfigurations;
+
   mkSystemConfig = system: {
     name = system.name;
     value = nixpkgs.lib.nixosSystem {
       specialArgs = allLibs // {
         systemArch = system.system;
         hostName = system.name;
+        inherit dnsRecords foxIngress dhcp firewall;
       };
       modules = [
         ({ ... }: {
@@ -81,21 +87,21 @@ in
 {
   nixosConfigurations = nixosConfigurations;
 
-  dnsRecords = rec {
-    attrset = foxDenLib.global.dns.mkRecords nixosConfigurations;
-    json = builtins.toFile "dns-records.json" (builtins.toJSON attrset);
+  dnsRecords = {
+    attrset = dnsRecords;
+    json = builtins.toFile "dns-records.json" (builtins.toJSON dnsRecords);
   };
-  foxIngress = rec {
-    attrset = foxDenLib.global.foxingress.make nixosConfigurations;
-    json = nixpkgs.lib.attrsets.mapAttrs (name: cfg: builtins.toFile "foxIngress.json" (builtins.toJSON cfg)) attrset;
+  foxIngress = {
+    attrset = foxIngress;
+    json = nixpkgs.lib.attrsets.mapAttrs (name: cfg: builtins.toFile "foxIngress.json" (builtins.toJSON cfg)) foxIngress;
   };
-  dhcp = rec {
-    attrset = foxDenLib.global.dhcp.make nixosConfigurations;
-    json = nixpkgs.lib.attrsets.mapAttrs (name: cfg: builtins.toFile "dhcp.json" (builtins.toJSON cfg)) attrset;
+  dhcp = {
+    attrset = dhcp;
+    json = nixpkgs.lib.attrsets.mapAttrs (name: cfg: builtins.toFile "dhcp.json" (builtins.toJSON cfg)) dhcp;
   };
-  firewall = rec {
-    attrset = foxDenLib.global.firewall.make nixosConfigurations;
-    json = nixpkgs.lib.attrsets.mapAttrs (name: cfg: builtins.toFile "firewall.json" (builtins.toJSON cfg)) attrset;
+  firewall = {
+    attrset = firewall;
+    json = nixpkgs.lib.attrsets.mapAttrs (name: cfg: builtins.toFile "firewall.json" (builtins.toJSON cfg)) firewall;
   };
 
   foxDenLib = foxDenLib;

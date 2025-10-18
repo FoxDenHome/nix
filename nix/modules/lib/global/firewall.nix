@@ -76,7 +76,7 @@ in
       else
         (lib.lists.filter (subRule: rule.family == null || subRule.family == rule.family)
           (map (address: rule // {
-              ${field} = address;
+              ${field} = util.removeIPCidr address;
               family = if util.isIPv6 address then "ipv6" else "ipv4";
               inherit (interface) gateway;
             }) interface.addresses));
