@@ -45,6 +45,10 @@ in
         default = {};
       };
     };
+    extraScript = lib.mkOption {
+      type = str;
+      default = "";
+    };
   };
 
   config = let
@@ -57,26 +61,29 @@ in
       failover = "2";
     };
 
-    ipmitool = "${pkgs.ipmitool}/bin/ipmitool";
     configScript = ''
       set -x
-      ${pkgs.systemd}/bin/systemctl stop superfan || true
+      systemctl stop superfan || true
 
-      ${ipmitool} lan set 1 ipsrc static
-      ${ipmitool} lan set 1 ipaddr ${foxDenLib.util.removeIPCidr netconfig.ipv4.address}
-      ${ipmitool} lan set 1 netmask ${foxDenLib.util.ipv4Netmask netconfig.ipv4.address}
-      ${ipmitool} lan set 1 defgw ipaddr ${netconfig.ipv4.gateway}
+      ipmitool lan set 1 ipsrc static
+      ipmitool lan set 1 ipaddr ${foxDenLib.util.removeIPCidr netconfig.ipv4.address}
+      ipmitool lan set 1 netmask ${foxDenLib.util.ipv4Netmask netconfig.ipv4.address}
+      ipmitool lan set 1 defgw ipaddr ${netconfig.ipv4.gateway}
 
-      ${ipmitool} lan6 set 1 nolock enables both
-      ${ipmitool} lan6 set 1 nolock static_addr 0 enable ${lib.replaceString "/" " " netconfig.ipv6.address}
-      ${ipmitool} lan6 set 1 nolock rtr_cfg dynamic
+      ipmitool lan6 set 1 nolock enables both
+      ipmitool lan6 set 1 nolock static_addr 0 enable ${lib.replaceString "/" " " netconfig.ipv6.address}
+      ipmitool lan6 set 1 nolock rtr_cfg dynamic
 
       # Raw code to set interface to "${netconfig.interface}" mode
-      ${ipmitool} raw 0x30 0x70 0x0c 1 ${rawInterfaceModeMap.${netconfig.interface}}
+      ipmitool raw 0x30 0x70 0x0c 1 ${rawInterfaceModeMap.${netconfig.interface}}
 
-      ${ipmitool} dcmi set_mc_id_string "${netconfig.hostName}"
+      ipmitool dcmi set_mc_id_string "${netconfig.hostName}"
 
-      ${pkgs.systemd}/bin/systemctl start superfan || true
+      # BEGIN EXTRA CONFIG #
+      ${ipmiconfig.extraScript}
+      # END EXTRA CONFIG #
+
+      systemctl start superfan || true
     '';
   in lib.mkIf ipmiconfig.enable {
     foxDen.hosts.hosts.${netconfig.hostName} = {
@@ -98,6 +105,11 @@ in
     systemd.services.ipmiconfig = {
       after = [ "superfan.service" ];
       wants = [ "superfan.service" ];
+
+      path = [
+        pkgs.ipmitool
+        pkgs.systemd
+      ];
 
       serviceConfig = {
         Type = "oneshot";
