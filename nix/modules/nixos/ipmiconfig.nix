@@ -1,4 +1,4 @@
-{ lib, foxDenLib, config, hostName, ... } :
+{ lib, pkgs, foxDenLib, config, hostName, ... } :
 let
   netConfigFamily = ipWithCidr: ipWithoutCidr: with lib.types; submodule {
     options = {
@@ -50,6 +50,18 @@ in
   config = let
     ipmiconfig = config.foxDen.ipmiconfig;
     netconfig = ipmiconfig.network;
+
+    ipmitool = "${pkgs.ipmitool}/bin/ipmitool";
+    configScript = ''
+      ${ipmitool} lan set 1 ipsrc static
+      ${ipmitool} lan set 1 ipaddr ${foxDenLib.util.removeIPCidr netconfig.ipv4.address}
+      ${ipmitool} lan set 1 netmask ${foxDenLib.util.ipv4Netmask netconfig.ipv4.address}
+      ${ipmitool} lan set 1 defgw ipaddr ${netconfig.ipv4.gateway}
+
+      ${ipmitool} lan6 set 1 nolock enables both
+      ${ipmitool} lan6 set 1 nolock static_addr 0 enable ${lib.replaceString "/" " " netconfig.ipv6.address}
+      ${ipmitool} lan6 set 1 nolock rtr_cfg dynamic
+    '';
   in lib.mkIf ipmiconfig.enable {
     foxDen.hosts.hosts.${netconfig.hostName} = {
       interfaces.default = {
@@ -67,15 +79,14 @@ in
       };
     };
 
-    environment.etc."foxden/ipmiconfig.txt".text = ''
-      ipmitool lan set 1 ipsrc static
-      ipmitool lan set 1 ipaddr ${foxDenLib.util.removeIPCidr netconfig.ipv4.address}
-      ipmitool lan set 1 netmask ${foxDenLib.util.ipv4Netmask netconfig.ipv4.address}
-      ipmitool lan set 1 defgw ipaddr ${netconfig.ipv4.gateway}
+    systemd.services.ipmiconfig = {
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
 
-      ipmitool lan6 set 1 nolock enables both
-      ipmitool lan6 set 1 nolock static_addr 0 enable ${lib.replaceString "/" " " netconfig.ipv6.address}
-      ipmitool lan6 set 1 nolock rtr_cfg dynamic
-    '';
+        ExecStart = ["${pkgs.writeShellScript "ipmiconfig.sh" configScript}"];
+      };
+      wantedBy = [ "multi-user.target" ];
+    };
   };
 }
