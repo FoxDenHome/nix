@@ -509,6 +509,23 @@
         "type": "github"
       }
     },
+    "mirror-nginx": {
+      "inputs": {
+        "flake-utils": "flake-utils_7",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "path": "modules/flakes/mirror-nginx",
+        "type": "path"
+      },
+      "original": {
+        "path": "modules/flakes/mirror-nginx",
+        "type": "path"
+      },
+      "parent": []
+    },
     "nix-jekyll-builder": {
       "inputs": {
         "flake-utils": "flake-utils_12",
@@ -575,23 +592,6 @@
         "repo": "nixpkgs",
         "type": "github"
       }
-    },
-    "njs-mirror-nginx": {
-      "inputs": {
-        "flake-utils": "flake-utils_7",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "path": "modules/flakes/nginx/mirror",
-        "type": "path"
-      },
-      "original": {
-        "path": "modules/flakes/nginx/mirror",
-        "type": "path"
-      },
-      "parent": []
     },
     "oauth-jit-radius": {
       "inputs": {
@@ -700,9 +700,9 @@
         "gitbackup": "gitbackup",
         "impermanence": "impermanence",
         "lanzaboote": "lanzaboote",
+        "mirror-nginx": "mirror-nginx",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "njs-mirror-nginx": "njs-mirror-nginx",
         "oauth-jit-radius": "oauth-jit-radius",
         "sops-nix": "sops-nix",
         "spaceage-api": "spaceage-api",
