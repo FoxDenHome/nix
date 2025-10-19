@@ -21,6 +21,7 @@ in
       name = "haproxy";
     }).config
     {
+      services.haproxy.enable = true;
       services.haproxy.config = if svcConfig.configFromGateway != ""
                                   then haproxy.${svcConfig.configFromGateway}
                                   else svcConfig.config;
