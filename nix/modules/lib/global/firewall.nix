@@ -18,11 +18,12 @@ let
   );
   mkPFRules = portForwards: map (fwd: {
     inherit (fwd) gateway protocol comment;
+    family = "ipv4";
     table = "nat";
     chain = "port-forward";
     action = "dnat";
     dstport = fwd.port;
-    toAddresses = if builtins.typeOf fwd.target == "set" then fwd.target // { family = "ipv4"; } else fwd.target;
+    toAddresses = fwd.target;
   }) portForwards;
   mkIfaceRules = interfaces: lib.flatten (
     map (iface: let
@@ -70,15 +71,12 @@ in
       ref = rule.${field};
       refType = builtins.typeOf ref;
       interface = hostsBySystem.${ref.system}.${ref.host}.interfaces.${ref.interface};
-
-      filteredAddresses = if ref.family == null then interface.addresses
-        else lib.filter (addr: if ref.family == "ipv4" then !util.isIPv6 addr else util.isIPv6 addr) interface.addresses;
     in if refType == "set"
       then
         (map (address: rule // {
             ${field} = util.removeIPCidr address;
             inherit (interface) gateway;
-          }) filteredAddresses)
+          }) interface.addresses)
       else
         [rule];
 
@@ -93,7 +91,16 @@ in
         srcRules = resolveHostRef rule "source";
         dstRules = lib.flatten (map (srcRule: resolveHostRef srcRule "destination") srcRules);
         allRules = lib.flatten (map (dstRule: resolveHostRef dstRule "toAddresses") dstRules);
-        allSameFamilyFilter = rule: (nullOrSameFamily "source" "destination" rule) && (nullOrSameFamily "source" "toAddresses" rule);
+        allSameFamilyFilter = rule: let
+          src = rule.source or null;
+          dest = rule.destination or null;
+          toAddr = rule.toAddresses or null;
+
+          baseAddr = if src != null then src else if dest != null then dest else toAddr;
+          baseFamily = if baseAddr != null then (if util.isIPv6 baseAddr then "ipv6" else "ipv4") else null;
+
+          sameFamilyOrNull = addrA: addrB: addrA == null || addrB == null || (util.isIPv6 addrA) == (util.isIPv6 addrB);
+        in (sameFamilyOrNull baseAddr src) && (sameFamilyOrNull baseAddr dest) && (sameFamilyOrNull baseAddr toAddr) && (baseFamily == null || rule.family == null || rule.family == baseFamily);
       in lib.lists.filter allSameFamilyFilter allRules) (nixpkgs.lib.lists.sortOn (rule: rule.priority)
         (lib.lists.filter (rule: rule.gateway == gateway) (foxDenLib.global.config.getList ["foxDen" "firewall" "rules"] nixosConfigurations)))))
   );
@@ -112,10 +119,6 @@ in
           type = str;
           default = hostName;
         };
-        family = lib.mkOption {
-          type = nullOr (enum [ "ipv4" "ipv6" ]);
-          default = null;
-        };
       };
     };
 
@@ -123,6 +126,10 @@ in
 
     ruleType = with lib.types; submodule {
       options = {
+        family = lib.mkOption {
+          type = nullOr (enum [ "ipv4" "ipv6" ]);
+          default = null;
+        };
         table = lib.mkOption {
           type = enum [ "filter" "nat" "mangle" "raw" ];
         };
