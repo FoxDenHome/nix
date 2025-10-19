@@ -49,6 +49,26 @@
 /ipv6/firewall/filter/add chain="forward" comment="auto-quic-restic-default" dst-address=fd2c:f4cb:63be:2::b0c dst-port=443 protocol=udp action=accept
 /ip/firewall/nat/add chain="port-forward" comment="portforward-minecraft-default" dst-port=25565 protocol=tcp to-addresses=10.2.11.14 action=dst-nat
 /ip/firewall/nat/add chain="port-forward" comment="portforward-spaceage-gmod-default" dst-port=27015 protocol=udp to-addresses=10.3.10.4 action=dst-nat
+/ip/firewall/nat/add chain="port-forward" comment="portforward-syncthing-default" dst-port=22000 protocol=tcp to-addresses=10.2.11.2 action=dst-nat
+/ip/firewall/nat/add chain="port-forward" comment="portforward-syncthing-default" dst-port=22000 protocol=udp to-addresses=10.2.11.2 action=dst-nat
+/ip/firewall/filter/add chain="forward" comment="auto-http-auth-default" dst-address=10.1.14.1 dst-port=80 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-http-auth-default" dst-address=fd2c:f4cb:63be:1::e01 dst-port=80 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-https-auth-default" dst-address=10.1.14.1 dst-port=443 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-https-auth-default" dst-address=fd2c:f4cb:63be:1::e01 dst-port=443 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-quic-auth-default" dst-address=10.1.14.1 dst-port=443 protocol=udp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-quic-auth-default" dst-address=fd2c:f4cb:63be:1::e01 dst-port=443 protocol=udp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-http-darksignsonline-default" dst-address=10.3.10.15 dst-port=80 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-http-darksignsonline-default" dst-address=fd2c:f4cb:63be:3::a0f dst-port=80 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-https-darksignsonline-default" dst-address=10.3.10.15 dst-port=443 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-https-darksignsonline-default" dst-address=fd2c:f4cb:63be:3::a0f dst-port=443 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-quic-darksignsonline-default" dst-address=10.3.10.15 dst-port=443 protocol=udp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-quic-darksignsonline-default" dst-address=fd2c:f4cb:63be:3::a0f dst-port=443 protocol=udp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-http-doridian-website-default" dst-address=10.2.11.15 dst-port=80 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-http-doridian-website-default" dst-address=fd2c:f4cb:63be:3::b0f dst-port=80 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-https-doridian-website-default" dst-address=10.2.11.15 dst-port=443 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-https-doridian-website-default" dst-address=fd2c:f4cb:63be:3::b0f dst-port=443 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-quic-doridian-website-default" dst-address=10.2.11.15 dst-port=443 protocol=udp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-quic-doridian-website-default" dst-address=fd2c:f4cb:63be:3::b0f dst-port=443 protocol=udp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-http-foxcaves-default" dst-address=10.3.10.1 dst-port=81 protocol=tcp action=accept
 /ipv6/firewall/filter/add chain="forward" comment="auto-http-foxcaves-default" dst-address=fd2c:f4cb:63be:3::a01 dst-port=81 protocol=tcp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-https-foxcaves-default" dst-address=10.3.10.1 dst-port=444 protocol=tcp action=accept
@@ -61,6 +81,12 @@
 /ipv6/firewall/filter/add chain="forward" comment="auto-https-git-default" dst-address=fd2c:f4cb:63be:3::b0d dst-port=443 protocol=tcp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-quic-git-default" dst-address=10.2.11.13 dst-port=443 protocol=udp action=accept
 /ipv6/firewall/filter/add chain="forward" comment="auto-quic-git-default" dst-address=fd2c:f4cb:63be:3::b0d dst-port=443 protocol=udp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-http-grafana-default" dst-address=10.2.11.5 dst-port=80 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-http-grafana-default" dst-address=fd2c:f4cb:63be:2::b05 dst-port=80 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-https-grafana-default" dst-address=10.2.11.5 dst-port=443 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-https-grafana-default" dst-address=fd2c:f4cb:63be:2::b05 dst-port=443 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-quic-grafana-default" dst-address=10.2.11.5 dst-port=443 protocol=udp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-quic-grafana-default" dst-address=fd2c:f4cb:63be:2::b05 dst-port=443 protocol=udp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-http-homeassistant-default" dst-address=10.2.12.2 dst-port=80 protocol=tcp action=accept
 /ipv6/firewall/filter/add chain="forward" comment="auto-http-homeassistant-default" dst-address=fd2c:f4cb:63be:2::c02 dst-port=80 protocol=tcp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-https-homeassistant-default" dst-address=10.2.12.2 dst-port=443 protocol=tcp action=accept
@@ -69,6 +95,12 @@
 /ipv6/firewall/filter/add chain="forward" comment="auto-quic-homeassistant-default" dst-address=fd2c:f4cb:63be:2::c02 dst-port=443 protocol=udp action=accept
 /ip/firewall/filter/add chain="forward" comment="" dst-address=10.2.11.14 dst-port=25565 protocol=tcp action=accept
 /ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:3::b0e dst-port=25565 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-http-radius-default" dst-address=10.1.14.2 dst-port=80 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-http-radius-default" dst-address=fd2c:f4cb:63be:1::e02 dst-port=80 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-https-radius-default" dst-address=10.1.14.2 dst-port=443 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-https-radius-default" dst-address=fd2c:f4cb:63be:1::e02 dst-port=443 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-quic-radius-default" dst-address=10.1.14.2 dst-port=443 protocol=udp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-quic-radius-default" dst-address=fd2c:f4cb:63be:1::e02 dst-port=443 protocol=udp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-http-spaceage-api-default" dst-address=10.3.10.5 dst-port=80 protocol=tcp action=accept
 /ipv6/firewall/filter/add chain="forward" comment="auto-http-spaceage-api-default" dst-address=fd2c:f4cb:63be:3::a05 dst-port=80 protocol=tcp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-https-spaceage-api-default" dst-address=10.3.10.5 dst-port=443 protocol=tcp action=accept
@@ -89,6 +121,16 @@
 /ipv6/firewall/filter/add chain="forward" comment="auto-https-spaceage-website-default" dst-address=fd2c:f4cb:63be:3::a09 dst-port=443 protocol=tcp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-quic-spaceage-website-default" dst-address=10.3.10.9 dst-port=443 protocol=udp action=accept
 /ipv6/firewall/filter/add chain="forward" comment="auto-quic-spaceage-website-default" dst-address=fd2c:f4cb:63be:3::a09 dst-port=443 protocol=udp action=accept
+/ip/firewall/filter/add chain="forward" comment="" dst-address=10.2.11.2 dst-port=22000 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:2::b02 dst-port=22000 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="" dst-address=10.2.11.2 dst-port=22000 protocol=udp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:2::b02 dst-port=22000 protocol=udp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-http-syncthing-default" dst-address=10.2.11.2 dst-port=80 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-http-syncthing-default" dst-address=fd2c:f4cb:63be:2::b02 dst-port=80 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-https-syncthing-default" dst-address=10.2.11.2 dst-port=443 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-https-syncthing-default" dst-address=fd2c:f4cb:63be:2::b02 dst-port=443 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="auto-quic-syncthing-default" dst-address=10.2.11.2 dst-port=443 protocol=udp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="auto-quic-syncthing-default" dst-address=fd2c:f4cb:63be:2::b02 dst-port=443 protocol=udp action=accept
 /ip/firewall/filter/add chain="forward" comment="trusted-mgmt-unifi" dst-address=10.1.10.1 src-address=10.1.0.0/16 action=accept
 /ipv6/firewall/filter/add chain="forward" comment="trusted-mgmt-unifi" dst-address=fd2c:f4cb:63be:1::a01 src-address=fd2c:f4cb:63be:1::/16 action=accept
 /ip/firewall/filter/add chain="forward" comment="trusted-lan-unifi" dst-address=10.1.10.1 src-address=10.2.0.0/16 action=accept

@@ -13,8 +13,18 @@ hosts:
     template: spaceage-api-default
   archlinux.foxden.network:
     template: mirror-default
+  auth.foxden.network:
+    template: auth-default
   cachyos.foxden.network:
     template: mirror-default
+  darksignsonline.com:
+    template: darksignsonline-default
+  darksignsonline.foxden.network:
+    template: darksignsonline-default
+  doridian.de:
+    template: doridian-website-default
+  doridian.net:
+    template: doridian-website-default
   e621.foxden.network:
     template: e621dumper-default
   f0x.es:
@@ -27,6 +37,8 @@ hosts:
     template: fadumper-default
   git.foxden.network:
     template: git-default
+  grafana.foxden.network:
+    template: grafana-default
   homeassistant.foxden.network:
     template: homeassistant-default
   jellyfin.foxden.network:
@@ -37,6 +49,8 @@ hosts:
     template: mirror-default
   nas.foxden.network:
     template: nas-default
+  radius.auth.foxden.network:
+    template: radius-default
   restic.foxden.network:
     template: restic-default
   spaceage-api.foxden.network:
@@ -47,8 +61,20 @@ hosts:
     template: spaceage-website-default
   spaceage.mp:
     template: spaceage-website-default
+  syncthing.foxden.network:
+    template: syncthing-default
   tts.spaceage.mp:
     template: spaceage-tts-default
+  webdav.syncthing.foxden.network:
+    template: syncthing-default
+  website.foxden.network:
+    template: doridian-website-default
+  www.darksignsonline.com:
+    template: darksignsonline-default
+  www.doridian.de:
+    template: doridian-website-default
+  www.doridian.net:
+    template: doridian-website-default
   www.f0x.es:
     template: foxcaves-default
   www.foxcav.es:
@@ -61,6 +87,36 @@ listeners:
   prometheus: :9001
   quic: :443
 templates:
+  auth-default:
+    default:
+      host: 10.1.14.1
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
+  darksignsonline-default:
+    default:
+      host: 10.3.10.15
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
+  doridian-website-default:
+    default:
+      host: 10.2.11.15
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
   e621dumper-default:
     default:
       host: 10.2.11.18
@@ -94,6 +150,16 @@ templates:
   git-default:
     default:
       host: 10.2.11.13
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
+  grafana-default:
+    default:
+      host: 10.2.11.5
       proxyProtocol: true
     http:
       port: 80
@@ -151,6 +217,16 @@ templates:
       port: 443
     quic:
       port: 443
+  radius-default:
+    default:
+      host: 10.1.14.2
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
   restic-default:
     default:
       host: 10.2.11.12
@@ -184,6 +260,16 @@ templates:
   spaceage-website-default:
     default:
       host: 10.3.10.9
+      proxyProtocol: true
+    http:
+      port: 80
+    https:
+      port: 443
+    quic:
+      port: 443
+  syncthing-default:
+    default:
+      host: 10.2.11.2
       proxyProtocol: true
     http:
       port: 80
