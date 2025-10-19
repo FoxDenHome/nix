@@ -8,5 +8,8 @@ def refresh_haproxy():
     check_call(["nix", "build", f"{NIX_DIR}#haproxy.text.router"])
     with open("result", "r") as file:
         config = file.read()
+
+    config = config.replace("#uid#", "uid").replace("#gid#", "gid")
+
     with open(FILENAME, "w") as out_file:
         out_file.write(config)

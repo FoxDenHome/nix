@@ -32,6 +32,8 @@ let
     ));
   in ''
     global
+      #uid# 980
+      #gid# 980
       log stdout format raw local0 info
 
     defaults
