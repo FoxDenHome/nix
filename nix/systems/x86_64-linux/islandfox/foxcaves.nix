@@ -37,7 +37,7 @@ in
           zone = "foxcav.es";
         }
       ];
-      snirouter = {
+      webservice = {
         enable = true;
         httpPort = 81;
         httpsPort = 444;

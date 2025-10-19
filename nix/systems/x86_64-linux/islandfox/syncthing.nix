@@ -20,7 +20,7 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
-      snirouter.enable = true;
+      webservice.enable = true;
       cnames = [
         {
           name = "webdav.syncthing";

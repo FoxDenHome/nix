@@ -24,7 +24,7 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
-      snirouter.enable = true;
+      webservice.enable = true;
       addresses = [
         "10.2.11.12/16"
         "fd2c:f4cb:63be:2::b0c/64"

@@ -77,7 +77,7 @@ in
         name = "nas-offsite";
         zone = "foxden.network";
       };
-      snirouter.enable = true;
+      webservice.enable = true;
       addresses = [
         "2a01:4f9:2b:1a42::1:5/112"
         "10.99.12.5/24"
@@ -100,7 +100,7 @@ in
         name = "jellyfin-offsite";
         zone = "foxden.network";
       };
-      snirouter.enable = true;
+      webservice.enable = true;
       addresses = [
         "2a01:4f9:2b:1a42::1:9/112"
         "10.99.12.9/24"
@@ -112,7 +112,7 @@ in
         name = "kiwix-offsite";
         zone = "foxden.network";
       };
-      snirouter.enable = true;
+      webservice.enable = true;
       addresses = [
         "2a01:4f9:2b:1a42::1:a/112"
         "10.99.12.10/24"

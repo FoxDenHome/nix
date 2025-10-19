@@ -35,7 +35,7 @@ in
           port = 22000;
         }
       ];
-      snirouter.enable = true;
+      webservice.enable = true;
       addresses = [
         "2a01:4f9:2b:1a42::1:6/112"
         "10.99.12.6/24"

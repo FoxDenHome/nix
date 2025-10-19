@@ -34,7 +34,7 @@ let
       } // (iface.sysctls or {});
       addresses = lib.filter (ip: !(foxDenLib.util.isPrivateIP ip)) iface.addresses;
       driver = "bridge";
-      snirouter.enable = false;
+      webservice.enable = false;
       driverOpts.bridge = lib.mkDefault ifcfg.interface;
       driverOpts.vlan = 0;
       routes = [ ];

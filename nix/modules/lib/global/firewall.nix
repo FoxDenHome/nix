@@ -28,21 +28,21 @@ let
   mkIfaceRules = interfaces: lib.flatten (
     map (iface: let
       addresses = map util.removeIPCidr iface.addresses;
-      snirouter = iface.snirouter;
-      snirouterRules =
-        if snirouter.enable then
-          (if snirouter.httpPort > 0 then [{
-            port = snirouter.httpPort;
+      webservice = iface.webservice;
+      webserviceRules =
+        if webservice.enable then
+          (if webservice.httpPort > 0 then [{
+            port = webservice.httpPort;
             protocol = "tcp";
             comment = "auto-http-${iface.host}-${iface.name}";
           }] else []) ++
-          (if snirouter.httpsPort > 0 then [{
-            port = snirouter.httpsPort;
+          (if webservice.httpsPort > 0 then [{
+            port = webservice.httpsPort;
             protocol = "tcp";
             comment = "auto-https-${iface.host}-${iface.name}";
           }] else []) ++
-          (if snirouter.quicPort > 0 then [{
-            port = snirouter.quicPort;
+          (if webservice.quicPort > 0 then [{
+            port = webservice.quicPort;
             protocol = "udp";
             comment = "auto-quic-${iface.host}-${iface.name}";
           }] else [])
@@ -60,7 +60,7 @@ let
           inherit (rule) comment;
           inherit (iface) gateway;
         }) addresses))
-        (iface.firewall.ingressAcceptRules ++ iface.firewall.portForwards ++ snirouterRules))) interfaces);
+        (iface.firewall.ingressAcceptRules ++ iface.firewall.portForwards ++ webserviceRules))) interfaces);
 in
 {
   make = nixosConfigurations: let

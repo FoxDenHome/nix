@@ -99,21 +99,21 @@ in
       privateIPv4 = lib.findFirst (ip: let
         ipNoCidr = util.removeIPCidr ip;
       in (util.isIPv4 ipNoCidr) && (util.isPrivateIP ipNoCidr)) "" iface.addresses;
-    in lib.mkIf (privateIPv4 != "" && iface.snirouter.enable) {
+    in lib.mkIf (privateIPv4 != "" && iface.webservice.enable) {
       templates."${template}" = {
         inherit (iface) gateway;
         default = {
           host = util.removeIPCidr privateIPv4;
-          proxyProtocol = iface.snirouter.proxyProtocol or false;
+          proxyProtocol = iface.webservice.proxyProtocol or false;
         };
         http = {
-          port = iface.snirouter.httpPort or 80;
+          port = iface.webservice.httpPort or 80;
         };
         https = {
-          port = iface.snirouter.httpsPort or 443;
+          port = iface.webservice.httpsPort or 443;
         };
         quic = {
-          port = iface.snirouter.quicPort or 443;
+          port = iface.webservice.quicPort or 443;
         };
       };
 

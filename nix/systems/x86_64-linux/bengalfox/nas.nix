@@ -119,7 +119,7 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
-      snirouter.enable = true;
+      webservice.enable = true;
       addresses = [
         "10.2.11.3/16"
         "fd2c:f4cb:63be:2::b03/64"
@@ -131,7 +131,7 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
-      snirouter.enable = true;
+      webservice.enable = true;
       addresses = [
         "10.2.11.6/16"
         "fd2c:f4cb:63be:2::b06/64"
@@ -143,7 +143,7 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
-      snirouter.enable = true;
+      webservice.enable = true;
       addresses = [
         "10.2.11.1/16"
         "fd2c:f4cb:63be:2::b01/64"

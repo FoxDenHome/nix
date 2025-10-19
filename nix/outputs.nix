@@ -65,6 +65,7 @@ let
   foxIngress = foxDenLib.global.foxingress.make nixosConfigurations;
   dhcp = foxDenLib.global.dhcp.make nixosConfigurations;
   firewall = foxDenLib.global.firewall.make nixosConfigurations;
+  haproxy = foxDenLib.global.haproxy.make nixosConfigurations;
 
   mkSystemConfig = system: {
     name = system.name;
@@ -94,6 +95,10 @@ in
   foxIngress = {
     attrset = foxIngress;
     json = nixpkgs.lib.attrsets.mapAttrs (name: cfg: builtins.toFile "foxIngress.json" (builtins.toJSON cfg)) foxIngress;
+  };
+  haproxy = {
+    source = haproxy;
+    text = nixpkgs.lib.attrsets.mapAttrs (name: cfg: builtins.toFile "haproxy.cfg" cfg) haproxy;
   };
   dhcp = {
     attrset = dhcp;

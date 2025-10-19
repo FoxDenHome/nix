@@ -52,7 +52,7 @@ in
           zone = "darksignsonline.com";
         }
       ];
-      snirouter.enable = true;
+      webservice.enable = true;
       addresses = [
         "10.3.10.15/16"
         "fd2c:f4cb:63be:3::a0f/64"
@@ -118,7 +118,7 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
-      snirouter.enable = true;
+      webservice.enable = true;
       cnames = [
         {
           name = "api";
@@ -136,7 +136,7 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
-      snirouter.enable = true;
+      webservice.enable = true;
       cnames = [
         {
           name = "tts";
@@ -154,7 +154,7 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
-      snirouter.enable = true;
+      webservice.enable = true;
       cnames = [
         {
           name = "www";

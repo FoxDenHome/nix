@@ -67,7 +67,7 @@ in
           type = nullOr str;
           default = null;
         };
-        snirouter = {
+        webservice = {
           enable = nixpkgs.lib.mkOption {
             type = bool;
             default = false;

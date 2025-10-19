@@ -8,7 +8,7 @@
       zone = "foxden.network";
       dynDns = true;
     };
-    snirouter = {
+    webservice = {
       enable = true;
       proxyProtocol = false;
     };

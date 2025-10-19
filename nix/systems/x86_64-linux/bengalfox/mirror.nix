@@ -42,7 +42,7 @@ in
           zone = "foxden.network";
         }
       ];
-      snirouter = {
+      webservice = {
         enable = true;
         httpPort = 81;
         httpsPort = 444;
