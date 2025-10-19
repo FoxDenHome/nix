@@ -104,16 +104,16 @@ in
         inherit (iface) gateway;
         default = {
           host = util.removeIPCidr privateIPv4;
-          proxyProtocol = iface.webservice.proxyProtocol or false;
+          proxyProtocol = iface.webservice.proxyProtocol;
         };
         http = {
-          port = iface.webservice.httpPort or 80;
+          port = iface.webservice.httpPort;
         };
         https = {
-          port = iface.webservice.httpsPort or 443;
+          port = iface.webservice.httpsPort;
         };
         quic = {
-          port = iface.webservice.quicPort or 443;
+          port = iface.webservice.quicPort;
         };
       };
 
