@@ -15,7 +15,7 @@ let
       in if portCfg.host != null then (map (hostName:
         "  acl acl_${name} ${varName} -i ${hostName}"
       ) host.names) ++ [
-        "  use_backend bk_${name} if acl_${name}"
+        "  use_backend be_${name} if acl_${name}"
       ] else []) hosts)));
 
     renderBackends = (cfgName: mode: options: nixpkgs.lib.concatStringsSep "\n" (
@@ -24,10 +24,10 @@ let
         name = "${cfgName}_${nixpkgs.lib.lists.head host.names}";
         flags = if portCfg.proxyProtocol then ["send-proxy-v2"] else [];
       in if portCfg.host != null then ''
-        backend bk_${name}
+        backend be_${name}
           mode ${mode}
         ${if options != [] then nixpkgs.lib.concatStringsSep "\n" (map (opt: "  option ${opt}") options) else ""}
-          server srv_main ${nixpkgs.lib.concatStringsSep " " flags}
+          server srv_main ${portCfg.host}:${builtins.toString portCfg.port} ${nixpkgs.lib.concatStringsSep " " flags}
       '' else "") hosts
     ));
   in ''
