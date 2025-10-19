@@ -22,7 +22,7 @@ let
     chain = "port-forward";
     action = "dnat";
     dstport = fwd.port;
-    toAddresses = fwd.target;
+    toAddresses = if builtins.typeOf fwd.target == "set" then fwd.target // { family = "ipv4"; } else fwd.target;
   }) portForwards;
   mkIfaceRules = interfaces: lib.flatten (
     map (iface: let
@@ -70,14 +70,17 @@ in
       ref = rule.${field};
       refType = builtins.typeOf ref;
       interface = hostsBySystem.${ref.system}.${ref.host}.interfaces.${ref.interface};
-    in if refType == "string" || refType == "null"
+
+      filteredAddresses = if ref.family == null then interface.addresses
+        else lib.filter (addr: if ref.family == "ipv4" then !util.isIPv6 addr else util.isIPv6 addr) interface.addresses;
+    in if refType == "set"
       then
-        [rule]
-      else
         (map (address: rule // {
             ${field} = util.removeIPCidr address;
             inherit (interface) gateway;
-          }) interface.addresses);
+          }) filteredAddresses)
+      else
+        [rule];
 
     nullOrSameFamily = field1: field2: rule: let
       val1 = rule.${field1};
@@ -90,8 +93,8 @@ in
         srcRules = resolveHostRef rule "source";
         dstRules = lib.flatten (map (srcRule: resolveHostRef srcRule "destination") srcRules);
         allRules = lib.flatten (map (dstRule: resolveHostRef dstRule "toAddresses") dstRules);
-        allSameFamiltFilter = rule: (nullOrSameFamily "source" "destination" rule) && (nullOrSameFamily "source" "toAddresses" rule);
-      in lib.lists.filter allSameFamiltFilter allRules) (nixpkgs.lib.lists.sortOn (rule: rule.priority)
+        allSameFamilyFilter = rule: (nullOrSameFamily "source" "destination" rule) && (nullOrSameFamily "source" "toAddresses" rule);
+      in lib.lists.filter allSameFamilyFilter allRules) (nixpkgs.lib.lists.sortOn (rule: rule.priority)
         (lib.lists.filter (rule: rule.gateway == gateway) (foxDenLib.global.config.getList ["foxDen" "firewall" "rules"] nixosConfigurations)))))
   );
 
@@ -108,6 +111,10 @@ in
         system = lib.mkOption {
           type = str;
           default = hostName;
+        };
+        family = lib.mkOption {
+          type = nullOr (enum [ "ipv4" "ipv6" ]);
+          default = null;
         };
       };
     };
