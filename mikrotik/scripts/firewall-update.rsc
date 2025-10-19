@@ -18,7 +18,6 @@
 :local ip6addr ([:deserialize value=$ip6addrcidr from=dsv delimiter="/" options=dsv.plain]->0->0)
 
 /ip/firewall/nat/set [ find comment="Hairpin" dst-address!=$ipaddr ] dst-address=$ipaddr
-/ip/firewall/nat/set [ find comment="Hairpin fallback" dst-address!="!$ipaddr" ] dst-address="!$ipaddr"
 
 :local ip6ptaddr ([:toip6 $ip6addr] & ffff:ffff:ffff:ffff:fff0::)
 :local ip6ptnet "$ip6ptaddr/60"
