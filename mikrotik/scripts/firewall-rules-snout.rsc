@@ -20,7 +20,6 @@ add action=jump chain=dstnat comment="Local forward" dst-address-list=local-ip i
 add action=jump chain=dstnat comment=External in-interface-list=zone-wan jump-target=port-forward
 add action=dst-nat chain=local-port-forward comment="DNS TCP" dst-port=53 protocol=tcp to-addresses=172.17.2.2
 add action=dst-nat chain=local-port-forward comment="DNS UDP" dst-port=53 protocol=udp to-addresses=172.17.2.2
-add action=dst-nat chain=local-port-forward comment="foxIngress Prometheus" dst-port=5303 protocol=tcp to-addresses=172.17.0.2 to-ports=9001
 add action=dst-nat chain=port-forward comment="HTTP(S)" dst-port=80,443 protocol=tcp to-addresses=172.17.0.2
 add action=dst-nat chain=port-forward comment=QUIC dst-port=443 protocol=udp to-addresses=172.17.0.2
 
@@ -31,4 +30,3 @@ add action=netmap chain=dstnat comment="Ingress PT" dst-address=fd2d::/60 to-add
 add action=netmap chain=srcnat comment="Egress PT" dst-address=!fd2c:f4cb:63be::/60 in-interface-list=zone-local src-address=fd2c:f4cb:63be::/60 to-address=fd2d::/60
 add action=dst-nat chain=local-port-forward comment="DNS TCP" dst-port=53 protocol=tcp to-address=fd2c:f4cb:63be::ac11:202/128 to-ports=53
 add action=dst-nat chain=local-port-forward comment="DNS UDP" dst-port=53 protocol=udp to-address=fd2c:f4cb:63be::ac11:202/128 to-ports=53
-add action=dst-nat chain=local-port-forward comment="foxIngress Prometheus" dst-port=5303 protocol=tcp to-address=fd2c:f4cb:63be::ac11:2/128 to-ports=9001
