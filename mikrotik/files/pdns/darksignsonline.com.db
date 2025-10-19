@@ -1,5 +1,0 @@
-$TTL 300
-$INCLUDE /etc/pdns/authority.db
-@ 3600 IN A 10.3.10.15
-@ 3600 IN AAAA fd2c:f4cb:63be:3::a0f
-www 3600 IN CNAME darksignsonline.foxden.network.

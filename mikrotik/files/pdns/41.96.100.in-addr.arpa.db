@@ -1,5 +1,0 @@
-$TTL 300
-$INCLUDE /etc/pdns/authority.db
-101 3600 IN PTR wii.foxden.network.
-102 3600 IN PTR ps2.foxden.network.
-253 3600 IN PTR mister.foxden.network.

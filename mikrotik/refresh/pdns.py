@@ -76,7 +76,7 @@ def refresh_pdns():
     for zone in sorted(INTERNAL_RECORDS.keys()):
         print(f"### Processing zone {zone}")
         records = INTERNAL_RECORDS[zone]
-        zone_file = path_join(ZONE_DIR, f"{zone}.db")
+        zone_file = path_join(ZONE_DIR, f"gen-{zone}.db")
 
         fixed_lines = [
             "$TTL 300",
@@ -105,7 +105,7 @@ def refresh_pdns():
 
         bind_conf.append('zone "%s" IN {' % zone)
         bind_conf.append('    type native;')
-        bind_conf.append('    file "/etc/pdns/%s.db";' % zone)
+        bind_conf.append('    file "/etc/pdns/gen-%s.db";' % zone)
         bind_conf.append('};')
 
         recursor_data["recursor"]["forward_zones"].append({
