@@ -23,7 +23,7 @@ let
     ${syncBootScript}
   '';
 
-  cryptenrollScript = pkgs.writeShellScript "cryptenroll.sh" ''
+  cryptenrollScript = pkgs.writeShellScript "cryptenroll.sh" (''
       #!/usr/bin/env bash
       set -xeuo pipefail
       enroll_disk() {
@@ -32,7 +32,7 @@ let
     ''
     + (builtins.concatStringsSep "\n"
         (map (dev: "enroll_disk ${dev.device}")
-          (lib.attrsets.attrValues config.boot.initrd.luks.devices))) + "\n";
+          (lib.attrsets.attrValues config.boot.initrd.luks.devices))) + "\n");
 in
 {
   environment.etc."foxden/update-nixos.sh".source = updateScript;
