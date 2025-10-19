@@ -48,6 +48,7 @@ let
       stats enable
       stats refresh 10s
       stats show-modules
+      http-request use-service prometheus-exporter if { path /metrics }
 
     frontend fe_https
       bind :443
