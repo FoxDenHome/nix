@@ -7,7 +7,7 @@ let
   defaultDataDir = "/var/lib/minecraft";
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
 
-  jrePackage = import ../../../../packages/minecraft-jre.nix { inherit pkgs; };
+  jrePackage = import ../../../../packages/foxden-minecraft/jre.nix { inherit pkgs; };
   serverPackage = pkgs.foxden-minecraft;
 in
 {
