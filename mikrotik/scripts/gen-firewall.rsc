@@ -48,9 +48,7 @@
 /ip/firewall/filter/add chain="forward" comment="auto-quic-restic-default" dst-address=10.2.11.12 dst-port=443 protocol=udp action=accept
 /ipv6/firewall/filter/add chain="forward" comment="auto-quic-restic-default" dst-address=fd2c:f4cb:63be:2::b0c dst-port=443 protocol=udp action=accept
 /ip/firewall/nat/add chain="port-forward" comment="portforward-minecraft-default" dst-port=25565 protocol=tcp to-addresses=10.3.10.8 action=dst-nat
-/ipv6/firewall/nat/add chain="port-forward" comment="portforward-minecraft-default" dst-port=25565 protocol=tcp to-addresses=fd2c:f4cb:63be:3::a08 action=dst-nat
 /ip/firewall/nat/add chain="port-forward" comment="portforward-spaceage-gmod-default" dst-port=27015 protocol=udp to-addresses=10.3.10.4 action=dst-nat
-/ipv6/firewall/nat/add chain="port-forward" comment="portforward-spaceage-gmod-default" dst-port=27015 protocol=udp to-addresses=fd2c:f4cb:63be:3::a04 action=dst-nat
 /ip/firewall/filter/add chain="forward" comment="auto-http-foxcaves-default" dst-address=10.3.10.1 dst-port=81 protocol=tcp action=accept
 /ipv6/firewall/filter/add chain="forward" comment="auto-http-foxcaves-default" dst-address=fd2c:f4cb:63be:3::a01 dst-port=81 protocol=tcp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-https-foxcaves-default" dst-address=10.3.10.1 dst-port=444 protocol=tcp action=accept

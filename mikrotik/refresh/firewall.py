@@ -36,6 +36,7 @@ def refresh_firewall() -> None:
             families = ["ipv6" if is_ipv6(addr) else "ip"]
         else:
             families = ["ip", "ipv6"]
+
         chain = rule["chain"]
         if chain == "postrouting":
             chain = "srcnat"
@@ -46,7 +47,10 @@ def refresh_firewall() -> None:
             action = "dst-nat"
         elif action == "snat":
             action = "src-nat"
+
         for family in families:
+            if rule["table"] == "nat" and family == "ipv6":
+                continue
             lines.append(f'/{family}/firewall/{rule["table"]}/add chain="{chain}" comment="{rule.get("comment","")}"{optval("dst-address", "destination")}{optval("dst-port", "dstport")}{optval("protocol", "protocol")}{optval("src-address", "source")}{optval("src-port", "srcport")}{optval("jump-target", "jumpTarget")}{optval("to-addresses", "toAddresses")}{optval("to-ports", "toPorts")}{optval("reject-with", "rejectWith")} action={action}')
     with open(FILENAME, "w") as file:
         file.write(("\n".join(snout_lines + lines + tail_lines)) + "\n")
