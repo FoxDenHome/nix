@@ -31,7 +31,7 @@ for script_file in $(ls -1 scripts/*.rsc); do
         else
             schedule_param="interval=$script_schedule"
         fi
-        echo "/system/scheduler/add name=\"$script_name\" $schedule_param on-event=\"/system/script/run $script_name\"" >> "$F"
+        echo "/system/scheduler/add name=\"$script_name\" $schedule_param policy=$script_policy on-event=\"/system/script/run $script_name\"" >> "$F"
     fi
 done
 
