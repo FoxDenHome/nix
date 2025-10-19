@@ -7,7 +7,7 @@ from urllib.parse import parse_qs, urlparse
 from refresh.util import mtik_path
 
 TEMPLATE = mtik_path("scripts/dyndns-update-template.rsc")
-FILENAME = mtik_path("scripts/dyndns-update.rsc")
+FILENAME = mtik_path("scripts/gen-dyndns-update.rsc")
 ROUTERS = ["router.foxden.network", "router-backup.foxden.network"]
 
 SPECIAL_HOSTS = ROUTERS + [f"v4-{router}" for router in ROUTERS]
