@@ -29,6 +29,8 @@
     oauth-jit-radius.inputs.nixpkgs.follows = "nixpkgs";
     mirror-nginx.url = ./modules/flakes/mirror-nginx;
     mirror-nginx.inputs.nixpkgs.follows = "nixpkgs";
+    foxden-minecraft.url = ./modules/flakes/foxden-minecraft;
+    foxden-minecraft.inputs.nixpkgs.follows = "nixpkgs";
     doridian-website.url = ./modules/flakes/doridian-website;
     doridian-website.inputs.nixpkgs.follows = "nixpkgs";
     spaceage-api.url = "github:SpaceAgeMP/space_age_api";
