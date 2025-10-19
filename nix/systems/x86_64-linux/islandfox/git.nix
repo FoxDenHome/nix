@@ -16,7 +16,7 @@ in
   };
 
   foxDen.hosts.hosts = {
-    git = mkVlanHost 3 {
+    git = mkVlanHost 2 {
       dns = {
         name = "git";
         zone = "foxden.network";
@@ -24,8 +24,8 @@ in
       };
       snirouter.enable = true;
       addresses = [
-        "10.3.10.2/16"
-        "fd2c:f4cb:63be:3::a02/64"
+        "10.2.11.13/16"
+        "fd2c:f4cb:63be:3::b0d/64"
       ];
     };
   };

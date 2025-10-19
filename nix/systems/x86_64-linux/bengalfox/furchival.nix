@@ -29,7 +29,7 @@ in
   };
 
   foxDen.hosts.hosts = {
-    e621dumper = mkVlanHost 3 {
+    e621dumper = mkVlanHost 2 {
       dns = {
         name = "e621";
         zone = "foxden.network";
@@ -37,8 +37,8 @@ in
       };
       snirouter.enable = true;
       addresses = [
-        "10.3.10.12/16"
-        "fd2c:f4cb:63be:3::a0c/64"
+        "10.2.11.18/16"
+        "fd2c:f4cb:63be:3::b12/64"
       ];
     };
     fadumper = mkVlanHost 3 {
@@ -49,8 +49,8 @@ in
       };
       snirouter.enable = true;
       addresses = [
-        "10.3.10.13/16"
-        "fd2c:f4cb:63be:3::a0d/64"
+        "10.2.11.19/16"
+        "fd2c:f4cb:63be:3::b13/64"
       ];
     };
   };

@@ -26,7 +26,7 @@ in
   };
 
   foxDen.hosts.hosts = {
-    mirror = mkVlanHost 3 {
+    mirror = mkVlanHost 2 {
       dns = {
         name = "mirror";
         zone = "foxden.network";
@@ -48,8 +48,8 @@ in
         httpsPort = 444;
       };
       addresses = [
-        "10.3.10.11/16"
-        "fd2c:f4cb:63be:3::a0b/64"
+        "10.2.11.17/16"
+        "fd2c:f4cb:63be:3::b11/64"
       ];
     };
   };

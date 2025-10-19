@@ -12,7 +12,7 @@ in
   };
 
   foxDen.hosts.hosts = {
-    doridian-website = mkVlanHost 3 {
+    doridian-website = mkVlanHost 2 {
       dns = {
         name = "website";
         zone = "foxden.network";
@@ -39,8 +39,8 @@ in
         }
       ];
       addresses = [
-        "10.3.10.10/16"
-        "fd2c:f4cb:63be:3::a0a/64"
+        "10.2.11.15/16"
+        "fd2c:f4cb:63be:3::b0f/64"
       ];
     };
   };
