@@ -102,13 +102,13 @@ in
       systemd.services = {
         mirror-nginx = {
           confinement.packages = [
-            pkgs.mirror-nginx
+            pkgs.foxden-mirror
           ];
 
           serviceConfig = {
             BindReadOnlyPaths = [
               "${foxDenLib.nginx.mkProxiesConf config}:/etc/nginx/proxies.conf"
-              "${pkgs.mirror-nginx}:/njs"
+              "${pkgs.foxden-mirror}:/njs"
               "${svcConfig.dataDir}:/data"
             ];
 
@@ -193,7 +193,7 @@ in
                   ];
 
                   ExecStart = [
-                    "${pkgs.bash}/bin/bash ${pkgs.njs-mirror-nginx}/refresh/run.sh"
+                    "${pkgs.bash}/bin/bash ${pkgs.foxden-mirror}/refresh/run.sh"
                   ];
                 };
               }

@@ -27,8 +27,8 @@
     backupmgr.inputs.nixpkgs.follows = "nixpkgs";
     oauth-jit-radius.url = "github:Doridian/oauth-jit-radius";
     oauth-jit-radius.inputs.nixpkgs.follows = "nixpkgs";
-    mirror-nginx.url = ./modules/flakes/mirror-nginx;
-    mirror-nginx.inputs.nixpkgs.follows = "nixpkgs";
+    foxden-mirror.url = ./modules/flakes/foxden-mirror;
+    foxden-mirror.inputs.nixpkgs.follows = "nixpkgs";
     foxden-minecraft.url = ./modules/flakes/foxden-minecraft;
     foxden-minecraft.inputs.nixpkgs.follows = "nixpkgs";
     doridian-website.url = ./modules/flakes/doridian-website;

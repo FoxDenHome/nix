@@ -458,9 +458,26 @@
       },
       "parent": []
     },
-    "gitbackup": {
+    "foxden-mirror": {
       "inputs": {
         "flake-utils": "flake-utils_7",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "path": "modules/flakes/foxden-mirror",
+        "type": "path"
+      },
+      "original": {
+        "path": "modules/flakes/foxden-mirror",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "gitbackup": {
+      "inputs": {
+        "flake-utils": "flake-utils_8",
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -543,23 +560,6 @@
         "repo": "lanzaboote",
         "type": "github"
       }
-    },
-    "mirror-nginx": {
-      "inputs": {
-        "flake-utils": "flake-utils_8",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "path": "modules/flakes/mirror-nginx",
-        "type": "path"
-      },
-      "original": {
-        "path": "modules/flakes/mirror-nginx",
-        "type": "path"
-      },
-      "parent": []
     },
     "nix-jekyll-builder": {
       "inputs": {
@@ -733,10 +733,10 @@
         "fadumper": "fadumper",
         "foxIngress": "foxIngress",
         "foxden-minecraft": "foxden-minecraft",
+        "foxden-mirror": "foxden-mirror",
         "gitbackup": "gitbackup",
         "impermanence": "impermanence",
         "lanzaboote": "lanzaboote",
-        "mirror-nginx": "mirror-nginx",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "oauth-jit-radius": "oauth-jit-radius",
