@@ -16,7 +16,7 @@ in
         name = "unifi";
         zone = "foxden.network";
       };
-      firewall.ingressAcceptRules = foxDenLib.firewall.templates.trusted;
+      firewall.ingressAcceptRules = foxDenLib.firewall.templates.trusted "unifi";
       addresses = [
         "10.1.10.1/16"
         "fd2c:f4cb:63be:1::a01/64"

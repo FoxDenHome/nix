@@ -10,7 +10,7 @@
         name = "bambu-x1";
         zone = "foxden.network";
       };
-      firewall.ingressAcceptRules = foxDenLib.firewall.templates.trusted;
+      firewall.ingressAcceptRules = foxDenLib.firewall.templates.trusted "bambu-x1";
       mac = "08:FB:EA:02:64:96";
       addresses = [
         "10.4.10.1/16"
