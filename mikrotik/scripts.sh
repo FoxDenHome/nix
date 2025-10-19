@@ -35,8 +35,6 @@ for script_file in $(ls -1 scripts/*.rsc); do
     fi
 done
 
-cat "$F"
-
 runscripts() {
     remote="$1"
     scp "$F" "$remote:/tmpfs-scratch/scripts.rsc"
