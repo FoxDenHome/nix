@@ -6,6 +6,9 @@ DEFAULT_POLICY='ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon
 
 F="$(mktemp)"
 
+echo '/system/scripts/remove [ find where (!(name~"^local-"))]' >> "$F"
+echo '/system/scheduler/remove [ find where (!(name~"^local-"))]' >> "$F"
+
 for script_file in $(ls -1 scripts/*.rsc); do
     script_name="$(basename "$script_file" .rsc)"
     script_policy="${DEFAULT_POLICY}"
@@ -19,9 +22,22 @@ for script_file in $(ls -1 scripts/*.rsc); do
         script_dontrequireperms=$(grep '^# dontrequireperms=' "$script_file" | cut -d'=' -f2)
     fi
 
-    echo ":do { /system/script/add name=\"$script_name\" source=\"# dummy script will be replaced\" } on-error={}" >> "$F"
-    echo "/system/script/set [ /system/script/find name=\"$script_name\" ] dont-require-permissions=$script_dontrequireperms  policy=$script_policy source=$(echo '0' | jq --rawfile src "$script_file" '$src' | sed 's/\$/\\$/g')" >> "$F"
+    echo "/system/script/add name=\"$script_name\" dont-require-permissions=$script_dontrequireperms policy=$script_policy source=$(echo '0' | jq --rawfile src "$script_file" '$src' | sed 's/\$/\\$/g')" >> "$F"
+
+    if grep -q '^# schedule=' "$script_file"; then
+        script_schedule=$(grep '^# schedule=' "$script_file" | cut -d'=' -f2)
+        if [ "$script_schedule" = "startup" ]; then
+            schedule_param="start-time=startup interval=00:00:00"
+        else
+            schedule_param="interval=$script_schedule"
+        fi
+        echo "/system/scheduler/add name=\"$script_name\" $schedule_param on-event=\"/system/script/run $script_name\"" >> "$F"
+    fi
 done
+
+cat "$F"
+rm -f "$F"
+exit 1
 
 runscripts() {
     remote="$1"

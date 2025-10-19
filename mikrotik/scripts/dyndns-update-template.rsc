@@ -1,5 +1,6 @@
 # dontrequireperms=yes
 # policy=ftp,read,write,policy,test
+# schedule=00:05:00
 
 :local ipaddrfind [ /ip/address/find interface=wan ]
 :if ([:len $ipaddrfind] < 1) do={

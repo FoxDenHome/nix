@@ -21,20 +21,8 @@ transfer_section() {
     fi
 }
 
-transfer_section_localclause() {
-    transfer_section "$1" '(!(name~"^local-"))'
-}
-
-transfer_section_notdynamic() {
-    transfer_section "$1" 'dynamic=no'
-}
-
 transfer_section_notdynamic_rmall() {
     transfer_section "$1" 'dynamic=no' ' '
-}
-
-transfer_section_notdynamic_expall() {
-    transfer_section "$1" ' ' 'dynamic=no'
 }
 
 F="$(mktemp)"
@@ -42,7 +30,6 @@ chmod 600 "$F"
 echo > "$F"
 
 transfer_section_notdynamic_rmall '/ipv6/dhcp-server/binding'
-transfer_section_localclause '/system/scheduler'
 
 scp "$F" router-backup.foxden.network:/tmpfs-scratch/transfer.rsc
 ssh router-backup.foxden.network '/import file-name=tmpfs-scratch/transfer.rsc'

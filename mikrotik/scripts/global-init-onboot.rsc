@@ -1,5 +1,6 @@
 # dontrequireperms=yes
 # policy=read,write,policy,test
+# schedule=startup
 
 :global logputdebug do={
     :log debug $1
@@ -28,3 +29,5 @@
     :put "Host: $host; MAC: $macaddr; Interface: $iface"
     /tool/wol mac=$macaddr interface=$iface
 }
+
+/system/script/run local-init-onboot

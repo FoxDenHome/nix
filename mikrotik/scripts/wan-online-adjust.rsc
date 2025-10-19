@@ -1,5 +1,6 @@
 # dontrequireperms=yes
 # policy=read,write,policy,test
+# schedule=00:01:00
 
 :global logputwarning
 
