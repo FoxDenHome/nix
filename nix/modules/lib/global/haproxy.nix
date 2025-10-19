@@ -18,20 +18,18 @@ let
         "  use_backend bk_${name} if acl_${name}"
       ] else []) hosts)));
 
-    renderBackends = (cfgName: mode: extraFlags: nixpkgs.lib.concatStringsSep "\n" (
+    renderBackends = (cfgName: mode: options: nixpkgs.lib.concatStringsSep "\n" (
       map (host: let
         portCfg = host.${cfgName};
         name = "${cfgName}_${nixpkgs.lib.lists.head host.names}";
-        flags = extraFlags ++ (if portCfg.proxyProtocol then ["send-proxy-v2"] else []);
+        flags = if portCfg.proxyProtocol then ["send-proxy-v2"] else [];
       in if portCfg.host != null then ''
         backend bk_${name}
           mode ${mode}
+        ${if options != [] then nixpkgs.lib.concatStringsSep "\n" (map (opt: "  option ${opt}") options) else ""}
           server srv_${name} ${portCfg.host}:${builtins.toString portCfg.port} ${nixpkgs.lib.concatStringsSep " " flags}
       '' else "") hosts
     ));
-
-     # http = "forwardfor" "httplog"
-     # https = "ssl-hello-chk" "tcplog"
   in ''
     global
       log stdout format raw local0 info
@@ -56,9 +54,9 @@ let
       mode http
     ${renderMatchers "http" "hdr(host)"}
 
-    ${renderBackends "http" "http" []}
+    ${renderBackends "http" "http" ["forwardfor" "httplog"]}
 
-    ${renderBackends "https" "tcp" []}
+    ${renderBackends "https" "tcp" ["ssl-hello-chk" "tcplog"]}
 
   '';
 in
