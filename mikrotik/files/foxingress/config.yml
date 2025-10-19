@@ -63,7 +63,7 @@ listeners:
 templates:
   e621dumper-default:
     default:
-      host: 10.3.10.12
+      host: 10.2.11.18
       proxyProtocol: true
     http:
       port: 80
@@ -73,7 +73,7 @@ templates:
       port: 443
   fadumper-default:
     default:
-      host: 10.3.10.13
+      host: 10.2.11.19
       proxyProtocol: true
     http:
       port: 80
@@ -93,7 +93,7 @@ templates:
       port: 443
   git-default:
     default:
-      host: 10.3.10.2
+      host: 10.2.11.13
       proxyProtocol: true
     http:
       port: 80
@@ -133,7 +133,7 @@ templates:
       port: 443
   mirror-default:
     default:
-      host: 10.3.10.11
+      host: 10.2.11.17
       proxyProtocol: true
     http:
       port: 81
