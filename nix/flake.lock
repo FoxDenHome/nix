@@ -258,6 +258,24 @@
         "type": "github"
       }
     },
+    "flake-utils_16": {
+      "inputs": {
+        "systems": "systems_16"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "flake-utils_2": {
       "inputs": {
         "systems": "systems_2"
@@ -423,9 +441,26 @@
         "type": "github"
       }
     },
-    "gitbackup": {
+    "foxden-minecraft": {
       "inputs": {
         "flake-utils": "flake-utils_6",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "path": "modules/flakes/foxden-minecraft",
+        "type": "path"
+      },
+      "original": {
+        "path": "modules/flakes/foxden-minecraft",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "gitbackup": {
+      "inputs": {
+        "flake-utils": "flake-utils_7",
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -511,7 +546,7 @@
     },
     "mirror-nginx": {
       "inputs": {
-        "flake-utils": "flake-utils_7",
+        "flake-utils": "flake-utils_8",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -528,7 +563,7 @@
     },
     "nix-jekyll-builder": {
       "inputs": {
-        "flake-utils": "flake-utils_12",
+        "flake-utils": "flake-utils_13",
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
@@ -595,7 +630,7 @@
     },
     "oauth-jit-radius": {
       "inputs": {
-        "flake-utils": "flake-utils_8",
+        "flake-utils": "flake-utils_9",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -697,6 +732,7 @@
         "e621dumper": "e621dumper",
         "fadumper": "fadumper",
         "foxIngress": "foxIngress",
+        "foxden-minecraft": "foxden-minecraft",
         "gitbackup": "gitbackup",
         "impermanence": "impermanence",
         "lanzaboote": "lanzaboote",
@@ -756,7 +792,7 @@
     },
     "spaceage-api": {
       "inputs": {
-        "flake-utils": "flake-utils_9",
+        "flake-utils": "flake-utils_10",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -777,7 +813,7 @@
     },
     "spaceage-tts": {
       "inputs": {
-        "flake-utils": "flake-utils_10",
+        "flake-utils": "flake-utils_11",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -798,7 +834,7 @@
     },
     "spaceage-website": {
       "inputs": {
-        "flake-utils": "flake-utils_11",
+        "flake-utils": "flake-utils_12",
         "nix-jekyll-builder": "nix-jekyll-builder"
       },
       "locked": {
@@ -817,7 +853,7 @@
     },
     "superfan": {
       "inputs": {
-        "flake-utils": "flake-utils_13",
+        "flake-utils": "flake-utils_14",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -927,6 +963,21 @@
       }
     },
     "systems_15": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_16": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
@@ -1063,7 +1114,7 @@
     },
     "tapemgr": {
       "inputs": {
-        "flake-utils": "flake-utils_14",
+        "flake-utils": "flake-utils_15",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -1084,7 +1135,7 @@
     },
     "uds-proxy": {
       "inputs": {
-        "flake-utils": "flake-utils_15",
+        "flake-utils": "flake-utils_16",
         "nixpkgs": [
           "nixpkgs"
         ]
