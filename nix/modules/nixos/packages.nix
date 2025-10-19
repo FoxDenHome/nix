@@ -1,4 +1,4 @@
-{ nixpkgs, systemArch, flakeInputs, ... } :
+inputs@{ nixpkgs, lib, systemArch, flakeInputs, ... } :
 let
   internalPackages = {
     "nixpkgs" = true;
@@ -9,25 +9,29 @@ let
     "self" = true;
   };
 
-  inputsWithoutInternal = nixpkgs.lib.filterAttrs (name: value: let
-                              valType = if nixpkgs.lib.isAttrs value then (value._type or null) else null;
+  inputsWithoutInternal = lib.filterAttrs (name: value: let
+                              valType = if lib.isAttrs value then (value._type or null) else null;
                             in
                               valType == "flake" &&
                               !(internalPackages.${name} or false)) flakeInputs;
 
-  removeDefaultPackage = nixpkgs.lib.filterAttrs (name: value: name != "default");
+  removeDefaultPackage = lib.filterAttrs (name: value: name != "default");
   addPackage = (mod: if (mod.packages or null) != null then removeDefaultPackage mod.packages.${systemArch} else {});
 
   nixPkgConfig = {
     allowUnfree = true;
   };
+
+  localPackages = lib.attrsets.genAttrs
+    (lib.attrNames (builtins.readDir ../../packages))
+    (name: import ../../packages/${name}/package.nix);
 in
 {
   imports = [
     nixpkgs.nixosModules.readOnlyPkgs
   ];
 
-  config.nixpkgs.pkgs = nixpkgs.lib.mergeAttrsList ([
+  config.nixpkgs.pkgs = lib.mergeAttrsList ([
     (import nixpkgs {
       system = systemArch;
       config = nixPkgConfig;
@@ -35,5 +39,6 @@ in
     {
       config = nixPkgConfig;
     }
-  ] ++ (map addPackage (nixpkgs.lib.attrValues inputsWithoutInternal)));
+    localPackages
+  ] ++ (map addPackage (lib.attrValues inputsWithoutInternal)));
 }
