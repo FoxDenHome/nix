@@ -8,7 +8,7 @@ from refresh.firewall import refresh_firewall
 
 def main():
     print("# DynDNS configuration")
-    refresh_dyndns()
+    #refresh_dyndns()
     print("# foxIngress configuration")
     refresh_foxingress()
     print("# PowerDNS configuration")

@@ -4,7 +4,10 @@ from refresh.util import unlink_safe, NIX_DIR, mtik_path, get_ipv4_netname
 
 FILENAME = mtik_path("scripts/gen-firewall.rsc")
 
-def refresh_firewall():
+def is_ipv6(addr: str) -> bool:
+    return "." not in addr
+
+def refresh_firewall() -> None:
     unlink_safe("result")
     check_call(["nix", "build", f"{NIX_DIR}#firewall.json.router"])
     with open("result", "r") as file:
@@ -28,9 +31,9 @@ def refresh_firewall():
         def optval(name: str, valname: str) -> str:
             val = rule.get(valname, "")
             return f' {name}={val}' if val else ''
-        # add action=accept chain=lan-out-forward comment=Grafana dst-address=10.2.11.5 dst-port=80,443 protocol=tcp
-        if "family" in rule:
-            families = ["ip" if rule["family"] == "ipv4" else "ipv6"]
+        addr = rule.get("source", rule.get("destination", rule.get("toAddresses", None)))
+        if addr is not None:
+            families = ["ipv6" if is_ipv6(addr) else "ip"]
         else:
             families = ["ip", "ipv6"]
         chain = rule["chain"]
@@ -38,7 +41,12 @@ def refresh_firewall():
             chain = "srcnat"
         elif chain == "prerouting":
             chain = "dstnat"
+        action = rule["action"]
+        if action == "dnat":
+            action = "dst-nat"
+        elif action == "snat":
+            action = "src-nat"
         for family in families:
-            lines.append(f'/{family}/firewall/{rule["table"]}/add chain="{chain}" comment="{rule.get("comment","")}"{optval("dst-address", "destination")}{optval("dst-port", "dstport")}{optval("protocol", "protocol")}{optval("src-address", "source")}{optval("src-port", "srcport")}{optval("jump-target", "jumpTarget")}{optval("to-addresses", "toAddresses")}{optval("to-ports", "toPorts")}{optval("reject-with", "rejectWith")} action={rule["action"]}')
+            lines.append(f'/{family}/firewall/{rule["table"]}/add chain="{chain}" comment="{rule.get("comment","")}"{optval("dst-address", "destination")}{optval("dst-port", "dstport")}{optval("protocol", "protocol")}{optval("src-address", "source")}{optval("src-port", "srcport")}{optval("jump-target", "jumpTarget")}{optval("to-addresses", "toAddresses")}{optval("to-ports", "toPorts")}{optval("reject-with", "rejectWith")} action={action}')
     with open(FILENAME, "w") as file:
         file.write(("\n".join(snout_lines + lines + tail_lines)) + "\n")

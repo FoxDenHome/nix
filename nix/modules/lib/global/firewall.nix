@@ -17,7 +17,7 @@ let
     interfaces
   );
   mkPFRules = portForwards: map (fwd: {
-    inherit (fwd) gateway protocol family comment;
+    inherit (fwd) gateway protocol comment;
     table = "nat";
     chain = "port-forward";
     action = "dnat";
@@ -52,7 +52,6 @@ let
           table = "filter";
           chain = "forward";
           action = "accept";
-          family = if util.isIPv6 address then "ipv6" else "ipv4";
           destination = address;
           dstport = rule.port or null;
           source = rule.source or null;
@@ -75,12 +74,15 @@ in
       then
         [rule]
       else
-        (lib.lists.filter (subRule: rule.family == null || subRule.family == rule.family)
-          (map (address: rule // {
-              ${field} = util.removeIPCidr address;
-              family = if util.isIPv6 address then "ipv6" else "ipv4";
-              inherit (interface) gateway;
-            }) interface.addresses));
+        (map (address: rule // {
+            ${field} = util.removeIPCidr address;
+            inherit (interface) gateway;
+          }) interface.addresses);
+
+    nullOrSameFamily = field1: field2: rule: let
+      val1 = rule.${field1};
+      val2 = rule.${field2};
+    in if val1 != null && val2 != null then (util.isIPv6 val1) == (util.isIPv6 val2) else true;
 
   in lib.attrsets.genAttrs gateways (gateway:
     map (lib.attrsets.filterAttrs (name: val: val != null && name != "gateway"))
@@ -88,7 +90,8 @@ in
         srcRules = resolveHostRef rule "source";
         dstRules = lib.flatten (map (srcRule: resolveHostRef srcRule "destination") srcRules);
         allRules = lib.flatten (map (dstRule: resolveHostRef dstRule "toAddresses") dstRules);
-      in allRules) (nixpkgs.lib.lists.sortOn (rule: rule.priority)
+        allSameFamiltFilter = rule: (nullOrSameFamily "source" "destination" rule) && (nullOrSameFamily "source" "toAddresses" rule);
+      in lib.lists.filter allSameFamiltFilter allRules) (nixpkgs.lib.lists.sortOn (rule: rule.priority)
         (lib.lists.filter (rule: rule.gateway == gateway) (foxDenLib.global.config.getList ["foxDen" "firewall" "rules"] nixosConfigurations)))))
   );
 
@@ -113,10 +116,6 @@ in
 
     ruleType = with lib.types; submodule {
       options = {
-        family = lib.mkOption {
-          type = nullOr (enum [ "ipv4" "ipv6" ]);
-          default = null;
-        };
         table = lib.mkOption {
           type = enum [ "filter" "nat" "mangle" "raw" ];
         };
@@ -179,10 +178,6 @@ in
 
     portForwardType = with lib.types; submodule {
       options = {
-        family = lib.mkOption {
-          type = enum [ "ipv4" ];
-          default = "ipv4";
-        };
         target = lib.mkOption {
           type = nullOr addrType;
           default = null;

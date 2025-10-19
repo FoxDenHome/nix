@@ -47,8 +47,10 @@
 /ipv6/firewall/filter/add chain="forward" comment="auto-https-restic-default" dst-address=fd2c:f4cb:63be:2::b0c dst-port=443 protocol=tcp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-quic-restic-default" dst-address=10.2.11.12 dst-port=443 protocol=udp action=accept
 /ipv6/firewall/filter/add chain="forward" comment="auto-quic-restic-default" dst-address=fd2c:f4cb:63be:2::b0c dst-port=443 protocol=udp action=accept
-/ip/firewall/nat/add chain="port-forward" comment="portforward-minecraft-default" dst-port=25565 protocol=tcp to-addresses=10.3.10.8 action=dnat
-/ip/firewall/nat/add chain="port-forward" comment="portforward-spaceage-gmod-default" dst-port=27015 protocol=udp to-addresses=10.3.10.4 action=dnat
+/ip/firewall/nat/add chain="port-forward" comment="portforward-minecraft-default" dst-port=25565 protocol=tcp to-addresses=10.3.10.8 action=dst-nat
+/ipv6/firewall/nat/add chain="port-forward" comment="portforward-minecraft-default" dst-port=25565 protocol=tcp to-addresses=fd2c:f4cb:63be:3::a08 action=dst-nat
+/ip/firewall/nat/add chain="port-forward" comment="portforward-spaceage-gmod-default" dst-port=27015 protocol=udp to-addresses=10.3.10.4 action=dst-nat
+/ipv6/firewall/nat/add chain="port-forward" comment="portforward-spaceage-gmod-default" dst-port=27015 protocol=udp to-addresses=fd2c:f4cb:63be:3::a04 action=dst-nat
 /ip/firewall/filter/add chain="forward" comment="auto-http-foxcaves-default" dst-address=10.3.10.1 dst-port=81 protocol=tcp action=accept
 /ipv6/firewall/filter/add chain="forward" comment="auto-http-foxcaves-default" dst-address=fd2c:f4cb:63be:3::a01 dst-port=81 protocol=tcp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-https-foxcaves-default" dst-address=10.3.10.1 dst-port=444 protocol=tcp action=accept
@@ -90,33 +92,19 @@
 /ip/firewall/filter/add chain="forward" comment="auto-quic-spaceage-website-default" dst-address=10.3.10.9 dst-port=443 protocol=udp action=accept
 /ipv6/firewall/filter/add chain="forward" comment="auto-quic-spaceage-website-default" dst-address=fd2c:f4cb:63be:3::a09 dst-port=443 protocol=udp action=accept
 /ip/firewall/filter/add chain="forward" comment="" dst-address=10.1.10.1 src-address=10.1.0.0/16 action=accept
-/ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:1::a01 src-address=10.1.0.0/16 action=accept
-/ip/firewall/filter/add chain="forward" comment="" dst-address=10.1.10.1 src-address=fd2c:f4cb:63be:1::/16 action=accept
 /ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:1::a01 src-address=fd2c:f4cb:63be:1::/16 action=accept
 /ip/firewall/filter/add chain="forward" comment="" dst-address=10.1.10.1 src-address=10.2.0.0/16 action=accept
-/ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:1::a01 src-address=10.2.0.0/16 action=accept
-/ip/firewall/filter/add chain="forward" comment="" dst-address=10.1.10.1 src-address=fd2c:f4cb:63be:2::/16 action=accept
 /ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:1::a01 src-address=fd2c:f4cb:63be:2::/16 action=accept
 /ip/firewall/filter/add chain="forward" comment="" dst-port=161 protocol=udp src-address=10.2.11.21 action=accept
 /ipv6/firewall/filter/add chain="forward" comment="" dst-port=161 protocol=udp src-address=fd2c:f4cb:63be:2::b15 action=accept
 /ip/firewall/filter/add chain="forward" comment="" dst-address=10.4.10.1 src-address=10.1.0.0/16 action=accept
-/ip/firewall/filter/add chain="forward" comment="" dst-address=10.4.10.1 src-address=fd2c:f4cb:63be:1::/16 action=accept
 /ip/firewall/filter/add chain="forward" comment="" dst-address=10.4.10.1 src-address=10.2.0.0/16 action=accept
-/ip/firewall/filter/add chain="forward" comment="" dst-address=10.4.10.1 src-address=fd2c:f4cb:63be:2::/16 action=accept
 /ip/firewall/filter/add chain="forward" comment="" dst-address=10.5.10.1 src-address=10.1.0.0/16 action=accept
-/ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:5::0a01 src-address=10.1.0.0/16 action=accept
-/ip/firewall/filter/add chain="forward" comment="" dst-address=10.5.10.1 src-address=fd2c:f4cb:63be:1::/16 action=accept
 /ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:5::0a01 src-address=fd2c:f4cb:63be:1::/16 action=accept
 /ip/firewall/filter/add chain="forward" comment="" dst-address=10.5.10.1 src-address=10.2.0.0/16 action=accept
-/ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:5::0a01 src-address=10.2.0.0/16 action=accept
-/ip/firewall/filter/add chain="forward" comment="" dst-address=10.5.10.1 src-address=fd2c:f4cb:63be:2::/16 action=accept
 /ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:5::0a01 src-address=fd2c:f4cb:63be:2::/16 action=accept
 /ip/firewall/filter/add chain="forward" comment="" dst-address=10.99.0.0/16 src-address=10.1.0.0/16 action=accept
-/ipv6/firewall/filter/add chain="forward" comment="" dst-address=10.99.0.0/16 src-address=10.1.0.0/16 action=accept
-/ip/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be::a64:0/112 src-address=fd2c:f4cb:63be:1::/16 action=accept
 /ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be::a64:0/112 src-address=fd2c:f4cb:63be:1::/16 action=accept
 /ip/firewall/filter/add chain="forward" comment="" dst-address=10.99.0.0/16 src-address=10.2.0.0/16 action=accept
-/ipv6/firewall/filter/add chain="forward" comment="" dst-address=10.99.0.0/16 src-address=10.2.0.0/16 action=accept
-/ip/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be::a64:0/112 src-address=fd2c:f4cb:63be:2::/16 action=accept
 /ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be::a64:0/112 src-address=fd2c:f4cb:63be:2::/16 action=accept
 /system/script/run firewall-rules-tail
