@@ -25,6 +25,14 @@ in
       services.haproxy.config = if svcConfig.configFromGateway != ""
                                   then haproxy.${svcConfig.configFromGateway}
                                   else svcConfig.config;
+
+      systemd.services.haproxy = {
+        serviceConfig = {
+          BindReadOnlyPaths = (foxDenLib.services.mkEtcPaths [
+            "haproxy.cfg"
+          ]);
+        };
+      };
     }
   ]);
 }
