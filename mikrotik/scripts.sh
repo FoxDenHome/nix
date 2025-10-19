@@ -6,8 +6,8 @@ DEFAULT_POLICY='ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon
 
 F="$(mktemp)"
 
-echo '/system/script/remove [ find where (!(name~"^local-"))]' >> "$F"
 echo '/system/scheduler/remove [ find where (!(name~"^local-"))]' >> "$F"
+echo '/system/script/remove [ find where (!(name~"^local-"))]' >> "$F"
 
 for script_file in $(ls -1 scripts/*.rsc); do
     script_name="$(basename "$script_file" .rsc)"
