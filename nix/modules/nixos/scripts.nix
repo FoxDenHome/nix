@@ -1,42 +1,39 @@
-{ config, lib, ... } :
+{ config, lib, pkgs, ... } :
+let
+  # TODO: Use a lanzaboote post script for this, once they exist
+  syncBootScript = pkgs.writeShellScript "sync-boot.sh" ''
+    set -xeuo pipefail
+    if [ -d /boot2 ]; then
+      rsync -av --delete /boot/ /boot2/
+    else
+      echo 'No /boot2, skipping'
+    fi
+  '';
+in
 {
-  environment.etc."nix/update.sh" = {
+  environment.etc."foxden/update-nixos.sh" = {
     text = ''
       #!/usr/bin/env bash
       set -xeuo pipefail
       nix flake update --flake 'github:FoxDenHome/core?dir=nix' || true
       nixos-rebuild switch --flake "github:FoxDenHome/core?dir=nix#$(hostname)"
-      /etc/nix/sync-boot.sh
+      ${syncBootScript}
     '';
     mode = "0755";
   };
 
-  environment.etc."nix/cleanup.sh" = {
+  environment.etc."foxden/prune-nixos.sh" = {
     text = ''
       #!/usr/bin/env bash
       set -xeuo pipefail
       nix-collect-garbage --delete-old
       /run/current-system/bin/switch-to-configuration boot
-      /etc/nix/sync-boot.sh
+      ${syncBootScript}
     '';
     mode = "0755";
   };
 
-  # TODO: Use a lanzaboote post script for this, once they exist
-  environment.etc."nix/sync-boot.sh" = {
-    text = ''
-      #!/usr/bin/env bash
-      set -xeuo pipefail
-      if [ -d /boot2 ]; then
-        rsync -av --delete /boot/ /boot2/
-      else
-        echo 'No /boot2, skipping'
-      fi
-    '';
-    mode = "0755";
-  };
-
-  environment.etc."nix/cryptenroll.sh" = {
+  environment.etc."foxden/cryptenroll.sh" = {
     text = ''
       #!/usr/bin/env bash
       set -xeuo pipefail
