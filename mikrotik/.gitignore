@@ -1,4 +1,4 @@
-/scripts/dyndns-update.rsc
+/scripts/gen-*
 /files/haproxy/haproxy.cfg
 /files/pdns/lua/gen-*
 /files/pdns/gen-*
