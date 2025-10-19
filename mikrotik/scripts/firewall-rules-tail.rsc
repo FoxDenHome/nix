@@ -2,10 +2,11 @@
 add action=accept chain=forward in-interface-list=zone-local out-interface-list=zone-wan
 add action=accept chain=forward in-interface=oob
 add action=accept chain=forward in-interface=wg-vpn
-add action=accept chain=forward comment=DNS dst-port=53 in-interface-list=zone-local out-interface=veth-dns protocol=tcp
-add action=accept chain=forward comment=DNS dst-port=53 in-interface-list=zone-local out-interface=veth-dns protocol=udp
-add action=accept chain=forward comment=HAProxy dst-port=80,443 out-interface=veth-haproxy protocol=tcp
-add action=accept chain=forward comment=HAProxy dst-port=443 out-interface=veth-haproxy protocol=udp
+add action=accept chain=forward comment="DNS TCP" dst-port=53 in-interface-list=zone-local out-interface=veth-dns protocol=tcp
+add action=accept chain=forward comment="DNS UDP" dst-port=53 in-interface-list=zone-local out-interface=veth-dns protocol=udp
+add action=accept chain=forward comment="HAProxy TCP (Pub)" dst-port=80,443 out-interface=veth-haproxy protocol=tcp
+add action=accept chain=forward comment="HAProxy UDP (Pub)" dst-port=443 out-interface=veth-haproxy protocol=udp
+add action=accept chain=forward comment="HAProxy TCP" dst-port=9001 in-interface-list=zone-local out-interface=veth-haproxy protocol=tcp
 add action=reject chain=forward reject-with=icmp-admin-prohibited
 
 add action=accept chain=input connection-state=established,related

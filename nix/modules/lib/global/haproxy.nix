@@ -22,7 +22,7 @@ let
       map (host: let
         portCfg = host.${cfgName};
         name = "${cfgName}_${nixpkgs.lib.lists.head host.names}";
-        flags = if portCfg.proxyProtocol then ["send-proxy-v2"] else [];
+        flags = ["check"] ++ (if portCfg.proxyProtocol then ["send-proxy-v2"] else []);
       in if portCfg.host != null then ''
         backend be_${name}
           mode ${mode}
@@ -33,12 +33,21 @@ let
   in ''
     global
       log stdout format raw local0 info
+
     defaults
       log global
       timeout client 30s
       timeout server 30s
       timeout connect 5s
       option dontlognull
+
+    frontend fe_stats
+      mode http
+      bind :9001
+      stats uri /stats
+      stats enable
+      stats refresh 10s
+      stats show-modules
 
     frontend fe_https
       bind :443

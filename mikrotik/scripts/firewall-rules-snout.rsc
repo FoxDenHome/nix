@@ -14,14 +14,14 @@ add action=accept chain=forward protocol=icmpv6
 add disabled=yes action=endpoint-independent-nat chain=srcnat out-interface=wan protocol=udp randomise-ports=yes
 add action=masquerade chain=srcnat comment=WAN out-interface=wan
 add action=masquerade chain=srcnat comment=cghmn dst-address=!100.96.41.0/24 out-interface-list=iface-cghmn src-address=!100.96.41.0/24
-add action=masquerade chain=srcnat comment=Container src-address=172.17.0.0/16
+add action=masquerade chain=srcnat comment=Containers src-address=172.17.0.0/16
 add action=jump chain=dstnat comment=Hairpin dst-address=127.1.1.1 jump-target=port-forward
 add action=jump chain=dstnat comment="Local forward" dst-address-list=local-ip in-interface-list=zone-local jump-target=local-port-forward
 add action=jump chain=dstnat comment=External in-interface-list=zone-wan jump-target=port-forward
 add action=dst-nat chain=local-port-forward comment="DNS TCP" dst-port=53 protocol=tcp to-addresses=172.17.2.2
 add action=dst-nat chain=local-port-forward comment="DNS UDP" dst-port=53 protocol=udp to-addresses=172.17.2.2
-add action=dst-nat chain=port-forward comment="HTTP(S)" dst-port=80,443 protocol=tcp to-addresses=172.17.0.2
-add action=dst-nat chain=port-forward comment=QUIC dst-port=443 protocol=udp to-addresses=172.17.0.2
+add action=dst-nat chain=port-forward comment="HAProxy TCP (Pub)" dst-port=80,443 protocol=tcp to-addresses=172.17.0.2
+add action=dst-nat chain=port-forward comment="HAProxy UDP (Pub)" dst-port=443 protocol=udp to-addresses=172.17.0.2
 
 /ipv6/firewall/nat
 add action=jump chain=dstnat comment="Local forward" dst-address-list=local-ip in-interface-list=zone-local jump-target=local-port-forward
