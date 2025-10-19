@@ -102,13 +102,13 @@ in
       systemd.services = {
         mirror-nginx = {
           confinement.packages = [
-            pkgs.njs-mirror-nginx
+            pkgs.mirror-nginx
           ];
 
           serviceConfig = {
             BindReadOnlyPaths = [
               "${foxDenLib.nginx.mkProxiesConf config}:/etc/nginx/proxies.conf"
-              "${pkgs.njs-mirror-nginx}:/njs"
+              "${pkgs.mirror-nginx}:/njs"
               "${svcConfig.dataDir}:/data"
             ];
 
