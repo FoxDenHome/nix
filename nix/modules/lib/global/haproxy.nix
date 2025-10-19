@@ -39,7 +39,6 @@ let
       timeout client 30s
       timeout server 30s
       timeout connect 5s
-      option tcplog
       option dontlognull
 
     frontend fe_https
