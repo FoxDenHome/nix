@@ -52,6 +52,7 @@ in
           zone = "darksignsonline.com";
         }
       ];
+      snirouter.enable = true;
       addresses = [
         "10.3.10.15/16"
         "fd2c:f4cb:63be:3::a0f/64"

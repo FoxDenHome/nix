@@ -20,10 +20,21 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
+      snirouter.enable = true;
       cnames = [
         {
           name = "webdav.syncthing";
           zone = "foxden.network";
+        }
+      ];
+      firewall.portForwards = [
+        {
+          protocol = "tcp";
+          port = 22000;
+        }
+        {
+          protocol = "udp";
+          port = 22000;
         }
       ];
       addresses = [

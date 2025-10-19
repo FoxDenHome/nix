@@ -38,6 +38,7 @@ in
           zone = "doridian.de";
         }
       ];
+      snirouter.enable = true;
       addresses = [
         "10.2.11.15/16"
         "fd2c:f4cb:63be:3::b0f/64"
