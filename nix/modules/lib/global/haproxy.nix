@@ -27,7 +27,7 @@ let
         backend bk_${name}
           mode ${mode}
         ${if options != [] then nixpkgs.lib.concatStringsSep "\n" (map (opt: "  option ${opt}") options) else ""}
-          server srv_${name} ${portCfg.host}:${builtins.toString portCfg.port} ${nixpkgs.lib.concatStringsSep " " flags}
+          server srv_main ${nixpkgs.lib.concatStringsSep " " flags}
       '' else "") hosts
     ));
   in ''
