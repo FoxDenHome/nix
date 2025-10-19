@@ -9,8 +9,6 @@ locals {
       visibility        = "private"
     }
     NixieClockDori    = {}
-    PaperESP32        = {}
-    LCDify            = {}
     e621dumper        = {
       required_checks = [
         "nix",
@@ -24,10 +22,6 @@ locals {
     CC1101Duino       = {}
     ntpi              = {}
     shutdownd         = {}
-    BlissLightControl = {}
-    hassio-ecoflow = {
-      description = "EcoFlow Portable Power Station Integration for Home Assistant"
-    }
     keepass-unlocker = {}
     backupmgr        = {
       required_checks = [
@@ -35,6 +29,11 @@ locals {
       ]
     }
     core             = {}
+    foxden-radius-autofill = {}
+    foxdenaur-keyring = {}
+    foxdenaur-mirrorlist = {}
+    goscsi = {}
+    initcpio-uki-sbsign = {}
   }
 
   members = {

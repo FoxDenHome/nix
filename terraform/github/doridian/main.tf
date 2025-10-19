@@ -24,6 +24,10 @@ locals {
     wsvpn-js          = {}
     query-finder      = {}
     factorio-fox-todo = {}
+    factorio-pause-commands = {
+      description       = "Factorio mod to add pause and unpause commands"
+      branch_protection = false
+    }
     slimfat           = {}
     tracething        = {}
     jsip = {
@@ -47,16 +51,9 @@ locals {
     OpenBambuAPI = {
       description = "Bambu API docs"
     }
-    flippertools = {
-      visibility = "private"
-    }
     # Forks
     qmk_firmware = {
       description       = "Open-source keyboard firmware for Atmel AVR and Arm USB families"
-      branch_protection = false
-    }
-    factorio-pause-commands = {
-      description       = "Factorio mod to add pause and unpause commands"
       branch_protection = false
     }
     gopacket = {
@@ -101,11 +98,6 @@ locals {
         "nix",
       ]
     }
-    panon = {
-      description    = "An Audio Visualizer Widget in KDE Plasma (works in KDE Plasma 6)"
-      default_branch = "6.x.x"
-    }
-    panon-effects = {}
     qmk_hid = {
       description = "Commandline tool for interacting with QMK devices over HID"
     }
@@ -145,6 +137,10 @@ locals {
       required_checks = [
         "nix",
       ]
+    }
+    haproxytiny = {}
+    peercred = {
+      description = "A wrapper around using Linux's SO_PEERCRED socket option on Unix domain sockets"
     }
   }
 }

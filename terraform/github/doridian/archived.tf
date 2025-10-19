@@ -164,6 +164,19 @@ locals {
     foxIngress = {
       description = "HTTP(S)/QUIC SNI/Host router"
     }
+    depthy = {}
+    fbsplash = {}
+    linux-fbcondecor = {}
+    miscsplashutils = {}
+    plenopticam = {}
+    flippertools = {
+      visibility = "private"
+    }
+    panon = {
+      description    = "An Audio Visualizer Widget in KDE Plasma (works in KDE Plasma 6)"
+      default_branch = "6.x.x"
+    }
+    panon-effects = {}
   }
 }
 

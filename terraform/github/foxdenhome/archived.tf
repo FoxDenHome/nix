@@ -36,6 +36,13 @@ locals {
       description = "Linux PTP Project"
     }
     initcpio-copy-efi2 = {}
+    docker-sriov-plugin-arch = {}
+    PaperESP32        = {}
+    LCDify            = {}
+    BlissLightControl = {}
+    hassio-ecoflow = {
+      description = "EcoFlow Portable Power Station Integration for Home Assistant"
+    }
   }
 }
 
