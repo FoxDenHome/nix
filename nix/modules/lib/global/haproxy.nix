@@ -39,6 +39,7 @@ let
       timeout server 30s
       timeout connect 5s
       option dontlognull
+
     frontend fe_https
       bind :443
       mode tcp
@@ -46,12 +47,15 @@ let
       tcp-request inspect-delay 5s
       tcp-request content accept if { req_ssl_hello_type 1 }
     ${renderMatchers "https" "req.ssl_sni"}
+
     frontend fe_http
       bind :80
       mode http
       option httplog
     ${renderMatchers "http" "hdr(host)"}
+
     ${renderBackends "http" "http" ["forwardfor"]}
+
     ${renderBackends "https" "tcp" ["ssl-hello-chk"]}
   '';
 in
