@@ -2,6 +2,7 @@
 /files/haproxy/haproxy.cfg
 /files/pdns/lua/gen-*
 /files/pdns/gen-*
+/files/pdns/bind.conf
 /files/pdns/recursor.conf
 *.backup
 *-secret.rsc
