@@ -28,8 +28,8 @@ locals {
       description       = "Factorio mod to add pause and unpause commands"
       branch_protection = false
     }
-    slimfat           = {}
-    tracething        = {}
+    slimfat    = {}
+    tracething = {}
     jsip = {
       description = "TCP/UDP/ICMP/IP/Ethernet stack in pure TypeScript."
     }
@@ -40,7 +40,7 @@ locals {
     streamdeckpi      = {}
     go-streamdeck     = {}
     go-haws           = {}
-    gitbackup         = {
+    gitbackup = {
       required_checks = [
         "nix",
       ]

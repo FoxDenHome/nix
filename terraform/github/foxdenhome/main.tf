@@ -8,32 +8,32 @@ locals {
       branch_protection = false
       visibility        = "private"
     }
-    NixieClockDori    = {}
-    e621dumper        = {
+    NixieClockDori = {}
+    e621dumper = {
       required_checks = [
         "nix",
       ]
     }
-    tapemgr           = {
+    tapemgr = {
       required_checks = [
         "nix",
       ]
     }
-    CC1101Duino       = {}
-    ntpi              = {}
-    shutdownd         = {}
+    CC1101Duino      = {}
+    ntpi             = {}
+    shutdownd        = {}
     keepass-unlocker = {}
-    backupmgr        = {
+    backupmgr = {
       required_checks = [
         "nix",
       ]
     }
-    core             = {}
+    core                   = {}
     foxden-radius-autofill = {}
-    foxdenaur-keyring = {}
-    foxdenaur-mirrorlist = {}
-    goscsi = {}
-    initcpio-uki-sbsign = {}
+    foxdenaur-keyring      = {}
+    foxdenaur-mirrorlist   = {}
+    goscsi                 = {}
+    initcpio-uki-sbsign    = {}
   }
 
   members = {

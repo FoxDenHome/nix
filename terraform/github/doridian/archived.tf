@@ -155,7 +155,7 @@ locals {
       description = "I really like food."
     }
     meshtastic-firmware = {
-      description = "Firmware for Meshtastic devices"
+      description  = "Firmware for Meshtastic devices"
       homepage_url = "https://meshtastic.org"
     }
     foxDNS = {
@@ -164,11 +164,11 @@ locals {
     foxIngress = {
       description = "HTTP(S)/QUIC SNI/Host router"
     }
-    depthy = {}
-    fbsplash = {}
+    depthy           = {}
+    fbsplash         = {}
     linux-fbcondecor = {}
-    miscsplashutils = {}
-    plenopticam = {}
+    miscsplashutils  = {}
+    plenopticam      = {}
     flippertools = {
       visibility = "private"
     }

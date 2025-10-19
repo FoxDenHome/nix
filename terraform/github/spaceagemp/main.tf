@@ -8,7 +8,7 @@ locals {
     StarLord = {
       description = "GMod server manager with updates from git"
     }
-    TTS           = {
+    TTS = {
       required_checks = [
         "nix",
       ]
@@ -18,7 +18,7 @@ locals {
         "nix",
       ]
     }
-    spacebuild    = {}
+    spacebuild = {}
     SpaceAge = {
       required_checks = [
         "lint"
