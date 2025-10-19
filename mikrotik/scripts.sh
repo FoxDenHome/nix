@@ -6,7 +6,7 @@ DEFAULT_POLICY='ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon
 
 F="$(mktemp)"
 
-echo '/system/scripts/remove [ find where (!(name~"^local-"))]' >> "$F"
+echo '/system/script/remove [ find where (!(name~"^local-"))]' >> "$F"
 echo '/system/scheduler/remove [ find where (!(name~"^local-"))]' >> "$F"
 
 for script_file in $(ls -1 scripts/*.rsc); do
@@ -34,6 +34,8 @@ for script_file in $(ls -1 scripts/*.rsc); do
         echo "/system/scheduler/add name=\"$script_name\" $schedule_param on-event=\"/system/script/run $script_name\"" >> "$F"
     fi
 done
+
+cat "$F"
 
 runscripts() {
     remote="$1"
