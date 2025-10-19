@@ -1,5 +1,7 @@
 { config, lib, foxDenLib, firewall, ... }:
 let
+  mainIPv4 = "95.216.116.140";
+
   ifcfg-foxden = {
     addresses = [
       "10.99.10.2/16"
@@ -9,7 +11,7 @@ let
   };
   ifcfg = {
     addresses = [
-      "95.216.116.140/26"
+      "${mainIPv4}/26"
       "2a01:4f9:2b:1a42::0:1/112"
     ];
     nameservers = [
@@ -69,7 +71,7 @@ in
       (mkMinHost ({ mac = null; } // iface))
       {
         interfaces.default = {
-          dns.auxAddresses = [ "95.216.116.140" ];
+          dns.auxAddresses = [ mainIPv4 ];
           routes = [
             { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::1:1"; }
           ];
@@ -97,12 +99,12 @@ in
       content = ''
         chain postrouting {
           type nat hook postrouting priority srcnat; policy accept;
-          ip saddr 10.99.12.0/24 oifname "${ifcfg.interface}" snat to 95.216.116.140
+          ip saddr 10.99.12.0/24 oifname "${ifcfg.interface}" snat to ${mainIPv4}
         }
 
         chain prerouting {
           type nat hook prerouting priority dstnat; policy accept;
-          ip daddr 95.216.116.140/32 iifname "${ifcfg.interface}" jump sharedip
+          ip daddr ${mainIPv4}/32 iifname "${ifcfg.interface}" jump sharedip
         }
 
         chain sharedip {
@@ -252,7 +254,7 @@ in
       name = "v4-icefox";
       type = "A";
       ttl = 3600;
-      value = "95.216.116.140";
+      value = mainIPv4;
       horizon = "external";
     }
     {
@@ -267,7 +269,7 @@ in
 
   # Due to Hetzner routing, we have two IPv6 subnets
   # - 2a01:4f9:2b:1a42::0:/112 for hosts which have public IPv4
-  # - 2a01:4f9:2b:1a42::1:/112 for hosts without public IPv4 (routed out via 95.216.116.140)
+  # - 2a01:4f9:2b:1a42::1:/112 for hosts without public IPv4 (routed out via mainIPv4)
   foxDen.hosts.hosts = {
     icefox = let
       mkIntf = addresses: {
