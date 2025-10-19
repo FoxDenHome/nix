@@ -80,11 +80,6 @@ in
       else
         [rule];
 
-    nullOrSameFamily = field1: field2: rule: let
-      val1 = rule.${field1};
-      val2 = rule.${field2};
-    in if val1 != null && val2 != null then (util.isIPv6 val1) == (util.isIPv6 val2) else true;
-
   in lib.attrsets.genAttrs gateways (gateway:
     map (lib.attrsets.filterAttrs (name: val: val != null && name != "gateway"))
       (lib.flatten (map (rule: let
