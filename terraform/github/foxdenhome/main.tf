@@ -11,8 +11,16 @@ locals {
     NixieClockDori    = {}
     PaperESP32        = {}
     LCDify            = {}
-    e621dumper        = {}
-    tapemgr           = {}
+    e621dumper        = {
+      required_checks = [
+        "nix",
+      ]
+    }
+    tapemgr           = {
+      required_checks = [
+        "nix",
+      ]
+    }
     CC1101Duino       = {}
     ntpi              = {}
     shutdownd         = {}
@@ -21,7 +29,11 @@ locals {
       description = "EcoFlow Portable Power Station Integration for Home Assistant"
     }
     keepass-unlocker = {}
-    backupmgr        = {}
+    backupmgr        = {
+      required_checks = [
+        "nix",
+      ]
+    }
     core             = {}
   }
 

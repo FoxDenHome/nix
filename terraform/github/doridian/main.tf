@@ -36,7 +36,11 @@ locals {
     streamdeckpi      = {}
     go-streamdeck     = {}
     go-haws           = {}
-    gitbackup         = {}
+    gitbackup         = {
+      required_checks = [
+        "nix",
+      ]
+    }
     BambuProfiles = {
       description = "Profiles for Bambu Lab printers"
     }
@@ -67,16 +71,15 @@ locals {
     karalabe_hid = {
       description = "Gopher Interface Devices (USB HID)"
     }
-    superfan = {}
-    foxDNS = {
-      description = "DNS server written in Golang"
-    }
-    foxIngress = {
-      description = "HTTP(S)/QUIC SNI/Host router"
+    superfan = {
+      required_checks = [
+        "nix",
+      ]
     }
     fadumper = {
       required_checks = [
-        "lint_and_build",
+        "lint",
+        "nix",
       ]
     }
     DarkSignsOnline = {
@@ -93,7 +96,11 @@ locals {
     node-single-instance = {
       description = "Check if an instance of the current application is running or not."
     }
-    oauth-jit-radius = {}
+    oauth-jit-radius = {
+      required_checks = [
+        "nix",
+      ]
+    }
     panon = {
       description    = "An Audio Visualizer Widget in KDE Plasma (works in KDE Plasma 6)"
       default_branch = "6.x.x"
@@ -131,6 +138,13 @@ locals {
     kanidm = {
       description    = "Kanidm: A simple, secure and fast identity management platform"
       default_branch = "master"
+    }
+
+    uds-proxy = {
+      description = "uds-proxy provides a UNIX domain socket that acts as HTTP(S) connection-pooling forward proxy"
+      required_checks = [
+        "nix",
+      ]
     }
   }
 }

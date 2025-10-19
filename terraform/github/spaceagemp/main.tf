@@ -1,11 +1,23 @@
 locals {
   repositores = {
-    website = {}
+    website = {
+      required_checks = [
+        "nix",
+      ]
+    }
     StarLord = {
       description = "GMod server manager with updates from git"
     }
-    TTS           = {}
-    space_age_api = {}
+    TTS           = {
+      required_checks = [
+        "nix",
+      ]
+    }
+    space_age_api = {
+      required_checks = [
+        "nix",
+      ]
+    }
     spacebuild    = {}
     SpaceAge = {
       required_checks = [

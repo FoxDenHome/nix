@@ -158,6 +158,12 @@ locals {
       description = "Firmware for Meshtastic devices"
       homepage_url = "https://meshtastic.org"
     }
+    foxDNS = {
+      description = "DNS server written in Golang"
+    }
+    foxIngress = {
+      description = "HTTP(S)/QUIC SNI/Host router"
+    }
   }
 }
 
