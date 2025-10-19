@@ -129,8 +129,6 @@ in
     config.foxDen.haproxy.hosts = lib.flatten (map renderHost (nixpkgs.lib.attrsets.attrsToList config.foxDen.hosts.hosts));
   };
 
-  getForGateway = config: gateway: mkForGateway gateway config.foxDen.haproxy;
-
   make = nixosConfigurations: let
     hosts = globalConfig.getList ["foxDen" "haproxy" "hosts"] nixosConfigurations;
     gateways = foxDenLib.global.hosts.getGateways nixosConfigurations;

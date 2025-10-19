@@ -23,8 +23,6 @@ let
         else []) ifaces);
 in
 {
-  getForGateway = config: gateway: mkForGateway gateway config.foxDen.foxIngress;
-
   make = nixosConfigurations: let
     interfaces = foxDenLib.global.hosts.getInterfaces nixosConfigurations;
     gateways = foxDenLib.global.hosts.getGateways nixosConfigurations;

@@ -26,7 +26,3 @@ scrape_configs:
   - job_name: mktxp
     static_configs:
       - targets: ['mktxp.foxden.network:49090']
-
-  - job_name: foxingress
-    static_configs:
-      - targets: ['router.foxden.network:5303', 'router-backup.foxden.network:5303', 'icefox.foxden.network:5303']

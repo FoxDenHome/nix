@@ -62,7 +62,6 @@ let
   }) systemInfos;
 
   dnsRecords = foxDenLib.global.dns.mkRecords nixosConfigurations;
-  foxIngress = foxDenLib.global.foxingress.make nixosConfigurations;
   dhcp = foxDenLib.global.dhcp.make nixosConfigurations;
   firewall = foxDenLib.global.firewall.make nixosConfigurations;
   haproxy = foxDenLib.global.haproxy.make nixosConfigurations;
@@ -73,7 +72,7 @@ let
       specialArgs = allLibs // {
         systemArch = system.system;
         hostName = system.name;
-        inherit dnsRecords foxIngress dhcp firewall haproxy;
+        inherit dnsRecords dhcp firewall haproxy;
       };
       modules = [
         ({ ... }: {
@@ -91,10 +90,6 @@ in
   dnsRecords = {
     attrset = dnsRecords;
     json = builtins.toFile "dns-records.json" (builtins.toJSON dnsRecords);
-  };
-  foxIngress = {
-    attrset = foxIngress;
-    json = nixpkgs.lib.attrsets.mapAttrs (name: cfg: builtins.toFile "foxIngress.json" (builtins.toJSON cfg)) foxIngress;
   };
   haproxy = {
     source = haproxy;
