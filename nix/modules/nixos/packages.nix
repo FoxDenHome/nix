@@ -22,9 +22,14 @@ let
     allowUnfree = true;
   };
 
+  pkgs = (import nixpkgs {
+    system = systemArch;
+    config = nixPkgConfig;
+  });
+
   localPackages = lib.attrsets.genAttrs
     (lib.attrNames (builtins.readDir ../../packages))
-    (name: import ../../packages/${name}/package.nix);
+    (name: import ../../packages/${name}/package.nix { inherit pkgs lib nixpkgs; });
 in
 {
   imports = [
@@ -32,10 +37,7 @@ in
   ];
 
   config.nixpkgs.pkgs = lib.mergeAttrsList ([
-    (import nixpkgs {
-      system = systemArch;
-      config = nixPkgConfig;
-    })
+    pkgs
     {
       config = nixPkgConfig;
     }

@@ -1,5 +1,5 @@
-{ pkgs, ... } : let
-  packageJson = nixpkgs.lib.trivial.importJSON ./package.json;
+{ pkgs, lib, ... } : let
+  packageJson = lib.trivial.importJSON ./package.json;
 in pkgs.stdenv.mkDerivation {
   name = packageJson.name;
   version = packageJson.version;
