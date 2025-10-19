@@ -2,10 +2,10 @@
 let
   # TODO: Use a lanzaboote post script for this, once they exist
   syncBootScript = ''
-    if [ -d /boot2 ]; then
+    if [ -d /boot2/EFI ]; then
       rsync -av --delete /boot/ /boot2/
     else
-      echo 'No /boot2, skipping'
+      echo 'No /boot2/EFI, skipping'
     fi
   '';
 
