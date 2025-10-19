@@ -41,7 +41,7 @@ in
         "fd2c:f4cb:63be:3::b12/64"
       ];
     };
-    fadumper = mkVlanHost 3 {
+    fadumper = mkVlanHost 2 {
       dns = {
         name = "furaffinity";
         zone = "foxden.network";
