@@ -29,6 +29,9 @@ let
           server srv_${name} ${portCfg.host}:${builtins.toString portCfg.port} ${nixpkgs.lib.concatStringsSep " " flags}
       '' else "") hosts
     ));
+
+     # http = "forwardfor" "httplog"
+     # https = "ssl-hello-chk" "tcplog"
   in ''
     global
       log stdout format raw local0 info
@@ -53,7 +56,7 @@ let
       mode http
     ${renderMatchers "http" "hdr(host)"}
 
-    ${renderBackends "http" "http" ["forwardfor" "httplog"]}
+    ${renderBackends "http" "http" []}
 
     ${renderBackends "https" "tcp" []}
 
