@@ -73,7 +73,7 @@ let
       specialArgs = allLibs // {
         systemArch = system.system;
         hostName = system.name;
-        inherit dnsRecords foxIngress dhcp firewall;
+        inherit dnsRecords foxIngress dhcp firewall haproxy;
       };
       modules = [
         ({ ... }: {
