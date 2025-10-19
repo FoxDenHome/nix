@@ -64,8 +64,8 @@ hue 3600 IN A 10.2.12.1
 hue-sync-box 3600 IN A 10.2.12.18
 icefox 3600 IN A 10.99.10.2
 icefox 3600 IN AAAA fd2c:f4cb:63be::a63:a02
-icefox-foxingress 3600 IN A 10.99.12.2
-icefox-foxingress 3600 IN AAAA fd2c:f4cb:63be::a63:c02
+icefox-haproxy 3600 IN A 10.99.12.2
+icefox-haproxy 3600 IN AAAA fd2c:f4cb:63be::a63:c02
 islandfox 3600 IN A 10.2.10.11
 islandfox 3600 IN AAAA fd2c:f4cb:63be:2::a0b
 jellyfin 3600 IN A 10.2.11.3

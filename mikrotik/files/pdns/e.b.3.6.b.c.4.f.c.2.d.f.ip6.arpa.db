@@ -72,7 +72,7 @@ b.7.0.0.0.0.0.0.0.0.0.0.0.0.0.0.9.0.0.0 IN PTR ntpi.foxden.network.
 2.0.a.0.3.6.a.0.0.0.0.0.0.0.0.0.0.0.0.0 3600 IN PTR icefox.foxden.network.
 2.0.b.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.0.0 3600 IN PTR syncthing.foxden.network.
 2.0.c.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.0.0 3600 IN PTR homeassistant.foxden.network.
-2.0.c.0.3.6.a.0.0.0.0.0.0.0.0.0.0.0.0.0 3600 IN PTR icefox-foxingress.foxden.network.
+2.0.c.0.3.6.a.0.0.0.0.0.0.0.0.0.0.0.0.0 3600 IN PTR icefox-haproxy.foxden.network.
 2.0.d.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.0.0 3600 IN PTR pikvm-rack.foxden.network.
 2.0.e.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.0.0 3600 IN PTR radius.auth.foxden.network.
 2.1.b.0.0.0.0.0.0.0.0.0.0.0.0.0.3.0.0.0 3600 IN PTR e621.foxden.network.

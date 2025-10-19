@@ -106,7 +106,7 @@ $INCLUDE /etc/pdns/authority.db
 2.11.2 3600 IN PTR syncthing.foxden.network.
 2.11.5 3600 IN PTR camera-living-room.foxden.network.
 2.12.2 3600 IN PTR homeassistant.foxden.network.
-2.12.99 3600 IN PTR icefox-foxingress.foxden.network.
+2.12.99 3600 IN PTR icefox-haproxy.foxden.network.
 2.13.1 3600 IN PTR pikvm-rack.foxden.network.
 2.14.1 3600 IN PTR radius.auth.foxden.network.
 20.11.2 3600 IN PTR prometheus.foxden.network.

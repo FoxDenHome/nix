@@ -1,0 +1,12 @@
+from subprocess import check_call
+from refresh.util import unlink_safe, NIX_DIR, mtik_path
+
+FILENAME = mtik_path("files/haproxy/haproxy.cfg")
+
+def refresh_haproxy():
+    unlink_safe("result")
+    check_call(["nix", "build", f"{NIX_DIR}#haproxy.text.router"])
+    with open("result", "r") as file:
+        config = file.read()
+    with open(FILENAME, "w") as out_file:
+        out_file.write(config)
