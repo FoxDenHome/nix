@@ -7,7 +7,7 @@ let
   defaultDataDir = "/var/lib/minecraft";
   ifDefaultData = lib.mkIf (svcConfig.dataDir == defaultDataDir);
 
-  jrePackage = pkgs.foxden-minecraft-jre;
+  jrePackage = import ../../../../packages/minecraft-jre.nix { inherit pkgs; };
   serverPackage = pkgs.foxden-minecraft;
 in
 {
@@ -18,8 +18,6 @@ in
       description = "Directory to store Minecraft data";
     };
   } // (services.http.mkOptions { svcName = "minecraft"; name = "Minecraft server"; });
-
-  # TODO: Make modpack a package and actually build it and only take the world
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
