@@ -2,7 +2,6 @@
 
 ## TODO
 
-- [ ] Firewall management (on router)
 - [ ] DHCPv6 lease management (on router)
 - [ ] apcupsd fails startup on boot, likely too early. just add better restart logic
 - icefox
