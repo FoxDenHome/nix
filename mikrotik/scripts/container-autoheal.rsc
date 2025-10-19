@@ -26,9 +26,12 @@
   :if (![get $ct running]) do={
     :set ctneedstop true
   }
+  :if ([get $ct stopped]) do={
+    :set ctneedstop false
+  }
 
   :if ($ctneedstop) do={
-    $logputinfo ("STOPPING container with interface " . [get $ct interface])
+    $logputinfo ("STOPPING container " . [get $ct name])
     stop $ct
 
     :set maxtries 50
@@ -40,29 +43,20 @@
       }
     }
     :if ($maxtries != -999) do={
-      $logputerror ("FAILED STOPPING container with interface " . [get $ct interface])
+      $logputerror ("FAILED STOPPING container " . [get $ct name])
     } else={
-      $logputinfo ("STOPPED container with interface " . [get $ct interface])
+      $logputinfo ("STOPPED container " . [get $ct name])
     }
   }
 
   :if ([get $ct stopped]) do={
-    $logputinfo ("STARTING container with interface " . [get $ct interface])
+    $logputinfo ("STARTING container " . [get $ct name])
 
     :if ($needupdate) do={
       :local ctinfo [get $ct]
 
-      $logputinfo ("UPDATING/REMOVE container with interface " . ($ctinfo->"interface"))
-      remove $ct
-
-      $logputinfo ("UPDATING/ADD container with interface " . ($ctinfo->"interface"))
-      add interface=($ctinfo->"interface") \
-        logging=($ctinfo->"logging") \
-        mounts=($ctinfo->"mounts") \
-        start-on-boot=($ctinfo->"start-on-boot") \
-        remote-image=($ctinfo->"repo")
-
-      :set ct ([find interface=($ctinfo->"interface")]->0)
+      $logputinfo ("UPDATING/REPULL container " . ($ctinfo->"name"))
+      repull $ct
 
       :set maxtries 600
       :while ($maxtries > 0) do={
@@ -73,9 +67,9 @@
         }
       }
       :if ($maxtries != -999) do={
-        $logputerror ("FAILED UPDATING container with interface " . ($ctinfo->"interface"))
+        $logputerror ("FAILED UPDATING container " . ($ctinfo->"name"))
       } else={
-        $logputinfo ("UPDATED container with interface " . ($ctinfo->"interface"))
+        $logputinfo ("UPDATED container " . ($ctinfo->"name"))
       }
     }
 
@@ -92,11 +86,11 @@
     }
   }
   :if ($maxtries != -999) do={
-    $logputerror ("FAILED STARTING container with interface " . [get $ct interface])
+    $logputerror ("FAILED STARTING container " . [get $ct name])
     :set clearrestart false
   } else={
     :if (!$hidestartok) do={
-      $logputinfo ("STARTED container with interface " . [get $ct interface])
+      $logputinfo ("STARTED container " . [get $ct name])
     }
   }
 }
