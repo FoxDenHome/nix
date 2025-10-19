@@ -59,6 +59,7 @@ in
           source = { host = svcConfig.host; };
           dstport = 161;
           protocol = "udp";
+          comment = "telegraf-allow-snmp";
         }
       ];
 
