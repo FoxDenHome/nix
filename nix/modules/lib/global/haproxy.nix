@@ -18,11 +18,11 @@ let
         "  use_backend bk_${name} if acl_${name}"
       ] else []) hosts)));
 
-    renderBackends = (cfgName: mode: nixpkgs.lib.concatStringsSep "\n" (
+    renderBackends = (cfgName: mode: extraFlags: nixpkgs.lib.concatStringsSep "\n" (
       map (host: let
         portCfg = host.${cfgName};
         name = "${cfgName}_${nixpkgs.lib.lists.head host.names}";
-        flags = if portCfg.proxyProtocol then ["send-proxy-v2"] else [];
+        flags = extraFlags ++ (if portCfg.proxyProtocol then ["send-proxy-v2"] else []);
       in if portCfg.host != null then ''
         backend bk_${name}
           mode ${mode}
@@ -34,15 +34,16 @@ let
       log stdout format raw local0 info
 
     defaults
+      log global
       timeout client 30s
       timeout server 30s
       timeout connect 5s
       option tcplog
+      option dontlognull
 
     frontend fe_https
       bind :443
       mode tcp
-      log global
       tcp-request inspect-delay 5s
       tcp-request content accept if { req_ssl_hello_type 1 }
     ${renderMatchers "https" "req.ssl_sni"}
@@ -50,12 +51,11 @@ let
     frontend fe_http
       bind :80
       mode http
-      log global
     ${renderMatchers "http" "hdr(host)"}
 
-    ${renderBackends "http" "http"}
+    ${renderBackends "http" "http" ["forwardfor" "httplog"]}
 
-    ${renderBackends "https" "tcp"}
+    ${renderBackends "https" "tcp" ["ssl-hello-chk" "tcplog"]}
 
   '';
 in
