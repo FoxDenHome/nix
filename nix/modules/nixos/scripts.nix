@@ -1,40 +1,29 @@
 { config, lib, pkgs, ... } :
 let
   # TODO: Use a lanzaboote post script for this, once they exist
-  syncBootScript = pkgs.writeShellScript "sync-boot.sh" ''
-    set -xeuo pipefail
+  syncBootScript = ''
     if [ -d /boot2 ]; then
       rsync -av --delete /boot/ /boot2/
     else
       echo 'No /boot2, skipping'
     fi
   '';
-in
-{
-  environment.etc."foxden/update-nixos.sh" = {
-    text = ''
-      #!/usr/bin/env bash
-      set -xeuo pipefail
-      nix flake update --flake 'github:FoxDenHome/core?dir=nix' || true
-      nixos-rebuild switch --flake "github:FoxDenHome/core?dir=nix#$(hostname)"
-      ${syncBootScript}
-    '';
-    mode = "0755";
-  };
 
-  environment.etc."foxden/prune-nixos.sh" = {
-    text = ''
-      #!/usr/bin/env bash
-      set -xeuo pipefail
-      nix-collect-garbage --delete-old
-      /run/current-system/bin/switch-to-configuration boot
-      ${syncBootScript}
-    '';
-    mode = "0755";
-  };
+  updateScript = pkgs.writeShellScript "update-nixos.sh" ''
+    set -xeuo pipefail
+    nix flake update --flake 'github:FoxDenHome/core?dir=nix' || true
+    nixos-rebuild switch --flake "github:FoxDenHome/core?dir=nix#$(hostname)"
+    ${syncBootScript}
+  '';
 
-  environment.etc."foxden/cryptenroll.sh" = {
-    text = ''
+  pruneScript = pkgs.writeShellScript "prune-nixos.sh" ''
+    set -xeuo pipefail
+    nix-collect-garbage --delete-old
+    /run/current-system/bin/switch-to-configuration boot
+    ${syncBootScript}
+  '';
+
+  cryptenrollScript = pkgs.writeShellScript "cryptenroll.sh" ''
       #!/usr/bin/env bash
       set -xeuo pipefail
       enroll_disk() {
@@ -44,6 +33,9 @@ in
     + (builtins.concatStringsSep "\n"
         (map (dev: "enroll_disk ${dev.device}")
           (lib.attrsets.attrValues config.boot.initrd.luks.devices))) + "\n";
-    mode = "0755";
-  };
+in
+{
+  environment.etc."foxden/update-nixos.sh".source = updateScript;
+  environment.etc."foxden/prune-nixos.sh".source = pruneScript;
+  environment.etc."foxden/cryptenroll.sh".source = cryptenrollScript;
 }
