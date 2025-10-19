@@ -47,6 +47,20 @@ in
         httpPort = 81;
         httpsPort = 444;
       };
+      firewall.ingressAcceptRules = [
+        {
+          protocol = "tcp";
+          port = 80;
+        }
+        {
+          protocol = "tcp";
+          port = 443;
+        }
+        {
+          protocol = "udp";
+          port = 443;
+        }
+      ];
       addresses = [
         "10.2.11.17/16"
         "fd2c:f4cb:63be:3::b11/64"

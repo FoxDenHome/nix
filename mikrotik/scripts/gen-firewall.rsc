@@ -29,6 +29,12 @@
 /ipv6/firewall/filter/add chain="forward" comment="auto-https-kiwix-default" dst-address=fd2c:f4cb:63be:2::b06 dst-port=443 protocol=tcp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-quic-kiwix-default" dst-address=10.2.11.6 dst-port=443 protocol=udp action=accept
 /ipv6/firewall/filter/add chain="forward" comment="auto-quic-kiwix-default" dst-address=fd2c:f4cb:63be:2::b06 dst-port=443 protocol=udp action=accept
+/ip/firewall/filter/add chain="forward" comment="" dst-address=10.2.11.17 dst-port=80 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:3::b11 dst-port=80 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="" dst-address=10.2.11.17 dst-port=443 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:3::b11 dst-port=443 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="" dst-address=10.2.11.17 dst-port=443 protocol=udp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:3::b11 dst-port=443 protocol=udp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-http-mirror-default" dst-address=10.2.11.17 dst-port=81 protocol=tcp action=accept
 /ipv6/firewall/filter/add chain="forward" comment="auto-http-mirror-default" dst-address=fd2c:f4cb:63be:3::b11 dst-port=81 protocol=tcp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-https-mirror-default" dst-address=10.2.11.17 dst-port=444 protocol=tcp action=accept
@@ -69,6 +75,12 @@
 /ipv6/firewall/filter/add chain="forward" comment="auto-https-doridian-website-default" dst-address=fd2c:f4cb:63be:3::b0f dst-port=443 protocol=tcp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-quic-doridian-website-default" dst-address=10.2.11.15 dst-port=443 protocol=udp action=accept
 /ipv6/firewall/filter/add chain="forward" comment="auto-quic-doridian-website-default" dst-address=fd2c:f4cb:63be:3::b0f dst-port=443 protocol=udp action=accept
+/ip/firewall/filter/add chain="forward" comment="" dst-address=10.3.10.1 dst-port=80 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:3::a01 dst-port=80 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="" dst-address=10.3.10.1 dst-port=443 protocol=tcp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:3::a01 dst-port=443 protocol=tcp action=accept
+/ip/firewall/filter/add chain="forward" comment="" dst-address=10.3.10.1 dst-port=443 protocol=udp action=accept
+/ipv6/firewall/filter/add chain="forward" comment="" dst-address=fd2c:f4cb:63be:3::a01 dst-port=443 protocol=udp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-http-foxcaves-default" dst-address=10.3.10.1 dst-port=81 protocol=tcp action=accept
 /ipv6/firewall/filter/add chain="forward" comment="auto-http-foxcaves-default" dst-address=fd2c:f4cb:63be:3::a01 dst-port=81 protocol=tcp action=accept
 /ip/firewall/filter/add chain="forward" comment="auto-https-foxcaves-default" dst-address=10.3.10.1 dst-port=444 protocol=tcp action=accept
