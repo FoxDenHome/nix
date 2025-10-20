@@ -69,7 +69,7 @@ in
       name = "vpn";
       type = "A";
       ttl = 3600;
-      value = "10.2.0.1";
+      value = "10.2.1.1";
       horizon = "internal";
     }
     {
@@ -77,7 +77,7 @@ in
       name = "v4-vpn";
       type = "A";
       ttl = 3600;
-      value = "10.2.0.1";
+      value = "10.2.1.1";
       horizon = "internal";
     }
   ]
