@@ -13,7 +13,7 @@
 		- RAIDZ2: 8 * 18 TB SATA3 HDD
 		- metadata special RAID1: 2 * 1TB SAS3 SSD (partition)
 	- zssd: XFS: RAID1: 2 * 3TB SAS3 SSD (partition)
-- **Network**: 25GbE (Mellanox ConnectX-6 Dx)
+- **Network**: 25GbE (SFP28; Mellanox ConnectX-6 Dx)
 
 ### islandfox
 
@@ -22,7 +22,7 @@
 - **RAM**: 64GB, DDR4, 3200 MT/s
 - **Storage**:
 	- nix: XFS: RAID1: 2TB NVMe SSD + 2TB SATA3 SSD
-- **Network**: 1GbE
+- **Network**: 1GbE (RJ45)
 
 ### icefox
 
@@ -33,15 +33,35 @@
 	- nix: xfs: RAID1: 2 * 1TB NVMe SSD
 	- ztank: ZFS:
 		- RAIDZ2: 10 * 14 TB SATA3 HDD
-- **Network**: 1GbE, no traffic limit
+- **Network**: 1GbE (no traffic limit)
 
 ### redfox
 
 - **Locator**: Vultr
 - **CPU**: 1 vCPU "Intel high performance"
-- **RAM**: 1GB
+- **RAM**: 1 GB
 - **Storage**: vdisk 25 GB NVMe SSD
-- **Network**: >= 1GbE, max 2 TB traffic
+- **Network**: >= 1GbE (max 2 TB traffic)
+
+### router
+
+- **Locator**: Rack; 1U, white Mikrotik CCR2004
+- **CPU**: 4 core ARM64 "AL32400"
+- **RAM**: 4 GB
+- **Storage**: 128 MB NAND
+- **Network**:
+	- LAN: 25 GbE (SFP28)
+	- WAN: 10 GbE (SFP+)
+
+### router-backup
+
+- **Locator**: Rack, 1U, black Mikrotik RB5009
+- **CPU**: 4 core ARM64 "88F7040"
+- **RAM**: 1 GB
+- **Storage**: 1 GB NAND
+- **Network**:
+	- LAN: 10 GbE (SFP+)
+	- WAN: 2.5 GbE (RJ45)
 
 ## TODO
 
