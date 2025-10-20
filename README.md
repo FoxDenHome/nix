@@ -66,7 +66,7 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 
 ### router-backup
 
-- **Locator**: Rack, 1U, black MikroTik RB5009
+- **Locator**: Rack; 1U, black MikroTik RB5009
 - **OS**: MikroTik RouterOS
 - **CPU**: 4 core ARM64 "88F7040"
 - **RAM**: 1 GB
