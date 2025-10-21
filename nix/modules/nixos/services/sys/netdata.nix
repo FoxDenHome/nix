@@ -20,6 +20,11 @@ in
       package = pkgs.netdata.override {
         withCloudUi = true;
       };
+      config = {
+        plugins = {
+          freeipmi = false;
+        };
+      };
     };
     environment.persistence."/nix/persist/netdata" = {
       hideMounts = true;
