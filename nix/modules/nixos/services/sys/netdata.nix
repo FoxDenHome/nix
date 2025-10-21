@@ -22,7 +22,7 @@ in
       };
       config = {
         plugins = {
-          freeipmi = false;
+          freeipmi = "no";
         };
       };
     };
