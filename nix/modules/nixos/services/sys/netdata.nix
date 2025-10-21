@@ -17,7 +17,7 @@ in
   config = lib.mkIf svcConfig.enable {
     services.netdata.enable = true;
 
-    environment.persistence."/nix/persist/netdata" = ifDefaultData {
+    environment.persistence."/nix/persist/netdata" = {
       hideMounts = true;
       directories = [
         (mkDir "/var/lib/netdata")
