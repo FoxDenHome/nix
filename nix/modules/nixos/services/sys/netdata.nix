@@ -15,9 +15,11 @@ in
   };
 
   config = lib.mkIf svcConfig.enable {
-    services.netdata.enable = true;
-    services.netdata.package = pkgs.netdata.override {
-      withCloudUi = true;
+    services.netdata = {
+      enable = true;
+      package = pkgs.netdata.override {
+        withCloudUi = true;
+      };
     };
     environment.persistence."/nix/persist/netdata" = {
       hideMounts = true;
