@@ -24,4 +24,5 @@ in
         (mkDir "/var/cache/netdata")
       ];
     };
+  };
 }
