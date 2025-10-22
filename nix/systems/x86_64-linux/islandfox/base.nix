@@ -9,7 +9,7 @@
   system.stateVersion = "25.05";
 
 
-  imports = [ ../../profiles/server.nix ];
+  imports = [ ../../../profiles/server.nix ];
   hardware.enableRedistributableFirmware = true;
   hardware.cpu.amd.updateMicrocode = true;
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" ];

@@ -8,7 +8,7 @@
 
   system.stateVersion = "25.05";
 
-  imports = [ ../../profiles/server.nix ];
+  imports = [ ../../../profiles/server.nix ];
   systemd.services."serial-getty@ttyS0".enable = true;
   systemd.services."serial-getty@ttyS1".enable = true;
   hardware.enableRedistributableFirmware = true;
