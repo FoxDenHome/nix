@@ -1,6 +1,7 @@
 # Mostly https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/profiles/headless.nix
 { ... }:
 {
+  systemd.services."getty@tty1".enable = true;
   systemd.services."serial-getty@hvc0".enable = false;
   systemd.services."autovt@".enable = false;
   boot.kernelParams = [
