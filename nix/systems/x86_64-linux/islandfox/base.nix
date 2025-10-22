@@ -8,7 +8,6 @@
 
   system.stateVersion = "25.05";
 
-
   imports = [ ../../../profiles/server.nix ];
   hardware.enableRedistributableFirmware = true;
   hardware.cpu.amd.updateMicrocode = true;
