@@ -1,4 +1,4 @@
-{ modulesPath, config, ... }:
+{ config, ... }:
 {
   # These are set when you reinstall the system
   # Change them to "false" for first boot, before secrets exist
@@ -8,10 +8,9 @@
 
   system.stateVersion = "25.05";
 
-  imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
-    (modulesPath + "/profiles/headless.nix")
-  ];
+  imports = [ ../../profiles/server.nix ];
+  systemd.services."serial-getty@ttyS0".enable = true;
+  systemd.services."serial-getty@ttyS1".enable = true;
   hardware.enableRedistributableFirmware = true;
   hardware.cpu.intel.updateMicrocode = true;
   boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "nvme" "mpt3sas" "usbhid" ];
