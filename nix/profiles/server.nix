@@ -6,8 +6,6 @@
   boot.kernelParams = [
     "panic=1"
     "boot.panic_on_fail"
-    "vga=0x317"
-    "nomodeset"
   ];
   systemd.enableEmergencyMode = false;
   boot.loader.grub.splashImage = null;
