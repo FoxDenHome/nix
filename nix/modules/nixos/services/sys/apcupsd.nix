@@ -33,6 +33,7 @@ in
 
     systemd.services.apcupsd = {
       after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
     };
   };
 }
