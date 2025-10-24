@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ lib, config, ... }:
 let
   svcConfig = config.foxDen.services.apcupsd;
 in

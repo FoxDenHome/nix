@@ -55,6 +55,7 @@
 
   foxDen.services = {
     watchdog.enable = true;
+    bootssh.enable = true;
     netdata.enable = true;
     backupmgr.enable = config.lib.foxDen.sops.mkIfAvailable true;
   };
