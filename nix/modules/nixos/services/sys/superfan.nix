@@ -16,7 +16,7 @@ in
       serviceConfig = {
         Type = "simple";
         Restart = "always";
-        TimeoutStartSec = "300";
+        TimeoutStartSec = "30";
         ExecStart = ["${pkgs.superfan}/bin/superfan"];
       };
 
