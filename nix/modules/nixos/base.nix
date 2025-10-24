@@ -25,6 +25,7 @@
     ipmitool
     lm_sensors
     mdadm
+    mstflint
     ncdu
     openssl
     rsync
