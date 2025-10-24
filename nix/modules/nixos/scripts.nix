@@ -35,7 +35,7 @@ let
           (lib.attrsets.attrValues config.boot.initrd.luks.devices))) + "\n");
 in
 {
-  environment.etc."foxden/update-nixos.sh".source = updateScript;
-  environment.etc."foxden/prune-nixos.sh".source = pruneScript;
+  environment.etc."foxden/nixos/update.sh".source = updateScript;
+  environment.etc."foxden/nixos/prune.sh".source = pruneScript;
   environment.etc."foxden/cryptenroll.sh".source = cryptenrollScript;
 }
