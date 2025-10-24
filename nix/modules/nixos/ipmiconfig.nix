@@ -104,9 +104,6 @@ in
         pkgs.systemd
       ];
 
-      after = [ "superfan.service" ];
-      wants = [ "superfan.service" ];
-
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
