@@ -19,9 +19,9 @@
       ];
     };
     boot.initrd.systemd = {
-      users.root.shell = "/bin/fish";
+      users.root.shell = "/bin/bash";
       storePaths = with pkgs; [
-        fish
+        bash
         cryptsetup
       ];
     };
