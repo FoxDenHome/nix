@@ -2,7 +2,6 @@
 { ... }:
 {
   systemd.services."serial-getty@hvc0".enable = false;
-  systemd.services."autovt@".enable = false;
   boot.kernelParams = [
     "panic=1"
     "boot.panic_on_fail"
