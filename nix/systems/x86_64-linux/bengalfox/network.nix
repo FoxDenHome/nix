@@ -37,7 +37,7 @@ in
       VLAN = "2";
     }];
   };
-  boot.initrd.systemd.network.networks."30-${phyIface}" = config.systemd.network.networks."30-${ifcfg.interface}" // { name = phyIface; };
+  #boot.initrd.systemd.network.networks."30-${phyIface}" = config.systemd.network.networks."30-${ifcfg.interface}" // { name = phyIface; };
 
   systemd.network.netdevs."${ifcfg.interface}" = {
     netdevConfig = {
