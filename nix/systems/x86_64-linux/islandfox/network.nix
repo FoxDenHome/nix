@@ -1,4 +1,4 @@
-{ config, foxDenLib, ... }:
+{ foxDenLib, ... }:
 let
   ifcfg = {
     addresses = [
