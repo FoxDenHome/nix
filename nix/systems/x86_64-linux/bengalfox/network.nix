@@ -10,6 +10,8 @@ let
     interface = "br-default";
     mac = "e8:eb:d3:08:d2:98";
   };
+
+  phyIface = "ens1f0np0";
 in
 {
   lib.foxDenSys.mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
@@ -17,18 +19,6 @@ in
   foxDen.hosts.index = 1;
   foxDen.hosts.gateway = "router";
   virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ];
-
-  systemd.network.netdevs."${ifcfg.interface}" = {
-    netdevConfig = {
-      Name = ifcfg.interface;
-      Kind = "bridge";
-      MACAddress = ifcfg.mac;
-    };
-
-    bridgeConfig = {
-      VLANFiltering = true;
-    };
-  };
 
   systemd.network.networks."30-${ifcfg.interface}" = {
     name = ifcfg.interface;
@@ -47,9 +37,22 @@ in
       VLAN = "2";
     }];
   };
+  boot.initrd.systemd.network.networks."30-${phyIface}" = config.systemd.network.networks."30-${ifcfg.interface}" // { name = phyIface; };
+
+  systemd.network.netdevs."${ifcfg.interface}" = {
+    netdevConfig = {
+      Name = ifcfg.interface;
+      Kind = "bridge";
+      MACAddress = ifcfg.mac;
+    };
+
+    bridgeConfig = {
+      VLANFiltering = true;
+    };
+  };
 
   systemd.network.networks."40-${ifcfg.interface}-root" = {
-    name = "ens1f0np0";
+    name = phyIface;
     bridge = [ifcfg.interface];
 
     bridgeVLANs = [{

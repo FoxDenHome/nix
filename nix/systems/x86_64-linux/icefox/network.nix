@@ -147,16 +147,13 @@ in
       IPv6AcceptRA = true;
     };
   };
+  boot.initrd.systemd.network.networks."30-${phyIface}" = config.systemd.network.networks."30-${ifcfg.interface}" // { name = phyIface; };
 
   systemd.network.netdevs."${ifcfg.interface}" = {
     netdevConfig = {
       Name = ifcfg.interface;
       Kind = "bridge";
       MACAddress = ifcfg.mac;
-    };
-
-    bridgeConfig = {
-      VLANFiltering = false;
     };
   };
 
@@ -165,10 +162,6 @@ in
       Name = routedInterface;
       Kind = "bridge";
       MACAddress = config.lib.foxDen.mkHashMac "000001";
-    };
-
-    bridgeConfig = {
-      VLANFiltering = false;
     };
   };
 
@@ -211,10 +204,6 @@ in
     netdevConfig = {
       Name = ifcfg-foxden.interface;
       Kind = "bridge";
-    };
-
-    bridgeConfig = {
-      VLANFiltering = false;
     };
   };
 
