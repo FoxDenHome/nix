@@ -15,6 +15,8 @@
   time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "C.UTF-8";
 
+  systemd.services."getty@tty1".enable = true;
+
   environment.systemPackages = with pkgs; [
     age
     bridge-utils
