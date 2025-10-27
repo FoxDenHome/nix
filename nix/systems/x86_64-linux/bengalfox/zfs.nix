@@ -32,26 +32,13 @@ in
         recursive = "zfs";
       };
     };
-    syncoid = let
-      syncoidRootDir = "/var/lib/syncoid";
-    in config.lib.foxDen.sops.mkIfAvailable {
+    syncoid = config.lib.foxDen.sops.mkIfAvailable {
       enable = true;
       commands.zhdd = {
         source = "zhdd/ROOT";
         target = "bengalfox@v4-icefox.doridian.net:ztank/ROOT/zhdd";
         sshKey = config.sops.secrets."syncoid-ssh-key".path;
         recursive = true;
-        service = {
-          serviceConfig = {
-            WorkingDirectory = syncoidRootDir;
-            ExecStartPre = [(pkgs.writeShellScript "keyscan.sh" ''
-              if [ ! -f "${syncoidRootDir}/.ssh/known_hosts" ] ; then
-                ${pkgs.coreutils}/bin/mkdir -p "${syncoidRootDir}/.ssh"
-                ${pkgs.openssh}/bin/ssh-keyscan -H v4-icefox.doridian.net >> "${syncoidRootDir}/.ssh/known_hosts"
-              fi
-            '')];
-          };
-        };
       };
     };
   };
