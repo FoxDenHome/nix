@@ -43,7 +43,7 @@
       ];
       commands = lib.attrsets.mapAttrs (_: cfg: {
         sendOptions = "Lec";
-        services = {
+        service = {
           path = [pkgs.openssh_hpn];
         };
       } // cfg) config.foxDen.zfs.syncoid.commands;
