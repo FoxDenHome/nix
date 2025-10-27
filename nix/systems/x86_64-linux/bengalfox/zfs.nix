@@ -32,6 +32,14 @@ in
         recursive = "zfs";
       };
     };
+    syncoid = {
+      enable = true;
+      commands.zhdd = {
+        source = "zhdd/ROOT";
+        target = "bengalfox@v4-icefox.doridian.net:ztank/ROOT/zhdd";
+        recursive = true;
+      };
+    };
   };
 
   sops.secrets."zfs-zhdd.key" = config.lib.foxDen.sops.mkIfAvailable {

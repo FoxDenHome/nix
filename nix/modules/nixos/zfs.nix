@@ -1,13 +1,21 @@
-{ pkgs, lib, config, ... } :
+{ pkgs, lib, config, ... }:
 {
   options.foxDen.zfs = {
-    enable = lib.mkEnableOption "Enable ZFS support.";
+    enable = lib.mkEnableOption "Enable ZFS support";
     sanoid = {
-      enable = lib.mkEnableOption "Enable sanoid snapshots for ZFS datasets.";
+      enable = lib.mkEnableOption "Enable sanoid snapshots for ZFS datasets";
       datasets = with lib.types; lib.mkOption {
         type = attrsOf anything;
         default = {};
-        description = "ZFS datasets to snapshot with sanoid.";
+        description = "ZFS datasets to snapshot with sanoid";
+      };
+    };
+    syncoid = {
+      enable = lib.mkEnableOption "Enable syncoid replication for ZFS datasets";
+      commands = with lib.types; lib.mkOption {
+        type = attrsOf anything;
+        default = {};
+        description = "Syncoid commands";
       };
     };
   };
@@ -23,6 +31,19 @@
       sanoid
     ];
 
+    services.syncoid = {
+      enable = config.foxDen.zfs.syncoid.enable;
+      commonArgs = [
+        # "--sshport=2222"
+        "--compress=none"
+        "--source-bwlimit=75m"
+        "--no-privilege-elevation"
+      ];
+      commands = lib.attrsets.mapAttrs (_: cfg: {
+        sendOptions = [ "Lec" ];
+      } // cfg) config.foxDen.zfs.syncoid.commands;
+    };
+
     services.sanoid = {
       enable = config.foxDen.zfs.sanoid.enable;
       templates.foxden = {
@@ -34,7 +55,9 @@
         autosnap = true;
         autoprune = true;
       };
-      datasets = lib.attrsets.mapAttrs (_: cfg: { useTemplate = ["foxden"]; } // cfg) config.foxDen.zfs.sanoid.datasets;
+      datasets = lib.attrsets.mapAttrs (_: cfg: {
+        useTemplate = ["foxden"];
+      } // cfg) config.foxDen.zfs.sanoid.datasets;
     };
   };
 }
