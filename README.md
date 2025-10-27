@@ -78,11 +78,7 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 ## TODO
 
 - [ ] DHCPv6 lease management (on router)
-- [ ] apcupsd fails startup on boot, likely too early. just add better restart logic
-- icefox
-	- [ ] sanoid
 - bengalfox
-	- [ ] sanoid
 	- [ ] syncoid
 	- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
 	- [ ] hashtopolis
