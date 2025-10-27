@@ -1,4 +1,9 @@
 { pkgs, lib, config, ... }:
+let
+  sanoidPackage = pkgs.sanoid.override {
+    openssh = pkgs.openssh_hpn;
+  };
+in
 {
   options.foxDen.zfs = {
     enable = lib.mkEnableOption "Enable ZFS support";
@@ -28,15 +33,13 @@
     boot.supportedFilesystems = [ "zfs" ];
     environment.systemPackages = with pkgs; [
       mbuffer
-      sanoid
+      sanoidPackage
       zfs
     ];
 
     services.syncoid = lib.mkIf config.foxDen.zfs.syncoid.enable {
       enable = true;
-      package = pkgs.sanoid.override {
-        openssh = pkgs.openssh_hpn;
-      };
+      package = sanoidPackage;
       commonArgs = [
         # "--sshport=2222"
         "--compress=none"
@@ -63,6 +66,7 @@
 
     services.sanoid = lib.mkIf config.foxDen.zfs.sanoid.enable {
       enable = true;
+      package = sanoidPackage;
       templates.foxden = {
         interval = "hourly";
         hourly = 36;
