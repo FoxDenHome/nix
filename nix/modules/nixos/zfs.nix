@@ -34,6 +34,9 @@
 
     services.syncoid = lib.mkIf config.foxDen.zfs.syncoid.enable {
       enable = true;
+      package = pkgs.sanoid.override {
+        openssh = pkgs.openssh_hpn;
+      };
       commonArgs = [
         # "--sshport=2222"
         "--compress=none"
