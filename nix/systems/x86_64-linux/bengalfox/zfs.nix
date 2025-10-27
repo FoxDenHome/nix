@@ -32,7 +32,9 @@ in
         recursive = "zfs";
       };
     };
-    syncoid = config.lib.foxDen.sops.mkIfAvailable {
+    syncoid = let
+      syncoidRootDir = "/var/lib/syncoid";
+    in config.lib.foxDen.sops.mkIfAvailable {
       enable = true;
       commands.zhdd = {
         source = "zhdd/ROOT";
@@ -42,9 +44,9 @@ in
         service = {
           serviceConfig = {
             ExecStartPre = [(pkgs.writeShellScript "keyscan.sh" ''
-              if [ ! -f "$HOME/.ssh/known_hosts" ] ; then
-                ${pkgs.coreutils}/bin/mkdir -p "$HOME/.ssh"
-                ${pkgs.openssh}/bin/ssh-keyscan -H v4-icefox.doridian.net >> "$HOME/.ssh/known_hosts"
+              if [ ! -f "${syncoidRootDir}/.ssh/known_hosts" ] ; then
+                ${pkgs.coreutils}/bin/mkdir -p "${syncoidRootDir}/.ssh"
+                ${pkgs.openssh}/bin/ssh-keyscan -H v4-icefox.doridian.net >> "${syncoidRootDir}/.ssh/known_hosts"
               fi
             '')];
           };
