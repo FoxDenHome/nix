@@ -102,7 +102,6 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 		- gmod
 			- [ ] Make StarLord + SteamCMD a flake, too
 	- [ ] affine
-- [ ] Dedupe CNAME records better
 
 ## Notes
 
