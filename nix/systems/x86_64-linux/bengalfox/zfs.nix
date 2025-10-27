@@ -43,8 +43,8 @@ in
           serviceConfig = {
             ExecStartPre = [(pkgs.writeShellScript "keyscan.sh" ''
               if [ ! -f "$HOME/.ssh/known_hosts" ] ; then
-                mkdir -p "$HOME/.ssh"
-                ssh-keyscan -H v4-icefox.doridian.net >> "$HOME/.ssh/known_hosts"
+                ${pkgs.coreutils}/bin/mkdir -p "$HOME/.ssh"
+                ${pkgs.openssh}/bin/ssh-keyscan -H v4-icefox.doridian.net >> "$HOME/.ssh/known_hosts"
               fi
             '')];
           };
