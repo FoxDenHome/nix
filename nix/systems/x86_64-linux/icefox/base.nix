@@ -53,7 +53,7 @@
     options = [ "fmask=0022" "dmask=0022" "nofail" ];
   };
 
-  services.openssh.package = pkgs.openssh-with-hpn;
+  services.openssh.package = pkgs.openssh_hpn;
 
   foxDen.services = {
     watchdog.enable = true;
