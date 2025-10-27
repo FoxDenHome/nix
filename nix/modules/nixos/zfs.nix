@@ -47,7 +47,12 @@
     environment.persistence."/nix/persist/syncoid" = lib.mkIf config.foxDen.zfs.syncoid.enable {
       hideMounts = true;
       directories = [
-        "/var/lib/syncoid"
+        {
+          directory = "/var/lib/syncoid";
+          user = config.services.syncoid.user;
+          group = config.services.syncoid.group;
+          mode = "u=rwx,g=,o=";
+        }
       ];
     };
 
