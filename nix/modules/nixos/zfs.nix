@@ -27,8 +27,9 @@
     ];
     boot.supportedFilesystems = [ "zfs" ];
     environment.systemPackages = with pkgs; [
-      zfs
+      mbuffer
       sanoid
+      zfs
     ];
 
     services.syncoid = lib.mkIf config.foxDen.zfs.syncoid.enable {
