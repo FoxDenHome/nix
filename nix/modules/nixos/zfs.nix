@@ -31,8 +31,8 @@
       sanoid
     ];
 
-    services.syncoid = {
-      enable = config.foxDen.zfs.syncoid.enable;
+    services.syncoid = lib.mkIf config.foxDen.zfs.syncoid.enable {
+      enable = true;
       commonArgs = [
         # "--sshport=2222"
         "--compress=none"
@@ -44,8 +44,15 @@
       } // cfg) config.foxDen.zfs.syncoid.commands;
     };
 
-    services.sanoid = {
-      enable = config.foxDen.zfs.sanoid.enable;
+    environment.persistence."/nix/persist/syncoid" = lib.mkIf config.foxDen.zfs.syncoid.enable {
+      hideMounts = true;
+      directories = [
+        "/var/lib/syncoid"
+      ];
+    };
+
+    services.sanoid = lib.mkIf config.foxDen.zfs.sanoid.enable {
+      enable = true;
       templates.foxden = {
         interval = "hourly";
         hourly = 36;
