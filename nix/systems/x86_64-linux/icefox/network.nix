@@ -244,15 +244,7 @@ in
       type = "A";
       ttl = 3600;
       value = mainIPv4;
-      horizon = "external";
-    }
-    {
-      zone = "doridian.net";
-      name = "v4-icefox";
-      type = "CNAME";
-      ttl = 3600;
-      value = "icefox.foxden.network.";
-      horizon = "internal";
+      horizon = "*";
     }
   ];
 
