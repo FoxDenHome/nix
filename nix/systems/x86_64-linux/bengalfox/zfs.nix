@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 let
   zhddMounts = [
     ""
@@ -39,6 +39,16 @@ in
         target = "bengalfox@v4-icefox.doridian.net:ztank/ROOT/zhdd";
         sshKey = config.sops.secrets."syncoid-ssh-key".path;
         recursive = true;
+        service = {
+          serviceConfig = {
+            ExecStartPre = [(pkgs.writeShellScript "keyscan.sh" ''
+              if [ ! -f "$HOME/.ssh/known_hosts" ] ; then
+                mkdir -p "$HOME/.ssh"
+                ssh-keyscan -H v4-icefox.doridian.net >> "$HOME/.ssh/known_hosts"
+              fi
+            '')];
+          };
+        };
       };
     };
   };
