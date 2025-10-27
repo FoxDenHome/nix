@@ -32,11 +32,12 @@ in
         recursive = "zfs";
       };
     };
-    syncoid = {
+    syncoid = config.lib.foxDen.sops.mkIfAvailable {
       enable = true;
       commands.zhdd = {
         source = "zhdd/ROOT";
         target = "bengalfox@v4-icefox.doridian.net:ztank/ROOT/zhdd";
+        sshKey = config.sops.secrets."syncoid-ssh-key".path;
         recursive = true;
       };
     };
@@ -45,5 +46,11 @@ in
   sops.secrets."zfs-zhdd.key" = config.lib.foxDen.sops.mkIfAvailable {
     format = "binary";
     sopsFile = ../../../secrets/zfs-zhdd.key;
+  };
+
+  sops.secrets."syncoid-ssh-key" = config.lib.foxDen.sops.mkIfAvailable {
+    mode = "0400";
+    owner = config.services.syncoid.user;
+    group = config.services.syncoid.group;
   };
 }
