@@ -24,6 +24,16 @@ in
     };
   }) zhddMounts);
 
+  foxDen.zfs = {
+    enable = true;
+    sanoid = {
+      enable = true;
+      datasets."zhdd/ROOT" = {
+        recursive = "zfs";
+      };
+    };
+  };
+
   sops.secrets."zfs-zhdd.key" = config.lib.foxDen.sops.mkIfAvailable {
     format = "binary";
     sopsFile = ../../../secrets/zfs-zhdd.key;

@@ -41,6 +41,10 @@ in
     (mkZfsMounts "/mnt/ztank" "ztank/ROOT" ztankMounts) ++
     (mkZfsMounts "/mnt/zhdd" "ztank/ROOT/zhdd" zhddMounts));
 
+  foxDen.zfs = {
+    enable = true;
+  };
+
   sops.secrets."zfs-ztank.key" = config.lib.foxDen.sops.mkIfAvailable {
     format = "binary";
     sopsFile = ../../../secrets/zfs-ztank.key;
