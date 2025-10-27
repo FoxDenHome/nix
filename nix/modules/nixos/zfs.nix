@@ -27,14 +27,12 @@
       enable = config.foxDen.zfs.sanoid.enable;
       templates.foxden = {
         interval = "hourly";
-        retention = {
-          hourly = 36;
-          daily = 30;
-          monthly = 3;
-          yearly = 0;
-          autosnap = true;
-          autoprune = true;
-        };
+        hourly = 36;
+        daily = 30;
+        monthly = 3;
+        yearly = 0;
+        autosnap = true;
+        autoprune = true;
       };
       datasets = lib.attrsets.mapAttrs (_: cfg: { useTemplate = "foxden"; } // cfg) config.foxDen.zfs.sanoid.datasets;
     };
