@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   # These are set when you reinstall the system
   # Change them to "false" for first boot, before secrets exist
@@ -52,6 +52,8 @@
     fsType = "vfat";
     options = [ "fmask=0022" "dmask=0022" "nofail" ];
   };
+
+  services.openssh.package = pkgs.openssh-with-hpn;
 
   foxDen.services = {
     watchdog.enable = true;
