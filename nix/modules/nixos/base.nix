@@ -43,6 +43,10 @@
   programs.git.enable = true;
   programs.htop.enable = true;
   programs.tcpdump.enable = true;
+  programs.ssh = {
+    enable = true;
+    package = pkgs.openssh_hpn;
+  };
 
   environment.shellAliases = {
     "sudo" = "run0 --background=''";
@@ -67,7 +71,6 @@
 
   services.openssh = {
     enable = true;
-    package = pkgs.openssh_hpn;
   };
 
   environment.persistence."/nix/persist/system" = {
