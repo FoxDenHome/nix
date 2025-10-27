@@ -85,12 +85,11 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 	- [ ] sanoid
 	- [ ] syncoid
 	- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
-	- [ ] ollama
 	- [ ] hashtopolis
 		- [x] mysql
 		- [ ] backend
 	- [ ] hashtopolis-agent
-	- [ ] owncast
+	- [ ] ollama
 - islandfox
 	- git
 		- [ ] mysql (right now on sqlite3)
@@ -101,7 +100,6 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 	- SpaceAge
 		- gmod
 			- [ ] Make StarLord + SteamCMD a flake, too
-	- [ ] affine
 
 ## Notes
 
