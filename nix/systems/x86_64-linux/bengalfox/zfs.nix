@@ -43,6 +43,7 @@ in
         recursive = true;
         service = {
           serviceConfig = {
+            WorkingDirectory = syncoidRootDir;
             ExecStartPre = [(pkgs.writeShellScript "keyscan.sh" ''
               if [ ! -f "${syncoidRootDir}/.ssh/known_hosts" ] ; then
                 ${pkgs.coreutils}/bin/mkdir -p "${syncoidRootDir}/.ssh"
