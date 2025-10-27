@@ -34,7 +34,7 @@
         autosnap = true;
         autoprune = true;
       };
-      datasets = lib.attrsets.mapAttrs (_: cfg: { useTemplate = "foxden"; } // cfg) config.foxDen.zfs.sanoid.datasets;
+      datasets = lib.attrsets.mapAttrs (_: cfg: { useTemplate = ["foxden"]; } // cfg) config.foxDen.zfs.sanoid.datasets;
     };
   };
 }
