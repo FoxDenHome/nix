@@ -40,7 +40,7 @@
         "--no-privilege-elevation"
       ];
       commands = lib.attrsets.mapAttrs (_: cfg: {
-        sendOptions = [ "Lec" ];
+        sendOptions = "Lec";
       } // cfg) config.foxDen.zfs.syncoid.commands;
     };
 
