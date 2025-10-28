@@ -39,7 +39,7 @@ in
         group = "foxcaves";
       };
 
-      foxDen.services.postgresql.services = [
+      foxDen.services.mysql.services = [
         {
           name = "foxcaves";
           proxy = true;
