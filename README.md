@@ -87,8 +87,6 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 	- [ ] hashtopolis-agent
 	- [ ] ollama
 - islandfox
-	- git
-		- [ ] mysql (right now on sqlite3)
 	- monitoring
 		- grafana
 			- [ ] manage more declaratively
