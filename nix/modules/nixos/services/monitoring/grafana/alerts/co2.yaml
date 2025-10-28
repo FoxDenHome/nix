@@ -32,7 +32,7 @@ groups:
               relativeTimeRange:
                 from: 300
                 to: 0
-              datasourceUid: "000000002"
+              datasourceUid: "prometheus"
               model:
                 exemplar: true
                 expr: homeassistant_sensor_carbon_dioxide_ppm > 0

@@ -13,7 +13,7 @@ groups:
               relativeTimeRange:
                 from: 3600
                 to: 0
-              datasourceUid: "000000002"
+              datasourceUid: "prometheus"
               model:
                 editorMode: builder
                 expr: homeassistant_sensor_temperature_celsius{entity="sensor.fridge_temperature"}

@@ -13,7 +13,7 @@ groups:
               relativeTimeRange:
                 from: 3600
                 to: 0
-              datasourceUid: "000000002"
+              datasourceUid: "prometheus"
               model:
                 exemplar: true
                 expr: homeassistant_sensor_unit_u0xb5g_per_mu0xb3
