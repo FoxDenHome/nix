@@ -39,7 +39,7 @@ in
         dataDir = "/var/lib/grafana";
         provision = {
           enable = true;
-          dashboards.settings.providers.default.options.path = ./grafana/dashboards;
+          dashboards.settings.providers = [ { options.path = ./grafana/dashboards; } ];
           datasources.settings = {
             apiVersion = 1;
             prune = true;
