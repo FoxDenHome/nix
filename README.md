@@ -80,6 +80,7 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 - [ ] DHCPv6 lease management (on router)
 - bengalfox
 	- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
+	- [ ] immich
 	- [ ] hashtopolis
 		- [x] mysql
 		- [ ] backend
