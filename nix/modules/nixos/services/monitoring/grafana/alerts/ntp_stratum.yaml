@@ -1,0 +1,59 @@
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: NTP stratum alert
+      folder: General Alerting
+      interval: 1m
+      rules:
+        - uid: qM0zxBjnk
+          title: NTP stratum alert
+          condition: B
+          data:
+            - refId: A
+              queryType: randomWalk
+              relativeTimeRange:
+                from: 300
+                to: 0
+              datasourceUid: "000000002"
+              model:
+                exemplar: true
+                expr: node_ntp_stratum
+                interval: ""
+                intervalMs: 1000
+                legendFormat: '{{instance}}'
+                maxDataPoints: 43200
+                queryType: randomWalk
+                refId: A
+            - refId: B
+              datasourceUid: "-100"
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1
+                            - 1
+                        type: outside_range
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - A
+                      reducer:
+                        type: last
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: B
+                type: classic_conditions
+          dashboardUid: mqTCPng4k
+          panelId: 8
+          noDataState: NoData
+          execErrState: Alerting
+          for: 5m
+          annotations:
+            __alertId__: "8"
+            __dashboardUid__: mqTCPng4k
+            __panelId__: "8"
+          labels:
+            alertname: NTP stratum alert
+            rule_uid: qM0zxBjnk
+          isPaused: false
