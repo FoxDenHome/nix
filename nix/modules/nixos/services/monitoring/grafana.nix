@@ -122,6 +122,8 @@ in
       };
 
       systemd.services.grafana = {
+        restartTriggers = config.lib.foxDen.sops.mkIfAvailable [ config.sops.secrets.grafana.path ];
+
         confinement.packages = [
           pkgs.coreutils
         ];
