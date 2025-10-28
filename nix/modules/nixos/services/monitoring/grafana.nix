@@ -47,7 +47,7 @@ in
             name = "grafana";
             user = "grafana";
             host = config.foxDen.services.mysql.socketPath;
-            type = "mysql";
+            type = "sqlite3";
           };
           security = {
             cookie_secure = svcConfig.tls;
