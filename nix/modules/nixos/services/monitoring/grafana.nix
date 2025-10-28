@@ -39,9 +39,10 @@ in
         dataDir = "/var/lib/grafana";
         provision = {
           enable = true;
-          dashboards.settings.providers = [ { options.path = ./grafana/dashboards; } ];
+          dashboards.settings.providers = [ {
+            options.path = ./grafana/dashboards;
+          } ];
           datasources.settings = {
-            apiVersion = 1;
             prune = true;
             datasources = [
               {
@@ -64,7 +65,7 @@ in
             name = "grafana";
             user = "grafana";
             host = config.foxDen.services.mysql.socketPath;
-            type = "sqlite3";
+            type = "mysql";
           };
           security = {
             cookie_secure = svcConfig.tls;
