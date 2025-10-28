@@ -36,7 +36,7 @@ in
       enable = true;
       commands.zhdd = {
         source = "zhdd/ROOT";
-        target = "bengalfox@v4-icefox.doridian.net:ztank/ROOT/bengalfox/zhdd";
+        target = "bengalfox@v4-icefox.doridian.net:ztank/ROOT/BENGALFOX/zhdd";
         sshKey = config.sops.secrets."syncoid-ssh-key".path;
         recursive = true;
       };
