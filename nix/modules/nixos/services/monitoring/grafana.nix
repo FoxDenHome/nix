@@ -44,18 +44,17 @@ in
           } ];
           alerting = {
             rules.path = ./grafana/alerts;
-            policies.settings = {
-              policies = [
-                {
-                  orgId = 1;
-                  receiver = "Telegram - FoxDen Home";
-                  group_by = [ "grafana_folder" "alertname" ];
-                  group_wait = "30s";
-                  group_interval = "5m";
-                  repeat_interval = "4h";
-                }
-              ];
-            };
+            contactPoints.path = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets."grafana-contact-points".path;
+            policies.settings.policies = [
+              {
+                orgId = 1;
+                receiver = "Telegram - FoxDen Home";
+                group_by = [ "grafana_folder" "alertname" ];
+                group_wait = "30s";
+                group_interval = "5m";
+                repeat_interval = "4h";
+              }
+            ];
           };
 
           datasources.settings = {
@@ -93,6 +92,12 @@ in
       };
 
       sops.secrets.grafana = config.lib.foxDen.sops.mkIfAvailable {
+        mode = "0400";
+        owner = "grafana";
+        group = "grafana";
+      };
+
+      sops.secrets.grafana-contact-points = config.lib.foxDen.sops.mkIfAvailable {
         mode = "0400";
         owner = "grafana";
         group = "grafana";
