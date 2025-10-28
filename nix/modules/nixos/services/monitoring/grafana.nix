@@ -37,6 +37,21 @@ in
       services.grafana = {
         enable = true;
         dataDir = "/var/lib/grafana";
+        provision = {
+          enable = true;
+          dashboards.settings.providers.default.options.path = ./grafana/dashboards;
+          datasources.settings = {
+            apiVersion = 1;
+            prune = true;
+            datasources = [
+              {
+                name = "Prometheus";
+                type = "prometheus";
+                access = "proxy";
+                url = "http://prometheus.foxden.network:9090";
+              }
+            ];
+          };
         settings = {
           server = {
             http_addr = "127.0.0.1";
