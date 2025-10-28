@@ -42,7 +42,23 @@ in
           dashboards.settings.providers = [ {
             options.path = ./grafana/dashboards;
           } ];
-          alerting.rules.path = ./grafana/alerts;
+          alerting = {
+            rules.path = ./grafana/alerts;
+            policies.settings = {
+              policies = [
+                {
+                  orgId = 1;
+                  receiver = "Telegram - FoxDen Home";
+                  group_by = [ "grafana_folder" "alertname" ];
+                  group_wait = "30s";
+                  group_interval = "5m";
+                  repeat_interval = "4h";
+                }
+              ];
+              resetPolicies = [ 1 ];
+            };
+          };
+
           datasources.settings = {
             prune = true;
             datasources = [
