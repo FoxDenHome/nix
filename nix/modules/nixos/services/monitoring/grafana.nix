@@ -71,7 +71,7 @@ in
           };
         };
         settings = {
-          auth.generic_oauth = {
+          "auth.generic_oauth" = {
             allow_assign_grafana_admin = true;
             allow_sign_up = true;
             api_url = "https://auth.foxden.network/oauth2/openid/grafana/userinfo";
