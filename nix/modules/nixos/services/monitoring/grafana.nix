@@ -42,6 +42,7 @@ in
           dashboards.settings.providers = [ {
             options.path = ./grafana/dashboards;
           } ];
+          alerting.rules.path = ./grafana/alerts;
           datasources.settings = {
             prune = true;
             datasources = [
