@@ -78,9 +78,11 @@ in
             auth_url = "https://auth.foxden.network/ui/oauth2";
             auto_login = true;
             client_id = "grafana";
+            email_attribute_name = "";
             email_attribute_path = "email";
             enabled = true;
             login_attribute_path = "preferred_username";
+            name = "FoxDen";
             name_attribute_path = "name";
             role_attribute_path = "contains(grafana_role[*], 'GrafanaAdmin') && 'GrafanaAdmin' || contains(grafana_role[*], 'Admin') && 'Admin' || contains(grafana_role[*], 'Editor') && 'Editor' || 'Viewer'";
             role_attribute_strict = true;
