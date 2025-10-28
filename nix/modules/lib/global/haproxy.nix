@@ -68,7 +68,7 @@ let
 
     ${renderBackends "http" "http" ["forwardfor"]}
 
-    ${renderBackends "https" "tcp" ["ssl-hello-chk"]}
+    ${renderBackends "https" "tcp" []}
   '';
 in
 {
