@@ -111,6 +111,9 @@ in
         serviceConfig = {
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.grafana.path;
           StateDirectory = "grafana";
+          BindReadOnlyPaths = config.lib.foxDen.sops.mkIfAvailable [
+            config.sops.secrets."grafana-contact-points".path
+          ];
         };
       };
 
