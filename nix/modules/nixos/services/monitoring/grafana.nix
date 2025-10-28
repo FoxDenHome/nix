@@ -47,6 +47,7 @@ in
               {
                 name = "Prometheus";
                 type = "prometheus";
+                uid = "prometheus";
                 access = "proxy";
                 url = "http://prometheus.foxden.network:9090";
               }

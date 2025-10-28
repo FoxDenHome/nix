@@ -61,7 +61,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -142,7 +142,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prometheus"
           },
           "editorMode": "builder",
           "expr": "deluge_torrents",
@@ -157,7 +157,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -240,7 +240,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prometheus"
           },
           "editorMode": "builder",
           "expr": "rate(deluge_libtorrent_net_recv_bytes_total[$__rate_interval])",
@@ -252,7 +252,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prometheus"
           },
           "editorMode": "builder",
           "expr": "rate(deluge_libtorrent_net_recv_failed_bytes_total[$__rate_interval])",
@@ -264,7 +264,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prometheus"
           },
           "editorMode": "builder",
           "expr": "rate(deluge_libtorrent_net_recv_ip_overhead_bytes_total[$__rate_interval])",
@@ -276,7 +276,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prometheus"
           },
           "editorMode": "builder",
           "expr": "rate(deluge_libtorrent_net_recv_payload_bytes_total[$__rate_interval])",
@@ -288,7 +288,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prometheus"
           },
           "editorMode": "builder",
           "expr": "rate(deluge_libtorrent_net_recv_redundant_bytes_total[$__rate_interval])",
@@ -300,7 +300,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prometheus"
           },
           "editorMode": "builder",
           "expr": "rate(deluge_libtorrent_net_recv_tracker_bytes_total[$__rate_interval])",
@@ -312,7 +312,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prometheus"
           },
           "editorMode": "builder",
           "expr": "rate(deluge_libtorrent_net_sent_bytes_total[$__rate_interval])",
@@ -323,7 +323,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prometheus"
           },
           "editorMode": "builder",
           "expr": "rate(deluge_libtorrent_net_sent_ip_overhead_bytes_total[$__rate_interval])",
@@ -335,7 +335,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prometheus"
           },
           "editorMode": "builder",
           "expr": "rate(deluge_libtorrent_net_sent_payload_bytes_total[$__rate_interval])",
@@ -347,7 +347,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prometheus"
           },
           "editorMode": "builder",
           "expr": "rate(deluge_libtorrent_net_sent_tracker_bytes_total[$__rate_interval])",
