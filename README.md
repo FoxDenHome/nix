@@ -79,7 +79,6 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 
 - [ ] DHCPv6 lease management (on router)
 - bengalfox
-	- [ ] syncoid
 	- [ ] Set up config for SR-IOV NIC (hostDrivers/sriov.nix)
 	- [ ] hashtopolis
 		- [x] mysql
