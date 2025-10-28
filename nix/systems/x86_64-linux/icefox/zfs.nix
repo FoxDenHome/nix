@@ -39,7 +39,7 @@ in
 {
   fileSystems = lib.listToAttrs (
     (mkZfsMounts "/mnt/ztank" "ztank/ROOT" ztankMounts) ++
-    (mkZfsMounts "/mnt/zhdd" "ztank/ROOT/zhdd" zhddMounts));
+    (mkZfsMounts "/mnt/zhdd" "ztank/ROOT/BENGALFOX/zhdd" zhddMounts));
 
   foxDen.zfs = {
     enable = true;
