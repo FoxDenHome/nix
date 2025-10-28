@@ -71,6 +71,24 @@ in
           };
         };
         settings = {
+          auth.generic_oauth = {
+            allow_assign_grafana_admin = true;
+            allow_sign_up = true;
+            api_url = "https://auth.foxden.network/oauth2/openid/grafana/userinfo";
+            auth_url = "https://auth.foxden.network/ui/oauth2";
+            auto_login = true;
+            client_id = "grafana";
+            email_attribute_path = "email";
+            enabled = true;
+            login_attribute_path = "preferred_username";
+            name_attribute_path = "name";
+            role_attribute_path = "contains(grafana_role[*], 'GrafanaAdmin') && 'GrafanaAdmin' || contains(grafana_role[*], 'Admin') && 'Admin' || contains(grafana_role[*], 'Editor') && 'Editor' || 'Viewer'";
+            role_attribute_strict = true;
+            scopes = [ "openid" "email" "profile" ];
+            token_url = "https://auth.foxden.network/oauth2/token";
+            use_pkce = true;
+            use_refresh_token = false;
+          };
           server = {
             http_addr = "127.0.0.1";
             http_port = 3000;
