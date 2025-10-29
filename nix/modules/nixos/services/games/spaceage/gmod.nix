@@ -33,7 +33,7 @@ in
         serviceConfig = {
           DynamicUser = true;
           StateDirectory = "spaceage-gmod";
-          EnvironmentFile = [ (config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.spaceage-gmod.path) ];
+          EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable [ config.sops.secrets.spaceage-gmod.path ];
           WorkingDirectory = "/var/lib/spaceage-gmod";
           Environment = [
             "STARLORD_CONFIG=spaceage_forlorn"
