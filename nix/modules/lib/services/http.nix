@@ -3,14 +3,7 @@ let
   services = foxDenLib.services;
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
-  mkOauthProxy = (inputs@{ config, svcConfig, pkgs, ... }: let
-    name = inputs.name;
-    serviceName = "oauth2-proxy-${name}";
-
-    svc = services.mkNamed serviceName inputs;
-    cmd = (eSA "${pkgs.oauth2-proxy}/bin/oauth2-proxy");
-    secure = if svcConfig.tls then "true" else "false";
-
+  mkOauthConfig = ({ config, svcConfig, ... }: let
     host = foxDenLib.hosts.getByName config svcConfig.host;
     baseUrlPrefix = if svcConfig.tls then "https://" else "http://";
     # TODO: Go back to uniqueStrings once next NixOS stable
@@ -18,6 +11,21 @@ let
                     (map (dns: "${baseUrlPrefix}${foxDenLib.global.dns.mkHost dns}") ([iface.dns] ++ iface.cnames)))
                       (nixpkgs.lib.filter (iface: iface.dns.name != "")
                         (nixpkgs.lib.attrsets.attrValues host.interfaces))));
+  in
+  {
+    displayName = svcConfig.oAuth.displayName;
+    originUrl = map (url: "${baseUrlPrefix}/oauth2/callback") baseUrls;
+    originLanding = nixpkgs.lib.lists.head baseUrls;
+    scopeMaps."login-users" = ["email" "openid" "profile"];
+  });
+
+  mkOauthProxy = (inputs@{ config, svcConfig, pkgs, ... }: let
+    name = inputs.name;
+    serviceName = "oauth2-proxy-${name}";
+
+    svc = services.mkNamed serviceName inputs;
+    cmd = (eSA "${pkgs.oauth2-proxy}/bin/oauth2-proxy");
+    secure = if svcConfig.tls then "true" else "false";
 
     configFile = "${svc.configDir}/${name}.conf";
     configFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" configFile;
@@ -51,12 +59,7 @@ let
 
         sops.secrets."${serviceName}" = {};
 
-        foxDen.services.kanidm.oauth2.${svcConfig.oAuth.clientId} = {
-          displayName = svcConfig.oAuth.displayName;
-          originUrl = map (url: "${baseUrlPrefix}/oauth2/callback") baseUrls;
-          originLanding = nixpkgs.lib.lists.head baseUrls;
-          scopeMaps."login-users" = ["email" "openid" "profile"];
-        };
+        foxDen.services.kanidm.oauth2.${svcConfig.oAuth.clientId} = mkOauthConfig inputs;
 
         systemd.services.${serviceName} = {
           restartTriggers = [ config.environment.etc.${configFileEtc}.text ];
@@ -130,6 +133,8 @@ in
       "10.9.0.0/23"
     ];
   };
+
+  inherit mkOauthConfig;
 
   mkOptions = (inputs@{ ... } : with nixpkgs.lib.types; {
     tls = nixpkgs.lib.mkEnableOption "TLS";
