@@ -40,6 +40,7 @@
         BindReadOnlyPaths = foxDenLib.services.mkEtcPaths [
           "passwd"
           "group"
+          "shadow"
         ];
       };
     };
