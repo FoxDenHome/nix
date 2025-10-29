@@ -68,6 +68,10 @@ in
             present = true;
             overwriteMembers = false;
           };
+          groups.superadmins = {
+            present = true;
+            overwriteMembers = false;
+          };
         };
         serverSettings = {
           version = "2";
