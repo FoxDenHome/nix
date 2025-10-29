@@ -33,6 +33,7 @@
         ] ++ (foxDenLib.services.mkEtcPaths [
           "shells"
         ]);
+        PrivateUsers = lib.mkForce false;
       };
     };
     # END: Fix "normal" shells
