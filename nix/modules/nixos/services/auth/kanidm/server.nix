@@ -1,4 +1,4 @@
-{ pkgs, lib, config, options, foxDenLib, ... } :
+{ pkgs, lib, config, options, nixosConfigurations, foxDenLib, ... } :
 let
   services = foxDenLib.services;
   globalCfg = foxDenLib.global.config;
@@ -64,7 +64,7 @@ in
           adminPasswordFile = config.sops.secrets."kanidm-admin-password".path;
           idmAdminPasswordFile = config.sops.secrets."kanidm-idm_admin-password".path;
           autoRemove = false; # TODO: True once all done
-          systems.oauth2 = globalCfg.getAttrSet [ "foxDen" "services" "kanidm" "oauth2" ];
+          systems.oauth2 = globalCfg.getAttrSet [ "foxDen" "services" "kanidm" "oauth2" ] nixosConfigurations;
         };
         serverSettings = {
           version = "2";
