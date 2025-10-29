@@ -57,7 +57,7 @@
         home_attr = "name";
         home_alias = "none";
 
-        "kanidm.map_group" = [
+        kanidm.map_group = [
           {
             "local" = "share";
             "with" = "login-users";
