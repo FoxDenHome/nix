@@ -23,6 +23,8 @@
     oauth-jit-radius.inputs.nixpkgs.follows = "nixpkgs";
     spaceage-api.url = "github:SpaceAgeMP/space_age_api";
     spaceage-api.inputs.nixpkgs.follows = "nixpkgs";
+    spaceage-starlord.url = "github:SpaceAgeMP/StarLord";
+    spaceage-starlord.inputs.nixpkgs.follows = "nixpkgs";
     spaceage-tts.url = "github:SpaceAgeMP/TTS";
     spaceage-tts.inputs.nixpkgs.follows = "nixpkgs";
     spaceage-website.url = "github:SpaceAgeMP/website";

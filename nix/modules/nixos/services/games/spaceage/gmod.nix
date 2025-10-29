@@ -8,28 +8,43 @@ in
   options.foxDen.services.spaceage-gmod = services.mkOptions { svcName = "spaceage-gmod"; name = "SpaceAge GMod"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
-    (foxDenLib.services.oci.make {
+    (foxDenLib.services.make {
       inherit pkgs config svcConfig;
       name = "spaceage-gmod";
-      oci = {
-        image = "ghcr.io/spaceagemp/starlord/starlord:latest";
-        volumes = [
-          "server:/home/server"
-        ];
-        environment = {
-          "ENABLE_SELF_UPDATE" = "true";
-        };
-        environmentFiles = [
-          (config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.spaceage-gmod.path)
-        ];
-      };
     }).config
     {
-      sops.secrets.spaceage-gmod = config.lib.foxDen.sops.mkIfAvailable {
-        mode = "0400";
-        owner = "spaceage-gmod";
-        group = "spaceage-gmod";
+      systemd.services.spaceage-gmod = {
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+
+        confinement.packages = with pkgs; [
+          steamcmd
+          starlord
+          git
+          coreutils
+        ];
+        path = [
+          steamcmd
+          starlord
+          git
+          coreutils
+        ];
+
+        serviceConfig = {
+          DynamicUser = true;
+          StateDirectory = "spaceage-gmod";
+          EnvironmentFile = [ (config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.spaceage-gmod.path) ];
+          WorkingDirectory = "/var/lib/spaceage-gmod";
+          Environment = [
+            "STARLORD_CONFIG=spaceage_forlorn"
+            "HOME=/var/lib/spaceage-gmod"
+          ];
+          Type = "simple";
+          ExecStart = [ "${pkgs.starlord}/bin/starlord" ];
+        };
       };
+
+      sops.secrets.spaceage-gmod = config.lib.foxDen.sops.mkIfAvailable { };
     }
   ]);
 }
