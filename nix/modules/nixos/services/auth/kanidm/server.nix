@@ -116,6 +116,10 @@ in
               overwriteMembers = true;
               members = [ "doridian" "wizzy" ];
             };
+            testgroup = {
+              present = true;
+              enableUnix = true;
+            };
           };
           persons = {
             doridian = {
