@@ -144,17 +144,20 @@ in
               verify_hostnames = false
             ''}:/etc/kanidm/config"
           ];
-          ExecStartPost = config.lib.foxDen.sops.mkIfAvailable [
+          ExecStartPost = let
+            kanidm = "${config.services.kanidm.package}/bin/kanidm";
+            kanidmArgs = "--name idm_admin";
+          in config.lib.foxDen.sops.mkIfAvailable [
             (pkgs.writeShellScript "set-posix-attrs" ''
               set -euo pipefail
               export KANIDM_PASSWORD="$(cat ${config.sops.secrets."kanidm-idm_admin-password".path})"
               set -x
               export HOME=/run/kanidmd
-              ${config.services.kanidm.package}/bin/kanidm login --name idm_admin
-              ${config.services.kanidm.package}/bin/kanidm person posix set --name idm_admin doridian --gidnumber 2006
-              ${config.services.kanidm.package}/bin/kanidm person posix set --name idm_admin wizzy --gidnumber 2010
-              ${config.services.kanidm.package}/bin/kanidm group posix set --name idm_admin login-users --gidnumber 4242
-              ${config.services.kanidm.package}/bin/kanidm group posix set --name idm_admin superadmins --gidnumber 4269
+              ${kanidm} login ${kanidmArgs}
+              ${kanidm} person posix set ${kanidmArgs} doridian --gidnumber 2006
+              ${kanidm} person posix set ${kanidmArgs} wizzy --gidnumber 2010
+              ${kanidm} group posix set ${kanidmArgs} login-users --gidnumber 4242
+              ${kanidm} group posix set ${kanidmArgs} superadmins --gidnumber 4269
             '')
             "${pkgs.coreutils}/bin/rm -rvf /run/kanidmd/.cache"
           ];
