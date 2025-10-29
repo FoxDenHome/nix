@@ -70,13 +70,13 @@ in
           groups = {
             login-users = {
               present = true;
-              # gidNumber = 4242
+              # gidNumber = 4242;
               overwriteMembers = true;
               members = [ "doridian" "wizzy" ];
             };
             superadmins = {
               present = true;
-              # gidNumber = 4269
+              # gidNumber = 4269;
               overwriteMembers = true;
               members = [ "doridian" "wizzy" ];
             };
