@@ -32,6 +32,23 @@ in
       '';
     }).config
     {
+      foxDen.services.grafana.oAuth.enable = lib.mkForce false; # We handle OAuth in-service
+
+      foxDen.services.kanidm.oauth2.${svcConfig.oAuth.clientId} =
+          (services.http.mkOauthConfig {
+            inherit svcConfig config;
+            oAuthCallbackUrl = "/login/generic_oauth";
+          }) // {
+        preferShortUsername = true;
+        claimMaps = {
+          "grafana_role" = {
+            valuesByGroup = {
+              "superadmins" = [ "GrafanaAdmin" ];
+            };
+          };
+        };
+      }
+
       services.grafana = {
         dataDir = "/var/lib/grafana";
         enable = true;
@@ -73,9 +90,10 @@ in
           "auth.generic_oauth" = {
             allow_assign_grafana_admin = true;
             allow_sign_up = true;
-            api_url = "https://auth.foxden.network/oauth2/openid/$__env{GF_AUTH_GENERIC_OAUTH_CLIENT_ID}/userinfo";
+            api_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}/userinfo";
             auth_url = "https://auth.foxden.network/ui/oauth2";
             auto_login = true;
+            client_id = svcConfig.oAuth.clientId;
             email_attribute_path = "email";
             enabled = true;
             login_attribute_path = "preferred_username";

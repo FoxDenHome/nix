@@ -3,7 +3,7 @@ let
   services = foxDenLib.services;
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
-  mkOauthConfig = ({ config, svcConfig, ... }: let
+  mkOauthConfig = ({ config, svcConfig, oAuthCallbackUrl ? "/oauth2/callback", ... }: let
     host = foxDenLib.hosts.getByName config svcConfig.host;
     baseUrlPrefix = if svcConfig.tls then "https://" else "http://";
     # TODO: Go back to uniqueStrings once next NixOS stable
@@ -15,7 +15,7 @@ let
   {
     present = true;
     displayName = svcConfig.oAuth.displayName;
-    originUrl = map (url: "${url}/oauth2/callback") baseUrls;
+    originUrl = map (url: "${url}${oAuthCallbackUrl}") baseUrls;
     originLanding = nixpkgs.lib.lists.head baseUrls;
     scopeMaps."login-users" = ["email" "openid" "profile"];
   });
