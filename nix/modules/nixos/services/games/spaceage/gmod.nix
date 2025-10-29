@@ -23,7 +23,7 @@ in
           git
           coreutils
         ];
-        path = [
+        path = with pkgs; [
           steamcmd
           starlord
           git
