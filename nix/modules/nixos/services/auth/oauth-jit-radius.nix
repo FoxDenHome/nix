@@ -84,22 +84,22 @@ in
         claimMaps = {
           "apc_service_type" = {
             valuesByGroup = {
-              "superadmins" = "admin";
+              "superadmins" = [ "admin" ];
             };
           };
           "cyberpower_service_type" = {
             valuesByGroup = {
-              "superadmins" = "admin";
+              "superadmins" = [ "admin" ];
             };
           };
           "mikrotik_group" = {
             valuesByGroup = {
-              "superadmins" = "full";
+              "superadmins" = [ "full" ];
             };
           };
           "supermicro_permissions" = {
             valuesByGroup = {
-              "superadmins" = "administrator";
+              "superadmins" = [ "administrator" ];
             };
           };
         };
