@@ -12,6 +12,11 @@ in
       enable = true;
       host = "git";
       tls = true;
+      oAuth = {
+        enable = true;
+        clientId = "git";
+        displayName = "Git";
+      }
     };
   };
 

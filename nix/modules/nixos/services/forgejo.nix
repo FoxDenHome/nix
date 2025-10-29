@@ -66,6 +66,25 @@ in
       '';
     }).config
     {
+      foxDen.services.forgejo.oAuth.enable = lib.mkForce false; # We handle OAuth in-service
+
+      foxDen.services.kanidm.oauth2 = lib.mkIf svcConfig.oAuth.enable {
+        ${svcConfig.oAuth.clientId} =
+          (services.http.mkOauthConfig {
+            inherit svcConfig config;
+            oAuthCallbackUrl = "/user/oauth2/FoxDen/callback";
+          }) // {
+          preferShortUsername = true;
+            claimMaps = {
+              "git_group" = {
+                valuesByGroup = {
+                  "superadmins" = [ "admin" ];
+                };
+              };
+            };
+          };
+      };
+
       services.forgejo = {
         database = {
           createDatabase = false;
