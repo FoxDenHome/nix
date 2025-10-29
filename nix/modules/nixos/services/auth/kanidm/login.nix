@@ -54,12 +54,6 @@
 
     nix.settings.allowed-users = [ "@superadmins" ];
 
-    system.nssDatabases.group = lib.mkForce [
-      "files"
-      "[success=merge] kanidm"
-      "[success=merge] systemd"
-    ];
-
     services.kanidm = {
       enablePam = true;
 
