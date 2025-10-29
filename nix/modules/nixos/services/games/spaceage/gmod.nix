@@ -33,7 +33,6 @@ in
         ];
         path = with pkgs; [
           steamcmd
-          steam-run
           starlord
           git
           coreutils
@@ -47,6 +46,7 @@ in
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable [ config.sops.secrets.spaceage-gmod.path ];
           WorkingDirectory = "/var/lib/spaceage-gmod";
           Environment = [
+            "STEAM_RUN=${pkgs.steam-run}/bin/steam-run"
             "STARLORD_CONFIG=spaceage_forlorn"
           ];
           Type = "simple";
