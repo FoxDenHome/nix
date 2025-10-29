@@ -12,12 +12,20 @@ def refresh_dhcp():
     unlink_safe("result")
 
     header_lines = [
-        "/ip/dhcp-server/lease/remove [find dynamic=no]"
+        "/ip/dhcp-server/lease",
+        "set [find dynamic=no] comment=__REFRESHING__",
+    ]
+    trailer_lines = [
+        "remove [find comment=__REFRESHING__]",
     ]
     lines = []
     for lease in dhcp_leases:
         if "ipv4" in lease:
             netname = get_ipv4_netname(lease["ipv4"])
-            lines.append(f'/ip/dhcp-server/lease/add mac-address={lease["mac"]} address={lease["ipv4"]} comment="{lease["name"]}" lease-time=1d server=dhcp-{netname}')
+            mac = lease["mac"].upper()
+            attribs = f'mac-address={mac} address={lease["ipv4"]} comment="{lease["name"]}" lease-time=1d server=dhcp-{netname}'
+            lines.append(f':if ([:len [find mac-address={mac}]] > 0)' + \
+                        f' do={{\n  set [find mac-address={mac}] {attribs}\n}}' + \
+                        f' else={{\n  :put "Adding {mac}"\n  add {attribs}\n}}')
     with open(FILENAME, "w") as file:
-        file.write(("\n".join(header_lines + sorted(lines))) + "\n")
+        file.write(("\n".join(header_lines + sorted(lines) + trailer_lines)) + "\n")
