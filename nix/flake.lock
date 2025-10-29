@@ -743,11 +743,11 @@
         "uv2nix": "uv2nix_2"
       },
       "locked": {
-        "lastModified": 1761781643,
-        "narHash": "sha256-ne5/5pU8KFixV/1Zzdnw2kUTjxd6H64Hxg1474loxR4=",
+        "lastModified": 1761781682,
+        "narHash": "sha256-/3e6WM+vuaBYxlIIdJg95U1YBP4o1V/DC/0MVrMwuPI=",
         "owner": "SpaceAgeMP",
         "repo": "StarLord",
-        "rev": "c2a251dc3ed115f1744d5c8afda78b067383cf55",
+        "rev": "3700bdc19bc84478c6e2ab6fa8061ed005fcb8aa",
         "type": "github"
       },
       "original": {

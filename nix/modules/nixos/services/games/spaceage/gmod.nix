@@ -40,7 +40,6 @@ in
         serviceConfig = {
           User = "spaceage-gmod";
           Group = "spaceage-gmod";
-          RuntimeDirectry = "spaceage-gmod";
           StateDirectory = "spaceage-gmod";
           StateDirectoryMode = "0700";
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable [ config.sops.secrets.spaceage-gmod.path ];
