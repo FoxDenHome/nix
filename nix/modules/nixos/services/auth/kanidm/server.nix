@@ -64,6 +64,10 @@ in
           idmAdminPasswordFile = config.sops.secrets."kanidm-idm_admin-password".path;
           autoRemove = false; # TODO: True once all done
           systems.oauth2 = kanidmOauth2;
+          groups.login-users = {
+            present = true;
+            overwriteMembers = false;
+          };
         };
         serverSettings = {
           version = "2";
