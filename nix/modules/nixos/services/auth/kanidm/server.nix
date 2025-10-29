@@ -155,8 +155,8 @@ in
               ${config.services.kanidm.package}/bin/kanidm person posix set --name idm_admin wizzy --gidnumber 2010
               ${config.services.kanidm.package}/bin/kanidm group posix set --name idm_admin login-users --gidnumber 4242
               ${config.services.kanidm.package}/bin/kanidm group posix set --name idm_admin superadmins --gidnumber 4269
-              ${pkgs.coreutils}/bin/rm -rvf /run/kanidmd/.cache
-            ''))
+            '')
+            "-${pkgs.coreutils}/bin/rm -rvf /run/kanidmd/.cache")
           ];
           StateDirectory = "kanidm";
         };
