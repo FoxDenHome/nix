@@ -79,6 +79,31 @@ in
 
       sops.secrets.oauth-jit-radius = config.lib.foxDen.sops.mkIfAvailable {};
 
+      foxDen.services.kanidm.oauth2.${svcConfig.oAuth.clientId} = {
+        claimMaps = {
+          "apc_service_type" = {
+            valuesByGroup = {
+              "superadmins" = "admin";
+            };
+          };
+          "cyberpower_service_type" = {
+            valuesByGroup = {
+              "superadmins" = "admin";
+            };
+          };
+          "mikrotik_group" = {
+            valuesByGroup = {
+              "superadmins" = "full";
+            };
+          };
+          "supermicro_permissions" = {
+            valuesByGroup = {
+              "superadmins" = "administrator";
+            };
+          };
+        };
+      };
+
       systemd.services.oauth-jit-radius = {
         confinement.packages = [
           pkgs.oauth-jit-radius
