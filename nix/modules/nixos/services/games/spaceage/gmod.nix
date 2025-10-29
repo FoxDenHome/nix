@@ -42,6 +42,8 @@ in
           Type = "simple";
           ExecStart = [ "${pkgs.starlord}/bin/starlord" ];
         };
+
+        wantedBy = [ "multi-user.target" ];
       };
 
       sops.secrets.spaceage-gmod = config.lib.foxDen.sops.mkIfAvailable { };
