@@ -80,6 +80,7 @@ in
       sops.secrets.oauth-jit-radius = config.lib.foxDen.sops.mkIfAvailable {};
 
       foxDen.services.kanidm.oauth2.${svcConfig.oAuth.clientId} = {
+        preferShortUsernames = true;
         claimMaps = {
           "apc_service_type" = {
             valuesByGroup = {
