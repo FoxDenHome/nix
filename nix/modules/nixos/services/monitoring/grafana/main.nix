@@ -47,7 +47,7 @@ in
             };
           };
         };
-      }
+      };
 
       services.grafana = {
         dataDir = "/var/lib/grafana";
