@@ -55,7 +55,7 @@ let
           displayName = svcConfig.oAuth.displayName;
           originUrl = map (url: "${baseUrlPrefix}/oauth2/callback") baseUrls;
           originLanding = nixpkgs.lib.lists.head baseUrls;
-          scopeMaps."login-users@auth.foxden.network" = ["email" "openid" "profile"];
+          scopeMaps."login-users" = ["email" "openid" "profile"];
         };
 
         systemd.services.${serviceName} = {
