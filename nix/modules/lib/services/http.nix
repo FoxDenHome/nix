@@ -14,7 +14,7 @@ let
   in
   {
     displayName = svcConfig.oAuth.displayName;
-    originUrl = map (url: "${baseUrlPrefix}/oauth2/callback") baseUrls;
+    originUrl = map (url: "${url}/oauth2/callback") baseUrls;
     originLanding = nixpkgs.lib.lists.head baseUrls;
     scopeMaps."login-users" = ["email" "openid" "profile"];
   });
