@@ -60,9 +60,12 @@ in
         enableServer = true;
         provision = config.lib.foxDen.sops.mkIfAvailable {
           enable = true;
+
           adminPasswordFile = config.sops.secrets."kanidm-admin-password".path;
           idmAdminPasswordFile = config.sops.secrets."kanidm-idm_admin-password".path;
-          autoRemove = false; # TODO: True once all done
+
+          autoRemove = true;
+
           systems.oauth2 = kanidmOauth2;
           groups = {
             login-users = {
