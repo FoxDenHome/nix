@@ -137,6 +137,7 @@ in
               present = true;
               enableUnix = true;
               displayName = "Tester";
+              gidNumber = 2337;
               mailAddresses = [ "test@foxden.network" ];
             };
           };
