@@ -11,6 +11,7 @@ in
       tls = true;
       oAuth = {
         enable = true;
+        displayName = "e621Dumper";
         clientId = "e621dumper";
         bypassInternal = true;
       };
@@ -22,6 +23,7 @@ in
       tls = true;
       oAuth = {
         enable = true;
+        displayName = "FADumper";
         clientId = "fadumper";
         bypassInternal = true;
       };

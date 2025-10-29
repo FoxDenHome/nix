@@ -14,7 +14,9 @@ in
       host = "radius";
       tls = true;
       oAuth = {
+        enable = true;
         clientId = "radius";
+        displayName = "RADIUS";
       };
     };
   };

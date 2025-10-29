@@ -11,6 +11,14 @@ let
     cmd = (eSA "${pkgs.oauth2-proxy}/bin/oauth2-proxy");
     secure = if svcConfig.tls then "true" else "false";
 
+    host = foxDenLib.hosts.getByName config svcConfig.host;
+    baseUrlPrefix = if svcConfig.tls then "https://" else "http://";
+    # TODO: Go back to uniqueStrings once next NixOS stable
+    baseUrls = nixpkgs.lib.lists.unique (nixpkgs.lib.flatten (map (iface:
+                    (map (dns: "${baseUrlPrefix}${foxDenLib.global.dns.mkHost dns}") ([iface.dns] ++ iface.cnames)))
+                      (nixpkgs.lib.filter (iface: iface.dns.name != "")
+                        (nixpkgs.lib.attrsets.attrValues host.interfaces))));
+
     configFile = "${svc.configDir}/${name}.conf";
     configFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" configFile;
   in
@@ -42,6 +50,13 @@ let
         };
 
         sops.secrets."${serviceName}" = {};
+
+        foxDen.services.kanidm.oauth2.${svcConfig.oAuth.clientId} = {
+          displayName = svcConfig.oAuth.displayName;
+          originUrl = map (url: "${baseUrlPrefix}/oauth2/callback") baseUrls;
+          originLanding = nixpkgs.lib.lists.head baseUrls;
+          scopeMaps."login-users@auth.foxden.network" = ["email" "openid" "profile"];
+        };
 
         systemd.services.${serviceName} = {
           restartTriggers = [ config.environment.etc.${configFileEtc}.text ];
@@ -122,6 +137,9 @@ in
       enable = nixpkgs.lib.mkEnableOption "OAuth2 Proxy";
       bypassInternal = nixpkgs.lib.mkEnableOption "Bypass OAuth for internal requests";
       clientId = nixpkgs.lib.mkOption {
+        type = str;
+      };
+      displayName = nixpkgs.lib.mkOption {
         type = str;
       };
     };

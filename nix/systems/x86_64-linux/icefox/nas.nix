@@ -42,6 +42,7 @@ in
       tls = true;
       oAuth = {
         enable = true;
+        displayName = "Kiwix (on icefox)";
         clientId = "kiwix-icefox";
         bypassInternal = true;
       };
@@ -53,6 +54,7 @@ in
       tls = true;
       oAuth = {
         enable = true;
+        displayName = "NAS (on icefox)";
         clientId = "nas-icefox";
         bypassInternal = true;
       };

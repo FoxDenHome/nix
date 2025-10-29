@@ -33,6 +33,7 @@ in
       tls = true;
       oAuth = {
         enable = true;
+        displayName = "Kiwix (on bengalfox)";
         clientId = "kiwix-bengalfox";
         bypassInternal = true;
       };
@@ -44,6 +45,7 @@ in
       tls = true;
       oAuth = {
         enable = true;
+        displayName = "NAS (on bengalfox)";
         clientId = "nas-bengalfox";
         bypassInternal = true;
       };
