@@ -46,6 +46,8 @@
 
     nix.settings.allowed-users = [ "@superadmins" ];
 
+    services.nscd.enable = false;
+
     services.kanidm = {
       enablePam = true;
 
