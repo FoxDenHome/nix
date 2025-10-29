@@ -88,7 +88,7 @@ let
     }
   '' else "");
 
-  mkCaddyHandler = (handler: svcConfig: if svcConfig.oAuth.enable then ''
+  mkCaddyHandler = (handler: svcConfig: if (svcConfig.oAuth.enable && (!svcConfig.oAuth.overrideService)) then ''
     handle /oauth2/* {
       reverse_proxy 127.0.0.1:4180 {
         header_up X-Real-IP {remote_host}
