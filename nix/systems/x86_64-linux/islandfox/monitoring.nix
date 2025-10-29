@@ -30,6 +30,11 @@ in
         zone = "foxden.network";
         dynDns = true;
       };
+      oAuth = {
+        enable = true;
+        clientId = "grafana";
+        displayName = "Grafana";
+      };
       webservice.enable = true;
       addresses = [
         "10.2.11.5/16"
