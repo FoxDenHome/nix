@@ -177,11 +177,6 @@ in
         serviceConfig = {
           BindReadOnlyPaths = [
             "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory"
-            "${pkgs.writers.writeText "kanidm-config" ''
-              uri = "https://127.0.0.1:8443"
-              verify_ca = false
-              verify_hostnames = false
-            ''}:/etc/kanidm/config"
           ];
           StateDirectory = "kanidm";
         };
