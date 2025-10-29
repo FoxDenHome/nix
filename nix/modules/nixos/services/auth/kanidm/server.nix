@@ -70,13 +70,15 @@ in
           groups = {
             login-users = {
               present = true;
-              # gidNumber = 4242;
+              enableUnix = true;
+              gidNumber = 4242;
               overwriteMembers = true;
               members = [ "doridian" "wizzy" ];
             };
             superadmins = {
               present = true;
-              # gidNumber = 4269;
+              enableUnix = true;
+              gidNumber = 4269;
               overwriteMembers = true;
               members = [ "doridian" "wizzy" ];
             };
@@ -84,13 +86,16 @@ in
           persons = {
             doridian = {
               present = true;
-              # gidNumber = 2006;
+              enableUnix = true;
+              gidNumber = 2006;
+              loginShell = "/usr/bin/fish";
               displayName = "Doridian";
               mailAddresses = [ "doridian@foxden.network" ];
             };
             wizzy = {
               present = true;
-              # gidNumber = 2010;
+              enableUnix = true;
+              gidNumber = 2010;
               displayName = "Wizzy";
               mailAddresses = [ "demwizzy@gmail.com" ];
             };
