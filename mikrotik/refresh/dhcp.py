@@ -26,6 +26,6 @@ def refresh_dhcp():
             attribs = f'mac-address={mac} address={lease["ipv4"]} comment="{lease["name"]}" lease-time=1d server=dhcp-{netname}'
             lines.append(f':if ([:len [find mac-address={mac}]] > 0)' + \
                         f' do={{\n  set [find mac-address={mac}] {attribs}\n}}' + \
-                        f' else={{\n  :put "Adding {mac}"\n  add {attribs}\n}}')
+                        f' else={{\n  add {attribs}\n}}')
     with open(FILENAME, "w") as file:
         file.write(("\n".join(header_lines + sorted(lines) + trailer_lines)) + "\n")
