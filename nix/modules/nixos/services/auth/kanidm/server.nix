@@ -149,7 +149,6 @@ in
               set -euo pipefail
               export KANIDM_PASSWORD="$(cat ${config.sops.secrets."kanidm-idm_admin-password".path})"
               set -x
-              ${config.services.kanidm.package}/bin/kanidm login --name idm_admin
               ${config.services.kanidm.package}/bin/kanidm person posix set --name idm_admin doridian --gidnumber 2006
               ${config.services.kanidm.package}/bin/kanidm person posix set --name idm_admin wizzy --gidnumber 2010
               ${config.services.kanidm.package}/bin/kanidm group posix set --name idm_admin login-users --gidnumber 4242
