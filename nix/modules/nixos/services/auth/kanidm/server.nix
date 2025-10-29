@@ -1,6 +1,7 @@
-{ pkgs, lib, config, foxDenLib, ... } :
+{ pkgs, lib, config, options, foxDenLib, ... } :
 let
   services = foxDenLib.services;
+  globalCfg = foxDenLib.global.config;
 
   svcConfig = config.foxDen.services.kanidm.server;
 
@@ -12,6 +13,8 @@ in
   options.foxDen.services.kanidm.server = {
     enable = lib.mkEnableOption "kanidm server";
   } // (services.http.mkOptions { svcName = "kanidm"; name = "Kanidm server"; });
+
+  options.foxDen.services.kanidm.oauth2 = options.services.kanidm.provision.systems.oauth2;
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
@@ -42,17 +45,38 @@ in
       '';
     }).config
     {
-      services.kanidm.enableServer = true;
-      services.kanidm.serverSettings = {
-        version = "2";
+      sops.secrets."kanidm-admin-password" = config.lib.foxDen.sops.mkIfAvailable {
+        mode = "0400";
+        owner = "kanidm";
+        group = "kanidm";
+      };
 
-        origin = "https://${hostName}";
-        domain = hostName;
+      sops.secrets."kanidm-idm_admin-password" = config.lib.foxDen.sops.mkIfAvailable {
+        mode = "0400";
+        owner = "kanidm";
+        group = "kanidm";
+      };
 
-        tls_chain = "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.crt";
-        tls_key = "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.key";
+      services.kanidm = {
+        enableServer = true;
+        provision = config.lib.foxDen.sops.mkIfAvailable {
+          enable = true;
+          adminPasswordFile = config.sops.secrets."kanidm-admin-password".path;
+          idmAdminPasswordFile = config.sops.secrets."kanidm-idm_admin-password".path;
+          autoRemove = false; # TODO: True once all done
+          systems.oauth2 = globalCfg.getAttrSet [ "foxDen" "services" "kanidm" "oauth2" ];
+        };
+        serverSettings = {
+          version = "2";
 
-        http_client_address_info.x-forward-for = ["127.0.0.1" "127.0.0.0/8"];
+          origin = "https://${hostName}";
+          domain = hostName;
+
+          tls_chain = "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.crt";
+          tls_key = "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.key";
+
+          http_client_address_info.x-forward-for = ["127.0.0.1" "127.0.0.0/8"];
+        };
       };
 
       systemd.services.caddy-kanidm = {
