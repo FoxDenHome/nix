@@ -16,7 +16,7 @@ in
         enable = true;
         clientId = "git";
         displayName = "Git";
-      }
+      };
     };
   };
 
