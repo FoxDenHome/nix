@@ -35,40 +35,41 @@ in
     }).config
     {
       services.grafana = {
-        enable = true;
         dataDir = "/var/lib/grafana";
+        enable = true;
         provision = {
-          enable = true;
-          dashboards.settings.providers = [ {
-            options.path = ./grafana/dashboards;
-          } ];
           alerting = {
-            rules.path = ./grafana/alerts;
             contactPoints.path = config.lib.foxDen.sops.mkIfAvailable config.sops.secrets."grafana-contact-points".path;
             policies.settings.policies = [
               {
+                group_by = [ "grafana_folder" "alertname" ];
+                group_interval = "5m";
+                group_wait = "30s";
                 orgId = 1;
                 receiver = "Telegram - FoxDen Home";
-                group_by = [ "grafana_folder" "alertname" ];
-                group_wait = "30s";
-                group_interval = "5m";
                 repeat_interval = "4h";
               }
             ];
+            rules.path = ./grafana/alerts;
           };
-
+          dashboards.settings.providers = [
+            {
+              options.path = ./grafana/dashboards;
+            }
+          ];
           datasources.settings = {
             prune = true;
             datasources = [
               {
+                access = "proxy";
                 name = "Prometheus";
                 type = "prometheus";
                 uid = "prometheus";
-                access = "proxy";
                 url = "http://prometheus.foxden.network:9090";
               }
             ];
           };
+          enable = true;
         };
         settings = {
           "auth.generic_oauth" = {
@@ -89,20 +90,20 @@ in
             use_pkce = true;
             use_refresh_token = false;
           };
-          server = {
-            http_addr = "127.0.0.1";
-            http_port = 3000;
-            root_url = "${proto}://${hostName}";
-          };
           database = {
-            name = "grafana";
-            user = "grafana";
             host = config.foxDen.services.mysql.socketPath;
+            name = "grafana";
             type = "mysql";
+            user = "grafana";
           };
           security = {
             cookie_secure = svcConfig.tls;
             disable_initial_admin_creation = true;
+          };
+          server = {
+            http_addr = "127.0.0.1";
+            http_port = 3000;
+            root_url = "${proto}://${hostName}";
           };
           smtp = {
             enabled = false;
