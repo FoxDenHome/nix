@@ -79,32 +79,37 @@ in
 
       sops.secrets.oauth-jit-radius = config.lib.foxDen.sops.mkIfAvailable {};
 
-      foxDen.services.kanidm.oauth2.${svcConfig.oAuth.clientId} =
-          (services.http.mkOauthConfig { inherit svcConfig config; }) // {
-        preferShortUsername = true;
-        claimMaps = {
-          "apc_service_type" = {
-            valuesByGroup = {
-              "superadmins" = [ "admin" ];
+      foxDen.services.kanidm.oauth2 = lib.mkIf svcConfig.oAuth.enable {
+        ${svcConfig.oAuth.clientId} =
+          (services.http.mkOauthConfig {
+            inherit svcConfig config;
+            oAuthCallbackUrl = "/redirect";
+          }) // {
+          preferShortUsername = true;
+          claimMaps = {
+            "apc_service_type" = {
+              valuesByGroup = {
+                "superadmins" = [ "admin" ];
+              };
+            };
+            "cyberpower_service_type" = {
+              valuesByGroup = {
+                "superadmins" = [ "admin" ];
+              };
+            };
+            "mikrotik_group" = {
+              valuesByGroup = {
+                "superadmins" = [ "full" ];
+              };
+            };
+            "supermicro_permissions" = {
+              valuesByGroup = {
+                "superadmins" = [ "administrator" ];
+              };
             };
           };
-          "cyberpower_service_type" = {
-            valuesByGroup = {
-              "superadmins" = [ "admin" ];
-            };
-          };
-          "mikrotik_group" = {
-            valuesByGroup = {
-              "superadmins" = [ "full" ];
-            };
-          };
-          "supermicro_permissions" = {
-            valuesByGroup = {
-              "superadmins" = [ "administrator" ];
-            };
-          };
+          scopeMaps.superadmins = ["preferred_username" "email" "openid" "profile"];
         };
-        scopeMaps.superadmins = ["preferred_username" "email" "openid" "profile"];
       };
 
       systemd.services.oauth-jit-radius = {
