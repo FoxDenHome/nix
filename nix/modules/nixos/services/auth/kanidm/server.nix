@@ -64,13 +64,29 @@ in
           idmAdminPasswordFile = config.sops.secrets."kanidm-idm_admin-password".path;
           autoRemove = false; # TODO: True once all done
           systems.oauth2 = kanidmOauth2;
-          groups.login-users = {
-            present = true;
-            overwriteMembers = false;
+          groups = {
+            login-users = {
+              present = true;
+              overwriteMembers = true;
+              members = [ "doridian" "wizzy" ];
+            };
+            superadmins = {
+              present = true;
+              overwriteMembers = true;
+              members = [ "doridian" "wizzy" ];
+            };
           };
-          groups.superadmins = {
-            present = true;
-            overwriteMembers = false;
+          persons = {
+            doridian = {
+              present = true;
+              displayName = "Doridian";
+              mailAddresses = [ "doridian@foxden.network" ];
+            };
+            wizzy = {
+              present = true;
+              displayName = "Wizzy";
+              mailAddresses = [ "demwizzy@gmail.com" ];
+            };
           };
         };
         serverSettings = {
