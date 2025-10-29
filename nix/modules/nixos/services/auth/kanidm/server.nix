@@ -119,6 +119,7 @@ in
             testgroup = {
               present = true;
               enableUnix = true;
+              gidNumber = 4300;
             };
           };
           persons = {
