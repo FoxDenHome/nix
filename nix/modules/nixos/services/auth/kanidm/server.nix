@@ -70,11 +70,13 @@ in
           groups = {
             login-users = {
               present = true;
+              # gidNumber = 4242
               overwriteMembers = true;
               members = [ "doridian" "wizzy" ];
             };
             superadmins = {
               present = true;
+              # gidNumber = 4269
               overwriteMembers = true;
               members = [ "doridian" "wizzy" ];
             };
@@ -82,11 +84,13 @@ in
           persons = {
             doridian = {
               present = true;
+              # uidNumber = 2006;
               displayName = "Doridian";
               mailAddresses = [ "doridian@foxden.network" ];
             };
             wizzy = {
               present = true;
+              # uidNumber = 2010;
               displayName = "Wizzy";
               mailAddresses = [ "demwizzy@gmail.com" ];
             };
