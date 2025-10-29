@@ -48,11 +48,11 @@ in
                 repeat_interval = "4h";
               }
             ];
-            rules.path = ./grafana/alerts;
+            rules.path = ./alerts;
           };
           dashboards.settings.providers = [
             {
-              options.path = ./grafana/dashboards;
+              options.path = ./dashboards;
             }
           ];
           datasources.settings = {
