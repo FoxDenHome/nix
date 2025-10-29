@@ -74,10 +74,9 @@ in
           "auth.generic_oauth" = {
             allow_assign_grafana_admin = true;
             allow_sign_up = true;
-            api_url = "https://auth.foxden.network/oauth2/openid/grafana/userinfo";
+            api_url = "https://auth.foxden.network/oauth2/openid/$__env{GF_AUTH_GENERIC_OAUTH_CLIENT_ID}/userinfo";
             auth_url = "https://auth.foxden.network/ui/oauth2";
             auto_login = true;
-            client_id = "grafana";
             email_attribute_path = "email";
             enabled = true;
             login_attribute_path = "preferred_username";
