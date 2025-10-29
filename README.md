@@ -8,7 +8,7 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 
 ## Machines
 
-### bengalfox
+### BengalFox
 
 - **Locator**: Rack; 2U, Supermicro chassis
 - **OS**: NixOS
@@ -22,7 +22,7 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 	- zssd: XFS: RAID1: 2 * 3TB SAS3 SSD (partition)
 - **Network**: 25GbE (SFP28; Mellanox ConnectX-6 Dx)
 
-### islandfox
+### IslandFox
 
 - **Locator**: Rack; Lenovo tiny mini-PC
 - **OS**: NixOS
@@ -32,7 +32,7 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 	- nix: XFS: RAID1: 2TB NVMe SSD + 2TB SATA3 SSD
 - **Network**: 1GbE (RJ45)
 
-### icefox
+### IceFox
 
 - **Locator**: Hetzner
 - **OS**: NixOS
@@ -44,7 +44,7 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 		- RAIDZ2: 10 * 14 TB SATA3 HDD
 - **Network**: 1GbE (no traffic limit)
 
-### redfox
+### RedFox
 
 - **Locator**: Vultr
 - **OS**: MikroTik RouterOS
@@ -53,7 +53,7 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 - **Storage**: vdisk 25 GB NVMe SSD
 - **Network**: >= 1GbE (max 2 TB traffic)
 
-### router
+### Router
 
 - **Locator**: Rack; 1U, white MikroTik CCR2004
 - **OS**: MikroTik RouterOS
@@ -64,7 +64,7 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 	- LAN: 25 GbE (SFP28)
 	- WAN: 10 GbE (SFP+)
 
-### router-backup
+### Router Backup
 
 - **Locator**: Rack; 1U, black MikroTik RB5009
 - **OS**: MikroTik RouterOS
