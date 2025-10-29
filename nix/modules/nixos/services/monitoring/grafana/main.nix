@@ -17,9 +17,7 @@ let
   proto = if svcConfig.tls then "https" else "http";
 in
 {
-  options.foxDen.services.grafana = {
-
-  } // services.http.mkOptions { svcName = "grafana"; name = "Grafana monitoring server"; };
+  options.foxDen.services.grafana = services.http.mkOptions { svcName = "grafana"; name = "Grafana monitoring server"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {

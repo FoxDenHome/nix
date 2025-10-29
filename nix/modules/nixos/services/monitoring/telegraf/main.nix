@@ -9,9 +9,7 @@ let
   hostName = foxDenLib.global.dns.mkHost primaryInterface.dns;
 in
 {
-  options.foxDen.services.telegraf = {
-
-  } // services.mkOptions { svcName = "telegraf"; name = "Telegraf monitoring agent"; };
+  options.foxDen.services.telegraf = services.mkOptions { svcName = "telegraf"; name = "Telegraf monitoring agent"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {

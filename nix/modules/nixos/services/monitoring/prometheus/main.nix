@@ -29,9 +29,7 @@ let
   };
 in
 {
-  options.foxDen.services.prometheus = {
-
-  } // services.mkOptions { svcName = "prometheus"; name = "Prometheus monitoring server"; };
+  options.foxDen.services.prometheus = services.mkOptions { svcName = "prometheus"; name = "Prometheus monitoring server"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
