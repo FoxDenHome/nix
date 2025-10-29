@@ -65,6 +65,7 @@ let
   dhcp = foxDenLib.global.dhcp.make nixosConfigurations;
   firewall = foxDenLib.global.firewall.make nixosConfigurations;
   haproxy = foxDenLib.global.haproxy.make nixosConfigurations;
+  kanidmOauth2 = foxDenLib.global.config.getAttrSet [ "foxDen" "services" "kanidm" "oauth2" ] nixosConfigurations;
 
   mkSystemConfig = system: {
     name = system.name;
@@ -72,7 +73,7 @@ let
       specialArgs = allLibs // {
         systemArch = system.system;
         hostName = system.name;
-        inherit dnsRecords dhcp firewall haproxy;
+        inherit dnsRecords dhcp firewall haproxy kanidmOauth2;
       };
       modules = [
         ({ ... }: {
