@@ -133,13 +133,6 @@ in
               displayName = "Wizzy";
               mailAddresses = [ "demwizzy@gmail.com" ];
             };
-            tester = {
-              present = true;
-              enableUnix = true;
-              displayName = "Tester";
-              gidNumber = 2337;
-              mailAddresses = [ "test@foxden.network" ];
-            };
           };
         };
         serverSettings = {
