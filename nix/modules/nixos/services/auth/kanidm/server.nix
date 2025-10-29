@@ -21,7 +21,7 @@ in
         options = {
           enableUnix = lib.mkEnableOption "manage UNIX attributes";
           gidNumber = lib.mkOption {
-            type = lib.types.nullOr lib.types.int;
+            type = lib.types.nullOr lib.types.ints.u32;
             default = null;
             description = "GID number for UNIX group.";
           };
@@ -35,7 +35,7 @@ in
         options = {
           enableUnix = lib.mkEnableOption "manage UNIX attributes";
           gidNumber = lib.mkOption {
-            type = lib.types.nullOr lib.types.int;
+            type = lib.types.nullOr lib.types.ints.u32;
             default = null;
             description = "GID number for UNIX group.";
           };
