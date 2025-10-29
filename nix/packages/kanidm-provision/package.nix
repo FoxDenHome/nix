@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 pkgs.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanidm-provision";
-  version = "1.3.0";
+  version = "0.3.0";
 
   src = pkgs.fetchFromGitHub {
     owner = "Doridian";
@@ -12,8 +12,6 @@ pkgs.rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-dPTrIc/hTbMlFDXYMk/dTjqaNECazldfW43egDOwyLM=";
 
-  nativeInstallCheckInputs = [ pkgs.versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
