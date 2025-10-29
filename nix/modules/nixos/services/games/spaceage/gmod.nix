@@ -26,12 +26,14 @@ in
 
         confinement.packages = with pkgs; [
           steamcmd
+          steam-run
           starlord
           git
           coreutils
         ];
         path = with pkgs; [
           steamcmd
+          steam-run
           starlord
           git
           coreutils
