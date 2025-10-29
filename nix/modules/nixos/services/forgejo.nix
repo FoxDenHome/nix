@@ -67,24 +67,23 @@ in
     }).config
     {
       services.forgejo = {
-        enable = true;
-        stateDir = svcConfig.dataDir;
         database = {
           createDatabase = false;
           name = "forgejo";
-          user = "forgejo";
           socket = config.foxDen.services.mysql.socketPath;
           type = "mysql";
+          user = "forgejo";
         };
+        enable = true;
         lfs = {
           enable = true;
         };
         settings = {
           server = {
-            PROTOCOL = "fcgi";
             DOMAIN = hostName;
             HTTP_ADDR = "127.0.0.1";
             HTTP_PORT = 3000;
+            PROTOCOL = "fcgi";
             ROOT_URL = "${proto}://${hostName}";
             START_SSH_SERVER = true;
           };
@@ -95,11 +94,12 @@ in
             COOKIE_SECURE = svcConfig.tls;
           };
           oauth2_client = {
-            REGISTER_EMAIL_CONFIRM = false;
-            OPENID_CONNECT_SCOPES = "openid email profile";
             ENABLE_AUTO_REGISTRATION = true;
+            OPENID_CONNECT_SCOPES = "openid email profile";
+            REGISTER_EMAIL_CONFIRM = false;
           };
         };
+        stateDir = svcConfig.dataDir;
       };
 
       systemd.services.forgejo-pre = {
