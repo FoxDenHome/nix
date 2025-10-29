@@ -7,6 +7,7 @@ pkgs.rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Doridian";
     repo = "kanidm-provision";
     rev = "139c2762e77e10cb2327d76f2f8d99e91e4cb07b";
+    hash = "sha256-m3bF4wFPVRc2E+E/pZc3js9T4rYbTejo/FFpysytWKw=";
   };
 
   cargoHash = "sha256-dPTrIc/hTbMlFDXYMk/dTjqaNECazldfW43egDOwyLM=";
