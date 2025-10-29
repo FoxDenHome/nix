@@ -54,6 +54,13 @@ in
         wantedBy = [ "multi-user.target" ];
       };
 
+      environment.persistence."/nix/persist/spaceage-gmod" = {
+        hideMounts = true;
+        directories = [
+          { directory = "/var/lib/spaceage-gmod"; user = "spaceage-gmod"; group = "spaceage-gmod"; mode = "u=rwx,g=,o="; }
+        ];
+      };
+
       sops.secrets.spaceage-gmod = config.lib.foxDen.sops.mkIfAvailable { };
     }
   ]);
