@@ -50,7 +50,10 @@
       enablePam = true;
 
       unixSettings = {
-        pam_allowed_login_groups = [ "login-users" ];
+        version = "2";
+        kanidm = {
+          pam_allowed_login_groups = [ "login-users" ];
+        };
         default_shell = "/run/current-system/sw/bin/fish";
         uid_attr_map = "name";
         gid_attr_map = "name";
