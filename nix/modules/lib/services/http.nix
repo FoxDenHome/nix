@@ -142,6 +142,7 @@ in
     oAuth = {
       enable = nixpkgs.lib.mkEnableOption "OAuth2 Proxy";
       bypassInternal = nixpkgs.lib.mkEnableOption "Bypass OAuth for internal requests";
+      overrideService = nixpkgs.lib.mkEnableOption "Don't setup OAuth2 Proxy service, the service has special handling";
       clientId = nixpkgs.lib.mkOption {
         type = str;
       };
@@ -188,7 +189,7 @@ in
     {
       config = (nixpkgs.lib.mkMerge [
         svc.config
-        (nixpkgs.lib.mkIf svcConfig.oAuth.enable (mkOauthProxy inputs).config)
+        (nixpkgs.lib.mkIf (svcConfig.oAuth.enable && (!svcConfig.oAuth.overrideService)) (mkOauthProxy inputs).config)
         {
           environment.etc.${caddyFileEtc} = {
             text = ''

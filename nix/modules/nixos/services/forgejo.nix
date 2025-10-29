@@ -66,7 +66,7 @@ in
       '';
     }).config
     {
-      foxDen.services.forgejo.oAuth.enable = lib.mkForce false; # We handle OAuth in-service
+      foxDen.services.forgejo.oAuth.overrideService = true;
 
       foxDen.services.kanidm.oauth2 = lib.mkIf svcConfig.oAuth.enable {
         ${svcConfig.oAuth.clientId} =

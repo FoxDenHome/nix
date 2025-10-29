@@ -32,7 +32,7 @@ in
       '';
     }).config
     {
-      foxDen.services.grafana.oAuth.enable = lib.mkForce false; # We handle OAuth in-service
+      foxDen.services.grafana.oAuth.overrideService = true;
 
       foxDen.services.kanidm.oauth2 = lib.mkIf svcConfig.oAuth.enable {
         ${svcConfig.oAuth.clientId} =

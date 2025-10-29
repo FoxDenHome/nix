@@ -75,7 +75,7 @@ in
       target = "reverse_proxy http://127.0.0.1:1444";
     }).config
     {
-      foxDen.services.oauth-jit-radius.oAuth.enable = lib.mkForce false; # We handle OAuth in-service
+      foxDen.services.oauth-jit-radius.oAuth.overrideService = true;
 
       sops.secrets.oauth-jit-radius = config.lib.foxDen.sops.mkIfAvailable {};
 
