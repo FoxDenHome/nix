@@ -13,7 +13,6 @@
       group = "root";
     };
 
-    # BEGIN: Fix "normal" shells
     environment.shells = [
       "/usr/bin/fish"
       "/usr/bin/zsh"
@@ -33,10 +32,17 @@
         ] ++ (foxDenLib.services.mkEtcPaths [
           "shells"
         ]);
-        PrivateUsers = lib.mkForce false;
       };
     };
-    # END: Fix "normal" shells
+
+    systemd.services.kanidm-unixd-tasks = {
+      serviceConfig = {
+        BindReadOnlyPaths = foxDenLib.services.mkEtcPaths [
+          "passwd"
+          "group"
+        ];
+      };
+    };
 
     services.openssh = {
       authorizedKeysCommand = "/run/wrappers/bin/kanidm_ssh_authorizedkeys %u";
