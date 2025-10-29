@@ -78,7 +78,6 @@ in
             auth_url = "https://auth.foxden.network/ui/oauth2";
             auto_login = true;
             client_id = "grafana";
-            email_attribute_name = " ";
             email_attribute_path = "email";
             enabled = true;
             login_attribute_path = "preferred_username";
