@@ -8,6 +8,11 @@ in
       enable = true;
       host = "grafana";
       tls = true;
+      oAuth = {
+        enable = true;
+        clientId = "grafana";
+        displayName = "Grafana";
+      };
     };
     mktxp = {
       enable = true;
@@ -29,11 +34,6 @@ in
         name = "grafana";
         zone = "foxden.network";
         dynDns = true;
-      };
-      oAuth = {
-        enable = true;
-        clientId = "grafana";
-        displayName = "Grafana";
       };
       webservice.enable = true;
       addresses = [
