@@ -88,8 +88,16 @@ in
             ROOT_URL = "${proto}://${hostName}";
             START_SSH_SERVER = true;
           };
+          service = {
+            DISABLE_REGISTRATION = true;
+          };
           session = {
             COOKIE_SECURE = svcConfig.tls;
+          };
+          oauth2_client = {
+            REGISTER_EMAIL_CONFIRM = false;
+            OPENID_CONNECT_SCOPES = "openid email profile";
+            ENABLE_AUTO_REGISTRATION = true;
           };
         };
       };
