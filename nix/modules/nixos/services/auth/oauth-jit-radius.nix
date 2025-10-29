@@ -104,6 +104,7 @@ in
             };
           };
         };
+        scopeMaps.superadmins = ["preferred_username" "email" "openid" "profile"];
       };
 
       systemd.services.oauth-jit-radius = {
