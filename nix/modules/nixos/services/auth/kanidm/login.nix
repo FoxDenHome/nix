@@ -66,6 +66,10 @@
             "local" = "share";
             "with" = "login-users";
           }
+          {
+            "local" = "wheel";
+            "with" = "superadmins";
+          }
         ];
       };
     };
