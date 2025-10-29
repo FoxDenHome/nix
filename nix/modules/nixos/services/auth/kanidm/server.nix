@@ -58,7 +58,6 @@ in
 
       services.kanidm = {
         enableServer = true;
-        package = pkgs.kanidmWithSecretProvisioning;
         provision = config.lib.foxDen.sops.mkIfAvailable {
           enable = true;
           adminPasswordFile = config.sops.secrets."kanidm-admin-password".path;
