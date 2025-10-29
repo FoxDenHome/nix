@@ -84,13 +84,13 @@ in
           persons = {
             doridian = {
               present = true;
-              # uidNumber = 2006;
+              # gidNumber = 2006;
               displayName = "Doridian";
               mailAddresses = [ "doridian@foxden.network" ];
             };
             wizzy = {
               present = true;
-              # uidNumber = 2010;
+              # gidNumber = 2010;
               displayName = "Wizzy";
               mailAddresses = [ "demwizzy@gmail.com" ];
             };
@@ -138,6 +138,15 @@ in
         serviceConfig = {
           BindReadOnlyPaths = [
             "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory"
+          ];
+          ExecStartPost = config.lib.foxDen.sops.mkIfAvailable [
+            (pkgs.writeShellScript "set-posix-attrs" ''
+              export KANIDM_PASSWORD="$(cat ${config.sops.secrets."kanidm-idm_admin-password".path})"
+              ${config.services.kanidm.package}/bin/kanidm person posix set --name idm_admin doridian --gidnumber 2006
+              ${config.services.kanidm.package}/bin/kanidm person posix set --name idm_admin wizzy --gidnumber 2010
+              ${config.services.kanidm.package}/bin/kanidm group posix set --name idm_admin login-users --gidnumber 4242
+              ${config.services.kanidm.package}/bin/kanidm group posix set --name idm_admin superadmins --gidnumber 4269
+            '')
           ];
           StateDirectory = "kanidm";
         };
