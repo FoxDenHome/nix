@@ -15,6 +15,40 @@ in
 
   options.foxDen.services.kanidm.oauth2 = options.services.kanidm.provision.systems.oauth2;
 
+  options.services.kanidm.provision.groups = lib.mkOption {
+    type = lib.types.attrsOf (
+      lib.types.submodule (groupSubmod: {
+        options = {
+          enableUnix = lib.mkEnableOption "manage UNIX attributes";
+          gidNumber = lib.mkOption {
+            type = lib.types.nullOr lib.types.int;
+            default = null;
+            description = "GID number for UNIX group.";
+          };
+        };
+      })
+    );
+  };
+  options.services.kanidm.provision.persons = lib.mkOption {
+    type = lib.types.attrsOf (
+      lib.types.submodule (groupSubmod: {
+        options = {
+          enableUnix = lib.mkEnableOption "manage UNIX attributes";
+          gidNumber = lib.mkOption {
+            type = lib.types.nullOr lib.types.int;
+            default = null;
+            description = "GID number for UNIX group.";
+          };
+          loginShell = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = "Login shell for UNIX user.";
+          };
+        };
+      })
+    );
+  };
+
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
       name = "kanidm";
