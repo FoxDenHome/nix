@@ -13,6 +13,7 @@ let
                         (nixpkgs.lib.attrsets.attrValues host.interfaces))));
   in
   {
+    present = true;
     displayName = svcConfig.oAuth.displayName;
     originUrl = map (url: "${url}/oauth2/callback") baseUrls;
     originLanding = nixpkgs.lib.lists.head baseUrls;
