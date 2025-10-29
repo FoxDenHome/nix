@@ -13,6 +13,13 @@ in
       name = "spaceage-gmod";
     }).config
     {
+      users.users.spaceage-gmod = {
+        isSystemUser = true;
+        group = "spaceage-gmod";
+        home = "/var/lib/spaceage-gmod";
+      };
+      users.groups.spaceage-gmod = { };
+
       systemd.services.spaceage-gmod = {
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
@@ -31,13 +38,14 @@ in
         ];
 
         serviceConfig = {
-          DynamicUser = true;
+          User = "spaceage-gmod";
+          Group = "spaceage-gmod";
           StateDirectory = "spaceage-gmod";
+          StateDirectoryMode = "0700";
           EnvironmentFile = config.lib.foxDen.sops.mkIfAvailable [ config.sops.secrets.spaceage-gmod.path ];
           WorkingDirectory = "/var/lib/spaceage-gmod";
           Environment = [
             "STARLORD_CONFIG=spaceage_forlorn"
-            "HOME=/var/lib/spaceage-gmod"
           ];
           Type = "simple";
           ExecStart = [ "${pkgs.starlord}/bin/starlord" ];
