@@ -7,8 +7,7 @@
   in {
     bambu-x1 = mkIntf {
       dns = {
-        name = "bambu-x1";
-        zone = "foxden.network";
+        name = "bambu-x1.foxden.network";
       };
       firewall.ingressAcceptRules = foxDenLib.firewall.templates.trusted "bambu-x1";
       mac = "08:FB:EA:02:64:96";
@@ -18,8 +17,7 @@
     };
     carvera = mkIntf {
       dns = {
-        name = "carvera";
-        zone = "foxden.network";
+        name = "carvera.foxden.network";
       };
       mac = "EC:C7:00:1C:E3:2D";
       addresses = [
@@ -28,8 +26,7 @@
     };
     carvera-controller = mkIntf {
       dns = {
-        name = "carvera-controller";
-        zone = "foxden.network";
+        name = "carvera-controller.foxden.network";
       };
       mac = "6C:6E:07:1B:1D:24";
       addresses = [
@@ -38,8 +35,7 @@
     };
     laser-controller = mkIntf {
       dns = {
-        name = "laser-controller";
-        zone = "foxden.network";
+        name = "laser-controller.foxden.network";
       };
       mac = "8C:16:45:46:05:22";
       addresses = [

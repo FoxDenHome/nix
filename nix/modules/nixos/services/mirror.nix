@@ -15,11 +15,7 @@ let
     ];
   };
 
-  svcRootName = if (primaryInterface.dns.name == "mirror") then "@" else (lib.strings.removePrefix "mirror." primaryInterface.dns.name);
-  svcRootDomain = if svcConfig.rootDomain != "" then svcConfig.rootDomain else (foxDenLib.global.dns.mkHost {
-    zone = primaryInterface.dns.zone;
-    name = svcRootName;
-  });
+  svcRootName = lib.strings.removePrefix "mirror." primaryInterface.dns.name;
 
   sourceType = with lib.types; submodule {
     options = {
@@ -113,7 +109,7 @@ in
             ];
 
             Environment = [
-              "\"ROOT_DOMAIN=${svcRootDomain}\""
+              "\"ROOT_DOMAIN=${svcRootName}\""
               "\"ARCH_MIRROR_ID=${svcConfig.archMirrorId}\""
               "\"RESOLVERS=${lib.strings.concatStringsSep " " (map util.bracketIPv6 hostCfg.nameservers)}\""
             ];

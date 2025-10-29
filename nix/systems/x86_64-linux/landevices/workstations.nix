@@ -7,8 +7,7 @@
   in {
     capefox = mkIntf {
       dns = {
-        name = "capefox";
-        zone = "foxden.network";
+        name = "capefox.foxden.network";
       };
       mac = "00:30:93:12:12:38";
       addresses = [
@@ -17,8 +16,7 @@
     };
     capefox-wired = mkIntf {
       dns = {
-        name = "capefox-wired";
-        zone = "foxden.network";
+        name = "capefox-wired.foxden.network";
       };
       mac = "00:30:93:12:12:39"; # TODO: Update MAC
       addresses = [
@@ -27,8 +25,7 @@
     };
     crossfox = mkIntf {
       dns = {
-        name = "crossfox";
-        zone = "foxden.network";
+        name = "crossfox.foxden.network";
       };
       mac = "B8:27:EB:ED:0F:4B";
       addresses = [
@@ -37,8 +34,7 @@
     };
     fennec = mkIntf {
       dns = {
-        name = "fennec";
-        zone = "foxden.network";
+        name = "fennec.foxden.network";
       };
       mac = "7C:FE:90:31:7B:0E";
       addresses = [
@@ -47,8 +43,7 @@
     };
     wizzy-desktop = mkIntf {
       dns = {
-        name = "wizzy-desktop";
-        zone = "foxden.network";
+        name = "wizzy-desktop.foxden.network";
       };
       mac = "7C:FE:90:39:20:9A";
       addresses = [

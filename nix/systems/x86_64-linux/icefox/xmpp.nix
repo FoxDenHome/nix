@@ -13,8 +13,7 @@ in
 
   foxDen.dns.records = [
     {
-      zone = "foxden.network";
-      name = "_xmpp-client._tcp";
+      name = "_xmpp-client._tcp.foxden.network";
       type = "SRV";
       ttl = 3600;
       port = 5222;
@@ -24,8 +23,7 @@ in
       value = "xmpp.foxden.network.";
     }
     {
-      zone = "foxden.network";
-      name = "_xmpps-client._tcp";
+      name = "_xmpps-client._tcp.foxden.network";
       type = "SRV";
       ttl = 3600;
       port = 5223;
@@ -35,8 +33,7 @@ in
       value = "xmpp.foxden.network.";
     }
     {
-      zone = "foxden.network";
-      name = "_xmpp-server._tcp";
+      name = "_xmpp-server._tcp.foxden.network";
       type = "SRV";
       ttl = 3600;
       port = 5269;
@@ -50,17 +47,14 @@ in
   foxDen.hosts.hosts = {
     xmpp = mkV6Host {
       dns = {
-        name = "@";
-        zone = "foxden.network";
+        name = "foxden.network";
       };
       cnames = [
         {
-          name = "xmpp";
-          zone = "foxden.network";
+          name = "xmpp.foxden.network";
         }
         {
-          name = "upload.xmpp";
-          zone = "foxden.network";
+          name = "upload.xmpp.foxden.network";
         }
       ];
       firewall.portForwards = [

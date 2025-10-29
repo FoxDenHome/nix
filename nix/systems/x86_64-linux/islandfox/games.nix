@@ -37,19 +37,16 @@ in
   foxDen.hosts.hosts = {
     darksignsonline = mkVlanHost 3 {
       dns = {
-        name = "darksignsonline";
-        zone = "foxden.network";
+        name = "darksignsonline.foxden.network";
         dynDns = true;
       };
       cnames = [
         {
-          name = "@";
-          zone = "darksignsonline.com";
+          name = "darksignsonline.com";
           type = "ALIAS";
         }
         {
-          name = "www";
-          zone = "darksignsonline.com";
+          name = "www.darksignsonline.com";
         }
       ];
       webservice.enable = true;
@@ -60,18 +57,15 @@ in
     };
     minecraft = mkVlanHost 2 {
       dns = {
-        name = "minecraft";
-        zone = "foxden.network";
+        name = "minecraft.foxden.network";
         dynDns = true;
       };
       cnames = [
         {
-          name = "mc";
-          zone = "foxden.network";
+          name = "mc.foxden.network";
         }
         {
-          name = "mc";
-          zone = "doridian.net";
+          name = "mc.doridian.net";
         }
       ];
       firewall.portForwards = [
@@ -87,18 +81,15 @@ in
     };
     spaceage-gmod = mkVlanHost 3 {
       dns = {
-        name = "spaceage-gmod";
-        zone = "foxden.network";
+        name = "spaceage-gmod.foxden.network";
         dynDns = true;
       };
       cnames = [
         {
-          name = "gmod";
-          zone = "spaceage.mp";
+          name = "gmod.spaceage.mp";
         }
         {
-          name = "play";
-          zone = "spaceage.mp";
+          name = "play.spaceage.mp";
         }
       ];
       firewall.portForwards = [
@@ -114,15 +105,13 @@ in
     };
     spaceage-api = mkVlanHost 3 {
       dns = {
-        name = "spaceage-api";
-        zone = "foxden.network";
+        name = "spaceage-api.foxden.network";
         dynDns = true;
       };
       webservice.enable = true;
       cnames = [
         {
-          name = "api";
-          zone = "spaceage.mp";
+          name = "api.spaceage.mp";
         }
       ];
       addresses = [
@@ -132,15 +121,13 @@ in
     };
     spaceage-tts = mkVlanHost 3 {
       dns = {
-        name = "spaceage-tts";
-        zone = "foxden.network";
+        name = "spaceage-tts.foxden.network";
         dynDns = true;
       };
       webservice.enable = true;
       cnames = [
         {
-          name = "tts";
-          zone = "spaceage.mp";
+          name = "tts.spaceage.mp";
         }
       ];
       addresses = [
@@ -150,19 +137,16 @@ in
     };
     spaceage-website = mkVlanHost 3 {
       dns = {
-        name = "spaceage-website";
-        zone = "foxden.network";
+        name = "spaceage-website.foxden.network";
         dynDns = true;
       };
       webservice.enable = true;
       cnames = [
         {
-          name = "www";
-          zone = "spaceage.mp";
+          name = "www.spaceage.mp";
         }
         {
-          name = "@";
-          zone = "spaceage.mp";
+          name = "spaceage.mp";
           type = "ALIAS";
         }
       ];

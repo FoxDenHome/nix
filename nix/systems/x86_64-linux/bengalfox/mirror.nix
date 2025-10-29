@@ -28,18 +28,15 @@ in
   foxDen.hosts.hosts = {
     mirror = mkVlanHost 2 {
       dns = {
-        name = "mirror";
-        zone = "foxden.network";
+        name = "mirror.foxden.network";
         dynDns = true;
       };
       cnames = [
         {
-          name = "archlinux";
-          zone = "foxden.network";
+          name = "archlinux.foxden.network";
         }
         {
-          name = "cachyos";
-          zone = "foxden.network";
+          name = "cachyos.foxden.network";
         }
       ];
       webservice = {

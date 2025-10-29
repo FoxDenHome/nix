@@ -76,8 +76,7 @@ in
   foxDen.hosts.hosts = {
     nas = mkV6Host {
       dns = {
-        name = "nas-offsite";
-        zone = "foxden.network";
+        name = "nas-offsite.foxden.network";
       };
       webservice.enable = true;
       addresses = [
@@ -88,8 +87,7 @@ in
     };
     nzbget = mkV6Host {
       dns = {
-        name = "nzbget-offsite";
-        zone = "foxden.network";
+        name = "nzbget-offsite.foxden.network";
       };
       addresses = [
         "2a01:4f9:2b:1a42::1:8/112"
@@ -99,8 +97,7 @@ in
     };
     jellyfin = mkV6Host {
       dns = {
-        name = "jellyfin-offsite";
-        zone = "foxden.network";
+        name = "jellyfin-offsite.foxden.network";
       };
       webservice.enable = true;
       addresses = [
@@ -111,8 +108,7 @@ in
     };
     kiwix = mkV6Host {
       dns = {
-        name = "kiwix-offsite";
-        zone = "foxden.network";
+        name = "kiwix-offsite.foxden.network";
       };
       webservice.enable = true;
       addresses = [
@@ -124,8 +120,7 @@ in
     deluge = let
       host = mkMinHost {
         dns = {
-          name = "deluge-offsite";
-          zone = "foxden.network";
+          name = "deluge-offsite.foxden.network";
         };
         addresses = [
           "10.99.12.11/24"

@@ -2,8 +2,7 @@
 let
   mkWanRecs = (suffix: v4: v6: [
     {
-      zone = "foxden.network";
-      name = suffix;
+      name = "${suffix}.foxden.network";
       type = "A";
       value = v4;
       ttl = 300;
@@ -11,8 +10,7 @@ let
       horizon = "external";
     }
     {
-      zone = "foxden.network";
-      name = suffix;
+      name = "${suffix}.foxden.network";
       type = "AAAA";
       value = v6;
       ttl = 300;
@@ -20,8 +18,7 @@ let
       horizon = "external";
     }
     {
-      zone = "foxden.network";
-      name = "v4-${suffix}";
+      name = "v4-${suffix}.foxden.network";
       type = "A";
       value = v4;
       ttl = 300;
@@ -29,8 +26,7 @@ let
       horizon = "external";
     }
     {
-      zone = "foxden.network";
-      name = "v4-${suffix}";
+      name = "v4-${suffix}.foxden.network";
       type = "CNAME";
       value = "${suffix}.foxden.network.";
       ttl = 300;
@@ -41,40 +37,35 @@ in
 {
   config.foxDen.dns.records = [
     {
-      zone = "foxden.network";
-      name = "vpn";
+      name = "vpn.foxden.network";
       type = "CNAME";
       ttl = 3600;
       value = "v4-wan.foxden.network.";
       horizon = "external";
     }
     {
-      zone = "foxden.network";
-      name = "v4-vpn";
+      name = "v4-vpn.foxden.network";
       type = "CNAME";
       ttl = 3600;
       value = "v4-wan.foxden.network.";
       horizon = "external";
     }
     {
-      zone = "foxden.network";
-      name = "ntp";
+      name = "ntp.foxden.network";
       type = "CNAME";
       ttl = 3600;
       value = "wan.foxden.network.";
       horizon = "external";
     }
     {
-      zone = "foxden.network";
-      name = "vpn";
+      name = "vpn.foxden.network";
       type = "A";
       ttl = 3600;
       value = "10.2.1.1";
       horizon = "internal";
     }
     {
-      zone = "foxden.network";
-      name = "v4-vpn";
+      name = "v4-vpn.foxden.network";
       type = "A";
       ttl = 3600;
       value = "10.2.1.1";

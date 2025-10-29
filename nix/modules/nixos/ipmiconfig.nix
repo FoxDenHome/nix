@@ -87,8 +87,7 @@ in
         driver = "null";
         useDHCP = true;
         dns = {
-          name = netconfig.hostName;
-          zone = netconfig.hostZone;
+          name = "${netconfig.hostName}.${netconfig.hostZone}";
         };
         addresses = lib.lists.filter (val: val != null) [
           netconfig.ipv4.address

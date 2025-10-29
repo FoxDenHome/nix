@@ -26,17 +26,14 @@ in
   foxDen.hosts.hosts = {
     mirror = mkHost {
       dns = {
-        name = "mirror";
-        zone = "doridian.net";
+        name = "mirror.doridian.net";
       };
       cnames = [
         {
-          name = "cachyos";
-          zone = "doridian.net";
+          name = "cachyos.doridian.net";
         }
         {
-          name = "archlinux";
-          zone = "doridian.net";
+          name = "archlinux.doridian.net";
         }
       ];
       addresses = [

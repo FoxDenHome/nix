@@ -128,8 +128,7 @@ in
         driverOpts.bridge = "br-default";
         driverOpts.vlan = 2;
         dns = {
-          name = "dummy";
-          zone = "local.foxden.network";
+          name = "dummy.foxden.local";
         };
         addresses = [
           "192.168.122.203/24"
@@ -145,8 +144,7 @@ in
         driverOpts.bridge = "br-default";
         driverOpts.vlan = 2;
         dns = {
-          name = "dummy2";
-          zone = "local.foxden.network";
+          name = "dummy2.foxden.local";
         };
         addresses = [
           "192.168.122.204/24"

@@ -3,33 +3,26 @@
   autostart = true;
   interfaces.default = {
     dns = {
-      name = "arcticfox";
-      zone = "doridian.net";
+      name = "arcticfox.doridian.net";
     };
     cnames = [
       {
-        name = "pma.arcticfox";
-        zone = "doridian.net";
+        name = "pma.arcticfox.doridian.net";
       }
       {
-        name = "ftp.arcticfox";
-        zone = "doridian.net";
+        name = "ftp.arcticfox.doridian.net";
       }
       {
-        name = "mail.arcticfox";
-        zone = "doridian.net";
+        name = "mail.arcticfox.doridian.net";
       }
       {
-        name = "www.pma.arcticfox";
-        zone = "doridian.net";
+        name = "www.pma.arcticfox.doridian.net";
       }
       {
-        name = "www.ftp.arcticfox";
-        zone = "doridian.net";
+        name = "www.ftp.arcticfox.doridian.net";
       }
       {
-        name = "www.mail.arcticfox";
-        zone = "doridian.net";
+        name = "www.mail.arcticfox.doridian.net";
       }
     ];
     addresses = [
@@ -40,32 +33,28 @@
   };
   records = [
     {
-      zone = "doridian.net";
-      name = "arcticfox";
+      name = "arcticfox.doridian.net";
       type = "TXT";
       ttl = 3600;
       value = "v=spf1 +a:arcticfox.doridian.net include:amazonses.com mx ~all";
       horizon = "*";
     }
     {
-      zone = "doridian.net";
-      name = "_dmarc.arcticfox";
+      name = "_dmarc.arcticfox.doridian.net";
       type = "TXT";
       ttl = 3600;
       value = "v=DMARC1;p=quarantine;pct=100";
       horizon = "*";
     }
     {
-      zone = "doridian.net";
-      name = "arcticfox";
+      name = "arcticfox.doridian.net";
       type = "A";
       ttl = 3600;
       value = "95.216.116.135";
       horizon = "internal";
     }
     {
-      zone = "doridian.net";
-      name = "arcticfox";
+      name = "arcticfox.doridian.net";
       type = "AAAA";
       ttl = 3600;
       value = "2a01:4f9:2b:1a42::0:ff01";

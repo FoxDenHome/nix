@@ -7,9 +7,6 @@ let
 
   dnsRecordType = with lib.types; submodule {
     options = {
-      zone = lib.mkOption {
-        type = str;
-      };
       name = lib.mkOption {
         type = str;
       };
@@ -53,22 +50,46 @@ in
       type = listOf dnsRecordType;
       default = [];
     };
+    # NOTE: We do NOT support nested zones here, as that would complicate things
+    # significantly. So don't add things like "sub.example.com" if "example.com" is already present.
+    options.foxDen.dns.zones = with lib.types; lib.mkOption {
+      type = uniq (listOf str);
+      default = [
+        "foxden.network"
+        "doridian.net"
+        "darksignsonline.com"
+        "f0x.es"
+        "foxcav.es"
+        "spaceage.mp"
+
+        "c.1.2.2.0.f.8.e.0.a.2.ip6.arpa"
+        "0.f.4.4.d.7.e.0.a.2.ip6.arpa"
+        "e.b.3.6.b.c.4.f.c.2.d.f.ip6.arpa"
+        "10.in-addr.arpa"
+        "41.96.100.in-addr.arpa"
+      ];
+    };
   };
 
-  mkHost = (record: if record.name == "@" then record.zone else "${record.name}.${record.zone}");
+  mkHost = record: record.name;
 
   mkRecords = (nixosConfigurations: let
     records = globalConfig.getList ["foxDen" "dns" "records"] nixosConfigurations;
     # TODO: Go back to uniqueStrings once next NixOS stable
-    horizons = nixpkgs.lib.filter (h: h != "*")
-        (nixpkgs.lib.lists.unique (map (record: record.horizon) records));
-    zones = nixpkgs.lib.lists.unique (map (record: record.zone) records);
+    horizons = lib.filter (h: h != "*")
+        (lib.lists.unique (map (record: record.horizon) records));
+    zones = lib.lists.unique (globalConfig.getList ["foxDen" "dns" "zones"] nixosConfigurations);
+
+    zonedRecords = map (record: record // rec {
+      zone = lib.findFirst (zone: (zone == record.name) || (lib.strings.hasSuffix ".${zone}" record.name)) "" zones;
+      name = if (record.name == zone) then "@" else (lib.strings.removeSuffix ".${zone}" record.name);
+    }) records;
   in
-  (nixpkgs.lib.attrsets.genAttrs horizons (horizon:
-    nixpkgs.lib.attrsets.genAttrs zones (zone:
-      nixpkgs.lib.filter (record:
-        (record.horizon == horizon || record.horizon == "*") && record.zone == zone)
-        records
-    )
-  )));
+    (lib.attrsets.genAttrs horizons (horizon:
+      lib.attrsets.genAttrs zones (zone:
+        lib.filter (record:
+          (record.horizon == horizon || record.horizon == "*") && record.zone == zone)
+          zonedRecords
+      )
+    )));
 }

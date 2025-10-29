@@ -16,13 +16,11 @@ in
   foxDen.hosts.hosts = {
     syncthing = mkV6Host {
       dns = {
-        name = "syncthing";
-        zone = "doridian.net";
+        name = "syncthing.doridian.net";
       };
       cnames = [
         {
-          name = "webdav.syncthing";
-          zone = "doridian.net";
+          name = "webdav.syncthing.doridian.net";
         }
       ];
       firewall.portForwards = [

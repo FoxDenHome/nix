@@ -31,8 +31,7 @@ in
   foxDen.hosts.hosts = {
     grafana = mkVlanHost 2 {
       dns = {
-        name = "grafana";
-        zone = "foxden.network";
+        name = "grafana.foxden.network";
         dynDns = true;
       };
       webservice.enable = true;
@@ -43,8 +42,7 @@ in
     };
     prometheus = mkVlanHost 2 {
       dns = {
-        name = "prometheus";
-        zone = "foxden.network";
+        name = "prometheus.foxden.network";
       };
       addresses = [
         "10.2.11.20/16"
@@ -53,8 +51,7 @@ in
     };
     telegraf = mkVlanHost 2 {
       dns = {
-        name = "telegraf";
-        zone = "foxden.network";
+        name = "telegraf.foxden.network";
       };
       addresses = [
         "10.2.11.21/16"
@@ -63,8 +60,7 @@ in
     };
     mktxp = mkVlanHost 2 {
       dns = {
-        name = "mktxp";
-        zone = "foxden.network";
+        name = "mktxp.foxden.network";
       };
       addresses = [
         "10.2.11.22/16"

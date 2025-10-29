@@ -4,8 +4,7 @@
   interfaces.default = {
     driver = "null";
     dns = {
-      name = "homeassistant";
-      zone = "foxden.network";
+      name = "homeassistant.foxden.network";
       dynDns = true;
     };
     webservice = {

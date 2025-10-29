@@ -7,8 +7,7 @@
   in {
     mister = mkIntf {
       dns = {
-        name = "mister";
-        zone = "foxden.network";
+        name = "mister.foxden.network";
       };
       mac = "02:03:04:05:06:07";
       addresses = [
@@ -17,8 +16,7 @@
     };
     ps2 = mkIntf {
       dns = {
-        name = "ps2";
-        zone = "foxden.network";
+        name = "ps2.foxden.network";
       };
       mac = "00:27:09:FF:A7:49";
       addresses = [
@@ -27,8 +25,7 @@
     };
     wii = mkIntf {
       dns = {
-        name = "wii";
-        zone = "foxden.network";
+        name = "wii.foxden.network";
       };
       mac = "00:27:09:8A:A7:49";
       addresses = [

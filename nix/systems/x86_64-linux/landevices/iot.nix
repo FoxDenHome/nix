@@ -7,8 +7,7 @@
   in {
     amp-living-room = mkIntf {
       dns = {
-        name = "amp-living-room";
-        zone = "foxden.network";
+        name = "amp-living-room.foxden.network";
       };
       mac = "EC:F4:51:D0:8C:AF";
       addresses = [
@@ -17,8 +16,7 @@
     };
     ecoflow-delta-pro = mkIntf {
       dns = {
-        name = "ecoflow-delta-pro";
-        zone = "foxden.network";
+        name = "ecoflow-delta-pro.foxden.network";
       };
       mac = "4C:EB:D6:D6:3C:9C";
       addresses = [
@@ -27,8 +25,7 @@
     };
     hue = mkIntf {
       dns = {
-        name = "hue";
-        zone = "foxden.network";
+        name = "hue.foxden.network";
       };
       mac = "C4:29:96:B5:2B:8F";
       addresses = [
@@ -37,8 +34,7 @@
     };
     hue-sync-box = mkIntf {
       dns = {
-        name = "hue-sync-box";
-        zone = "foxden.network";
+        name = "hue-sync-box.foxden.network";
       };
       mac = "C4:29:96:0B:9C:82";
       addresses = [
@@ -47,8 +43,7 @@
     };
     led-strip-dori-office-ceiling = mkIntf {
       dns = {
-        name = "led-strip-dori-office-ceiling";
-        zone = "foxden.network";
+        name = "led-strip-dori-office-ceiling.foxden.network";
       };
       mac = "C4:DE:E2:B2:D2:C7";
       addresses = [
@@ -57,8 +52,7 @@
     };
     nanoleaf-shapes-dori = mkIntf {
       dns = {
-        name = "nanoleaf-shapes-dori";
-        zone = "foxden.network";
+        name = "nanoleaf-shapes-dori.foxden.network";
       };
       mac = "80:8A:F7:03:E2:1A";
       addresses = [
@@ -67,8 +61,7 @@
     };
     nanoleaf-lines-wizzy = mkIntf {
       dns = {
-        name = "nanoleaf-lines-wizzy";
-        zone = "foxden.network";
+        name = "nanoleaf-lines-wizzy.foxden.network";
       };
       mac = "80:8A:F7:03:55:58";
       addresses = [
@@ -77,8 +70,7 @@
     };
     printer = mkIntf {
       dns = {
-        name = "printer";
-        zone = "foxden.network";
+        name = "printer.foxden.network";
       };
       mac = "64:C6:D2:E5:91:45";
       addresses = [
@@ -87,8 +79,7 @@
     };
     streamdeckpi = mkIntf {
       dns = {
-        name = "streamdeckpi";
-        zone = "foxden.network";
+        name = "streamdeckpi.foxden.network";
       };
       mac = "D8:3A:DD:40:CA:F1";
       addresses = [
@@ -97,8 +88,7 @@
     };
     tesla-wall-charger = mkIntf {
       dns = {
-        name = "tesla-wall-charger";
-        zone = "foxden.network";
+        name = "tesla-wall-charger.foxden.network";
       };
       mac = "98:ED:5C:9B:79:CF";
       addresses = [
@@ -107,8 +97,7 @@
     };
     ups-dori-office = mkIntf {
       dns = {
-        name = "ups-dori-office";
-        zone = "foxden.network";
+        name = "ups-dori-office.foxden.network";
       };
       mac = "00:0C:15:04:39:93";
       addresses = [

@@ -23,8 +23,7 @@ in
   foxDen.hosts.hosts = {
     git = mkVlanHost 2 {
       dns = {
-        name = "git";
-        zone = "foxden.network";
+        name = "git.foxden.network";
         dynDns = true;
       };
       webservice.enable = true;

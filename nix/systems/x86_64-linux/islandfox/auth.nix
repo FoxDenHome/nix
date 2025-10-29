@@ -24,8 +24,7 @@ in
   foxDen.hosts.hosts = {
     auth = mkVlanHost 1 {
       dns = {
-        name = "auth";
-        zone = "foxden.network";
+        name = "auth.foxden.network";
         dynDns = true;
       };
       webservice.enable = true;
@@ -36,8 +35,7 @@ in
     };
     radius = mkVlanHost 1 {
       dns = {
-        name = "radius.auth";
-        zone = "foxden.network";
+        name = "radius.auth.foxden.network";
         dynDns = true;
       };
       webservice.enable = true;

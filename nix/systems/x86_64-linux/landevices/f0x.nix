@@ -2,8 +2,7 @@
 {
   config.foxDen.dns.records = [
     {
-      zone = "f0x.es";
-      name = "c0de";
+      name = "c0de.f0x.es";
       type = "CNAME";
       ttl = 3600;
       value = "c0defox.es.";

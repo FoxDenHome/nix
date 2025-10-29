@@ -10,13 +10,11 @@
   in {
     redfox = mkIntf {
       dns = {
-        name = "redfox";
-        zone = "foxden.network";
+        name = "redfox.foxden.network";
       };
       cnames = [
         {
-          name = "redfox";
-          zone = "doridian.net";
+          name = "redfox.doridian.net";
         }
       ];
       addresses = [
@@ -30,16 +28,14 @@
 
   foxDen.dns.records = [
     {
-      zone = "doridian.net";
-      name = "v4-redfox";
+      name = "v4-redfox.doridian.net";
       type = "A";
       ttl = 3600;
       value = "144.202.81.146";
       horizon = "external";
     }
     {
-      zone = "doridian.net";
-      name = "v4-redfox";
+      name = "v4-redfox.doridian.net";
       type = "CNAME";
       ttl = 3600;
       value = "redfox.foxden.network.";

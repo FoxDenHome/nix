@@ -3,8 +3,7 @@
   autostart = true;
   interfaces.default = {
     dns = {
-      name = "bengalfox-win";
-      zone = "foxden.network";
+      name = "bengalfox-win.foxden.network";
     };
     addresses = [
       "10.2.10.10/16"

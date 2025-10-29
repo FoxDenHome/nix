@@ -108,10 +108,6 @@ in
             type = uniq (listOf foxDenLib.types.ip);
             default = [];
           };
-          zone = nixpkgs.lib.mkOption {
-            type = str;
-            default = "foxden.network";
-          };
           ttl = nixpkgs.lib.mkOption {
             type = ints.positive;
             default = 3600;
@@ -199,7 +195,6 @@ in
 
     mkIfaceDynDnsOne = (iface: check: type: value: if (check iface) then [
       {
-        zone = iface.dns.zone;
         name = iface.dns.name;
         type = type;
         ttl = iface.dns.dynDnsTtl;
@@ -234,16 +229,6 @@ in
           This is used to avoid generating colliding MAC addresses for interfaces.
         '';
       };
-      ptrZones = nixpkgs.lib.mkOption {
-        type = listOf str;
-        default = [
-          "c.1.2.2.0.f.8.e.0.a.2.ip6.arpa"
-          "0.f.4.4.d.7.e.0.a.2.ip6.arpa"
-          "e.b.3.6.b.c.4.f.c.2.d.f.ip6.arpa"
-          "10.in-addr.arpa"
-          "41.96.100.in-addr.arpa"
-        ];
-      };
       index = nixpkgs.lib.mkOption {
         type = ints.u8;
       };
@@ -257,25 +242,23 @@ in
       foxDen.dns.records = (nixpkgs.lib.flatten (map
           (iface: let
             mkRecord = (addr: nixpkgs.lib.mkIf (iface.dns.name != "") {
-              inherit (iface.dns) zone name ttl;
+              inherit (iface.dns) name ttl;
               type = if (util.isIPv6 addr) then "AAAA" else "A";
               value = util.removeIPCidr addr;
               horizon = if (util.isPrivateIP addr) then "internal" else "external";
             });
             mkPtr = (addr: let
               revName = util.mkPtr addr;
-              zone = nixpkgs.lib.findFirst (zone: nixpkgs.lib.strings.hasSuffix zone ".${revName}") "" config.foxDen.hosts.ptrZones;
-            in nixpkgs.lib.mkIf (iface.dns.name != "" && zone != "") {
+            in nixpkgs.lib.mkIf (iface.dns.name != "") {
               inherit (iface.dns) ttl;
-              inherit zone;
-              name = nixpkgs.lib.strings.removeSuffix ".${zone}" revName;
+              name = revName;
               type = "PTR";
               value = "${foxDenLib.global.dns.mkHost iface.dns}.";
               horizon = if (util.isPrivateIP addr) then "internal" else "external";
             });
             ifaceCnames = map (cname: {
               inherit (iface.dns) ttl;
-              inherit (cname) name zone type;
+              inherit (cname) name type;
               value = "${foxDenLib.global.dns.mkHost iface.dns}.";
               horizon = "*"; # TODO: This might need to be conditional if there is v4/v6 only hosts with CNAMEs
             }) iface.cnames;

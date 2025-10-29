@@ -67,8 +67,7 @@ in
       interfaces.default = {
         driver = "null";
         dns = {
-          name = "islandfox";
-          zone = "foxden.network";
+          name = "islandfox.foxden.network";
         };
         addresses = ifcfg.addresses;
       };

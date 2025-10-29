@@ -239,8 +239,7 @@ in
 
   foxDen.dns.records = [
     {
-      zone = "doridian.net";
-      name = "v4-icefox";
+      name = "v4-icefox.doridian.net";
       type = "A";
       ttl = 3600;
       value = mainIPv4;
@@ -256,13 +255,11 @@ in
       mkIntf = addresses: {
         driver = "null";
         dns = {
-          name = "icefox";
-          zone = "foxden.network";
+          name = "icefox.foxden.network";
         };
         cnames = [
           {
-            name = "icefox";
-            zone = "doridian.net";
+            name = "icefox.doridian.net";
           }
         ];
         inherit addresses;
