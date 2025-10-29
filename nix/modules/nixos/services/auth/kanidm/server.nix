@@ -138,10 +138,14 @@ in
         serviceConfig = {
           BindReadOnlyPaths = [
             "/var/lib/foxden/caddy-kanidm/certificates/acme-v02.api.letsencrypt.org-directory"
-          ];
+          ] ++ (foxDenLib.services.mkEtcPaths [
+            "kanidm/config"
+          ]);
           ExecStartPost = config.lib.foxDen.sops.mkIfAvailable [
             ("-"+(pkgs.writeShellScript "set-posix-attrs" ''
+              set -euo pipefail
               export KANIDM_PASSWORD="$(cat ${config.sops.secrets."kanidm-idm_admin-password".path})"
+              set -x
               ${config.services.kanidm.package}/bin/kanidm login --name idm_admin
               ${config.services.kanidm.package}/bin/kanidm person posix set --name idm_admin doridian --gidnumber 2006
               ${config.services.kanidm.package}/bin/kanidm person posix set --name idm_admin wizzy --gidnumber 2010
