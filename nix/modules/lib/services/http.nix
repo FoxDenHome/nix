@@ -31,6 +31,8 @@ let
 
     configFile = "${svc.configDir}/${name}.conf";
     configFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" configFile;
+
+    cookieSecretFile = "/run/${serviceName}/cookie-secret";
   in
   {
     config = (nixpkgs.lib.mkMerge [
@@ -53,7 +55,7 @@ let
 
             client_id = "${svcConfig.oAuth.clientId}"
             client_secret = "PKCE"
-            cookie_secret_file = "/run/${serviceName}/cookie-secret"
+            cookie_secret_file = "${cookieSecretFile}"
             oidc_issuer_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}"
           '';
           user = "root";
@@ -69,10 +71,10 @@ let
             DynamicUser = true;
             ExecStartPre = [
               (pkgs.writeShellScript "generate-cookie-secret" ''
-                if [ -f /run/${serviceName}/cookie-secret ]; then
-                  exit 0
+                if [ ! -f ${cookieSecretFile} ]; then
+                  ${pkgs.coreutils}/bin/dd if=/dev/urandom bs=16 count=1 | ${pkgs.coreutils}/bin/base64 -w 0 > ${cookieSecretFile}
                 fi
-                ${pkgs.coreutils}/bin/dd if=/dev/urandom bs=16 count=1 | ${pkgs.coreutils}/bin/base64 -w 0 > /run/${serviceName}/cookie-secret
+                chmod 600 ${cookieSecretFile}
               '')
             ];
             RuntimeDirectory = serviceName;
