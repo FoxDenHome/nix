@@ -28,6 +28,10 @@ in
       gpu = true;
       inherit svcConfig pkgs config;
     }).config
+    (foxDenLib.services.redis.make {
+      inherit pkgs config svcConfig;
+      name = "immich";
+    }).config
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "caddy-immich";
@@ -82,6 +86,11 @@ in
         mediaLocation = svcConfig.mediaDir;
         database = {
           createDB = false;
+        };
+        redis = {
+          enable = true;
+          host = "127.0.0.1";
+          port = 6379;
         };
         settings = {
           ffmpeg = {
