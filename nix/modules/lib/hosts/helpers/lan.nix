@@ -11,13 +11,13 @@ rec {
 
   mkVlanHost = (ifcfg: vlan: cfg: {
     nameservers = mkNameservers vlan;
-    interfaces.default = cfg // {
+    interfaces.default = {
       driver = "bridge";
       driverOpts = {
         bridge = ifcfg.interface;
         vlan = vlan;
       };
       routes = mkRoutes vlan;
-    };
+    } // cfg;
   });
 }

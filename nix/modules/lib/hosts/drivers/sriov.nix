@@ -7,7 +7,7 @@ in
     vlan = nixpkgs.lib.mkOption {
       type = ints.unsigned;
     };
-    root = nixpkgs.lib.mkOption {
+    bridge = nixpkgs.lib.mkOption {
       type = str;
     };
   };
@@ -15,26 +15,26 @@ in
   build = { ... } : { };
 
   hooks = ({ pkgs, ipCmd, defaultServiceInterface, interface, ... }: let
-    root = interface.driverOpts.root;
+    bridge = interface.driverOpts.bridge;
 
     allocSriovScript = pkgs.writeShellScript "allocate-sriov" ''
       set -euox pipefail
       interface="$1"
-      numvfs_file="/sys/class/net/${root}/device/sriov_numvfs"
-      totalvfs="$(cat /sys/class/net/${root}/device/sriov_totalvfs)"
+      numvfs_file="/sys/class/net/${bridge}/device/sriov_numvfs"
+      totalvfs="$(cat /sys/class/net/${bridge}/device/sriov_totalvfs)"
 
       assign_vf() {
         idx="$1"
         # Enable spoof checking, set MAC and VLAN
-        ${ipCmd} link set dev "${root}" vf "$idx" spoofchk on mac "${interface.mac}" vlan "${builtins.toString interface.driverOpts.vlan}"
+        ${ipCmd} link set dev "${bridge}" vf "$idx" spoofchk on mac "${interface.mac}" vlan "${builtins.toString interface.driverOpts.vlan}"
         # Find current name of VF interface
-        ifname="$(${pkgs.coreutils}/bin/ls /sys/class/net/${root}/device/virtfn$idx/net/)"
+        ifname="$(${pkgs.coreutils}/bin/ls /sys/class/net/${bridge}/device/virtfn$idx/net/)"
         # And rename it
         ${ipCmd} link set dev "$ifname" name "${defaultServiceInterface}"
       }
 
       # Condition A: We find a VIF with our MAC address
-      matched_vf="$(${ipCmd} link show dev "${root}" | ${pkgs.gnugrep}/bin/grep -oi "vf .* link/ether ${interface.mac} " | ${pkgs.coreutils}/bin/cut -d' ' -f2)"
+      matched_vf="$(${ipCmd} link show dev "${bridge}" | ${pkgs.gnugrep}/bin/grep -oi "vf .* link/ether ${interface.mac} " | ${pkgs.coreutils}/bin/cut -d' ' -f2)"
       if [ -n "$matched_vf" ]; then
         assign_vf "$matched_vf"
         exit 0
