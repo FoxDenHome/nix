@@ -43,7 +43,7 @@ in
     {
       config = nixPkgConfig;
       inherit onnxruntime;
-      python312Packages.onnxruntime = pkgs.python312Packages.onnxruntime.override { inherit onnxruntime; };
+      python3Packages.onnxruntime = pkgs.python3Packages.onnxruntime.override { inherit onnxruntime; };
     }
     localPackages
   ] ++ (map addPackage (lib.attrValues inputsWithoutInternal)));

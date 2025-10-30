@@ -77,6 +77,10 @@ in
 
       systemd.services = let
         cfg = {
+          confinement.packages = [
+            pkgs.python3Packages.onnxruntime
+          ];
+
           serviceConfig = {
             BindPaths = [
               svcConfig.mediaDir
@@ -85,6 +89,7 @@ in
               config.services.immich.environment.IMMICH_CONFIG_FILE
             ];
             Environment = [
+              "LD_LIBRARY_PATH=${pkgs.python3Packages.onnxruntime}/lib/python3.12/site-packages/onnxruntime/capi"
               "MPLCONFIGDIR=/var/cache/immich/matplotlib"
             ];
           };
