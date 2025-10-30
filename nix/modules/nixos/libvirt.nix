@@ -43,7 +43,7 @@ let
     for vfn in $physfn/virtfn*; do
       vfn_dev="$(${pkgs.coreutils}/bin/basename "$(${pkgs.coreutils}/bin/readlink "$vfn")")"
       if [ "$vfn_dev" == "${vm.config.sriovNic}" ]; then
-        vfn_idx="$(echo "$vfn" | ${pkgs.gnused}/bin/sed 's/virtfn//')"
+        vfn_idx="$(${pkgs.coreutils}/bin/basename "$vfn" | ${pkgs.gnused}/bin/sed 's/virtfn//')"
         echo "Configuring SR-IOV for VM ${vm.name} on device phy=$physdev vfidx=$vfn_idx vfdev=$vfn_dev"
         ${pkgs.iproute2}/bin/ip link set "$physdev" vf "$vfn_idx" mac "${vm.config.interfaces.default.mac}" spoofchk on vlan ${toString vm.config.sriovVlan}
         exit 0
