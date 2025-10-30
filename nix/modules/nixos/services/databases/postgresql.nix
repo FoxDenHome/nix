@@ -73,7 +73,7 @@ in
 
       services.postgresql = {
         enable = true;
-        package = pkgs.postgresql_17;
+        package = pkgs.postgresql_16;
         enableTCPIP = false;
         ensureDatabases = map (svc: svc.name) svcConfig.services;
         ensureUsers = map (svc: {
