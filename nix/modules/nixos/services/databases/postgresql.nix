@@ -16,9 +16,10 @@ let
         type = str;
       };
       user = lib.mkOption {
-        type = str;
+        type = nullOr str;
         default = null;
         description = "User to connect as (defaults to targetService)";
+      };
     };
   };
 

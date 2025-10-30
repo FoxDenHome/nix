@@ -46,10 +46,12 @@ in
       foxDen.services.postgresql.services = [
         {
           name = "immich";
+          user = config.services.immich.user;
           targetService = "immich-server";
         }
         {
           name = "immich";
+          user = config.services.immich.user;
           targetService = "immich-machine-learning";
         }
       ];
