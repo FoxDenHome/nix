@@ -1,4 +1,4 @@
-{ foxDenLib, config, ... }:
+{ foxDenLib, ... }:
 let
   ifcfg = {
     addresses = [
@@ -31,23 +31,6 @@ in
     };
   };
   #boot.initrd.systemd.network.networks."30-${ifcfg.phyIface}" = config.systemd.network.networks."30-${ifcfg.phyIface}";
-
-  foxDen.services = {
-    wireguard."wg-deluge" = config.lib.foxDen.sops.mkIfAvailable {
-      host = "deluge"; # solid snake
-      interface = {
-        ips = [ "10.70.175.10/32" "fc00:bbbb:bbbb:bb01::7:af09/128" ];
-        peers = [
-          {
-            allowedIPs = [ "0.0.0.0/0" "::/0" "10.64.0.1/32" ];
-            endpoint = "23.234.81.127:51820";
-            persistentKeepalive = 25;
-            publicKey = "G6+A375GVmuFCAtvwgx3SWCWhrMvdQ+cboXQ8zp2ang=";
-          }
-        ];
-      };
-    };
-  };
 
   foxDen.hosts.hosts = {
     bengalfox = {
