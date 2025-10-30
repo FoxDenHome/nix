@@ -188,7 +188,7 @@ in
             clientSecret = "";
             defaultStorageQuota = 1 * 1024 * 1024 * 1024; # 1 GB
             enabled = true;
-            issuerUrl = "";
+            issuerUrl = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}";
             mobileOverrideEnabled = false;
             mobileRedirectUri = "";
             scope = "openid email profile";
