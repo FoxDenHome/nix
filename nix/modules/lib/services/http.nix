@@ -76,6 +76,7 @@ let
               '')
             ];
             RuntimeDirectory = serviceName;
+            RuntimeDirectoryMode = "0700";
             LoadCredential = "oauth2-proxy.conf:${configFile}";
             ExecStart = "${cmd} --config=\"\${CREDENTIALS_DIRECTORY}/oauth2-proxy.conf\"";
           };
