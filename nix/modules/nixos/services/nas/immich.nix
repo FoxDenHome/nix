@@ -98,7 +98,7 @@ in
       services.immich = {
         host = "127.0.0.1";
         enable = true;
-        accelerationDevices = null;
+        accelerationDevices = [ ];
         mediaLocation = svcConfig.mediaDir;
         database = {
           createDB = false;
