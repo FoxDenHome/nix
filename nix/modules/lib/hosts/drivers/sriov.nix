@@ -56,7 +56,7 @@ in
   in
   {
     start = [
-      "${pkgs.util-linux}/bin/flock -x /run/foxden-sriov.lock ${allocSriovScript} ${eSA interface.driverOpts.root}"
+      "${pkgs.util-linux}/bin/flock -x /run/foxden-sriov.lock '${allocSriovScript}' '${bridge}'"
     ];
     serviceInterface = "";
     stop = [
