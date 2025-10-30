@@ -35,6 +35,7 @@ in
             oAuthCallbackUrl = "/redirect";
           }) // {
           preferShortUsername = true;
+          public = true;
           scopeMaps.login-users = ["preferred_username" "email" "openid" "profile"];
         };
       };
@@ -177,7 +178,7 @@ in
             autoLaunch = false;
             autoRegister = true;
             buttonText = "Login with FoxDen";
-            clientId = svcConfig.oauth.clientId;
+            clientId = svcConfig.oAuth.clientId;
             clientSecret = "";
             defaultStorageQuota = 1 * 1024 * 1024 * 1024; # 1 GB
             enabled = true;
