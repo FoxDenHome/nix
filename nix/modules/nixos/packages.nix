@@ -1,4 +1,4 @@
-inputs@{ nixpkgs, lib, systemArch, flakeInputs, ... } :
+{ nixpkgs, lib, systemArch, flakeInputs, ... } :
 let
   internalPackages = {
     "nixpkgs" = true;
