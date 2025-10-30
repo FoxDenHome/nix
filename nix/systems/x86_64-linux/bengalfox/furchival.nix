@@ -34,7 +34,6 @@ in
         name = "e621.foxden.network";
         dynDns = true;
       };
-      driver = "sriov";
       webservice.enable = true;
       addresses = [
         "10.2.11.18/16"
@@ -46,7 +45,6 @@ in
         name = "furaffinity.foxden.network";
         dynDns = true;
       };
-      driver = "sriov";
       webservice.enable = true;
       addresses = [
         "10.2.11.19/16"
