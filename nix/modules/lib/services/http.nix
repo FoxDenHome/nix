@@ -74,7 +74,7 @@ let
                 if [ ! -f ${cookieSecretFile} ]; then
                   ${pkgs.coreutils}/bin/dd if=/dev/urandom bs=16 count=1 | ${pkgs.coreutils}/bin/base64 -w 0 > ${cookieSecretFile}
                 fi
-                chmod 600 ${cookieSecretFile}
+                ${pkgs.coreutils}/bin/chmod 600 ${cookieSecretFile}
               '')
             ];
             RuntimeDirectory = serviceName;
