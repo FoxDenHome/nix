@@ -13,6 +13,7 @@
     }; # TODO: Remove on 25.11/unstable
     hardware.nvidia.open = true;
     hardware.graphics.enable = true;
+    hardware.nvidia-container-toolkit.enable = true;
 
     foxDen.services.gpuDevices = [
       "/dev/nvidiactl"
