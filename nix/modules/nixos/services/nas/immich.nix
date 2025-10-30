@@ -48,8 +48,6 @@ in
       in lib.mkIf svcConfig.oAuth.enable {
         ${svcConfig.oAuth.clientId} = baseCfg // {
           preferShortUsername = true;
-          public = true;
-          scopeMaps.login-users = ["preferred_username" "email" "openid" "profile"];
           originUrl = baseCfg.originUrl ++ [ "app.immich:///oauth-callback" ];
           claimMaps = {
             "immich_role" = {

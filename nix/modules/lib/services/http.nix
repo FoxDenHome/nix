@@ -18,7 +18,7 @@ let
     displayName = svcConfig.oAuth.displayName;
     originUrl = map (url: "${url}${oAuthCallbackUrl}") baseUrls;
     originLanding = nixpkgs.lib.lists.head baseUrls;
-    scopeMaps."login-users" = ["email" "openid" "profile"];
+    scopeMaps.login-users = ["preferred_username" "email" "openid" "profile"];
   });
 
   mkOauthProxy = (inputs@{ config, svcConfig, pkgs, ... }: let
