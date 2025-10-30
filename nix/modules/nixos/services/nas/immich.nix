@@ -183,7 +183,7 @@ in
             urls = [ "http://127.0.0.1:3003" ];
             clip = {
               enabled = true;
-              modelName = "ViT-B-32__openai";
+              modelName = "XLM-Roberta-Large-Vit-B-16Plus";
             };
             duplicateDetection = {
               enabled = true;
@@ -191,7 +191,7 @@ in
             };
             facialRecognition = {
               enabled = true;
-              modelName = "buffalo_l";
+              modelName = "antelopev2";
               minScore = 0.7;
               maxDistance = 0.5;
               minFaces = 3;
