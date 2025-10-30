@@ -33,7 +33,7 @@
       }
 
       # Condition A: We find a VIF with our MAC address
-      matched_vf="$(${ipCmd} link show dev "${root}" | ${pkgs.gnugrep}/bin/grep -oi "vf .* link/ether ${interface.mac} " | ${pkgs.coreutils}/bin/cut -d' ' -f2)"
+      matched_vf="$(${ipCmd} link show dev "${root}" | ${pkgs.gnugrep}/bin/grep -oi "vf .* link/ether ${interface.mac} " | ${pkgs.coreutils}/bin/cut -d' ' -f2 || true)"
       if [ -n "$matched_vf" ]; then
         assign_vf "$matched_vf"
         exit 0
