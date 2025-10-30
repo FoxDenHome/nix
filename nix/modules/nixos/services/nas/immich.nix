@@ -3,6 +3,11 @@ let
   services = foxDenLib.services;
 
   svcConfig = config.foxDen.services.immich;
+
+  hostCfg = foxDenLib.hosts.getByName config svcConfig.host;
+  primaryInterface = lib.lists.head (lib.attrsets.attrValues hostCfg.interfaces);
+  hostName = foxDenLib.global.dns.mkHost primaryInterface.dns;
+  proto = if svcConfig.tls then "https" else "http";
 in
 {
   options.foxDen.services.immich = {
@@ -25,8 +30,6 @@ in
     }).config
     {
       foxDen.services.immich.oAuth.overrideService = true;
-
-      services.immich.host = "127.0.0.1";
     
       foxDen.services.kanidm.oauth2 = lib.mkIf svcConfig.oAuth.enable {
         ${svcConfig.oAuth.clientId} =
@@ -66,6 +69,7 @@ in
       };
   
       services.immich = {
+        host = "127.0.0.1";
         enable = true;
         accelerationDevices = null;
         mediaLocation = svcConfig.mediaDir;
@@ -144,7 +148,7 @@ in
           };
           machineLearning = {
             enabled = false;
-            urls = [ "http://immich-machine-learning:3003" ];
+            urls = [ "http://127.0.0.1:3003" ];
             clip = {
               enabled = true;
               modelName = "ViT-B-32__openai";
@@ -233,7 +237,7 @@ in
             };
           };
           server = {
-            externalDomain = "";
+            externalDomain = "${proto}://${hostName}";
             loginPageMessage = "";
           };
           notifications = {
