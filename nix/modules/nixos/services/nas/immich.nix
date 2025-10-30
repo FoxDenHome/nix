@@ -118,7 +118,7 @@ in
             targetAudioCodec = "aac";
             acceptedAudioCodecs = ["aac" "mp3" "libopus" "pcm_s16le"];
             acceptedContainers = ["mov" "ogg" "webm"];
-            targetResolution = "720";
+            targetResolution = "1080";
             maxBitrate = "0";
             bframes = -1;
             refs = 0;
