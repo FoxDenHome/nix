@@ -237,6 +237,8 @@ in
     config = {
       lib.foxDen.mkHashMac = mkHashMac;
 
+      networking.useDHCP = config.foxDen.hosts.useDHCP;
+
       foxDen.hosts.usedMacAddresses = map (iface: iface.mac) interfaces;
 
       foxDen.dns.records = (nixpkgs.lib.flatten (map
