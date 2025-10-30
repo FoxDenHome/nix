@@ -13,9 +13,15 @@ let
     (first == 192 && second == 168) ||
     (first == 100 && (second >= 64 && second <= 127))); # Technically CGNAT, but also internal
 
-  isPrivateIPv6 = (ip:
-    (nixpkgs.lib.strings.hasPrefix "fd" ip) ||
-    (nixpkgs.lib.strings.hasPrefix "fc" ip));
+  isPrivateIPv6 = (ip: let
+    segments = nixpkgs.lib.strings.splitString ":" ip;
+    first = builtins.elemAt segments 0;
+  in
+    (nixpkgs.lib.strings.length first == 4) && (
+      (nixpkgs.lib.strings.hasPrefix "fd" first) ||
+      (nixpkgs.lib.strings.hasPrefix "fc" first)
+    )
+  );
 
   isIPv6 = nixpkgs.lib.strings.hasInfix ":";
 
