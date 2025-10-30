@@ -40,7 +40,7 @@ in
     pkgs
     {
       config = nixPkgConfig;
-      onnxruntime = pkgs.onnxruntime.override { cudaSupport = true; };
+      python312Packages.onnxruntime = pkgs.python312Packages.onnxruntime.override { cudaSupport = true; };
     }
     localPackages
   ] ++ (map addPackage (lib.attrValues inputsWithoutInternal)));
