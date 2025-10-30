@@ -1,6 +1,8 @@
 {
   rootDiskSize = "80G";
   autostart = true;
+  sriovNic = "0000:81:03.7";
+  sriovVlan = 0;
   interfaces.default = {
     dns = {
       name = "bengalfox-win.foxden.network";

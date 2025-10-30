@@ -25,6 +25,24 @@ let
     ${pkgs.libvirt}/bin/virsh define ${vm.libvirtXml}
     ${pkgs.libvirt}/bin/virsh autostart ${vm.name} --disable
   '';
+
+  setupSriovScript = vm: pkgs.writeShellScript "setup-sriov" ''
+    #!${pkgs.bash}/bin/bash
+    set -euo pipefail
+
+    physfn='/sys/bus/pci/devices/${vm.config.sriovNic}/physfn'
+    physdev="$(${pkgs.coreutils}/bin/ls "$physfn/net")"
+
+    for vfn in $physfn/virtfn*; do
+      vfn_dev="$(${pkgs.coreutils}/bin/basename "$(${pkgs.coreutils}/bin/readlink "$vfn")")"
+      if [ "$vfn_dev" == "${vm.config.sriovNic}" ]; then
+        vfn_idx="$(${pkgs.gnused}/bin/sed 's/virtfn//')"
+        echo "Configuring SR-IOV for VM ${vm.name} on device phy=$physdev vfidx=$vfn_idx vfdev=$vfn_dev"
+        ${pkgs.iproute2}/bin/ip link set "$physdev" vf "$vfn_idx" mac "${vm.config.interfaces.default.mac}" spoofchk on vlan ${toString vm.config.sriovVlan}
+        exit 0
+      fi
+    done
+  '';
 in
 {
   config = lib.mkIf ((lib.length vmNames) > 0) {
@@ -44,6 +62,20 @@ in
     };
 
     systemd.services = {
+      libvirt-sriov-pre = {
+        description = "Libvirt SR-IOV Pre-Setup Service";
+        before = [ "libvirtd.service" ];
+        requiredBy = [ "libvirtd.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = (map setupSriovScript (
+            lib.filter (vm: lib.hasAttr "sriovNic" vm.config)
+              (lib.attrsets.attrValues vms))
+          );
+          RemainAfterExit = true;
+        };
+        wantedBy = [ "multi-user.target" ];
+      };
       libvirt-autocreator = {
         description = "Libvirt AutoCreator Service";
         after = [ "libvirtd.service" ];

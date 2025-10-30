@@ -139,15 +139,14 @@
     <controller type='sata' index='0'>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x1f' function='0x2'/>
     </controller>
-    <interface type='bridge'>
-      <mac address='5e:8c:f2:cd:c8:4a'/>
-      <source bridge='br-default'/>
-      <vlan>
-        <tag id='2'/>
-      </vlan>
-      <model type='virtio'/>
-      <address type='pci' domain='0x0000' bus='0x01' slot='0x00' function='0x0'/>
-    </interface>
+    <hostdev mode="subsystem" type="pci" managed="yes">
+      <driver name="vfio"/>
+      <source>
+        <address domain="0x0000" bus="0x81" slot="0x03" function="0x7"/>
+      </source>
+      <alias name="hostdev0"/>
+      <address type="pci" domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
+    </hostdev>
     <serial type='pty'>
       <target type='isa-serial' port='0'>
         <model name='isa-serial'/>
@@ -179,4 +178,3 @@
     </memballoon>
   </devices>
 </domain>
-
