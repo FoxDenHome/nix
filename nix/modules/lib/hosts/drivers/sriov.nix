@@ -60,7 +60,7 @@
       for i in `seq 0 $(( $numvfs - 1 ))`; do
         # If the interface is listed here with its name, it is in the root NS, so it is unused
         ifname="$(${pkgs.coreutils}/bin/ls /sys/class/net/${root}/device/virtfn$i/net/)"
-        if [ -z "$ifname" ]; then
+        if [ -n "$ifname" ]; then
           assign_vf "$i"
           exit 0
         fi
