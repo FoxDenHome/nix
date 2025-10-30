@@ -12,7 +12,7 @@ rec {
   mkVlanHost = (ifcfg: vlan: cfg: {
     nameservers = mkNameservers vlan;
     interfaces.default = {
-      driver = "bridge";
+      driver = ifcfg.defaultDriver or "bridge";
       driverOpts = {
         bridge = ifcfg.interface;
         root = ifcfg.phyIface;
