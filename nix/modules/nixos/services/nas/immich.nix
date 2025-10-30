@@ -51,7 +51,7 @@ in
           scopeMaps.login-users = ["preferred_username" "email" "openid" "profile"];
           claimMaps = {
             "immich_role" = {
-              type = "ssv";
+              joinType = "ssv";
               valuesByGroup = {
                 "superadmins" = [ "admin" ];
               };
