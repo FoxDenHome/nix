@@ -69,12 +69,6 @@
   };
 
   foxDen.services = {
-    gpuDevices = [
-      "/dev/dri/card0"
-      "/dev/dri/card1"
-      "/dev/dri/renderD128"
-    ];
-
     watchdog.enable = true;
     superfan.enable = true;
     netdata.enable = true;
