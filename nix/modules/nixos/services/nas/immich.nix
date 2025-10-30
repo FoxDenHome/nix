@@ -40,15 +40,17 @@ in
     {
       foxDen.services.immich.oAuth.overrideService = true;
     
-      foxDen.services.kanidm.oauth2 = lib.mkIf svcConfig.oAuth.enable {
-        ${svcConfig.oAuth.clientId} =
-          (services.http.mkOauthConfig {
-            inherit svcConfig config;
-            oAuthCallbackUrl = "/auth/login";
-          }) // {
+      foxDen.services.kanidm.oauth2 = let
+        baseCfg = (services.http.mkOauthConfig {
+          inherit svcConfig config;
+          oAuthCallbackUrl = "/auth/login";
+        });
+      in lib.mkIf svcConfig.oAuth.enable {
+        ${svcConfig.oAuth.clientId} = baseCfg // {
           preferShortUsername = true;
           public = true;
           scopeMaps.login-users = ["preferred_username" "email" "openid" "profile"];
+          originUrl = baseCfg.originUrl ++ [ "app.immich:///oauth-callback" ];
           claimMaps = {
             "immich_role" = {
               joinType = "ssv";
