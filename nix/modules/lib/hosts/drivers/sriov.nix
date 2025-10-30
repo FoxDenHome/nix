@@ -53,7 +53,7 @@
   in
   {
     start = [
-      "${pkgs.util-linux}/bin/flock -x /run/foxden-sriov.lock '${allocSriovScript}' '${root}'"
+      "${pkgs.util-linux}/bin/flock -F -x /run/foxden-sriov.lock '${allocSriovScript}' '${root}'"
     ];
     serviceInterface = "";
     stop = [
