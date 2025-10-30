@@ -69,6 +69,9 @@ let
             DynamicUser = true;
             ExecStartPre = [
               (pkgs.writeShellScript "generate-cookie-secret" ''
+                if [ -f /run/${serviceName}/cookie-secret ]; then
+                  exit 0
+                fi
                 ${pkgs.coreutils}/bin/dd if=/dev/urandom bs=16 count=1 | ${pkgs.coreutils}/bin/base64 -w 0 > /run/${serviceName}/cookie-secret
               '')
             ];
