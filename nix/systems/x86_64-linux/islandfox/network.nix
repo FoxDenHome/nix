@@ -8,10 +8,9 @@ let
     routes = foxDenLib.hosts.helpers.lan.mkRoutes 2;
     nameservers = foxDenLib.hosts.helpers.lan.mkNameservers 2;
     interface = "br-default";
+    phyIface = "enp1s0f1";
     mac = "04:7b:cb:44:c0:dd";
   };
-
-  phyIface = "enp1s0f1";
 in
 {
   lib.foxDenSys.mkVlanHost = foxDenLib.hosts.helpers.lan.mkVlanHost ifcfg;
@@ -37,7 +36,7 @@ in
       VLAN = "2";
     }];
   };
-  #boot.initrd.systemd.network.networks."30-${phyIface}" = config.systemd.network.networks."30-${ifcfg.interface}" // { name = phyIface; };
+  #boot.initrd.systemd.network.networks."30-${ifcfg.phyIface}" = config.systemd.network.networks."30-${ifcfg.interface}" // { name = ifcfg.phyIface; };
 
   systemd.network.netdevs."${ifcfg.interface}" = {
     netdevConfig = {
@@ -52,7 +51,7 @@ in
   };
 
   systemd.network.networks."40-${ifcfg.interface}-root" = {
-    name = phyIface;
+    name = ifcfg.phyIface;
     bridge = [ifcfg.interface];
 
     bridgeVLANs = [{

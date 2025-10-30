@@ -15,6 +15,7 @@ rec {
       driver = "bridge";
       driverOpts = {
         bridge = ifcfg.interface;
+        root = ifcfg.phyIface;
         vlan = vlan;
       };
       routes = mkRoutes vlan;
