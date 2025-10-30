@@ -76,7 +76,7 @@ in
       ];
       addresses = [
         "10.2.11.14/16"
-        "fd2c:f4cb:63be:3::b0e/64"
+        "fd2c:f4cb:63be:2::b0e/64"
       ];
     };
     spaceage-gmod = mkVlanHost 3 {

@@ -39,7 +39,7 @@ in
       webservice.enable = true;
       addresses = [
         "10.2.11.18/16"
-        "fd2c:f4cb:63be:3::b12/64"
+        "fd2c:f4cb:63be:2::b12/64"
       ];
     };
     fadumper = mkVlanHost 2 {
@@ -50,7 +50,7 @@ in
       webservice.enable = true;
       addresses = [
         "10.2.11.19/16"
-        "fd2c:f4cb:63be:3::b13/64"
+        "fd2c:f4cb:63be:2::b13/64"
       ];
     };
   };
