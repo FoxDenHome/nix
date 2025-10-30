@@ -32,6 +32,8 @@ in
     }).config
     {
       foxDen.services.immich.oAuth.overrideService = true;
+
+      services.immich.host = "127.0.0.1";
     
       foxDen.services.kanidm.oauth2 = lib.mkIf svcConfig.oAuth.enable {
         ${svcConfig.oAuth.clientId} =
