@@ -115,6 +115,10 @@
         name = "ups-dori-office.foxden.network";
       };
       mac = "00:0C:15:04:39:93";
+      dhcpv6 = {
+        duid = "0x00030001000c15043993";
+        iaid = 167781915;
+      };
       addresses = [
         "10.1.11.3/16"
       ];

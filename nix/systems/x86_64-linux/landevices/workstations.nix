@@ -11,8 +11,8 @@
       };
       mac = "00:30:93:12:12:38";
       dhcpv6 = {
-        duid = "0x000406ebeb41ea0f9862ca41afbc74b541bf";
-        iaid = 3121537524;
+        duid = "0x000100012d6265636c7e67bcff75";
+        iaid = 0;
       };
       addresses = [
         "10.2.10.3/16"
@@ -61,8 +61,13 @@
         name = "wizzy-desktop.foxden.network";
       };
       mac = "7C:FE:90:39:20:9A";
+      dhcpv6 = {
+        duid = "0x000100013060c3d8ec9161cff6c9";
+        iaid = 494730896;
+      };
       addresses = [
         "10.2.10.2/16"
+        "fd2c:f4cb:63be:2::0a02/64"
       ];
     };
   };
