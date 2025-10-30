@@ -28,7 +28,7 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "caddy-immich";
-      target = "reverse_proxy http://127.0.0.1:8096";
+      target = "reverse_proxy http://127.0.0.1:${config.services.immich.port}";
     }).config
     {
       foxDen.services.immich.oAuth.overrideService = true;
