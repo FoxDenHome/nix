@@ -43,7 +43,7 @@ in
         };
       };
 
-      foxDen.services.mysql.services = [
+      foxDen.services.postgresql.services = [
         {
           name = "immich";
           targetService = "immich-server";
