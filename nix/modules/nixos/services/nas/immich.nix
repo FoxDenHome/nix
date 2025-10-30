@@ -2,13 +2,6 @@
 let
   services = foxDenLib.services;
 
-  mkDir = (dir: {
-    directory = dir;
-    user = config.services.immich.user;
-    group = config.services.immich.group;
-    mode = "u=rwx,g=,o=";
-  });
-
   svcConfig = config.foxDen.services.immich;
 in
 {
@@ -260,18 +253,6 @@ in
             deleteDelay = 7;
           };
         };
-      };
-
-      users.users.immich.home = "${config.services.immich.dataDir}/home";
-
-      environment.persistence."/nix/persist/immich" = {
-        hideMounts = true;
-        directories = [
-          (mkDir config.services.jellyfin.cacheDir)
-          (mkDir config.services.jellyfin.configDir)
-          (mkDir config.services.jellyfin.dataDir)
-          (mkDir config.services.jellyfin.logDir)
-        ];
       };
     }
   ]);
