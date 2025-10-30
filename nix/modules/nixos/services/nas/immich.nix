@@ -44,7 +44,7 @@ in
         ${svcConfig.oAuth.clientId} =
           (services.http.mkOauthConfig {
             inherit svcConfig config;
-            oAuthCallbackUrl = "/redirect";
+            oAuthCallbackUrl = "/auth/login";
           }) // {
           preferShortUsername = true;
           public = true;
