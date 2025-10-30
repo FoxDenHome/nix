@@ -29,8 +29,13 @@
         name = "carvera-controller.foxden.network";
       };
       mac = "6C:6E:07:1B:1D:24";
+      dhcpv6 = {
+        duid = "0x00020000ab1122f2d239e0457e9d";
+        iaid = 886453245;
+      };
       addresses = [
         "10.4.10.2/16"
+        "fd2c:f4cb:63be:4::0a02/64"
       ];
     };
     laser-controller = mkIntf {

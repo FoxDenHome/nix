@@ -15,11 +15,11 @@ let
         ipv6 = ifaceFirstV6 iface;
         name = "${iface.host}-${iface.name}";
       in if ipv4 != "" && ipv6 != ""
-        then [{ inherit (iface) mac; inherit name ipv4 ipv6; }]
+        then [{ inherit (iface) mac dhcpv6; inherit name ipv4 ipv6; }]
         else if ipv4 != ""
-          then [{ inherit (iface) mac; inherit name ipv4; }]
+          then [{ inherit (iface) mac dhcpv6; inherit name ipv4; }]
         else if ipv6 != ""
-          then [{ inherit (iface) mac; inherit name ipv6; }]
+          then [{ inherit (iface) mac dhcpv6; inherit name ipv6; }]
         else []) ifaces);
 in
 {

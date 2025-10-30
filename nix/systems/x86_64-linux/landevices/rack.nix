@@ -10,6 +10,10 @@
         name = "pikvm-rack.foxden.network";
       };
       mac = "D8:3A:DD:A3:82:A8";
+      dhcpv6 = {
+        duid = "0x00020000ab114a5edad0f8fd0afa";
+        iaid = 4174257057;
+      };
       addresses = [
         "10.1.13.2/16"
         "fd2c:f4cb:63be:1::0d02/64"
@@ -28,9 +32,14 @@
       dns = {
         name = "ups-rack.foxden.network";
       };
+      dhcpv6 = {
+        duid = "0x0003000100c0b7e8b2a0";
+        iaid = 2;
+      };
       mac = "00:C0:B7:E8:B2:A0";
       addresses = [
         "10.1.11.2/16"
+        "fd2c:f4cb:63be:1::0b02/64"
       ];
     };
   };

@@ -77,7 +77,6 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 
 ## TODO
 
-- [ ] DHCPv6 lease management (on router)
 - bengalfox
 	- [ ] hashtopolis
 		- [x] mysql

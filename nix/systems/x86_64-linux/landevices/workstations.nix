@@ -10,8 +10,13 @@
         name = "capefox.foxden.network";
       };
       mac = "00:30:93:12:12:38";
+      dhcpv6 = {
+        duid = "0x000406ebeb41ea0f9862ca41afbc74b541bf";
+        iaid = 3121537524;
+      };
       addresses = [
         "10.2.10.3/16"
+        "fd2c:f4cb:63be:2::0a03/64"
       ];
     };
     capefox-wired = mkIntf {
@@ -28,8 +33,13 @@
         name = "crossfox.foxden.network";
       };
       mac = "B8:27:EB:ED:0F:4B";
+      dhcpv6 = {
+        duid = "0x0004e6fce6a5d4ed3d40b052d913277bff9c";
+        iaid = 726689589;
+      };
       addresses = [
         "10.5.10.3/16"
+        "fd2c:f4cb:63be:5::0a03/64"
       ];
     };
     fennec = mkIntf {
@@ -37,8 +47,13 @@
         name = "fennec.foxden.network";
       };
       mac = "7C:FE:90:31:7B:0E";
+      dhcpv6 = {
+        duid = "0x0004f480d71b42f7092a0657194834b9505d";
+        iaid = 876325795;
+      };
       addresses = [
         "10.2.10.1/16"
+        "fd2c:f4cb:63be:2::0a01/64"
       ];
     };
     wizzy-desktop = mkIntf {

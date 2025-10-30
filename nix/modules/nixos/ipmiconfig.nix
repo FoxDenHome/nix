@@ -85,7 +85,7 @@ in
     foxDen.hosts.hosts.${netconfig.hostName} = {
       interfaces.default = {
         driver = "null";
-        useDHCP = true;
+        useDHCP = false;
         dns = {
           name = "${netconfig.hostName}.${netconfig.hostZone}";
         };

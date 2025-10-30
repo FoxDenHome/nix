@@ -67,6 +67,16 @@ in
           type = nullOr str;
           default = null;
         };
+        dhcpv6 = {
+          duid = nixpkgs.lib.mkOption {
+            type = nullOr str;
+            default = null;
+          };
+          iaid = nixpkgs.lib.mkOption {
+            type = nullOr ints.u32;
+            default = null;
+          };
+        };
         webservice = {
           enable = nixpkgs.lib.mkOption {
             type = bool;
