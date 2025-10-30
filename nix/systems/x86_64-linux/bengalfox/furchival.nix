@@ -13,7 +13,6 @@ in
         enable = true;
         displayName = "e621Dumper";
         clientId = "e621dumper";
-        bypassInternal = true;
       };
     };
     fadumper = {
@@ -25,7 +24,6 @@ in
         enable = true;
         displayName = "FADumper";
         clientId = "fadumper";
-        bypassInternal = true;
       };
     };
   };
