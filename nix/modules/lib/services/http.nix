@@ -14,6 +14,7 @@ let
   in
   {
     present = true;
+    public = true;
     displayName = svcConfig.oAuth.displayName;
     originUrl = map (url: "${url}${oAuthCallbackUrl}") baseUrls;
     originLanding = nixpkgs.lib.lists.head baseUrls;
