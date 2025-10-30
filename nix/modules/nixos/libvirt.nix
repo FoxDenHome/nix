@@ -33,10 +33,17 @@ let
     physfn='/sys/bus/pci/devices/${vm.config.sriovNic}/physfn'
     physdev="$(${pkgs.coreutils}/bin/ls "$physfn/net")"
 
+    numvfs_file="/sys/class/net/$physdev/device/sriov_numvfs"
+    totalvfs="$(cat /sys/class/net/$physdev/device/sriov_totalvfs)"
+    numvfs="$(cat "$numvfs_file")"
+    if [ "$numvfs" -eq 0 ]; then
+      echo $totalvfs > "$numvfs_file"
+    fi
+
     for vfn in $physfn/virtfn*; do
       vfn_dev="$(${pkgs.coreutils}/bin/basename "$(${pkgs.coreutils}/bin/readlink "$vfn")")"
       if [ "$vfn_dev" == "${vm.config.sriovNic}" ]; then
-        vfn_idx="$(${pkgs.gnused}/bin/sed 's/virtfn//')"
+        vfn_idx="$(echo "$vfn_dev" | ${pkgs.gnused}/bin/sed 's/virtfn//')"
         echo "Configuring SR-IOV for VM ${vm.name} on device phy=$physdev vfidx=$vfn_idx vfdev=$vfn_dev"
         ${pkgs.iproute2}/bin/ip link set "$physdev" vf "$vfn_idx" mac "${vm.config.interfaces.default.mac}" spoofchk on vlan ${toString vm.config.sriovVlan}
         exit 0
