@@ -183,7 +183,7 @@ in
             urls = [ "http://127.0.0.1:3003" ];
             clip = {
               enabled = true;
-              modelName = "ViT-SO400M-16-SigLIP2-384__webli";
+              modelName = "ViT-H-14-378-quickgelu__dfn5b";
             };
             duplicateDetection = {
               enabled = true;
