@@ -86,10 +86,6 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 		- [ ] backend
 	- [ ] hashtopolis-agent
 	- [ ] ollama
-- islandfox
-	- SpaceAge
-		- gmod
-			- [ ] Make StarLord + SteamCMD a flake, too
 
 ## Notes
 
