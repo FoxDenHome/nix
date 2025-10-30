@@ -96,6 +96,7 @@ in
             auth_url = "https://auth.foxden.network/ui/oauth2";
             auto_login = true;
             client_id = svcConfig.oAuth.clientId;
+            client_secret = "";
             email_attribute_path = "email";
             enabled = true;
             login_attribute_path = "preferred_username";
