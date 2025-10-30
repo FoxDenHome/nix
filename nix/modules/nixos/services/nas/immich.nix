@@ -209,7 +209,7 @@ in
             mobileOverrideEnabled = false;
             mobileRedirectUri = "";
             scope = "openid email profile";
-            signingAlgorithm = "RS256";
+            signingAlgorithm = "ES256";
             profileSigningAlgorithm = "none";
             storageLabelClaim = "preferred_username";
             storageQuotaClaim = "immich_quota";
