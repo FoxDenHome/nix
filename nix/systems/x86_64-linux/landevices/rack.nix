@@ -24,8 +24,13 @@
         name = "tape-library.foxden.network";
       };
       mac = "00:0E:11:14:70:8B";
+      dhcpv6 = {
+        duid = "0x00030001000e1114708b";
+        iaid = 286552203;
+      };
       addresses = [
         "10.1.13.1/16"
+        "fd2c:f4cb:63be:1::0d01/64"
       ];
     };
     ups-rack = mkIntf {
