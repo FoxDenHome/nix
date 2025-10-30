@@ -377,6 +377,8 @@ in
                   ++ [
                     "${ipCmd} netns del ${eSA host.namespace}"
                   ];
+
+                TimeoutStartSec = "5min";
               };
             };
           }) hosts));

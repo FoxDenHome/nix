@@ -78,6 +78,7 @@ in
         serviceConfig = {
           Type = "oneshot";
           ExecStart = lib.flatten (map setupSriovScripts (lib.attrsets.attrValues vms));
+          TimeoutStartSec = "5min";
           RemainAfterExit = true;
         };
         wantedBy = [ "multi-user.target" ];
