@@ -26,11 +26,11 @@ let
     ${pkgs.libvirt}/bin/virsh autostart ${vm.name} --disable
   '';
 
-  setupSriovScriptRaw = vm: pkgs.writeShellScript "setup-sriov" ''
+  setupSriovScriptRawIface = vm: ifaceName: pkgs.writeShellScript "setup-sriov" ''
     #!${pkgs.bash}/bin/bash
     set -euo pipefail
 
-    physfn='/sys/bus/pci/devices/${vm.config.sriovNic}/physfn'
+    physfn='/sys/bus/pci/devices/${vm.config.sriovNics.${ifaceName}.addr}/physfn'
     physdev="$(${pkgs.coreutils}/bin/ls "$physfn/net")"
 
     numvfs_file="/sys/class/net/$physdev/device/sriov_numvfs"
@@ -42,16 +42,16 @@ let
 
     for vfn in $physfn/virtfn*; do
       vfn_dev="$(${pkgs.coreutils}/bin/basename "$(${pkgs.coreutils}/bin/readlink "$vfn")")"
-      if [ "$vfn_dev" == "${vm.config.sriovNic}" ]; then
+      if [ "$vfn_dev" == "${vm.config.sriovNics.${ifaceName}.addr}" ]; then
         vfn_idx="$(${pkgs.coreutils}/bin/basename "$vfn" | ${pkgs.gnused}/bin/sed 's/virtfn//')"
         echo "Configuring SR-IOV for VM ${vm.name} on device phy=$physdev vfidx=$vfn_idx vfdev=$vfn_dev"
-        ${pkgs.iproute2}/bin/ip link set "$physdev" vf "$vfn_idx" mac "${vm.config.interfaces.default.mac}" spoofchk on vlan ${toString vm.config.sriovVlan}
+        ${pkgs.iproute2}/bin/ip link set "$physdev" vf "$vfn_idx" mac "${vm.config.interfaces.${ifaceName}.mac}" spoofchk on vlan ${toString vm.config.sriovNics.${ifaceName}.vlan}
         exit 0
       fi
     done
   '';
 
-  setupSriovScript = vm: "${pkgs.util-linux}/bin/flock -x /run/foxden-sriov.lock '${setupSriovScriptRaw vm}'";
+  setupSriovScripts = vm: map (ifaceName: "${pkgs.util-linux}/bin/flock -x /run/foxden-sriov.lock '${setupSriovScriptRawIface vm ifaceName}'") (lib.attrsets.attrNames vm.config.sriovNics);
 in
 {
   config = lib.mkIf ((lib.length vmNames) > 0) {
@@ -77,10 +77,7 @@ in
         requiredBy = [ "libvirtd.service" ];
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = (map setupSriovScript (
-            lib.filter (vm: lib.hasAttr "sriovNic" vm.config)
-              (lib.attrsets.attrValues vms))
-          );
+          ExecStart = lib.flatten (map setupSriovScripts (lib.attrsets.attrValues vms));
           RemainAfterExit = true;
         };
         wantedBy = [ "multi-user.target" ];
@@ -92,7 +89,7 @@ in
         serviceConfig = {
           Type = "oneshot";
           ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/libvirt/images";
-          ExecStart = (map setupVMScript (lib.attrsets.attrValues vms));
+          ExecStart = map setupVMScript (lib.attrsets.attrValues vms);
           RemainAfterExit = true;
         };
         wantedBy = [ "multi-user.target" ];
