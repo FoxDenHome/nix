@@ -15,6 +15,10 @@ let
       targetService = lib.mkOption {
         type = str;
       };
+      user = lib.mkOption {
+        type = str;
+        default = null;
+        description = "User to connect as (defaults to targetService)";
     };
   };
 
@@ -83,7 +87,7 @@ in
         identMap = ''
           postgres root postgres
         '' + lib.concatStringsSep "\n" (map (svc: ''
-          postgres ${svc.targetService} ${svc.name}
+          postgres ${if svc.user == null then svc.targetService else svc.user} ${svc.name}
         '') svcConfig.services);
       };
 
