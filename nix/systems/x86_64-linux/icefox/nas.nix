@@ -126,6 +126,9 @@ in
           "10.99.12.11/24"
           "fd2c:f4cb:63be::a63:c0b/120"
         ];
+        sysctls = {
+          "net.ipv6.conf.INTERFACE.accept_ra_defrtr" = "0";
+        };
       };
     in {
       nameservers = [ "10.64.0.1" ];
