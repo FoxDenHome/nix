@@ -51,7 +51,7 @@ let
     done
   '';
 
-  setupSriovScripts = vm: map (ifaceName: "${pkgs.util-linux}/bin/flock -x /run/foxden-sriov.lock '${setupSriovScriptRawIface vm ifaceName}'") (lib.attrsets.attrNames vm.config.sriovNics);
+  setupSriovScripts = vm: map (ifaceName: "${pkgs.util-linux}/bin/flock -x /run/foxden-sriov.lock '${setupSriovScriptRawIface vm ifaceName}'") (lib.attrsets.attrNames (vm.config.sriovNics or {}));
 in
 {
   config = lib.mkIf ((lib.length vmNames) > 0) {
