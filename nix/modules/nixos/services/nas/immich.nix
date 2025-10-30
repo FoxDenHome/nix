@@ -77,10 +77,6 @@ in
 
       systemd.services = let
         cfg = {
-          confinement.packages = [
-            #pkgs.python3Packages.onnxruntime
-          ];
-
           serviceConfig = {
             BindPaths = [
               svcConfig.mediaDir
