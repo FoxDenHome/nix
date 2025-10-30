@@ -21,6 +21,10 @@
       interface="$1"
       numvfs_file="/sys/class/net/${root}/device/sriov_numvfs"
       totalvfs="$(cat /sys/class/net/${root}/device/sriov_totalvfs)"
+      current_vfs="$(cat "$numvfs_file")"
+      if [ "$current_vfs" -eq 0 ]; then
+        echo $totalvfs > "$numvfs_file"
+      fi
 
       assign_vf() {
         idx="$1"
@@ -32,22 +36,22 @@
         ${ipCmd} link set dev "$ifname" name "${serviceInterface}"
       }
 
+      assign_vf_by_mac() {
+        mac="$1"
+        matched_vf="$(${ipCmd} link show dev "${root}" | ${pkgs.gnugrep}/bin/grep -oi "vf .* link/ether $mac " | ${pkgs.coreutils}/bin/cut -d' ' -f2 | ${pkgs.coreutils}/bin/head -1 || :)"
+        if [ -n "$matched_vf" ]; then
+          assign_vf "$matched_vf"
+          exit 0
+        fi
+      }
+
       # Condition A: We find a VIF with our MAC address
-      matched_vf="$(${ipCmd} link show dev "${root}" | ${pkgs.gnugrep}/bin/grep -oi "vf .* link/ether ${interface.mac} " | ${pkgs.coreutils}/bin/cut -d' ' -f2 || :)"
-      if [ -n "$matched_vf" ]; then
-        assign_vf "$matched_vf"
-        exit 0
-      fi
+      assign_vf_by_mac '${interface.mac}'
 
-      # Condition B: numvfs < totalvfs, we can allocate a new one
-      current_vfs="$(cat "$numvfs_file")"
-      if [ "$current_vfs" -lt "$totalvfs" ]; then
-        echo $((current_vfs + 1)) > "$numvfs_file"
-        assign_vf "$current_vfs"
-        exit 0
-      fi
+      # Condition B: Find an unused VF
+      assign_vf_by_mac '00:00:00:00:00:00'
 
-      # TODO: Condition C: No free VFs, go hunting for unused ones
+      # TODO: Condition C: No free VFs, go hunting for unused ones (in main netns)
       exit 1
     '';
   in
