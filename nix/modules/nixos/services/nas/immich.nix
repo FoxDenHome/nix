@@ -49,6 +49,14 @@ in
           preferShortUsername = true;
           public = true;
           scopeMaps.login-users = ["preferred_username" "email" "openid" "profile"];
+          claimMaps = {
+            "immich_role" = {
+              type = "ssv";
+              valuesByGroup = {
+                "superadmins" = [ "admin" ];
+              };
+            };
+          };
         };
       };
 
