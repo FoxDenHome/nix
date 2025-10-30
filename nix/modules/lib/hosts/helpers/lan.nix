@@ -16,6 +16,7 @@ rec {
       driverOpts = {
         bridge = ifcfg.interface;
         root = ifcfg.phyIface;
+        rootPvid = ifcfg.phyPvid;
         vlan = vlan;
       };
       routes = mkRoutes vlan;

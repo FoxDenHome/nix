@@ -4,6 +4,9 @@
     vlan = nixpkgs.lib.mkOption {
       type = ints.unsigned;
     };
+    rootPvid = nixpkgs.lib.mkOption {
+      type = ints.unsigned;
+    };
     root = nixpkgs.lib.mkOption {
       type = str;
     };
@@ -15,6 +18,8 @@
 
   hooks = ({ pkgs, ipCmd, serviceInterface, interface, ... }: let
     root = interface.driverOpts.root;
+
+    vlan = if interface.driverOpts.vlan == interface.driverOpts.rootPvid then 0 else interface.driverOpts.vlan;
 
     allocSriovScript = pkgs.writeShellScript "allocate-sriov" ''
       set -euox pipefail
@@ -29,7 +34,7 @@
       assign_vf() {
         idx="$1"
         # Enable spoof checking, set MAC and VLAN
-        ${ipCmd} link set dev "${root}" vf "$idx" spoofchk on mac "${interface.mac}" vlan "${builtins.toString interface.driverOpts.vlan}"
+        ${ipCmd} link set dev "${root}" vf "$idx" spoofchk on mac "${interface.mac}" vlan "${builtins.toString vlan}"
         # Find current name of VF interface
         ifname="$(${pkgs.coreutils}/bin/ls /sys/class/net/${root}/device/virtfn$idx/net/)"
         # And rename it

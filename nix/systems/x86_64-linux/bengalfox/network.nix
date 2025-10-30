@@ -9,6 +9,7 @@ let
     nameservers = foxDenLib.hosts.helpers.lan.mkNameservers 2;
     interface = "br-default";
     phyIface = "ens1f0np0";
+    phyPvid = 2;
     mac = "e8:eb:d3:08:d2:98";
   };
 in
@@ -31,9 +32,9 @@ in
     };
 
     bridgeVLANs = [{
-      PVID = 2;
-      EgressUntagged = 2;
-      VLAN = "2";
+      PVID = ifcfg.phyPvid;
+      EgressUntagged = ifcfg.phyPvid;
+      VLAN = builtins.toString ifcfg.phyPvid;
     }];
   };
   #boot.initrd.systemd.network.networks."30-${ifcfg.phyIface}" = config.systemd.network.networks."30-${ifcfg.interface}" // { name = ifcfg.phyIface; };
@@ -55,8 +56,8 @@ in
     bridge = [ifcfg.interface];
 
     bridgeVLANs = [{
-      PVID = 2;
-      EgressUntagged = 2;
+      PVID = ifcfg.phyPvid;
+      EgressUntagged = ifcfg.phyPvid;
       VLAN = "1-10";
     }];
   };
