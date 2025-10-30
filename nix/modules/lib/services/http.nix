@@ -52,6 +52,7 @@ let
             skip_provider_button = true
 
             client_id = "${svcConfig.oAuth.clientId}"
+            client_secret = ""
             oidc_issuer_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}"
           '';
           user = "root";
