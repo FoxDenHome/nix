@@ -206,7 +206,7 @@ in
             };
           };
           oauth = {
-            autoLaunch = false;
+            autoLaunch = true;
             autoRegister = true;
             buttonText = "Login with FoxDen";
             clientId = if svcConfig.oAuth.enable then svcConfig.oAuth.clientId else "";
@@ -223,7 +223,7 @@ in
             storageQuotaClaim = "immich_quota";
           };
           passwordLogin = {
-            enabled = true;
+            enabled = false;
           };
           storageTemplate = {
             enabled = false;
