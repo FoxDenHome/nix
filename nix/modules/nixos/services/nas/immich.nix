@@ -113,8 +113,8 @@ in
             crf = 23;
             threads = 0;
             preset = "ultrafast";
-            targetVideoCodec = "hevc_cuvid";
-            acceptedVideoCodecs = ["h264_cuvid" "hevc_cuvid"];
+            targetVideoCodec = "hevc";
+            acceptedVideoCodecs = ["h264" "hevc"];
             targetAudioCodec = "aac";
             acceptedAudioCodecs = ["aac" "mp3" "libopus" "pcm_s16le"];
             acceptedContainers = ["mov" "ogg" "webm"];
