@@ -69,7 +69,7 @@ in
         cfg = {
           serviceConfig = {
             BindPaths = [
-              "${svcConfig.mediaDir}"
+              svcConfig.mediaDir
             ];
             BindReadOnlyPaths = [
               config.services.immich.environment.IMMICH_CONFIG_FILE
