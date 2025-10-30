@@ -7,6 +7,7 @@ in
     immich = {
       enable = true;
       host = "immich";
+      mediaDir = "/mnt/zssd/immich";
       oAuth = {
         enable = true;
         clientId = "immich";
