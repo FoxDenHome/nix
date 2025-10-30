@@ -53,6 +53,7 @@ let
 
             client_id = "${svcConfig.oAuth.clientId}"
             client_secret = "PKCE"
+            cookie_secret_file = "/run/${serviceName}/cookie-secret"
             oidc_issuer_url = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}"
           '';
           user = "root";
@@ -60,18 +61,19 @@ let
           mode = "0600";
         };
 
-        sops.secrets."${serviceName}" = {};
-
         foxDen.services.kanidm.oauth2.${svcConfig.oAuth.clientId} = mkOauthConfig inputs;
 
         systemd.services.${serviceName} = {
           restartTriggers = [ config.environment.etc.${configFileEtc}.text ];
           serviceConfig = {
             DynamicUser = true;
-
+            ExecStartPre = [
+              (pkgs.writeShellScript "generate-cookie-secret" ''
+                ${pkgs.coreutils}/bin/dd if=/dev/urandom bs=16 count=1 | ${pkgs.coreutils}/bin/base64 -w 0 > /run/${serviceName}/cookie-secret
+              '')
+            ];
+            RuntimeDirectory = serviceName;
             LoadCredential = "oauth2-proxy.conf:${configFile}";
-            EnvironmentFile = config.sops.secrets."${serviceName}".path;
-
             ExecStart = "${cmd} --config=\"\${CREDENTIALS_DIRECTORY}/oauth2-proxy.conf\"";
           };
           wantedBy = ["multi-user.target"];
