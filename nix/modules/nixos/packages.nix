@@ -20,6 +20,9 @@ let
 
   nixPkgConfig = {
     allowUnfree = true;
+    packageOverrides = pkgs: {
+      onnxruntime = pkgs.onnxruntime.override { cudaSupport = true; };
+    };
   };
 
   pkgs = (import nixpkgs {
@@ -30,8 +33,6 @@ let
   localPackages = lib.attrsets.genAttrs
     (lib.attrNames (builtins.readDir ../../packages))
     (name: import ../../packages/${name}/package.nix { inherit pkgs lib nixpkgs; });
-
-  onnxruntime = pkgs.onnxruntime.override { cudaSupport = true; };
 in
 {
   imports = [
@@ -42,8 +43,6 @@ in
     pkgs
     {
       config = nixPkgConfig;
-      inherit onnxruntime;
-      python3Packages.onnxruntime = pkgs.python3Packages.onnxruntime.override { inherit onnxruntime; };
     }
     localPackages
   ] ++ (map addPackage (lib.attrValues inputsWithoutInternal)));
