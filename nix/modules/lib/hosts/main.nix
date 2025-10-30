@@ -295,10 +295,9 @@ in
             mkHooks = (interface: let
               ifaceDriver = foxDenLib.hosts.drivers.${interface.driver};
 
-              defaultServiceInterface = "host${interface.suffix}";
-              driverRunParams = { inherit ipCmd ipInNsCmd netnsExecCmd interface pkgs defaultServiceInterface; };
+              serviceInterface = "host${interface.suffix}";
+              driverRunParams = { inherit ipCmd ipInNsCmd netnsExecCmd interface pkgs serviceInterface; };
               hooks = ifaceDriver.hooks driverRunParams;
-              serviceInterface = if hooks.serviceInterface then hooks.serviceInterface else defaultServiceInterface;
 
               sysctlsRaw = {
                 "net.ipv6.conf.INTERFACE.accept_ra" = "1";

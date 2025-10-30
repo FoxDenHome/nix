@@ -16,7 +16,7 @@ in
     config.systemd = {};
   };
 
-  hooks = ({ pkgs, ipCmd, defaultServiceInterface, interface, ... }: let
+  hooks = ({ pkgs, ipCmd, serviceInterface, interface, ... }: let
     bridge = interface.driverOpts.bridge;
 
     allocSriovScript = pkgs.writeShellScript "allocate-sriov" ''
@@ -32,7 +32,7 @@ in
         # Find current name of VF interface
         ifname="$(${pkgs.coreutils}/bin/ls /sys/class/net/${bridge}/device/virtfn$idx/net/)"
         # And rename it
-        ${ipCmd} link set dev "$ifname" name "${defaultServiceInterface}"
+        ${ipCmd} link set dev "$ifname" name "${serviceInterface}"
       }
 
       # Condition A: We find a VIF with our MAC address
