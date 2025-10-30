@@ -65,6 +65,8 @@
           exit 0
         fi
       done
+
+      # Condition D: No VFs available
       exit 1
     '';
   in
