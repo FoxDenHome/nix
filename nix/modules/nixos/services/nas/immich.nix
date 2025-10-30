@@ -19,7 +19,12 @@ in
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
-      name = "immich";
+      name = "immich-server";
+      gpu = true;
+      inherit svcConfig pkgs config;
+    }).config
+    (services.make {
+      name = "immich-machine-learning";
       gpu = true;
       inherit svcConfig pkgs config;
     }).config
