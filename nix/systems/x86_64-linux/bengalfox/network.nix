@@ -7,7 +7,6 @@ let
     ];
     routes = foxDenLib.hosts.helpers.lan.mkRoutes 2;
     nameservers = foxDenLib.hosts.helpers.lan.mkNameservers 2;
-    interface = "br-default";
     phyIface = "ens1f0np0";
     phyPvid = 2;
     defaultDriver = "sriov";
