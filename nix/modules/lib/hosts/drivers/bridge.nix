@@ -35,13 +35,13 @@ in
         })) interfaces));
   };
 
-  hooks = ({ ipCmd, interface, serviceInterface, ... }: let
+  hooks = ({ ipCmd, interface, defaultServiceInterface, ... }: let
     hostIface = mkIfaceName interface;
   in
   {
     start = [
       "-${ipCmd} link del ${eSA hostIface}"
-      "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA serviceInterface}"
+      "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA defaultServiceInterface}"
     ];
     stop = [
       "-${ipCmd} link del ${eSA hostIface}"
