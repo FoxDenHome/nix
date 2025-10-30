@@ -147,7 +147,7 @@ in
             level = "log";
           };
           machineLearning = {
-            enabled = false;
+            enabled = true;
             urls = [ "http://127.0.0.1:3003" ];
             clip = {
               enabled = true;
