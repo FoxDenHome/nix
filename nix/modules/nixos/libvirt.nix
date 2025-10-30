@@ -26,7 +26,7 @@ let
     ${pkgs.libvirt}/bin/virsh autostart ${vm.name} --disable
   '';
 
-  setupSriovScript = vm: pkgs.writeShellScript "setup-sriov" ''
+  setupSriovScriptRaw = vm: pkgs.writeShellScript "setup-sriov" ''
     #!${pkgs.bash}/bin/bash
     set -euo pipefail
 
@@ -50,6 +50,8 @@ let
       fi
     done
   '';
+
+  setupSriovScript = vm: "${pkgs.util-linux}/bin/flock -x /run/foxden-sriov.lock '${setupSriovScriptRaw vm}'";
 in
 {
   config = lib.mkIf ((lib.length vmNames) > 0) {
