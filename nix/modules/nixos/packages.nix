@@ -40,6 +40,7 @@ in
     pkgs
     {
       config = nixPkgConfig;
+      onnxruntime = pkgs.onnxruntime.override { cudaSupport = true; };
     }
     localPackages
   ] ++ (map addPackage (lib.attrValues inputsWithoutInternal)));

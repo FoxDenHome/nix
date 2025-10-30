@@ -17,7 +17,7 @@
 
     nixpkgs.overlays = [
       (final: prev: {
-        onnxruntime = prev.onnxruntime.override {cudaSupport = true;};
+        onnxruntime = prev.onnxruntime.override { cudaSupport = true; };
       })
     ];
 
