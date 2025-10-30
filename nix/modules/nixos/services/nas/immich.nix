@@ -184,11 +184,11 @@ in
             autoLaunch = false;
             autoRegister = true;
             buttonText = "Login with FoxDen";
-            clientId = svcConfig.oAuth.clientId;
+            clientId = if svcConfig.oAuth.enable then svcConfig.oAuth.clientId else "";
             clientSecret = "";
             defaultStorageQuota = 1 * 1024 * 1024 * 1024; # 1 GB
-            enabled = true;
-            issuerUrl = "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}";
+            enabled = svcConfig.oAuth.enable;
+            issuerUrl = if svcConfig.oAuth.enable then "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}" else "";
             mobileOverrideEnabled = false;
             mobileRedirectUri = "";
             scope = "openid email profile";
