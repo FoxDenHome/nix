@@ -314,7 +314,10 @@ in
             {
               start =
                 hooks.start
-                ++ [ "${ipCmd} link set ${eSA serviceInterface} netns ${eSA host.namespace}" ]
+                ++ [
+                  "-${ipCmd} link set ${eSA serviceInterface} down"
+                  "${ipCmd} link set ${eSA serviceInterface} netns ${eSA host.namespace}"
+                ]
                 ++ (map (addr:
                       "${ipInNsCmd} addr add ${eSA addr} dev ${eSA serviceInterface}")
                       interface.addresses)
