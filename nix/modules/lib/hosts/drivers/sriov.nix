@@ -12,7 +12,9 @@ in
     };
   };
 
-  build = { ... } : { };
+  build = { ... } : {
+    config.systemd = {};
+  };
 
   hooks = ({ pkgs, ipCmd, defaultServiceInterface, interface, ... }: let
     bridge = interface.driverOpts.bridge;
