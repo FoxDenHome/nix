@@ -113,8 +113,8 @@ in
             crf = 23;
             threads = 0;
             preset = "ultrafast";
-            targetVideoCodec = "h264";
-            acceptedVideoCodecs = ["h264"];
+            targetVideoCodec = "hevc_cuvid";
+            acceptedVideoCodecs = ["h264_cuvid" "hevc_cuvid"];
             targetAudioCodec = "aac";
             acceptedAudioCodecs = ["aac" "mp3" "libopus" "pcm_s16le"];
             acceptedContainers = ["mov" "ogg" "webm"];
@@ -129,8 +129,8 @@ in
             preferredHwDevice = "auto";
             transcode = "required";
             tonemap = "hable";
-            accel = "disabled";
-            accelDecode = false;
+            accel = "cuda";
+            accelDecode = true;
           };
           backup = {
             database = {
