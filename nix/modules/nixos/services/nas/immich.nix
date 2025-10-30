@@ -186,7 +186,7 @@ in
             buttonText = "Login with FoxDen";
             clientId = if svcConfig.oAuth.enable then svcConfig.oAuth.clientId else "";
             clientSecret = "";
-            defaultStorageQuota = 100 * 1024 * 1024 * 1024; # 1 GB
+            defaultStorageQuota = 100 * 1024 * 1024 * 1024; # 100 GB
             enabled = svcConfig.oAuth.enable;
             issuerUrl = if svcConfig.oAuth.enable then "https://auth.foxden.network/oauth2/openid/${svcConfig.oAuth.clientId}" else "";
             mobileOverrideEnabled = false;
