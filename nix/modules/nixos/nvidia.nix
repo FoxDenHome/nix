@@ -15,6 +15,12 @@
     hardware.graphics.enable = true;
     hardware.nvidia-container-toolkit.enable = true;
 
+    nixpkgs.overlays = [
+      (final: prev: {
+        onnxruntime = prev.onnxruntime.override {cudaSupport = true;};
+      })
+    ];
+
     foxDen.services.gpuDevices = [
       "/dev/nvidiactl"
       "/dev/nvidia-uvm"
