@@ -7,6 +7,11 @@ in
     immich = {
       enable = true;
       host = "immich";
+      oAuth = {
+        enable = true;
+        clientId = "immich";
+        displayName = "Immich";
+      };
     };
   };
 

@@ -33,7 +33,7 @@ in
     {
       foxDen.services.immich.oAuth.overrideService = true;
     
-      foxDen.services.immich.oauth2 = lib.mkIf svcConfig.oAuth.enable {
+      foxDen.services.kanidm.oauth2 = lib.mkIf svcConfig.oAuth.enable {
         ${svcConfig.oAuth.clientId} =
           (services.http.mkOauthConfig {
             inherit svcConfig config;
