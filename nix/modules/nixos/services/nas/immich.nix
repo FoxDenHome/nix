@@ -129,7 +129,7 @@ in
             preferredHwDevice = "auto";
             transcode = "required";
             tonemap = "hable";
-            accel = "cuda";
+            accel = "nvenc";
             accelDecode = true;
           };
           backup = {
