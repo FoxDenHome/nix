@@ -183,7 +183,7 @@ in
             urls = [ "http://127.0.0.1:3003" ];
             clip = {
               enabled = true;
-              modelName = "XLM-Roberta-Large-Vit-B-16Plus";
+              modelName = "ViT-SO400M-16-SigLIP2-384__webli";
             };
             duplicateDetection = {
               enabled = true;
