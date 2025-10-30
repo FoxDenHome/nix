@@ -17,7 +17,7 @@ let
     segments = nixpkgs.lib.strings.splitString ":" ip;
     first = builtins.elemAt segments 0;
   in
-    (nixpkgs.lib.strings.length first == 4) && (
+    ((builtins.stringLength first) == 4) && (
       (nixpkgs.lib.strings.hasPrefix "fd" first) ||
       (nixpkgs.lib.strings.hasPrefix "fc" first)
     )
