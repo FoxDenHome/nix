@@ -104,13 +104,11 @@ in
     };
 
     ipv6AcceptRAConfig = {
-      UseGateway = false;
       UseDomains = false;
       UseDNS = false;
-      UseNTP = false;
+      UseGateway = false;
       UseRoutePrefix = false;
       UseCaptivePortal = false;
-      UseHostname = false;
     };
 
     linkConfig = {
