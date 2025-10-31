@@ -4,10 +4,15 @@ let
 
   ifcfg-foxden = {
     addresses = [
+      "10.99.10.2/16"
+      "fd2c:f4cb:63be::a63:a02/112"
+    ];
+    bridgeAddresses = [
       "10.99.12.1/24"
       "fd2c:f4cb:63be::a63:c01/120"
     ];
     interface = "br-foxden";
+    phyIface = "wg-foxden";
     mac = config.lib.foxDen.mkHashMac "000001";
     mtu = 1280;
   };
@@ -59,7 +64,7 @@ let
       addresses = lib.filter (foxDenLib.util.isPrivateIP) iface.addresses;
       driver = "bridge";
       driverOpts = {
-        bridge = ifcfg-foxden.interface;
+        bridge = ifcfg-foxden.bridge;
         vlan = 0;
         mtu = ifcfg-foxden.mtu;
       };
@@ -195,7 +200,7 @@ in
 
   systemd.network.networks."30-${ifcfg-foxden.interface}" = {
     name = ifcfg-foxden.interface;
-    address = ifcfg-foxden.addresses;
+    address = ifcfg-foxden.bridgeAddresses;
 
     networkConfig = {
       IPv4Forwarding = true;
@@ -235,13 +240,10 @@ in
   };
 
   foxDen.services = {
-    wireguard."wg-foxden" = config.lib.foxDen.sops.mkIfAvailable {
+    wireguard.${ifcfg-foxden.phyIface} = config.lib.foxDen.sops.mkIfAvailable {
       host = "";
       interface = {
-        ips = [
-          "10.99.10.2/16"
-          "fd2c:f4cb:63be::a63:a02/112"
-        ];
+        ips = ifcfg-foxden.addresses;
         listenPort = 13232;
         peers = [
           {
