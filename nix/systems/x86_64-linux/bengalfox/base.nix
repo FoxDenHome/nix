@@ -15,7 +15,7 @@
   hardware.cpu.intel.updateMicrocode = true;
   boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "nvme" "mpt3sas" "usbhid" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelModules = [ "kvm-intel" "rdma_cm" ];
   boot.extraModulePackages = [ ];
 
   foxDen.nvidia.enable = true;
