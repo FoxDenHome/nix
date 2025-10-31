@@ -25,6 +25,11 @@ let
     interface = "br-default";
     phyIface = "enp7s0";
   };
+  ifcfg-routed = {
+    interface = "br-routed";
+    mac = config.lib.foxDen.mkHashMac "000002";
+  };
+
 
   mkMinHost = (iface: {
     inherit (ifcfg) nameservers;
@@ -63,7 +68,7 @@ let
 in
 {
   lib.foxDenSys = {
-    routedInterface = ifcfg-foxden.interface;
+    routedInterface = ifcfg-routed.interface;
     inherit mkMinHost;
     mkHost = iface: lib.mkMerge [
       (mkMinHost iface)
@@ -83,7 +88,7 @@ in
             { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::1:1"; }
           ];
           driverOpts = {
-            bridge = lib.mkForce ifcfg-foxden.interface;
+            bridge = lib.mkForce ifcfg-routed.interface;
             mtu = ifcfg.mtu;
           };
         };
@@ -96,7 +101,7 @@ in
 
   foxDen.hosts.index = 3;
   foxDen.hosts.gateway = "icefox";
-  virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ifcfg-foxden.interface ];
+  virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ifcfg-foxden.interface ifcfg-routed.interface ];
 
   # We don't firewall on servers, so only use port forward type rules
   networking.nftables.tables = let
@@ -171,11 +176,11 @@ in
     };
   };
 
-  systemd.network.netdevs."${ifcfg-foxden.interface}" = {
+  systemd.network.netdevs."${ifcfg-routed.interface}" = {
     netdevConfig = {
-      Name = ifcfg-foxden.interface;
+      Name = ifcfg-routed.interface;
       Kind = "bridge";
-      MACAddress = ifcfg-foxden.mac;
+      MACAddress = ifcfg-routed.mac;
     };
   };
 
@@ -200,8 +205,8 @@ in
     };
   };
 
-  systemd.network.networks."30-${ifcfg-foxden.interface}" = {
-    name = ifcfg-foxden.interface;
+  systemd.network.networks."30-${ifcfg-routed.interface}" = {
+    name = ifcfg-routed.interface;
     address = [
       "2a01:4f9:2b:1a42::1:1/112"
     ];
@@ -218,6 +223,7 @@ in
     netdevConfig = {
       Name = ifcfg-foxden.interface;
       Kind = "bridge";
+      MACAddress = ifcfg-foxden.mac;
     };
   };
 
@@ -282,6 +288,11 @@ in
       inherit (ifcfg) nameservers;
       interfaces.default = mkIntf ifcfg;
       interfaces.foxden = mkIntf ifcfg-foxden;
+      interfaces.routed = {
+        driver = "null";
+        inherit (ifcfg-routed) mac addresses;
+        dns.name = "";
+      };
     };
   };
 }
