@@ -50,9 +50,7 @@ let
       fi
     done
   '';
-
   setupSriovScripts = vm: map (ifaceName: "${pkgs.util-linux}/bin/flock -x /run/foxden-sriov.lock '${setupSriovScriptRawIface vm ifaceName}'") (lib.attrsets.attrNames (vm.config.sriovNics or {}));
-
   sriovExecStarts = lib.flatten (map setupSriovScripts (lib.attrsets.attrValues vms));
 in
 {
