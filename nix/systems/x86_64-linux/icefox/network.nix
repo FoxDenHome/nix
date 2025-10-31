@@ -156,6 +156,10 @@ in
       DHCP = "no";
       IPv6AcceptRA = true;
     };
+
+    linkConfig = {
+      MTUBytes = ifcfg.mtu;
+    };
   };
   boot.initrd.systemd.network.networks."30-${phyIface}" = config.systemd.network.networks."30-${ifcfg.interface}" // { name = phyIface; };
 
