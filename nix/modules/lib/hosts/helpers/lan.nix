@@ -15,14 +15,15 @@ rec {
     nameservers = mkNameservers vlan;
     interfaces.default = {
       inherit driver;
-      driverOpts = if driver == "sriov" then {
+      driverOpts = (if driver == "sriov" then {
         root = ifcfg.phyIface;
         rootPvid = ifcfg.phyPvid;
-        vlan = vlan;
       } else if driver == "bridge" then {
         bridge = ifcfg.interface;
+      } else {}) // {
+        mtu = ifcfg.mtu;
         vlan = vlan;
-      } else {};
+      };
       routes = mkRoutes vlan;
     } // cfg;
   });

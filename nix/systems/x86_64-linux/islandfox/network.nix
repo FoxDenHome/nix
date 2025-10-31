@@ -10,6 +10,7 @@ let
     interface = "br-default";
     phyIface = "enp1s0f1";
     phyPvid = 2;
+    mtu = 9000;
     mac = "04:7b:cb:44:c0:dd";
   };
 in
@@ -36,6 +37,10 @@ in
       EgressUntagged = ifcfg.phyPvid;
       VLAN = builtins.toString ifcfg.phyPvid;
     }];
+
+    linkConfig = {
+      MTUBytes = ifcfg.mtu;
+    };
   };
   #boot.initrd.systemd.network.networks."30-${ifcfg.phyIface}" = config.systemd.network.networks."30-${ifcfg.interface}" // { name = ifcfg.phyIface; };
 

@@ -12,6 +12,10 @@ in
     bridge = nixpkgs.lib.mkOption {
       type = str;
     };
+    mtu = nixpkgs.lib.mkOption {
+      type = ints.u16;
+      default = 1500;
+    };
   };
 
   build = { interfaces, ... }:
@@ -42,6 +46,8 @@ in
     start = [
       "-${ipCmd} link del ${eSA hostIface}"
       "${ipCmd} link add ${eSA hostIface} type veth peer name ${eSA serviceInterface}"
+      "${ipCmd} link set dev ${eSA hostIface} mtu ${toString interface.driverOpts.mtu}"
+      "${ipCmd} link set dev ${eSA serviceInterface} mtu ${toString interface.driverOpts.mtu}"
     ];
     stop = [
       "-${ipCmd} link del ${eSA hostIface}"

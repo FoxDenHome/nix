@@ -1,4 +1,7 @@
 { nixpkgs, ... }:
+let
+  eSA = nixpkgs.lib.strings.escapeShellArg;
+in
 {
   driverOptsType = with nixpkgs.lib.types; submodule {
     vlan = nixpkgs.lib.mkOption {
@@ -9,6 +12,10 @@
     };
     root = nixpkgs.lib.mkOption {
       type = str;
+    };
+    mtu = nixpkgs.lib.mkOption {
+      type = ints.u16;
+      default = 1500;
     };
   };
 
@@ -73,6 +80,7 @@
   {
     start = [
       "${pkgs.util-linux}/bin/flock -x /run/foxden-sriov.lock '${allocSriovScript}' '${root}'"
+      "${ipCmd} link set dev ${eSA serviceInterface} mtu ${toString interface.driverOpts.mtu}"
     ];
     serviceInterface = "";
     stop = [
