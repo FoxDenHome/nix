@@ -67,6 +67,58 @@ in
     }];
   };
 
+  # BEGIN: Network to avoid network hop for talking to local Kanidm
+  systemd.network.netdevs."${ifcfg.interface}.1" = {
+    netdevConfig = {
+      Name = "${ifcfg.interface}.1";
+      Kind = "vlan";
+    };
+
+    vlanConfig = {
+      Id = 1;
+    };
+  };
+  systemd.network.networks."30-${ifcfg.interface}.1" = {
+    name = "${ifcfg.interface}.1";
+    routes = [ ];
+    address = [ "10.1.250.99/16" ];
+
+    networkConfig = {
+      DHCP = "yes";
+      IPv6AcceptRA = true;
+    };
+
+    dhcpv4Config = {
+      UseDNS = false;
+      UseRoutes = false;
+      UseNTP = false;
+      UseDomains = false;
+      UseHostname = false;
+    };
+
+    dhcpv6Config = {
+      UseDNS = false;
+      UseRoutes = false;
+      UseNTP = false;
+      UseDomains = false;
+      UseHostname = false;
+    };
+
+    ipv6AcceptRaConfig = {
+      UseGateway = false;
+      UseDomains = false;
+      UseDNS = false;
+      UseRoutePrefix = false;
+      UseCaptivePortal = false;
+      UseHostname = false;
+    };
+
+    linkConfig = {
+      MTUBytes = ifcfg.mtu;
+    };
+  };
+  # END: Network to avoid network hop for talking to local Kanidm
+
   foxDen.hosts.hosts = {
     islandfox = {
       interfaces.default = {
