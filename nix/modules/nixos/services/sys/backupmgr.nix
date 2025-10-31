@@ -15,7 +15,7 @@ let
   commonPackages = [ pkgs.restic ];
 in
 {
-  options.foxDen.services.backupmgr.enable = lib.mkEnableOption "backupmgr";
+  options.foxDen.services.backupmgr = foxDenLib.services.mkOptions { svcName = "backupmgr"; name = "Backup Manager"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (foxDenLib.services.make {
@@ -27,6 +27,8 @@ in
       name = "backupmgr-backup";
     }).config
     {
+      foxDen.services.backupmgr.host = "";
+
       environment.systemPackages = [
         pkgs.restic
         pkgs.backupmgr
