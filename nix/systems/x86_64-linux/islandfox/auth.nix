@@ -22,15 +22,15 @@ in
   };
 
   foxDen.hosts.hosts = {
-    auth = mkVlanHost 1 {
+    auth = mkVlanHost 2 {
       dns = {
         name = "auth.foxden.network";
         dynDns = true;
       };
       webservice.enable = true;
       addresses = [
-        "10.1.14.1/16"
-        "fd2c:f4cb:63be:1::e01/64"
+        "10.2.11.24/16"
+        "fd2c:f4cb:63be:2::0b18/64"
       ];
     };
     radius = mkVlanHost 1 {
@@ -41,7 +41,7 @@ in
       webservice.enable = true;
       addresses = [
         "10.1.14.2/16"
-        "fd2c:f4cb:63be:1::e02/64"
+        "fd2c:f4cb:63be:1::0e02/64"
       ];
     };
   };
