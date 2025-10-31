@@ -35,7 +35,7 @@ in
     bridgeVLANs = [{
       PVID = ifcfg.phyPvid;
       EgressUntagged = ifcfg.phyPvid;
-      VLAN = "1,${builtins.toString ifcfg.phyPvid}";
+      VLAN = builtins.toString ifcfg.phyPvid;
     }];
 
     linkConfig = {
@@ -60,11 +60,16 @@ in
     name = ifcfg.phyIface;
     bridge = [ifcfg.interface];
 
-    bridgeVLANs = [{
-      PVID = ifcfg.phyPvid;
-      EgressUntagged = ifcfg.phyPvid;
-      VLAN = "1-10,2001";
-    }];
+    bridgeVLANs = [
+      {
+        PVID = ifcfg.phyPvid;
+        EgressUntagged = ifcfg.phyPvid;
+        VLAN = "1-10";
+      }
+      {
+        VLAN = "2001";
+      }
+    ];
 
     linkConfig = {
       MTUBytes = ifcfg.mtu;
