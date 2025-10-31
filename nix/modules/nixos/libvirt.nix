@@ -52,6 +52,8 @@ let
   '';
 
   setupSriovScripts = vm: map (ifaceName: "${pkgs.util-linux}/bin/flock -x /run/foxden-sriov.lock '${setupSriovScriptRawIface vm ifaceName}'") (lib.attrsets.attrNames (vm.config.sriovNics or {}));
+
+  sriovExecStarts = lib.flatten (map setupSriovScripts (lib.attrsets.attrValues vms));
 in
 {
   config = lib.mkIf ((lib.length vmNames) > 0) {
@@ -75,9 +77,10 @@ in
         description = "Libvirt SR-IOV Pre-Setup Service";
         before = [ "libvirtd.service" ];
         requiredBy = [ "libvirtd.service" ];
+        enable = (lib.lists.length sriovExecStarts) > 0;
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = lib.flatten (map setupSriovScripts (lib.attrsets.attrValues vms));
+          ExecStart = sriovExecStarts;
           TimeoutStartSec = "5min";
           RemainAfterExit = true;
         };
