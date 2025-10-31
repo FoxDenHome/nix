@@ -1,4 +1,4 @@
-{ foxDenLib, ... }:
+{ foxDenLib, config, ... }:
 let
   ifcfg = {
     addresses = [
@@ -11,7 +11,7 @@ let
     phyIface = "enp1s0f1";
     phyPvid = 2;
     mtu = 9000;
-    mac = "e6:21:82:00:00:01";
+    mac = config.lib.foxDen.mkHashMac "000001";
   };
 in
 {
@@ -78,7 +78,7 @@ in
         dns = {
           name = "islandfox.foxden.network";
         };
-        addresses = ifcfg.addresses;
+        inherit (ifcfg) mac addresses;
       };
     };
   };

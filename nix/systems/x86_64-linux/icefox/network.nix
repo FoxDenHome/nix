@@ -8,6 +8,7 @@ let
       "fd2c:f4cb:63be::a63:a02/112"
     ];
     interface = "br-foxden";
+    mac = config.lib.foxDen.mkHashMac "000001";
   };
   ifcfg = {
     addresses = [
@@ -175,7 +176,7 @@ in
     netdevConfig = {
       Name = routedInterface;
       Kind = "bridge";
-      MACAddress = config.lib.foxDen.mkHashMac "000001";
+      MACAddress = ifcfg-foxden.mac;
     };
   };
 
@@ -266,7 +267,7 @@ in
   # - 2a01:4f9:2b:1a42::1:/112 for hosts without public IPv4 (routed out via mainIPv4)
   foxDen.hosts.hosts = {
     icefox = let
-      mkIntf = addresses: {
+      mkIntf = subifcfg: {
         driver = "null";
         dns = {
           name = "icefox.foxden.network";
@@ -276,12 +277,12 @@ in
             name = "icefox.doridian.net";
           }
         ];
-        inherit addresses;
+        inherit (subifcfg) mac addresses;
       };
     in {
       inherit (ifcfg) nameservers;
-      interfaces.default = mkIntf ifcfg.addresses;
-      interfaces.foxden = mkIntf ifcfg-foxden.addresses;
+      interfaces.default = mkIntf ifcfg;
+      interfaces.foxden = mkIntf ifcfg-foxden;
     };
   };
 }
