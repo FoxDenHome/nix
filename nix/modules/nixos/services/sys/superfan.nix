@@ -16,6 +16,10 @@ in
     {
       foxDen.services.superfan.host = "";
 
+      systemd.tmpfiles.rules = [
+        "d /var/lock/superfan - - - - -"
+      ];
+
       systemd.services.superfan = {
         description = "SuperMicro fan controller daemon";
 
@@ -23,7 +27,7 @@ in
         confinement.packages = [ pkgs.lm_sensors ];
 
         serviceConfig = {
-          BindPaths = [ "/var/lock" ];
+          BindPaths = [ "/var/lock/superfan" ];
           Type = "simple";
           Restart = "always";
           TimeoutStartSec = "30";
