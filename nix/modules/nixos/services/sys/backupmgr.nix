@@ -5,17 +5,25 @@ let
   commonServiceConfig = {
     Type = "simple";
     Restart = "no";
-    BindPaths = [ "/var/cache/restic" ];
+    BindPaths = [ "/var/cache/restic" ] ++ svcConfig.backupDirs;
     BindReadOnlyPaths = [
       "/nix/persist"
-    ] ++ (foxDenLib.services.mkEtcPaths "backupmgr/config.json");
+    ] ++ (foxDenLib.services.mkEtcPaths [
+      "backupmgr/config.json"
+    ]);
     PrivateNetwork = lib.mkForce false;
     PrivateUsers = lib.mkForce false;
   };
   commonPackages = [ pkgs.restic ];
 in
 {
-  options.foxDen.services.backupmgr = foxDenLib.services.mkOptions { svcName = "backupmgr"; name = "Backup Manager"; };
+  options.foxDen.services.backupmgr = {
+    backupDirs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = "Additional directories to back up.";
+    };
+  } // foxDenLib.services.mkOptions { svcName = "backupmgr"; name = "Backup Manager"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (foxDenLib.services.make {

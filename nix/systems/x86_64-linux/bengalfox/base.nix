@@ -72,7 +72,10 @@
     watchdog.enable = true;
     superfan.enable = true;
     netdata.enable = true;
-    backupmgr.enable = config.lib.foxDen.sops.mkIfAvailable true;
+    backupmgr = config.lib.foxDen.sops.mkIfAvailable {
+      enable = true;
+      backupDirs = [ "/mnt/zssd/immich" ];
+    };
     apcupsd.enable = config.lib.foxDen.sops.mkIfAvailable true;
   };
 }
