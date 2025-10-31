@@ -83,7 +83,7 @@ in
             { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::1:1"; }
           ];
           driverOpts = {
-            bridge = routedInterface;
+            bridge = lib.mkForce routedInterface;
             mtu = 1500;
           };
         };
