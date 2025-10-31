@@ -10,7 +10,6 @@ let
     interface = "br-default";
     phyIface = "enp1s0f1";
     phyPvid = 2;
-    mac = "04:7b:cb:44:c0:dd";
   };
 in
 {
@@ -39,15 +38,20 @@ in
   };
   #boot.initrd.systemd.network.networks."30-${ifcfg.phyIface}" = config.systemd.network.networks."30-${ifcfg.interface}" // { name = ifcfg.phyIface; };
 
-  systemd.network.netdevs."${ifcfg.interface}" = {
+  systemd.network.netdevs.${ifcfg.interface} = {
     netdevConfig = {
       Name = ifcfg.interface;
       Kind = "bridge";
-      MACAddress = ifcfg.mac;
     };
 
     bridgeConfig = {
       VLANFiltering = true;
+    };
+  };
+
+  systemd.network.links.${ifcfg.interface} = {
+    linkConfig = {
+      MACAddressPolicy = "none";
     };
   };
 
