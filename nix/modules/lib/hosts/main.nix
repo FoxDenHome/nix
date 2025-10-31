@@ -372,11 +372,8 @@ in
                   ]
                   ++ (getHook "start");
 
-                ExecStop =
-                  (getHook "stop")
-                  ++ [
-                    "${ipCmd} netns del ${eSA host.namespace}"
-                  ];
+                ExecStop = getHook "stop";
+                ExecStopPost = [ "${ipCmd} netns del ${eSA host.namespace}" ];
 
                 TimeoutStartSec = "5min";
               };
