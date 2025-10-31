@@ -10,7 +10,7 @@ let
     interface = "br-default";
     phyIface = "enp1s0f1";
     phyPvid = 2;
-    mtu = 1500;
+    mtu = 9000;
     mac = "04:7b:cb:44:c0:dd";
   };
 in
@@ -65,6 +65,10 @@ in
       EgressUntagged = ifcfg.phyPvid;
       VLAN = "1-10";
     }];
+
+    linkConfig = {
+      MTUBytes = ifcfg.mtu;
+    };
   };
 
   # BEGIN: Network to avoid network hop for talking to local Kanidm
