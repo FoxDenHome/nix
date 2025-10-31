@@ -7,7 +7,7 @@ let
     ]) paths
   ));
 
-  mkNamed = (svc: { svcConfig, overrideHost ? null, pkgs, config, gpu ? false, ... }:
+  mkNamed = (svc: { svcConfig, overrideHost ? null, pkgs, config, devices ? [], gpu ? false, ... }:
   let
     cfgHostName = if overrideHost != null then overrideHost else svcConfig.host;
 
@@ -28,6 +28,8 @@ let
       "-/run/opengl-driver"
       "-/run/opengl-driver-32"
     ] else [];
+
+    allDevices = devices ++ (if canGpu then config.foxDen.services.gpuDevices else []);
   in
   {
     configDir = "/etc/foxden/services/${svc}";
@@ -47,11 +49,11 @@ let
           NetworkNamespacePath = nixpkgs.lib.mkIf (cfgHostName != "") host.namespacePath;
           DevicePolicy = nixpkgs.lib.mkForce "closed";
           PrivateDevices = nixpkgs.lib.mkForce true;
-          DeviceAllow = nixpkgs.lib.mkIf canGpu (map (dev: "${dev} rw") config.foxDen.services.gpuDevices);
           ProtectProc = "invisible";
           Restart = nixpkgs.lib.mkDefault "always";
 
-          BindPaths = nixpkgs.lib.mkIf canGpu (map (dev: "-${dev}") config.foxDen.services.gpuDevices);
+          DeviceAllow = map (dev: "${dev} rw") allDevices;
+          BindPaths = map (dev: "-${dev}") allDevices;
 
           BindReadOnlyPaths = [
             "/run/systemd/notify"
