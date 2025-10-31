@@ -3,7 +3,7 @@ let
   svcConfig = config.foxDen.services.superfan;
 in
 {
-  options.foxDen.services.superfan.enable = lib.mkEnableOption "SuperMicro fan controller";
+  options.foxDen.services.superfan = foxDenLib.services.mkOptions { svcName = "superfan"; name = "SuperFan"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (foxDenLib.services.make {
@@ -14,6 +14,8 @@ in
       ];
     }).config
     {
+      foxDen.services.superfan.host = "";
+
       systemd.services.superfan = {
         description = "SuperMicro fan controller daemon";
 
