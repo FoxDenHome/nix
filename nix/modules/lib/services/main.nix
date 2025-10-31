@@ -49,6 +49,7 @@ let
           NetworkNamespacePath = nixpkgs.lib.mkIf (cfgHostName != "") host.namespacePath;
           DevicePolicy = nixpkgs.lib.mkForce "closed";
           PrivateDevices = nixpkgs.lib.mkForce true;
+          PrivateNetwork = true;
           ProtectProc = "invisible";
           Restart = nixpkgs.lib.mkDefault "always";
 
