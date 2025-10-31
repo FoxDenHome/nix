@@ -125,8 +125,10 @@ in
       nameservers = ifcfg.nameservers;
       interfaces.ext = {
         driver = "bridge";
-        driverOpts.bridge = "br-default";
-        driverOpts.vlan = 2;
+        driverOpts = {
+          bridge = "br-default";
+          vlan = 2;
+        };
         dns = {
           name = "dummy.foxden.local";
         };
@@ -141,8 +143,10 @@ in
       nameservers = ifcfg.nameservers;
       interfaces.ext = {
         driver = "bridge";
-        driverOpts.bridge = "br-default";
-        driverOpts.vlan = 2;
+        driverOpts = {
+          bridge = "br-default";
+          vlan = 2;
+        };
         dns = {
           name = "dummy2.foxden.local";
         };

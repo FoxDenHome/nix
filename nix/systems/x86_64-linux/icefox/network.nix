@@ -20,6 +20,7 @@ let
       "213.133.98.100"
     ];
     mac = "fc:34:97:68:1e:07";
+    mtu = 1500;
     interface = "br-default";
   };
 
@@ -35,8 +36,11 @@ let
       addresses = lib.filter (ip: !(foxDenLib.util.isPrivateIP ip)) iface.addresses;
       driver = "bridge";
       webservice.enable = false;
-      driverOpts.bridge = lib.mkDefault ifcfg.interface;
-      driverOpts.vlan = 0;
+      driverOpts = {
+        bridge = ifcfg.interface;
+        vlan = 0;
+        mtu = ifcfg.mtu;
+      };
       routes = [ ];
     };
     interfaces.foxden = iface // {
@@ -46,8 +50,11 @@ let
       mac = null;
       addresses = lib.filter (foxDenLib.util.isPrivateIP) iface.addresses;
       driver = "bridge";
-      driverOpts.bridge = ifcfg-foxden.interface;
-      driverOpts.vlan = 0;
+      driverOpts = {
+        bridge = ifcfg-foxden.interface;
+        vlan = 0;
+        mtu = ifcfg.mtu;
+      };
       routes = [
         { Destination = "10.0.0.0/8"; Gateway = "10.99.12.1"; }
         { Destination = "fd2c:f4cb:63be::/60"; Gateway = "fd2c:f4cb:63be::a63:c01"; }
@@ -75,7 +82,10 @@ in
           routes = [
             { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::1:1"; }
           ];
-          driverOpts.bridge = routedInterface;
+          driverOpts = {
+            bridge = routedInterface;
+            mtu = 1500;
+          };
         };
         interfaces.foxden.routes = [
           { Destination = "0.0.0.0/0"; Gateway = "10.99.12.1"; }
