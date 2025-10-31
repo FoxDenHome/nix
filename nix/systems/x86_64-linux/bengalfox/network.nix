@@ -10,7 +10,6 @@ let
     phyIface = "ens1f0np0";
     phyPvid = 2;
     defaultDriver = "sriov";
-    mac = "e8:eb:d3:08:d2:98";
   };
 in
 {
