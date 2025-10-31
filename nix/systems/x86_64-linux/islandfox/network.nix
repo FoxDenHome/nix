@@ -81,7 +81,7 @@ in
   systemd.network.networks."30-${ifcfg.interface}.1" = {
     name = "${ifcfg.interface}.1";
     routes = [ ];
-    address = [ "10.1.250.99/16" ];
+    address = [ ];
 
     networkConfig = {
       DHCP = "yes";
