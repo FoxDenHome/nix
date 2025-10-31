@@ -23,10 +23,8 @@ let
     mac = "fc:34:97:68:1e:07";
     mtu = 1500;
     interface = "br-default";
+    phyIface = "enp7s0";
   };
-
-  phyIface = "enp7s0";
-  routedInterface = "br-routed";
 
   mkMinHost = (iface: {
     inherit (ifcfg) nameservers;
@@ -65,7 +63,8 @@ let
 in
 {
   lib.foxDenSys = {
-    inherit routedInterface mkMinHost;
+    routedInterface = ifcfg-foxden.interface;
+    inherit mkMinHost;
     mkHost = iface: lib.mkMerge [
       (mkMinHost iface)
       {
@@ -84,7 +83,7 @@ in
             { Destination = "::/0"; Gateway = "2a01:4f9:2b:1a42::1:1"; }
           ];
           driverOpts = {
-            bridge = lib.mkForce routedInterface;
+            bridge = lib.mkForce ifcfg-foxden.interface;
             mtu = ifcfg.mtu;
           };
         };
@@ -97,7 +96,7 @@ in
 
   foxDen.hosts.index = 3;
   foxDen.hosts.gateway = "icefox";
-  virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ifcfg-foxden.interface routedInterface ];
+  virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ifcfg-foxden.interface ];
 
   # We don't firewall on servers, so only use port forward type rules
   networking.nftables.tables = let
@@ -128,7 +127,7 @@ in
       content = ''
         chain forward {
           type filter hook forward priority 0; policy accept;
-          oifname "${phyIface}" ether saddr & ff:ff:00:00:00:00 == e6:21:00:00:00:00 drop
+          oifname "${ifcfg.phyIface}" ether saddr & ff:ff:00:00:00:00 == e6:21:00:00:00:00 drop
         }
       '';
       family = "bridge";
@@ -162,7 +161,7 @@ in
       MTUBytes = ifcfg.mtu;
     };
   };
-  boot.initrd.systemd.network.networks."30-${phyIface}" = config.systemd.network.networks."30-${ifcfg.interface}" // { name = phyIface; };
+  boot.initrd.systemd.network.networks."30-${ifcfg.phyIface}" = config.systemd.network.networks."30-${ifcfg.interface}" // { name = ifcfg.phyIface; };
 
   systemd.network.netdevs."${ifcfg.interface}" = {
     netdevConfig = {
@@ -172,16 +171,16 @@ in
     };
   };
 
-  systemd.network.netdevs."${routedInterface}" = {
+  systemd.network.netdevs."${ifcfg-foxden.interface}" = {
     netdevConfig = {
-      Name = routedInterface;
+      Name = ifcfg-foxden.interface;
       Kind = "bridge";
       MACAddress = ifcfg-foxden.mac;
     };
   };
 
   systemd.network.networks."40-${ifcfg.interface}-root" = {
-    name = phyIface;
+    name = ifcfg.phyIface;
     bridge = [ifcfg.interface];
   };
 
@@ -201,8 +200,8 @@ in
     };
   };
 
-  systemd.network.networks."30-${routedInterface}" = {
-    name = routedInterface;
+  systemd.network.networks."30-${ifcfg-foxden.interface}" = {
+    name = ifcfg-foxden.interface;
     address = [
       "2a01:4f9:2b:1a42::1:1/112"
     ];
