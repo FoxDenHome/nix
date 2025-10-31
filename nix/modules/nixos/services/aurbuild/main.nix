@@ -3,8 +3,8 @@ let
   svcConfig = config.foxDen.services.aurbuild;
   mirrorCfg = config.foxDen.services.mirror;
 
-  packagesTxt = ./aurbuild-packages.txt;
-  makepkgConf = ./aurbuild-makepkg.conf;
+  packagesTxt = ./packages.txt;
+  makepkgConf = ./makepkg.conf;
 
   builderArch = "x86_64";
 in
