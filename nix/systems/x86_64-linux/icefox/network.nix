@@ -64,7 +64,7 @@ let
       addresses = lib.filter (foxDenLib.util.isPrivateIP) iface.addresses;
       driver = "bridge";
       driverOpts = {
-        bridge = ifcfg-foxden.bridge;
+        bridge = ifcfg-foxden.interface;
         vlan = 0;
         mtu = ifcfg-foxden.mtu;
       };
