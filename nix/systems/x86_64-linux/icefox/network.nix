@@ -4,8 +4,8 @@ let
 
   ifcfg-foxden = {
     addresses = [
-      "10.99.10.2/16"
-      "fd2c:f4cb:63be::a63:a02/112"
+      "10.99.12.1/24"
+      "fd2c:f4cb:63be::a63:c01/120"
     ];
     interface = "br-foxden";
     mac = config.lib.foxDen.mkHashMac "000001";
@@ -27,6 +27,9 @@ let
     phyIface = "enp7s0";
   };
   ifcfg-routed = {
+    addresses = [
+      "2a01:4f9:2b:1a42::1:1/112"
+    ];
     interface = "br-routed";
     mtu = 1500;
     mac = config.lib.foxDen.mkHashMac "000002";
@@ -192,10 +195,7 @@ in
 
   systemd.network.networks."30-${ifcfg-foxden.interface}" = {
     name = ifcfg-foxden.interface;
-    address = [
-      "10.99.12.1/24"
-      "fd2c:f4cb:63be::a63:c01/120"
-    ];
+    address = ifcfg-foxden.addresses;
 
     networkConfig = {
       IPv4Forwarding = true;
@@ -212,9 +212,7 @@ in
 
   systemd.network.networks."30-${ifcfg-routed.interface}" = {
     name = ifcfg-routed.interface;
-    address = [
-      "2a01:4f9:2b:1a42::1:1/112"
-    ];
+    address = ifcfg-routed.addresses;
 
     networkConfig = {
       IPv6Forwarding = true;
@@ -240,7 +238,10 @@ in
     wireguard."wg-foxden" = config.lib.foxDen.sops.mkIfAvailable {
       host = "";
       interface = {
-        ips = ifcfg-foxden.addresses;
+        ips = [
+          "10.99.10.2/16"
+          "fd2c:f4cb:63be::a63:a02/112"
+        ];
         listenPort = 13232;
         peers = [
           {
