@@ -30,7 +30,7 @@ let
     #!${pkgs.bash}/bin/bash
     set -euo pipefail
 
-    physfn='/sys/bus/pci/devices/${vm.config.sriovNics.${ifaceName}.addr}/physfn'
+    physfn='/sys/bus/pci/devices/${vm.config.sriovMappings.${ifaceName}.addr}/physfn'
     physdev="$(${pkgs.coreutils}/bin/ls "$physfn/net")"
 
     numvfs_file="/sys/class/net/$physdev/device/sriov_numvfs"
@@ -42,15 +42,15 @@ let
 
     for vfn in $physfn/virtfn*; do
       vfn_dev="$(${pkgs.coreutils}/bin/basename "$(${pkgs.coreutils}/bin/readlink "$vfn")")"
-      if [ "$vfn_dev" == "${vm.config.sriovNics.${ifaceName}.addr}" ]; then
+      if [ "$vfn_dev" == "${vm.config.sriovMappings.${ifaceName}.addr}" ]; then
         vfn_idx="$(${pkgs.coreutils}/bin/basename "$vfn" | ${pkgs.gnused}/bin/sed 's/virtfn//')"
         echo "Configuring SR-IOV for VM ${vm.name} on device phy=$physdev vfidx=$vfn_idx vfdev=$vfn_dev"
-        ${pkgs.iproute2}/bin/ip link set "$physdev" vf "$vfn_idx" mac "${vm.config.interfaces.${ifaceName}.mac}" spoofchk on vlan ${toString vm.config.sriovNics.${ifaceName}.vlan}
+        ${pkgs.iproute2}/bin/ip link set "$physdev" vf "$vfn_idx" mac "${vm.config.interfaces.${ifaceName}.mac}" spoofchk on vlan ${toString vm.config.sriovMappings.${ifaceName}.vlan}
         exit 0
       fi
     done
   '';
-  setupSriovScripts = vm: map (ifaceName: "${pkgs.util-linux}/bin/flock -x /run/foxden-sriov.lock '${setupSriovScriptRawIface vm ifaceName}'") (lib.attrsets.attrNames (vm.config.sriovNics or {}));
+  setupSriovScripts = vm: map (ifaceName: "${pkgs.util-linux}/bin/flock -x /run/foxden-sriov.lock '${setupSriovScriptRawIface vm ifaceName}'") (lib.attrsets.attrNames (vm.config.sriovMappings or {}));
   sriovExecStarts = lib.flatten (map setupSriovScripts (lib.attrsets.attrValues vms));
 in
 {

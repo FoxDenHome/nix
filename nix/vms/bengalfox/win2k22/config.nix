@@ -1,7 +1,7 @@
 {
   rootDiskSize = "80G";
   autostart = true;
-  sriovNics.default = {
+  sriovMappings.default = {
     addr = "0000:81:03.7";
     vlan = 0;
   };
