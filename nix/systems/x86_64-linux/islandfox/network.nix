@@ -10,7 +10,7 @@ let
     interface = "br-default";
     phyIface = "enp1s0f1";
     phyPvid = 2;
-    mtu = 9000;
+    mtu = 1500;
     mac = "04:7b:cb:44:c0:dd";
   };
 in
