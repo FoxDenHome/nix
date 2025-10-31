@@ -5,7 +5,7 @@ let
       "10.2.10.9/16"
       "fd2c:f4cb:63be:2::a09/64"
     ];
-    mac = "e6:21:01:00:00:01";
+    mac = "e6:21:81:00:00:01";
     mtu = 9000;
     routes = foxDenLib.hosts.helpers.lan.mkRoutes 2;
     nameservers = foxDenLib.hosts.helpers.lan.mkNameservers 2;
