@@ -9,6 +9,7 @@ let
     ];
     interface = "br-foxden";
     mac = config.lib.foxDen.mkHashMac "000001";
+    mtu = 1280;
   };
   ifcfg = {
     addresses = [
@@ -27,9 +28,9 @@ let
   };
   ifcfg-routed = {
     interface = "br-routed";
+    mtu = 1500;
     mac = config.lib.foxDen.mkHashMac "000002";
   };
-
 
   mkMinHost = (iface: {
     inherit (ifcfg) nameservers;
@@ -57,7 +58,7 @@ let
       driverOpts = {
         bridge = ifcfg-foxden.interface;
         vlan = 0;
-        mtu = ifcfg.mtu;
+        mtu = ifcfg-foxden.mtu;
       };
       routes = [
         { Destination = "10.0.0.0/8"; Gateway = "10.99.12.1"; }
@@ -89,7 +90,7 @@ in
           ];
           driverOpts = {
             bridge = lib.mkForce ifcfg-routed.interface;
-            mtu = ifcfg.mtu;
+            mtu = ifcfg-routed.mtu;
           };
         };
         interfaces.foxden.routes = [
@@ -203,6 +204,10 @@ in
       DHCP = "no";
       IPv6AcceptRA = false;
     };
+
+    linkConfig = {
+      MTUBytes = ifcfg-foxden.mtu;
+    };
   };
 
   systemd.network.networks."30-${ifcfg-routed.interface}" = {
@@ -216,6 +221,10 @@ in
 
       DHCP = "no";
       IPv6AcceptRA = false;
+    };
+
+    linkConfig = {
+      MTUBytes = ifcfg-routed.mtu;
     };
   };
 
