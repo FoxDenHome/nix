@@ -98,7 +98,6 @@ in
 
     dhcpV6Config = {
       UseDNS = false;
-      UseRoutes = false;
       UseNTP = false;
       UseDomains = false;
       UseHostname = false;
@@ -108,6 +107,7 @@ in
       UseGateway = false;
       UseDomains = false;
       UseDNS = false;
+      UseNTP = false;
       UseRoutePrefix = false;
       UseCaptivePortal = false;
       UseHostname = false;
