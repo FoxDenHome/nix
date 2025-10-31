@@ -63,6 +63,9 @@ in
 
     configScript = ''
       set -x
+      echo 'FIXME: Disabled for now'
+      exit 0
+
       ipmitool lan set 1 ipsrc static
       ipmitool lan set 1 ipaddr ${foxDenLib.util.removeIPCidr netconfig.ipv4.address}
       ipmitool lan set 1 netmask ${foxDenLib.util.ipv4Netmask netconfig.ipv4.address}
