@@ -11,7 +11,6 @@ let
     ] ++ svcConfig.sourceDirs ++ (foxDenLib.services.mkEtcPaths [
       "backupmgr/config.json"
     ]);
-    PrivateNetwork = lib.mkForce false;
     PrivateUsers = lib.mkForce false;
   };
   commonPackages = [ pkgs.restic ];
