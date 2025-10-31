@@ -36,6 +36,9 @@ in
               VLAN = vlan;
             }] else [];
           };
+          linkConfig = {
+            MTUBytes = iface.driverOpts.mtu;
+          };
         })) interfaces));
   };
 

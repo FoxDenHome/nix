@@ -29,8 +29,8 @@
       };
       mac = "C4:29:96:B5:2B:8F";
       dhcpv6 = {
-        duid = "0x00020000ab11a39d5ea7b078c55a"; # TODO: Update
-        iaid = 1491564959; # TODO: Update
+        duid = "0x00020000ab11a39d5ea7b078c55a";
+        iaid = 1491564959;
       };
       addresses = [
         "10.2.12.1/16"
@@ -61,8 +61,8 @@
       };
       mac = "80:8A:F7:03:E2:1A";
       dhcpv6 = {
-        duid = "0x00030001808af703e21a"; # TODO: Update
-        iaid = 1; # TODO: Update
+        duid = "0x00030001808af703e21a";
+        iaid = 1;
       };
       addresses = [
         "10.2.12.28/16"
@@ -75,8 +75,8 @@
       };
       mac = "80:8A:F7:03:55:58";
       dhcpv6 = {
-        duid = "0x00030001808af7035558"; # TODO: Update
-        iaid = 1; # TODO: Update
+        duid = "0x00030001808af7035558";
+        iaid = 1;
       };
       addresses = [
         "10.2.12.19/16"
