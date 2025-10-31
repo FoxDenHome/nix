@@ -35,7 +35,7 @@ in
     bridgeVLANs = [{
       PVID = ifcfg.phyPvid;
       EgressUntagged = ifcfg.phyPvid;
-      VLAN = builtins.toString ifcfg.phyPvid;
+      VLAN = "1,${builtins.toString ifcfg.phyPvid}";
     }];
 
     linkConfig = {
