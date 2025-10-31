@@ -272,7 +272,7 @@ in
               inherit (iface.dns) ttl;
               inherit (cname) name type;
               value = "${foxDenLib.global.dns.mkHost iface.dns}.";
-              horizon = "*"; # TODO: This might need to be conditional if there is v4/v6 only hosts with CNAMEs
+              horizon = "*";
             }) iface.cnames;
           in
           (
