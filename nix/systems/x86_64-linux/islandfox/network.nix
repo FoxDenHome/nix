@@ -11,7 +11,7 @@ let
     phyIface = "enp1s0f1";
     phyPvid = 2;
     mtu = 9000;
-    mac = "04:7b:cb:44:c0:dd";
+    mac = "e6:21:02:00:00:01";
   };
 in
 {
