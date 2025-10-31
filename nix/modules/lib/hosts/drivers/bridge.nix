@@ -35,9 +35,9 @@ in
               EgressUntagged = vlan;
               VLAN = vlan;
             }] else [];
-          };
-          linkConfig = {
-            MTUBytes = iface.driverOpts.mtu;
+            linkConfig = {
+              MTUBytes = iface.driverOpts.mtu;
+            };
           };
         })) interfaces));
   };
