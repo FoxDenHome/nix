@@ -83,7 +83,6 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 		- [ ] backend
 	- [ ] hashtopolis-agent
 	- [ ] ollama
-	- [ ] DeviceAllow roce interface with SR-IOV driver
 
 ## Notes
 
