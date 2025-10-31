@@ -88,7 +88,7 @@ in
       IPv6AcceptRA = true;
     };
 
-    dhcpv4Config = {
+    dhcpV4Config = {
       UseDNS = false;
       UseRoutes = false;
       UseNTP = false;
@@ -96,7 +96,7 @@ in
       UseHostname = false;
     };
 
-    dhcpv6Config = {
+    dhcpV6Config = {
       UseDNS = false;
       UseRoutes = false;
       UseNTP = false;
@@ -104,7 +104,7 @@ in
       UseHostname = false;
     };
 
-    ipv6AcceptRaConfig = {
+    ipv6AcceptRAConfig = {
       UseGateway = false;
       UseDomains = false;
       UseDNS = false;
