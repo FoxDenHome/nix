@@ -64,7 +64,7 @@ in
     bridgeVLANs = [{
       PVID = ifcfg.phyPvid;
       EgressUntagged = ifcfg.phyPvid;
-      VLAN = "1-10";
+      VLAN = "1-10,2001";
     }];
 
     linkConfig = {
