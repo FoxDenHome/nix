@@ -84,7 +84,7 @@ in
           ];
           driverOpts = {
             bridge = lib.mkForce routedInterface;
-            mtu = 1500;
+            mtu = ifcfg.mtu;
           };
         };
         interfaces.foxden.routes = [
