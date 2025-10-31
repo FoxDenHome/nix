@@ -43,7 +43,7 @@
   programs.git.enable = true;
   programs.htop.enable = true;
   programs.tcpdump.enable = true;
-  programs.sshd.package = pkgs.openssh_hpn;
+  programs.ssh.package = pkgs.openssh_hpn;
 
   environment.shellAliases = {
     "sudo" = "run0 --background=''";
