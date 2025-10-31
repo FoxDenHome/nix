@@ -14,7 +14,10 @@ in
       ];
     }).config
     {
-      foxDen.services.superfan.host = "";
+      foxDen.services.superfan.host = "superfan";
+      foxDen.hosts.hosts = {
+        superfan.interfaces = {};
+      };
 
       systemd.tmpfiles.rules = [
         "d /var/lock/superfan - - - - -"

@@ -35,7 +35,7 @@ in
       name = "backupmgr-backup";
     }).config
     {
-      foxDen.services.backupmgr.host = "";
+      foxDen.services.backupmgr.host = lib.mkDefault "";
 
       environment.systemPackages = [
         pkgs.restic

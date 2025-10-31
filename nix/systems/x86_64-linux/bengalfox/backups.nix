@@ -5,10 +5,7 @@ in
 {
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
     tapemgr.enable = true;
-    gitbackup = {
-      enable = true;
-      host = "";
-    };
+    gitbackup.enable = true;
     restic-server = {
       enable = true;
       host = "restic";

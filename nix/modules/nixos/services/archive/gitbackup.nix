@@ -23,6 +23,8 @@ in
       inherit svcConfig pkgs config;
     }).config
     {
+      foxDen.services.gitbackup.host = lib.mkDefault "";
+
       systemd.services.gitbackup = {
         confinement.packages = [
           pkgs.git

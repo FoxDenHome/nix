@@ -4,10 +4,7 @@ let
 in
 {
   foxDen.services = config.lib.foxDen.sops.mkIfAvailable {
-    gitbackup = {
-      enable = true;
-      host = "";
-    };
+    gitbackup.enable = true;
     forgejo = {
       enable = true;
       host = "git";
