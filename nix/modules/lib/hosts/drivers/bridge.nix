@@ -1,4 +1,4 @@
-{ nixpkgs, ... } :
+{ nixpkgs, ... }:
 let
   eSA = nixpkgs.lib.strings.escapeShellArg;
 
@@ -14,7 +14,7 @@ in
     };
   };
 
-  build = { interfaces, ... } :
+  build = { interfaces, ... }:
   {
     config.systemd.network.networks =
       nixpkgs.lib.attrsets.listToAttrs (

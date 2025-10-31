@@ -1,4 +1,4 @@
-{ foxDenLib, ... } :
+{ foxDenLib, ... }:
 {
   foxDen.firewall.rules = map (rule: rule // {
     table = "filter";

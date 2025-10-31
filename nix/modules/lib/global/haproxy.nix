@@ -72,7 +72,7 @@ let
   '';
 in
 {
-  nixosModule = { config, ... } : let
+  nixosModule = { config, ... }: let
     protoCfgType = defPort: with lib.types; submodule {
       options = {
         host = lib.mkOption {

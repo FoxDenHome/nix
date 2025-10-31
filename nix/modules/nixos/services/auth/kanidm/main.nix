@@ -1,4 +1,4 @@
-{ nixpkgs-unstable, systemArch, ... } :
+{ nixpkgs-unstable, systemArch, ... }:
 {
   services.kanidm = {
     enableClient = true;

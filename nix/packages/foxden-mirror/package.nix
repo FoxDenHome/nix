@@ -1,4 +1,4 @@
-{ pkgs, lib, ... } : let
+{ pkgs, lib, ... }: let
   packageJson = lib.trivial.importJSON ./package.json;
 in pkgs.stdenv.mkDerivation {
   name = packageJson.name;

@@ -1,4 +1,4 @@
-{ lib, pkgs, ... } :
+{ lib, pkgs, ... }:
 let
   subnets = [
     "2a0e:7d44:f000::/40"

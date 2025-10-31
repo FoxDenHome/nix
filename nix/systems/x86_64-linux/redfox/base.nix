@@ -1,4 +1,4 @@
-{ ... } :
+{ ... }:
 {
   foxDen.hosts.index = 4;
   foxDen.hosts.gateway = "redfox";

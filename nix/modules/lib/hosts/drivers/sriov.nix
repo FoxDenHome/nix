@@ -1,4 +1,4 @@
-{ nixpkgs, ... } :
+{ nixpkgs, ... }:
 {
   driverOptsType = with nixpkgs.lib.types; submodule {
     vlan = nixpkgs.lib.mkOption {
@@ -12,7 +12,7 @@
     };
   };
 
-  build = { ... } : {
+  build = { ... }: {
     config.systemd = {};
   };
 

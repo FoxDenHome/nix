@@ -1,4 +1,4 @@
-{ pkgs, lib, config, options, kanidmOauth2, foxDenLib, ... } :
+{ pkgs, lib, config, options, kanidmOauth2, foxDenLib, ... }:
 let
   services = foxDenLib.services;
 

@@ -1,4 +1,4 @@
-{ ... } :
+{ ... }:
 {
   config.foxDen.dns.records = [
     {

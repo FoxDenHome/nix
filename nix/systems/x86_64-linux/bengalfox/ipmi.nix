@@ -1,4 +1,4 @@
-{ ... } :
+{ ... }:
 {
   config.foxDen.ipmiconfig = {
     enable = true;

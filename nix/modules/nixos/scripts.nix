@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... } :
+{ config, lib, pkgs, ... }:
 let
   # TODO: Use a lanzaboote post script for this, once they exist
   syncBootScript = ''

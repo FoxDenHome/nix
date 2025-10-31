@@ -1,4 +1,4 @@
-{ lib, config, foxDenLib, ... } :
+{ lib, config, foxDenLib, ... }:
 {
   options.foxDen.services.kanidm.login = lib.mkOption {
     type = lib.types.bool;

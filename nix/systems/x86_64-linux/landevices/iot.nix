@@ -1,4 +1,4 @@
-{ ... } :
+{ ... }:
 {
   config.foxDen.hosts.hosts = let
     mkIntf = (intf: {

@@ -292,7 +292,7 @@ in
       }) hosts);
 
       systemd = nixpkgs.lib.mkMerge (
-        (map ({ name, value } : (value.build {
+        (map ({ name, value }: (value.build {
           interfaces = (nixpkgs.lib.filter (iface: iface.driver == name) interfaces);
         }).config.systemd) (nixpkgs.lib.attrsets.attrsToList foxDenLib.hosts.drivers))
         ++ [{

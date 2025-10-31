@@ -1,4 +1,4 @@
-{ lib, pkgs, foxDenLib, config, hostName, ... } :
+{ lib, pkgs, foxDenLib, config, hostName, ... }:
 let
   netConfigFamily = ipWithCidr: ipWithoutCidr: with lib.types; submodule {
     options = {

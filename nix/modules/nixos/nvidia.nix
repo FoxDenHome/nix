@@ -1,4 +1,4 @@
-{ lib, config, ... } :
+{ lib, config, ... }:
 {
   options.foxDen.nvidia.enable = lib.mkEnableOption "Enable NVIDIA support via the proprietary drivers";
 

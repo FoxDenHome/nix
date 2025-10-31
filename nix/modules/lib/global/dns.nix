@@ -45,7 +45,7 @@ in
 {
   defaultTtl = defaultTtl;
 
-  nixosModule = { ... } : {
+  nixosModule = { ... }: {
     options.foxDen.dns.records = with lib.types; lib.mkOption {
       type = listOf dnsRecordType;
       default = [];

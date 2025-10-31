@@ -1,4 +1,4 @@
-{ ... } :
+{ ... }:
 rec {
   mkNameservers = (vlan: [
     "10.${builtins.toString vlan}.0.53"

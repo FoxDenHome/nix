@@ -150,7 +150,7 @@ in
           wantedBy = [ "multi-user.target" ];
         };
       }  // (lib.attrsets.listToAttrs (
-        map ({ name, value } : let
+        map ({ name, value }: let
           svcName = "mirror-sync-${name}";
         in {
             name = svcName;
@@ -203,7 +203,7 @@ in
       ));
 
       systemd.timers = (lib.attrsets.listToAttrs (
-        map ({ name, value } : let
+        map ({ name, value }: let
           svcName = "mirror-sync-${name}";
         in {
             name = svcName;

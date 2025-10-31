@@ -1,4 +1,4 @@
-{ hostName, pkgs, lib, ... } :
+{ hostName, pkgs, lib, ... }:
 let
   vmDirPath = ../../vms/${hostName};
 

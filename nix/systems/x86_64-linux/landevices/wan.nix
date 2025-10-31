@@ -1,4 +1,4 @@
-{ ... } :
+{ ... }:
 let
   mkWanRecs = (suffix: v4: v6: [
     {

@@ -147,7 +147,7 @@ in
 
   inherit mkOauthConfig;
 
-  mkOptions = (inputs@{ ... } : with nixpkgs.lib.types; {
+  mkOptions = (inputs@{ ... }: with nixpkgs.lib.types; {
     tls = nixpkgs.lib.mkEnableOption "TLS";
     oAuth = {
       enable = nixpkgs.lib.mkEnableOption "OAuth2 Proxy";

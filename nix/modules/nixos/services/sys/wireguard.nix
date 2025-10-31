@@ -1,4 +1,4 @@
-{ lib, config, foxDenLib, ... } :
+{ lib, config, foxDenLib, ... }:
 let
   wireguardType = with lib.types; submodule {
     options = {

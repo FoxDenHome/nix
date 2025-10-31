@@ -1,4 +1,4 @@
-{ lib, config, sops-nix, ... } :
+{ lib, config, sops-nix, ... }:
 let
   sharedSopsFile = ../../secrets/shared.yaml;
 

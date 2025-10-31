@@ -1,4 +1,4 @@
-{ lib, pkgs, ... } :
+{ pkgs, ... }:
 pkgs.stdenv.mkDerivation {
   name = "foxden-minecraft";
   version = "1.0.0";

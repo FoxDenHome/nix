@@ -1,4 +1,4 @@
-{ ... } :
+{ ... }:
 {
   users.users.homeassistant = {
     description = "Home Assistant backup user";
