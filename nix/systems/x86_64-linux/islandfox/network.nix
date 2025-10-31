@@ -94,6 +94,7 @@ in
       UseNTP = false;
       UseDomains = false;
       UseHostname = false;
+      UseGateway = false;
     };
 
     dhcpV6Config = {
@@ -108,7 +109,6 @@ in
       UseDNS = false;
       UseGateway = false;
       UseRoutePrefix = false;
-      UseCaptivePortal = false;
     };
 
     linkConfig = {
