@@ -84,39 +84,30 @@ let
 in
 {
   nixosModule = { config, ... }: let
-    protoCfgType = defPort: with lib.types; submodule {
-      options = {
-        host = lib.mkOption {
-          type = nullOr str;
-          default = null;
-        };
-        proxyProtocol = lib.mkOption {
-          type = bool;
-          default = true;
-        };
-        port = lib.mkOption {
-          type = ints.u16;
-          default = defPort;
-        };
-      };
-    };
-
     hostType = with lib.types; submodule {
       options = {
         names = lib.mkOption {
           type = listOf str;
         };
-        http = lib.mkOption {
-          type = protoCfgType 80;
-          default = {};
+        host = lib.mkOption {
+          type = nullOr str;
+          default = null;
         };
-        https = lib.mkOption {
-          type = protoCfgType 443;
-          default = {};
+        httpPort = lib.mkOption {
+          type = ints.u16;
+          default = 80;
+        };
+        httpsPort = lib.mkOption {
+          type = ints.u16;
+          default = 443;
         };
         readyzPath = lib.mkOption {
           type = str;
           default = "/readyz";
+        };
+        proxyProtocol = lib.mkOption {
+          type = bool;
+          default = true;
         };
         gateway = lib.mkOption {
           type = str;
@@ -125,28 +116,21 @@ in
       };
     };
 
-    renderInterface = (hostName: ifaceObj: let
+    renderInterface = (hostName: ifaceObj: hostVal: let
       iface = ifaceObj.value;
       privateIPv4 = lib.findFirst (ip: let
         ipNoCidr = util.removeIPCidr ip;
       in (util.isIPv4 ipNoCidr) && (util.isPrivateIP ipNoCidr)) "" iface.addresses;
-      host = util.removeIPCidr privateIPv4;
     in lib.mkIf (privateIPv4 != "" && iface.webservice.enable) {
       inherit (iface) gateway;
+      inherit (hostVal.webservice) readyzPath proxyProtocol;
       names = map mkHost ([iface.dns] ++ iface.cnames);
-      http = {
-        inherit host;
-        inherit (iface.hostVal.webservice) readyzPath proxyProtocol;
-        port = if iface.hostVal.webservice.proxyProtocol then iface.webservice.httpProxyPort else iface.webservice.httpPort;
-      };
-      https = {
-        inherit host;
-        inherit (iface.hostVal.webservice) readyzPath proxyProtocol;
-        port = if iface.hostVal.webservice.proxyProtocol then iface.webservice.httpsProxyPort else iface.webservice.httpsPort;
-      };
+      host = util.removeIPCidr privateIPv4;
+      httpPort = if hostVal.webservice.proxyProtocol then iface.webservice.httpProxyPort else iface.webservice.httpPort;
+      httpsPort = if hostVal.webservice.proxyProtocol then iface.webservice.httpsProxyPort else iface.webservice.httpsPort;
     });
 
-    renderHost = { name, value }: map (iface: renderInterface name iface) (lib.attrsets.attrsToList value.interfaces);
+    renderHost = { name, value }: map (iface: renderInterface name iface value) (lib.attrsets.attrsToList value.interfaces);
   in
   {
     options.foxDen.haproxy.hosts = with lib.types; lib.mkOption {
