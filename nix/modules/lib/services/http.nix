@@ -205,7 +205,7 @@ in
       confFilePath = "${svc.configDir}/nginx.conf";
       confFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" confFilePath;
 
-      readyzConf = if svcConfig.customReadyz then ''
+      readyzConf = enabled: if enabled then ''
         # Normal /readyz handling disabled
       '' else ''
         location = /readyz {
@@ -238,7 +238,7 @@ in
         # Auto generated config below
         ${mkNginxHandler defaultTarget svcConfig}
       '';
-      baseHttpConfig = first: let
+      baseHttpConfig = readyz: first: let
         proxyOpts = if first then "proxy_protocol" else "";
       in ''
         listen 80;
@@ -254,9 +254,9 @@ in
           js_content acme.challengeResponse;
         }
 
-        ${readyzConf}
+        ${readyzConf readyz}
       '';
-      baseHttpsConfig = first: let
+      baseHttpsConfig = readyz: first: let
         proxyOpts = if first then "proxy_protocol" else "";
         reuseportOpts = if first then "reuseport" else "";
         sslOpts = if first then "ssl" else "";
@@ -278,9 +278,10 @@ in
           js_content acme.challengeResponse;
         }
 
-        ${readyzConf}
+        ${readyzConf readyz}
       '';
-      baseWebConfig = first: if svcConfig.tls then baseHttpsConfig first else baseHttpConfig first;
+      useStockReadyz = !svcConfig.customReadyz;
+      baseWebConfig = first: if svcConfig.tls then baseHttpsConfig useStockReadyz first else baseHttpConfig useStockReadyz first;
 
       normalConfig = ''server {
         server_name ${builtins.concatStringsSep " " hostMatchers};
@@ -330,11 +331,8 @@ in
 
                 server {
                   server_name ${builtins.concatStringsSep " " hostMatchers};
-                  ${baseHttpConfig true}
+                  ${baseHttpConfig true true}
 
-                  location = /readyz {
-                    return 200 "OK";
-                  }
                   location / {
                     return 301 https://$http_host$request_uri;
                   }
