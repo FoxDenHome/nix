@@ -37,6 +37,7 @@ in
         hash = "sha256-FOs4Y6UZWmUHDYWdKoqcU8k6hodISYS03BQkGx76OpU=";
       };
       rawConfig = { baseWebConfig, proxyConfigNoHost, ... }: ''
+        error_log stderr debug;
         server {
           server_name ${svcConfig.syncthingHost};
           ${baseWebConfig true}
@@ -47,8 +48,6 @@ in
           }
         }
         server {
-          access_log syslog:;
-
           server_name ${svcConfig.webdavHost};
           ${baseWebConfig false}
 
