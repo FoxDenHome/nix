@@ -72,7 +72,7 @@ in
       target = ''
         @denied {
           path /v1/*
-          not client_ip private_ranges ${lib.concatStringStep " " kanidmExternalIPs}
+          not client_ip private_ranges ${lib.concatStringsSep " " kanidmExternalIPs}
           not path /v1/auth /v1/auth/* /v1/self /v1/self/* /v1/credential /v1/credential/* /v1/jwk /v1/jwk/* /v1/reauth /v1/reauth/* /v1/oauth2 /v1/oauth2/*
         }
         respond @denied "foxden.network intranet only" 403
