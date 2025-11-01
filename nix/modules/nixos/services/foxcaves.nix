@@ -42,10 +42,7 @@ in
         group = "foxcaves";
       };
 
-      foxDen.hosts.hosts.${svcConfig.host}.webservice = {
-        enable = true;
-        checkUrl = "/api/v1/system/health";
-      };
+      foxDen.hosts.hosts.${svcConfig.host}.webservice.enable = true;
 
       foxDen.services.mysql = {
         enable = true;

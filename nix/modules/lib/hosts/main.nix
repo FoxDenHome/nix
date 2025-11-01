@@ -188,7 +188,7 @@ in
             type = ints.u16;
             default = 443;
           };
-          checkUrl = nixpkgs.lib.mkOption {
+          readyUrl = nixpkgs.lib.mkOption {
             type = str;
             default = "/readyz";
           };
