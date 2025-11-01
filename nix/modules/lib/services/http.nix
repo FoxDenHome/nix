@@ -228,11 +228,13 @@ in
         # Auto generated config below
         ${mkNginxHandler defaultTarget svcConfig}
       '';
-      baseHttpConfig = ''
+      baseHttpConfig = first: let
+        proxyOpts = if first then "proxy_protocol" else "";
+      in ''
         listen 80;
         listen [::]:80;
-        listen 81 proxy_protocol;
-        listen [::]:81 proxy_protocol;
+        listen 81 ${proxyOpts};
+        listen [::]:81 ${proxyOpts};
 
         location @acmePeriodicAuto {
           js_periodic acme.clientAutoMode interval=1m;
@@ -242,13 +244,17 @@ in
           js_content acme.challengeResponse;
         }
       '';
-      baseHttpsConfig = ''
-        listen 443 ssl;
-        listen [::]:443 ssl;
-        listen 443 quic reuseport;
-        listen [::]:443 quic reuseport;
-        listen 444 ssl proxy_protocol;
-        listen [::]:444 ssl proxy_protocol;
+      baseHttpsConfig = first: let
+        proxyOpts = if first then "proxy_protocol" else "";
+        quicOpts = if first then "quic reuseport" else "";
+        sslOpts = if first then "ssl" else "";
+      in ''
+        listen 443 ${sslOpts};
+        listen [::]:443 ${sslOpts};
+        listen 443 ${quicOpts};
+        listen [::]:443 ${quicOpts};
+        listen 444 ${sslOpts} ${proxyOpts};
+        listen [::]:444 ${sslOpts} ${proxyOpts};
         http2 on;
 
         js_set $dynamic_ssl_cert acme.js_cert;
@@ -260,11 +266,11 @@ in
           js_content acme.challengeResponse;
         }
       '';
-      baseWebConfig = if svcConfig.tls then baseHttpsConfig else baseHttpConfig;
+      baseWebConfig = first: if svcConfig.tls then baseHttpsConfig first else baseHttpConfig first;
 
       normalConfig = ''server {
         server_name ${builtins.concatStringsSep " " hostMatchers};
-        ${baseWebConfig}
+        ${baseWebConfig true}
         ${hostConfig}
       }'';
     in
@@ -310,7 +316,7 @@ in
 
                 server {
                   server_name ${builtins.concatStringsSep " " hostMatchers};
-                  ${baseHttpConfig}
+                  ${baseHttpConfig true}
                   location / {
                     return 301 https://$http_host$request_uri;
                   }
