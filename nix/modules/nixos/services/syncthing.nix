@@ -32,6 +32,7 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "http-syncthing";
+      dynamicUser = false;
       modules = [
         pkgs.nginxModules.dav
       ];
@@ -79,7 +80,6 @@ in
 
       systemd.services.http-syncthing = {
         serviceConfig = {
-          DynamicUser = lib.mkForce false;
           User = "syncthing";
           Group = "syncthing";
           BindPaths = [

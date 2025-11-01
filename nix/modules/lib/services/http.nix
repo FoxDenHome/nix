@@ -176,6 +176,7 @@ in
     config,
     svcConfig,
     pkgs,
+    dynamicUser ? true,
     modules ? [],
     rawConfig ? null,
     ...
@@ -332,9 +333,10 @@ in
           systemd.services.${name} = {
             restartTriggers = [ config.environment.etc.${confFileEtc}.text ];
             serviceConfig = {
-              DynamicUser = true;
+              DynamicUser = dynamicUser;
               StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" storageRoot;
               LoadCredential = "nginx.conf:${confFilePath}";
+              BindPaths = if dynamicUser then [ ] else [ storageRoot ];
               BindReadOnlyPaths = [
                 "${pkgs.fetchurl {
                   url = "https://github.com/nginx/njs-acme/releases/download/v1.0.0/acme.js";

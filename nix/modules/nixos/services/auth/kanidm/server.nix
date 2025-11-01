@@ -69,6 +69,7 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "http-kanidm";
+      dynamicUser = false;
       target = ''
         #@denied {
         #  path /v1/*
@@ -153,7 +154,6 @@ in
 
       systemd.services.http-kanidm = {
         serviceConfig = {
-          DynamicUser = lib.mkForce false;
           User = "kanidm";
           Group = "kanidm";
         };

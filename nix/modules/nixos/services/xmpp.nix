@@ -32,11 +32,11 @@ in
       inherit svcConfig pkgs config;
       name = "http-prosody";
       target = "proxy_pass http://127.0.0.1:5280;";
+      dynamicUser = false;
     }).config
     {
       systemd.services.http-prosody = {
         serviceConfig = {
-          DynamicUser = lib.mkForce false;
           User = config.services.prosody.user;
           Group = config.services.prosody.group;
         };
