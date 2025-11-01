@@ -26,6 +26,9 @@ in
         environment = {
           "ENVIRONMENT" = "production";
         };
+        extraOptions = [
+          "-e MYSQL_*"
+        ];
       };
     }).config
     (foxDenLib.services.redis.make {

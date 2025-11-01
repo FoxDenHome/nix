@@ -28,14 +28,12 @@ in
           "HTTP_MODE" = if svcConfig.tls then "https" else "http";
           "TRUSTED_PROXIES" = lib.concatStringsSep " " config.foxDen.services.trustedProxies;
           "SMTP_FROM" = "noreply@${svcConfig.domain}";
-          "MYSQL_HOST" = "127.0.0.1";
-          "MYSQL_PORT" = "3306";
-          "MYSQL_PASSWORD" = "";
-          "MYSQL_DATABASE" = "darksignsonline";
-          "MYSQL_USERNAME" = "darksignsonline";
-        } ++ config.lib.mysql.mkEnvironmentAttrs;
+        };
         environmentFiles = [
           (config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.darksignsonline.path)
+        ];
+        extraOptions = [
+          "-e MYSQL_*"
         ];
       };
     }).config
