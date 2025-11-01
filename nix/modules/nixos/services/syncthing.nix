@@ -47,7 +47,7 @@ in
           }
         }
         server {
-          access_log /dev/stdout;
+          access_log /proc/self/fd/1;
 
           server_name ${svcConfig.webdavHost};
           ${baseWebConfig false}
