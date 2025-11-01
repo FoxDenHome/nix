@@ -124,8 +124,8 @@ in
       inherit (hostVal.webservice) readyzPath proxyProtocol;
       names = map mkHost ([iface.dns] ++ iface.cnames);
       host = util.removeIPCidr privateIPv4;
-      httpPort = if hostVal.webservice.proxyProtocol then iface.webservice.httpProxyPort else iface.webservice.httpPort;
-      httpsPort = if hostVal.webservice.proxyProtocol then iface.webservice.httpsProxyPort else iface.webservice.httpsPort;
+      httpPort = if hostVal.webservice.proxyProtocol then hostVal.webservice.httpProxyPort else hostVal.webservice.httpPort;
+      httpsPort = if hostVal.webservice.proxyProtocol then hostVal.webservice.httpsProxyPort else hostVal.webservice.httpsPort;
     });
 
     renderHost = { name, value }: map (iface: renderInterface name iface value) (lib.attrsets.attrsToList value.interfaces);
