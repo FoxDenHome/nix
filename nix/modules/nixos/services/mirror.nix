@@ -166,7 +166,7 @@ in
 
           serviceConfig = {
             BindReadOnlyPaths = [
-              "${pkgs.foxden-mirror}:/njs"
+              "${pkgs.foxden-mirror}/lib/node_modules/foxden-mirror:/njs"
               "${svcConfig.dataDir}:/data"
             ];
 
