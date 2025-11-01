@@ -28,9 +28,9 @@ let
   mkIfaceRules = interfaces: lib.flatten (
     map (iface: let
       addresses = map util.removeIPCidr iface.addresses;
-      webservice = iface.webservice;
+      webservice = iface.hostVal.webservice;
       webserviceRules =
-        if webservice.enable then
+        if webservice.enable && iface.webservice.enable then
           (if webservice.httpPort > 0 then [{
             port = webservice.httpPort;
             protocol = "tcp";

@@ -125,31 +125,28 @@ in
       };
     };
 
-    renderInterface = (hostName: ifaceObj: let
+    renderInterface = (hostName: ifaceObj: hostVal: let
       iface = ifaceObj.value;
       privateIPv4 = lib.findFirst (ip: let
         ipNoCidr = util.removeIPCidr ip;
       in (util.isIPv4 ipNoCidr) && (util.isPrivateIP ipNoCidr)) "" iface.addresses;
       host = util.removeIPCidr privateIPv4;
-      proxyProtocol = iface.webservice.proxyProtocol;
     in lib.mkIf (privateIPv4 != "" && iface.webservice.enable) {
       inherit (iface) gateway;
       names = map mkHost ([iface.dns] ++ iface.cnames);
       http = {
         inherit host;
-        inherit proxyProtocol;
-        inherit (iface.webservice) readyzPath;
-        port = if proxyProtocol then iface.webservice.httpProxyPort else iface.webservice.httpPort;
+        inherit (hostVal.webservice) readyzPath proxyProtocol;
+        port = if hostVal.webservice.proxyProtocol then iface.webservice.httpProxyPort else iface.webservice.httpPort;
       };
       https = {
         inherit host;
-        inherit proxyProtocol;
-        inherit (iface.webservice) readyzPath;
-        port = if proxyProtocol then iface.webservice.httpsProxyPort else iface.webservice.httpsPort;
+        inherit (hostVal.webservice) readyzPath proxyProtocol;
+        port = if hostVal.webservice.proxyProtocol then iface.webservice.httpsProxyPort else iface.webservice.httpsPort;
       };
     });
 
-    renderHost = { name, value }: map (iface: renderInterface name iface) (lib.attrsets.attrsToList value.interfaces);
+    renderHost = { name, value }: map (iface: renderInterface name iface value) (lib.attrsets.attrsToList value.interfaces);
   in
   {
     options.foxDen.haproxy.hosts = with lib.types; lib.mkOption {

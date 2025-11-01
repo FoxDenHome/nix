@@ -82,34 +82,6 @@ in
             type = bool;
             default = false;
           };
-          proxyProtocol = nixpkgs.lib.mkOption {
-            type = bool;
-            default = true;
-          };
-          httpPort = nixpkgs.lib.mkOption {
-            type = ints.u16;
-            default = 80;
-          };
-          httpsPort = nixpkgs.lib.mkOption {
-            type = ints.u16;
-            default = 443;
-          };
-          httpProxyPort = nixpkgs.lib.mkOption {
-            type = ints.u16;
-            default = 81;
-          };
-          httpsProxyPort = nixpkgs.lib.mkOption {
-            type = ints.u16;
-            default = 444;
-          };
-          quicPort = nixpkgs.lib.mkOption {
-            type = ints.u16;
-            default = 443;
-          };
-          readyzPath = nixpkgs.lib.mkOption {
-            type = str;
-            default = "/readyz";
-          };
         };
         firewall = {
           ingressAcceptRules = nixpkgs.lib.mkOption {
@@ -186,6 +158,40 @@ in
       options = {
         interfaces = nixpkgs.lib.mkOption {
           type = attrsOf interfaceType;
+        };
+        webservice = {
+          enable = nixpkgs.lib.mkOption {
+            type = bool;
+            default = false;
+          };
+          proxyProtocol = nixpkgs.lib.mkOption {
+            type = bool;
+            default = true;
+          };
+          httpPort = nixpkgs.lib.mkOption {
+            type = ints.u16;
+            default = 80;
+          };
+          httpsPort = nixpkgs.lib.mkOption {
+            type = ints.u16;
+            default = 443;
+          };
+          httpProxyPort = nixpkgs.lib.mkOption {
+            type = ints.u16;
+            default = 81;
+          };
+          httpsProxyPort = nixpkgs.lib.mkOption {
+            type = ints.u16;
+            default = 444;
+          };
+          quicPort = nixpkgs.lib.mkOption {
+            type = ints.u16;
+            default = 443;
+          };
+          readyzPath = nixpkgs.lib.mkOption {
+            type = str;
+            default = "/readyz";
+          };
         };
         nameservers = nixpkgs.lib.mkOption {
           type = listOf str;
