@@ -28,6 +28,7 @@ let
       in if portCfg.host != null then ''
         backend be_${name}
           mode ${mode}
+          http-check send meth GET uri /readyz hdr Host ${primaryHost}
         ${if directives != [] then nixpkgs.lib.concatStringsSep "\n" (map (dir: "  ${dir}") (procHostVars directives)) else ""}
           server srv_main ${portCfg.host}:${builtins.toString portCfg.port} ${nixpkgs.lib.concatStringsSep " " flags}
       '' else "") hosts
@@ -37,7 +38,6 @@ let
       #uid# 980
       #gid# 980
       log stdout format raw local0 info
-      ca-file /etc/ssl/certs/ca-certificates.crt
 
     defaults
       log global
@@ -73,12 +73,10 @@ let
 
     ${renderBackends "http" "http" [
       "option forwardfor"
-      "http-check send meth GET uri /readyz hdr Host __HOST__"
     ] []}
 
-    ${renderBackends "https" "tcp" [
-      "http-check send meth GET uri /readyz hdr Host __HOST__"
-    ] [
+    ${renderBackends "https" "tcp" [ ] [
+      "ca-file /etc/ssl/certs/ca-certificates.crt"
       "check-ssl"
       "check-sni __HOST__"
     ]}
