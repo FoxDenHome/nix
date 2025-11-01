@@ -169,6 +169,9 @@ in
               "${pkgs.foxden-mirror}/lib/node_modules/foxden-mirror:/njs"
               "${svcConfig.dataDir}:/data"
             ];
+            BindPaths = [
+              "/var/lib/foxden/mirror-nginx"
+            ];
 
             DynamicUser = lib.mkForce false;
             User = "mirror";
