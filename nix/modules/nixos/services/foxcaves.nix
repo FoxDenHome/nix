@@ -39,7 +39,10 @@ in
         group = "foxcaves";
       };
 
-      foxDen.hosts.hosts.${svcConfig.host}.webservice.readyzPath = "/v1/system/info";
+      foxDen.hosts.hosts.${svcConfig.host}.webservice = {
+        enable = true;
+        readyzPath = "/v1/system/info";
+      };
 
       foxDen.services.mysql.services = [
         {

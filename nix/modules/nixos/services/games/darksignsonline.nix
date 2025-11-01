@@ -46,6 +46,8 @@ in
         group = "darksignsonline";
       };
 
+      foxDen.hosts.hosts.${svcConfig.host}.webservice.enable = true;
+
       foxDen.services.mysql = {
         enable = true;
         services = [
