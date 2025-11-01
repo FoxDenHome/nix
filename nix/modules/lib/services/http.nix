@@ -177,7 +177,6 @@ in
     svcConfig,
     pkgs,
     modules ? [],
-    webdav ? false,
     rawConfig ? null,
     ...
   }:
@@ -217,7 +216,6 @@ in
       '';
 
       hostConfig = ''
-        # TODO: ${if webdav then "order webdav before file_server" else ""}
         # Custom config can be injected here
         ${inputs.extraConfig or ""}
         # Auto generated config below
