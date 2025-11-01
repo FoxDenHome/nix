@@ -138,11 +138,13 @@ in
       http = {
         inherit host;
         inherit proxyProtocol;
+        inherit (iface.webservice) readyzPath;
         port = if proxyProtocol then iface.webservice.httpProxyPort else iface.webservice.httpPort;
       };
       https = {
         inherit host;
         inherit proxyProtocol;
+        inherit (iface.webservice) readyzPath;
         port = if proxyProtocol then iface.webservice.httpsProxyPort else iface.webservice.httpsPort;
       };
     });
