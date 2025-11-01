@@ -47,6 +47,14 @@ let
         js_content files.index;
     }
 
+    location = /.well-known {
+        return 301 /.well-known/;
+    }
+
+    location /.well-known/ {
+        root /njs/www;
+    }
+
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-Frame-Options "DENY" always;
     add_header Strict-Transport-Security "max-age=31536000; preload; includeSubDomains" always;
