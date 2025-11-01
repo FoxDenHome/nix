@@ -27,8 +27,8 @@ let
         backend be_${name}
           mode ${mode}
           option httpchk
-          http-check send meth GET uri ${host.readyzPath} hdr Host ${primaryHost}
-          http-check expect status 200
+          http-check send meth GET uri ${host.checkUrl} hdr Host ${primaryHost}
+          http-check expect status ${host.checkExpectCode}
         ${if directives != [] then nixpkgs.lib.concatStringsSep "\n" (map (dir: "  ${dir}") (procHostVars directives)) else ""}
           server srv_main ${host.host}:${builtins.toString host."${cfgName}Port"} ${nixpkgs.lib.concatStringsSep " " flags}
       '' else "") hosts
@@ -101,9 +101,13 @@ in
           type = ints.u16;
           default = 443;
         };
-        readyzPath = lib.mkOption {
+        checkUrl = lib.mkOption {
           type = str;
           default = "/readyz";
+        };
+        checkExpectCode = nixpkgs.lib.mkOption {
+          type = ints.positive;
+          default = 200;
         };
         proxyProtocol = lib.mkOption {
           type = bool;
@@ -123,7 +127,7 @@ in
       in (util.isIPv4 ipNoCidr) && (util.isPrivateIP ipNoCidr)) "" iface.addresses;
     in lib.mkIf (privateIPv4 != "" && iface.webservice.enable) {
       inherit (iface) gateway;
-      inherit (hostVal.webservice) readyzPath proxyProtocol;
+      inherit (hostVal.webservice) checkUrl checkExpectCode proxyProtocol;
       names = map mkHost ([iface.dns] ++ iface.cnames);
       host = util.removeIPCidr privateIPv4;
       httpPort = if hostVal.webservice.proxyProtocol then hostVal.webservice.httpProxyPort else hostVal.webservice.httpPort;

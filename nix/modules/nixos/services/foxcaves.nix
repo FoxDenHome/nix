@@ -41,7 +41,7 @@ in
 
       foxDen.hosts.hosts.${svcConfig.host}.webservice = {
         enable = true;
-        readyzPath = "/v1/system/info";
+        checkUrl = "/v1/system/health";
       };
 
       foxDen.services.mysql.services = [

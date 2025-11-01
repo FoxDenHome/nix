@@ -188,9 +188,13 @@ in
             type = ints.u16;
             default = 443;
           };
-          readyzPath = nixpkgs.lib.mkOption {
+          checkUrl = nixpkgs.lib.mkOption {
             type = str;
             default = "/readyz";
+          };
+          checkExpectCode = nixpkgs.lib.mkOption {
+            type = ints.positive;
+            default = 200;
           };
         };
         nameservers = nixpkgs.lib.mkOption {

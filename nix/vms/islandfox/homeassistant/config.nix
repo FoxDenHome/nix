@@ -20,5 +20,6 @@
   webservice = {
     enable = true;
     proxyProtocol = false;
+    checkExpectCode = 301;
   };
 }
