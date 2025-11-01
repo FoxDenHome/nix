@@ -12,8 +12,10 @@ in
       inherit svcConfig pkgs config;
       name = "spaceage-website";
       target = ''
-        root * /web
-        file_server
+        root /web;
+        location / {
+          index index.htm index.html;
+        }
       '';
     }).config
     {
