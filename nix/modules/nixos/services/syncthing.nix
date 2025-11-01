@@ -40,7 +40,6 @@ in
         pkgs.nginxModules.dav
       ];
       rawConfig = { baseWebConfig, proxyConfigNoHost, ... }: ''
-        error_log stderr debug;
         server {
           server_name ${svcConfig.syncthingHost};
           ${baseWebConfig true}
@@ -58,14 +57,10 @@ in
           auth_basic_user_file ${if config.foxDen.sops.available then config.sops.secrets.http-syncthing.path else "/dev/null"};
 
           root /syncthing;
+
           location / {
             log_not_found off;
             autoindex on;
-          }
-          location = /dav  {
-            return 301 /dav/;
-          }
-          location /dav {
             dav_methods PUT DELETE MKCOL COPY MOVE;
             dav_ext_methods PROPFIND OPTIONS;
             create_full_put_path on;
