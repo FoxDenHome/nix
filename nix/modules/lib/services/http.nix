@@ -206,12 +206,12 @@ in
       confFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" confFilePath;
 
       readyzConf = enabled: if enabled then ''
-        # Normal /readyz handling disabled
-      '' else ''
         location = /readyz {
           add_header Content-Type text/plain always;
           return 200 "OK";
         }
+      '' else ''
+        # Normal /readyz handling disabled
       '';
 
       proxyConfigNoHost = ''
