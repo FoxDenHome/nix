@@ -205,12 +205,13 @@ in
       confFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" confFilePath;
 
       defaultTarget = ''
-        proxy_buffering off;
+        proxy_http_version 1.1;
+        proxy_request_buffering off;
+        client_max_body_size 0;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $remote_addr;
         proxy_set_header X-Forwarded-Proto $scheme;
-        client_max_body_size 0;
         ${inputs.target}
       '';
 
