@@ -26,6 +26,7 @@ in
         environment = {
           "DOMAIN" = svcConfig.domain;
           "HTTP_MODE" = if svcConfig.tls then "https" else "http";
+          "TRUSTED_PROXIES" = lib.concatStringsSep " " config.foxDen.services.trustedProxies;
           "SMTP_FROM" = "noreply@${svcConfig.domain}";
           "MYSQL_HOST" = "127.0.0.1";
           "MYSQL_PORT" = "3306";
