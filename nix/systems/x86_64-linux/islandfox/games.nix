@@ -7,6 +7,7 @@ in
     darksignsonline = {
       enable = true;
       domain = "darksignsonline.com";
+      tls = true;
       host = "darksignsonline";
     };
     minecraft = {

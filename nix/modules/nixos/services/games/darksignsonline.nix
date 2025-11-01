@@ -10,6 +10,7 @@ in
       type = lib.types.str;
       description = "Domain name for the service";
     };
+    tls = lib.mkEnabledOption "Enable TLS for the service";
   } // services.mkOptions { svcName = "darksignsonline"; name = "Dark Signs Online"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
@@ -24,6 +25,7 @@ in
         ];
         environment = {
           "DOMAIN" = svcConfig.domain;
+          "HTTP_MODE" = if svcConfig.tls then "https" else "http";
           "SMTP_FROM" = "noreply@${svcConfig.domain}";
           "MYSQL_HOST" = "127.0.0.1";
           "MYSQL_PORT" = "3306";
