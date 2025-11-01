@@ -159,6 +159,7 @@ in
 
   mkOptions = (inputs@{ ... }: with nixpkgs.lib.types; {
     tls = nixpkgs.lib.mkEnableOption "TLS";
+    customReadyz = nixpkgs.lib.mkEnableOption "Don't handle /readyz endpoint for custom health checks";
     oAuth = {
       enable = nixpkgs.lib.mkEnableOption "OAuth2 Proxy";
       bypassInternal = nixpkgs.lib.mkEnableOption "Bypass OAuth for internal requests";
@@ -204,6 +205,14 @@ in
       confFilePath = "${svc.configDir}/nginx.conf";
       confFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" confFilePath;
 
+      readyzConf = if svcConfig.customReadyz then ''
+        # Normal /readyz handling disabled
+      '' else ''
+        location = /readyz {
+          return 200 "OK";
+        }
+      '';
+
       proxyConfigNoHost = ''
         proxy_http_version 1.1;
         proxy_request_buffering off;
@@ -244,6 +253,8 @@ in
         location /.well-known/acme-challenge/ {
           js_content acme.challengeResponse;
         }
+
+        ${readyzConf}
       '';
       baseHttpsConfig = first: let
         proxyOpts = if first then "proxy_protocol" else "";
@@ -266,6 +277,8 @@ in
         location /.well-known/acme-challenge/ {
           js_content acme.challengeResponse;
         }
+
+        ${readyzConf}
       '';
       baseWebConfig = first: if svcConfig.tls then baseHttpsConfig first else baseHttpConfig first;
 
@@ -318,6 +331,10 @@ in
                 server {
                   server_name ${builtins.concatStringsSep " " hostMatchers};
                   ${baseHttpConfig true}
+
+                  location = /readyz {
+                    return 200 "OK";
+                  }
                   location / {
                     return 301 https://$http_host$request_uri;
                   }
