@@ -255,16 +255,9 @@ in
 
       normalConfig = ''server {
         server_name ${builtins.concatStringsSep " " hostMatchers};
-        ${baseHttpConfig}
-        ${if svcConfig.tls then ''location / {
-          return 301 https://$http_host$request_uri;
-        }'' else hostConfig}
-      }''
-      + (if svcConfig.tls then ''server {
-        server_name ${builtins.concatStringsSep " " hostMatchers};
-        ${baseHttpsConfig}
+        ${baseWebConfig}
         ${hostConfig}
-      }'' else "");
+      }'';
     in
     {
       config = (nixpkgs.lib.mkMerge [
@@ -305,9 +298,17 @@ in
                 js_var $njs_acme_directory_uri "https://acme-v02.api.letsencrypt.org/directory";
                 js_shared_dict_zone zone=acme:1m;
                 js_import acme from acme.js;
+
+                server {
+                  server_name ${builtins.concatStringsSep " " hostMatchers};
+                  ${baseHttpConfig}
+                  location / {
+                    return 301 https://$http_host$request_uri;
+                  }
+                }
                 '' else ""}
 
-              ${if rawConfig != null then rawConfig { inherit baseHttpConfig baseHttpsConfig baseWebConfig; } else normalConfig}
+              ${if rawConfig != null then rawConfig { inherit baseWebConfig; } else normalConfig}
               }
             '';
             mode = "0600";
