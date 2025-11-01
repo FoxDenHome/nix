@@ -77,6 +77,8 @@ in
 
       sops.secrets.http-syncthing = config.lib.foxDen.sops.mkIfAvailable {
         mode = "0400";
+        owner = "syncthing";
+        group = "syncthing";
       };
 
       systemd.services.http-syncthing = {
@@ -87,6 +89,10 @@ in
           BindPaths = [
             "${svcConfig.dataDir}:/syncthing"
           ];
+          BindReadOnlyPaths = config.lib.mkIf config.foxDen.sops.available [
+            config.sops.secrets.http-syncthing.path
+          ];
+        };
           EnvironmentFile = [ config.sops.secrets.http-syncthing.path ];
         };
       };
