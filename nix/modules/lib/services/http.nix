@@ -52,7 +52,6 @@ let
             cookie_httponly = true
             cookie_secure = ${secure}
             skip_provider_button = true
-            reverse_proxy = true
             set_xauthrequest = true
 
             client_id = "${svcConfig.oAuth.clientId}"
