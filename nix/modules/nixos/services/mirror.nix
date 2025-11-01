@@ -174,8 +174,6 @@ in
             User = "mirror";
             Group = "mirror";
           };
-
-          wantedBy = [ "multi-user.target" ];
         };
 
         mirror-rsyncd = {
