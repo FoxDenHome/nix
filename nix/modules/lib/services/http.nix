@@ -336,6 +336,7 @@ in
               DynamicUser = dynamicUser;
               StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" storageRoot;
               LoadCredential = "nginx.conf:${confFilePath}";
+              ExecStartPre =[ "${pkgs.coreutils}/bin/mkdir -p ${storageRoot}/acme" ];
               BindPaths = if dynamicUser then [ ] else [ storageRoot ];
               BindReadOnlyPaths = [
                 "${pkgs.fetchurl {
