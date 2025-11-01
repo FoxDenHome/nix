@@ -66,6 +66,8 @@ let
   firewall = foxDenLib.global.firewall.make nixosConfigurations;
   haproxy = foxDenLib.global.haproxy.make nixosConfigurations;
   kanidmOauth2 = foxDenLib.global.config.getAttrSet [ "foxDen" "services" "kanidm" "oauth2" ] nixosConfigurations;
+    # TODO: Go back to uniqueStrings once next NixOS stable
+  kanidmExternalIPs = nixpkgs.lib.lists.unique (foxDenLib.global.config.getList [ "foxDen" "services" "kanidm" "externalIPs" ] nixosConfigurations);
 
   mkSystemConfig = system: {
     name = system.name;
@@ -73,7 +75,7 @@ let
       specialArgs = allLibs // {
         systemArch = system.system;
         hostName = system.name;
-        inherit dnsRecords dhcp firewall haproxy kanidmOauth2;
+        inherit dnsRecords dhcp firewall haproxy kanidmOauth2 kanidmExternalIPs;
       };
       modules = [
         ({ ... }: {

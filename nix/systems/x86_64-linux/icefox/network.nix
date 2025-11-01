@@ -108,6 +108,7 @@ in
     ];
   };
 
+  foxDen.services.kanidm.externalIPs = map foxDenLib.util.removeIPCidr ifcfg.addresses;
   foxDen.hosts.index = 3;
   foxDen.hosts.gateway = "icefox";
   virtualisation.libvirtd.allowedBridges = [ ifcfg.interface ifcfg-foxden.interface ifcfg-routed.interface ];

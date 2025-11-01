@@ -1,4 +1,4 @@
-{ pkgs, lib, config, options, kanidmOauth2, foxDenLib, ... }:
+{ pkgs, lib, config, options, kanidmOauth2, kanidmExternalIPs, foxDenLib, ... }:
 let
   services = foxDenLib.services;
 
@@ -9,44 +9,52 @@ let
   hostName = foxDenLib.global.dns.mkHost primaryInterface.dns;
 in
 {
-  options.foxDen.services.kanidm.server = {
-    enable = lib.mkEnableOption "kanidm server";
+  options.foxDen.services.kanidm = {
+    oauth2 = options.services.kanidm.provision.systems.oauth2;
+    externalIPs = lib.mkOption {
+      type = lib.types.uniq lib.types.str;
+      default = [ ];
+      description = "List of external IPs that will access kanidm internal endpoints.";
+    };
+    server = {
+      enable = lib.mkEnableOption "kanidm server";
   } // (services.http.mkOptions { svcName = "kanidm"; name = "Kanidm server"; });
-
-  options.foxDen.services.kanidm.oauth2 = options.services.kanidm.provision.systems.oauth2;
-
-  options.services.kanidm.provision.groups = lib.mkOption {
-    type = lib.types.attrsOf (
-      lib.types.submodule (groupSubmod: {
-        options = {
-          enableUnix = lib.mkEnableOption "manage UNIX attributes";
-          gidNumber = lib.mkOption {
-            type = lib.types.nullOr lib.types.ints.u32;
-            default = null;
-            description = "GID number for UNIX group.";
-          };
-        };
-      })
-    );
   };
-  options.services.kanidm.provision.persons = lib.mkOption {
-    type = lib.types.attrsOf (
-      lib.types.submodule (groupSubmod: {
-        options = {
-          enableUnix = lib.mkEnableOption "manage UNIX attributes";
-          gidNumber = lib.mkOption {
-            type = lib.types.nullOr lib.types.ints.u32;
-            default = null;
-            description = "GID number for UNIX group.";
+
+  options.services.kanidm.provision = {
+    groups = lib.mkOption {
+      type = lib.types.attrsOf (
+        lib.types.submodule (groupSubmod: {
+          options = {
+            enableUnix = lib.mkEnableOption "manage UNIX attributes";
+            gidNumber = lib.mkOption {
+              type = lib.types.nullOr lib.types.ints.u32;
+              default = null;
+              description = "GID number for UNIX group.";
+            };
           };
-          loginShell = lib.mkOption {
-            type = lib.types.nullOr lib.types.str;
-            default = null;
-            description = "Login shell for UNIX user.";
+        })
+      );
+    };
+    persons = lib.mkOption {
+      type = lib.types.attrsOf (
+        lib.types.submodule (groupSubmod: {
+          options = {
+            enableUnix = lib.mkEnableOption "manage UNIX attributes";
+            gidNumber = lib.mkOption {
+              type = lib.types.nullOr lib.types.ints.u32;
+              default = null;
+              description = "GID number for UNIX group.";
+            };
+            loginShell = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = "Login shell for UNIX user.";
+            };
           };
-        };
-      })
-    );
+        })
+      );
+    };
   };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
@@ -62,12 +70,12 @@ in
       inherit svcConfig pkgs config;
       name = "caddy-kanidm";
       target = ''
-        #@denied {
-        #  path /v1/*
-        #  not client_ip private_ranges
-        #  not path /v1/auth /v1/auth/* /v1/self /v1/self/* /v1/credential /v1/credential/* /v1/jwk /v1/jwk/* /v1/reauth /v1/reauth/* /v1/oauth2 /v1/oauth2/*
-        #}
-        #respond @denied "foxden.network intranet only" 403
+        @denied {
+          path /v1/*
+          not client_ip private_ranges ${lib.concatStringStep " " kanidmExternalIPs}
+          not path /v1/auth /v1/auth/* /v1/self /v1/self/* /v1/credential /v1/credential/* /v1/jwk /v1/jwk/* /v1/reauth /v1/reauth/* /v1/oauth2 /v1/oauth2/*
+        }
+        respond @denied "foxden.network intranet only" 403
 
         reverse_proxy https://127.0.0.1:8443 {
           transport http {
