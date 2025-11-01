@@ -181,7 +181,7 @@ in
 
       package = pkgs.nginxQuic.override {
         modules = [
-          pkgs.nginxModules.acme
+          pkgs.nginxModules.njs
         ] ++ modules;
       };
 
@@ -220,6 +220,14 @@ in
         listen [::]:80;
         listen 81 proxy_protocol;
         listen [::]:81 proxy_protocol;
+
+        location @acmePeriodicAuto {
+          js_periodic acme.clientAutoMode interval=1m;
+        }
+
+        location /.well-known/acme-challenge/ {
+          js_content acme.challengeResponse;
+        }
       '';
       baseHttpsConfig = ''
         listen 443 ssl;
@@ -228,41 +236,30 @@ in
         listen [::]:443 quic reuseport;
         listen 444 ssl proxy_protocol;
         listen [::]:444 ssl proxy_protocol;
+        http2 on;
 
-        acme_certificate main;
-        ssl_certificate $acme_certificate;
-        ssl_certificate_key $acme_certificate_key;
-        # do not parse the certificate on each request
-        ssl_certificate_cache max=2;
+        js_set $dynamic_ssl_cert acme.js_cert;
+        js_set $dynamic_ssl_key acme.js_key;
+        ssl_certificate data:$dynamic_ssl_cert;
+        ssl_certificate_key data:$dynamic_ssl_key;
+
+        location /.well-known/acme-challenge/ {
+          js_content acme.challengeResponse;
+        }
       '';
       baseWebConfig = if svcConfig.tls then baseHttpsConfig else baseHttpConfig;
 
       normalConfig = ''server {
         server_name ${builtins.concatStringsSep " " hostMatchers};
-
         ${baseHttpConfig}
-
         ${if svcConfig.tls then ''location / {
           return 301 https://$http_host$request_uri;
         }'' else hostConfig}
       }''
       + (if svcConfig.tls then ''server {
         server_name ${builtins.concatStringsSep " " hostMatchers};
-
-        listen 443 ssl;
-        listen [::]:443 ssl;
-        listen 443 quic reuseport;
-        listen [::]:443 quic reuseport;
-        listen 444 ssl proxy_protocol;
-        listen [::]:444 ssl proxy_protocol;
-
-        acme_certificate main;
-        ssl_certificate $acme_certificate;
-        ssl_certificate_key $acme_certificate_key;
-        # do not parse the certificate on each request
-        ssl_certificate_cache max=2;
-
-      ${hostConfig}
+        ${baseHttpsConfig}
+        ${hostConfig}
       }'' else "");
     in
     {
@@ -291,15 +288,20 @@ in
                 keepalive_timeout 65;
 
                 resolver ${nixpkgs.lib.strings.concatStringsSep " " (map foxDenLib.util.bracketIPv6 host.nameservers)};
-              ${foxDenLib.nginx.mkProxiesText "  " config}
 
-                acme_issuer main {
-                    uri         https://acme-v02.api.letsencrypt.org/directory;
-                    contact     ssl@foxden.network;
-                    state_path  ${storageRoot}/acme-main;
-                    accept_terms_of_service;
-                }
-                acme_shared_zone zone=ngx_acme_shared:1M;
+                ${foxDenLib.nginx.mkProxiesText "  " config}
+
+                js_path "/njs/";
+                js_fetch_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
+
+                ${if svcConfig.tls then ''
+                js_var $njs_acme_server_names "${builtins.concatStringsSep " " hostMatchers}";
+                js_var $njs_acme_account_email "ssl@foxden.network";
+                js_var $njs_acme_dir "${storageRoot}/acme";
+                js_var $njs_acme_directory_uri "https://acme-v02.api.letsencrypt.org/directory";
+                js_shared_dict_zone zone=acme:1m;
+                js_import acme from acme.js;
+                '' else ""}
 
               ${if rawConfig != null then rawConfig { inherit baseHttpConfig baseHttpsConfig baseWebConfig; } else normalConfig}
               }
@@ -313,6 +315,12 @@ in
               DynamicUser = true;
               StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" storageRoot;
               LoadCredential = "nginx.conf:${confFilePath}";
+              BindReadOnlyPaths = [
+                "${pkgs.fetchurl {
+                  url = "https://github.com/nginx/njs-acme/releases/download/v1.0.0/acme.js";
+                  hash = "sha256-Gu+3Ca/C7YHAf7xfarZYeC/pnohWnuho4l06bx5TVcs=";
+                }}:/njs/acme.js"
+              ];
               ExecStart = "${package}/bin/nginx -e stderr -c \"\${CREDENTIALS_DIRECTORY}/nginx.conf\"";
             };
             wantedBy = ["multi-user.target"];
