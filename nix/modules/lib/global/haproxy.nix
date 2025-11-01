@@ -46,7 +46,6 @@ let
       timeout connect 5s
       option dontlognull
       option httpchk
-      http-check send meth GET uri /readyz hdr Host __HOST__
       http-check expect status 200
 
     frontend fe_stats
@@ -74,9 +73,12 @@ let
 
     ${renderBackends "http" "http" [
       "option forwardfor"
+      "http-check send meth GET uri /readyz hdr Host __HOST__"
     ] []}
 
-    ${renderBackends "https" "tcp" [ ] [
+    ${renderBackends "https" "tcp" [
+      "http-check send meth GET uri /readyz hdr Host __HOST__"
+    ] [
       "check-ssl"
       "check-sni __HOST__"
     ]}
