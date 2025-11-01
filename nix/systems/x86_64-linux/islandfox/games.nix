@@ -50,11 +50,7 @@ in
           name = "www.darksignsonline.com";
         }
       ];
-      webservice = {
-        enable = true;
-        httpProxyPort = 80;
-        httpsProxyPort = 443;
-      };
+      webservice.enable = true;
       addresses = [
         "10.3.10.15/16"
         "fd2c:f4cb:63be:3::a0f/64"
