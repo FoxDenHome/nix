@@ -98,7 +98,7 @@ let
     }
   '' else "");
 
-  mkCaddyHandler = (handler: svcConfig: if (svcConfig.oAuth.enable && (!svcConfig.oAuth.overrideService)) then ''
+  mkNginxHandler = (handler: svcConfig: if (svcConfig.oAuth.enable && (!svcConfig.oAuth.overrideService)) then ''
     handle /oauth2/* {
       reverse_proxy 127.0.0.1:4180 {
         header_up X-Real-IP {remote_host}
@@ -166,7 +166,7 @@ in
     config,
     svcConfig,
     pkgs,
-    package ? pkgs.caddy,
+    package ? pkgs.nginx,
     webdav ? false,
     rawConfig ? null,
     ...
@@ -174,83 +174,108 @@ in
     let
       name = inputs.name;
 
-      caddyStorageRoot = "/var/lib/foxden/${name}";
+      storageRoot = "/var/lib/foxden/${name}";
 
       host = foxDenLib.hosts.getByName config svcConfig.host;
-      matchPrefix = if svcConfig.tls then "" else "http://";
 
       # TODO: Go back to uniqueStrings once next NixOS stable
-      dnsMatchers = nixpkgs.lib.lists.unique (nixpkgs.lib.flatten (map (iface:
-                      (map (dns: "${matchPrefix}${foxDenLib.global.dns.mkHost dns}") ([iface.dns] ++ iface.cnames)))
+      hostMatchers = nixpkgs.lib.lists.unique (nixpkgs.lib.flatten (map (iface:
+                      (map foxDenLib.global.dns.mkHost ([iface.dns] ++ iface.cnames)))
                         (nixpkgs.lib.filter (iface: iface.dns.name != "")
                           (nixpkgs.lib.attrsets.attrValues host.interfaces))));
 
       svc = services.mkNamed name inputs;
-      caddyFilePath = "${svc.configDir}/Caddyfile";
+      confFilePath = "${svc.configDir}/nginx.conf";
+      confFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" confFilePath;
 
-      trustedProxies = config.foxDen.services.trustedProxies;
-      mkTrustedProxies = (prefix:
-                          if (builtins.length trustedProxies) > 0
-                            then (prefix + " " + (nixpkgs.lib.strings.concatStringsSep " " trustedProxies))
-                            else "#${prefix} none");
+      hostConfig = ''
+        # TODO: ${if webdav then "order webdav before file_server" else ""}
+        # Custom config can be injected here
+        ${inputs.extraConfig or ""}
+        # Auto generated config below
+        ${mkNginxHandler inputs.target svcConfig}
+      '';
 
-      caddyFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" caddyFilePath;
+      normalConfig = ''server {
+        server_name ${builtins.concatStringsSep " " hostMatchers};
+
+        listen 80;
+        listen [::]:80;
+        listen 81 proxy_protocol;
+        listen [::]:81 proxy_protocol;
+
+        ${if svcConfig.tls then ''location / {
+          return 301 https://$http_host$request_uri;
+        }'' else hostConfig}
+      }''
+      + (if svcConfig.tls then ''server {
+        server_name ${builtins.concatStringsSep " " hostMatchers};
+
+        listen 443 ssl;
+        listen [::]:443 ssl;
+        listen 443 quic reuseport;
+        listen [::]:443 quic reuseport;
+        listen 444 ssl proxy_protocol;
+        listen [::]:444 ssl proxy_protocol;
+
+        acme_certificate main;
+        ssl_certificate $acme_certificate;
+        ssl_certificate_key $acme_certificate_key;
+        # do not parse the certificate on each request
+        ssl_certificate_cache max=2;
+
+      ${hostConfig}
+      }'' else "");
     in
     {
       config = (nixpkgs.lib.mkMerge [
         svc.config
         (nixpkgs.lib.mkIf (svcConfig.oAuth.enable && (!svcConfig.oAuth.overrideService)) (mkOauthProxy inputs).config)
         {
-          environment.etc.${caddyFileEtc} = {
+          environment.etc.${confFileEtc} = {
             text = ''
-              {
-                storage file_system {
-                  root ${caddyStorageRoot}
-                }
-                servers {
-                  listener_wrappers {
-                    proxy_protocol {
-                      timeout 5s
-                      ${mkTrustedProxies "allow"}
-                    }
-                    tls
-                  }
-                  trusted_proxies_strict
-                  ${mkTrustedProxies "trusted_proxies static"}
-                }
-                ${if webdav then "order webdav before file_server" else ""}
+              worker_processes auto;
+
+              error_log stderr notice;
+              pid /tmp/nginx.pid;
+
+              events {
+                  worker_connections  1024;
               }
 
-              http:// {
-                # Required dummy empty section
+              http {
+                access_log off;
+
+                include mime.types;
+                default_type application/octet-stream;
+
+                sendfile on;
+                keepalive_timeout 65;
+
+                resolver ${nixpkgs.lib.strings.concatStringsSep " " (map foxDenLib.util.bracketIPv6 host.nameservers)};
+              ${foxDenLib.nginx.mkProxiesText "  " config}
+
+                acme_issuer main {
+                    uri         https://acme-v02.api.letsencrypt.org/directory;
+                    contact     ssl@foxden.network;
+                    state_path  ${storageRoot}/acme-main;
+                    accept_terms_of_service;
+                }
+                acme_shared_zone zone=ngx_acme_shared:1M;
+
+              ${if rawConfig != null then rawConfig else normalConfig}
               }
-            ''
-            + (if rawConfig != null then rawConfig else ''
-              ${builtins.concatStringsSep ", " dnsMatchers} {
-                # Custom config can be injected here
-                ${inputs.extraConfig or ""}
-                # Auto generated config below
-                ${mkCaddyHandler inputs.target svcConfig}
-              }
-            '');
+            '';
             mode = "0600";
           };
 
           systemd.services.${name} = {
-            restartTriggers = [ config.environment.etc.${caddyFileEtc}.text ];
+            restartTriggers = [ config.environment.etc.${confFileEtc}.text ];
             serviceConfig = {
               DynamicUser = true;
-
-              StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" caddyStorageRoot;
-
-              LoadCredential = "Caddyfile:${caddyFilePath}";
-              Environment = [
-                "\"XDG_CONFIG_HOME=${caddyStorageRoot}\""
-                "\"XDG_DATA_HOME=${caddyStorageRoot}\""
-                "\"HOME=${caddyStorageRoot}\""
-              ];
-
-              ExecStart = "${package}/bin/caddy run --config \"\${CREDENTIALS_DIRECTORY}/Caddyfile\"";
+              StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" storageRoot;
+              LoadCredential = "nginx.conf:${confFilePath}";
+              ExecStart = "${package}/bin/nginx -c \"\${CREDENTIALS_DIRECTORY}/nginx.conf\"";
             };
             wantedBy = ["multi-user.target"];
           };
