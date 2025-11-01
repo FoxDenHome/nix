@@ -18,15 +18,17 @@ let
         "  use_backend be_${name} if acl_${name}"
       ] else []) hosts)));
 
-    renderBackends = (cfgName: mode: options: nixpkgs.lib.concatStringsSep "\n" (
+    renderBackends = (cfgName: mode: directives: addFlags: nixpkgs.lib.concatStringsSep "\n" (
       map (host: let
+        primaryHost = nixpkgs.lib.lists.head host.names;
+        procHostVars = vals: map (val: nixpkgs.lib.replaceString "__HOST__" primaryHost val) vals;
         portCfg = host.${cfgName};
-        name = "${cfgName}_${nixpkgs.lib.lists.head host.names}";
-        flags = ["check"] ++ (if portCfg.proxyProtocol then ["send-proxy-v2"] else []);
+        name = "${cfgName}_${primaryHost}";
+        flags = ["check"] ++ (procHostVars addFlags) ++ (if portCfg.proxyProtocol then ["send-proxy-v2"] else []);
       in if portCfg.host != null then ''
         backend be_${name}
           mode ${mode}
-        ${if options != [] then nixpkgs.lib.concatStringsSep "\n" (map (opt: "  option ${opt}") options) else ""}
+        ${if directives != [] then nixpkgs.lib.concatStringsSep "\n" (map (dir: "  ${dir}") (procHostVars directives)) else ""}
           server srv_main ${portCfg.host}:${builtins.toString portCfg.port} ${nixpkgs.lib.concatStringsSep " " flags}
       '' else "") hosts
     ));
@@ -42,6 +44,9 @@ let
       timeout server 30s
       timeout connect 5s
       option dontlognull
+      option httpchk
+      http-check send meth GET uri /readyz hdr Host __HOST__
+      http-check expect status 200
 
     frontend fe_stats
       mode http
@@ -66,9 +71,14 @@ let
       option httplog
     ${renderMatchers "http" "hdr(host)"}
 
-    ${renderBackends "http" "http" ["forwardfor"]}
+    ${renderBackends "http" "http" [
+      "option forwardfor"
+    ] []}
 
-    ${renderBackends "https" "tcp" ["ssl-hello-chk"]}
+    ${renderBackends "https" "tcp" [ ] [
+      "check-ssl"
+      "check-sni __HOST__"
+    ]}
   '';
 in
 {
