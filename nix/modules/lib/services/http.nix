@@ -203,27 +203,31 @@ in
       confFilePath = "${svc.configDir}/nginx.conf";
       confFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" confFilePath;
 
-      defaultTarget = ''
+      proxyConfigNoHost = ''
         proxy_http_version 1.1;
         proxy_request_buffering off;
         proxy_buffering off;
         fastcgi_request_buffering off;
         fastcgi_buffering off;
         client_max_body_size 0;
-        proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $remote_addr;
         proxy_set_header X-Forwarded-Proto $scheme;
+      '';
+      proxyConfig = ''
+        ${proxyConfigNoHost}
+        proxy_set_header Host $host;
+      '';
+      defaultTarget = ''
+        ${proxyConfig}
         ${inputs.target}
       '';
-
       hostConfig = ''
         # Custom config can be injected here
         ${inputs.extraConfig or ""}
         # Auto generated config below
         ${mkNginxHandler defaultTarget svcConfig}
       '';
-
       baseHttpConfig = ''
         listen 80;
         listen [::]:80;
@@ -313,7 +317,7 @@ in
                 }
                 '' else ""}
 
-              ${if rawConfig != null then rawConfig { inherit baseWebConfig; } else normalConfig}
+              ${if rawConfig != null then rawConfig { inherit baseWebConfig proxyConfig proxyConfigNoHost; } else normalConfig}
               }
             '';
             mode = "0600";

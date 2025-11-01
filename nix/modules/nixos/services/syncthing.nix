@@ -36,12 +36,15 @@ in
         plugins = [ "github.com/mholt/caddy-webdav@v0.0.0-20250805175825-7a5c90d8bf90" ];
         hash = "sha256-FOs4Y6UZWmUHDYWdKoqcU8k6hodISYS03BQkGx76OpU=";
       };
-      rawConfig = { baseWebConfig, ... }: ''
+      rawConfig = { baseWebConfig, proxyConfigNoHost, ... }: ''
         server {
           server_name ${svcConfig.syncthingHost};
           ${baseWebConfig}
-          proxy_pass http://127.0.0.1:8384;
-          proxy_set_header Host localhost;
+          location / {
+            proxy_pass http://127.0.0.1:8384;
+            ${proxyConfigNoHost}
+            proxy_set_header Host localhost;
+          }
         }
         server {
           server_name ${svcConfig.webdavHost};

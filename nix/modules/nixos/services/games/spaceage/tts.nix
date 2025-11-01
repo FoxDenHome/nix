@@ -15,7 +15,7 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "http-spaceage-tts";
-      target = "proxy_pass 127.0.0.1:8000;";
+      target = "proxy_pass http://127.0.0.1:8000;";
     }).config
     {
       systemd.services.spaceage-tts = {
