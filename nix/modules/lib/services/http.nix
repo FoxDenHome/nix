@@ -303,7 +303,7 @@ in
 
                 ${foxDenLib.nginx.mkProxiesText "  " config}
 
-                js_path "/njs/";
+                js_path "/njs/lib/";
                 js_fetch_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
 
                 ${if svcConfig.tls then ''
@@ -339,7 +339,7 @@ in
                 "${pkgs.fetchurl {
                   url = "https://github.com/nginx/njs-acme/releases/download/v1.0.0/acme.js";
                   hash = "sha256-Gu+3Ca/C7YHAf7xfarZYeC/pnohWnuho4l06bx5TVcs=";
-                }}:/njs/acme.js"
+                }}:/njs/lib/acme.js"
               ];
               ExecStart = "${package}/bin/nginx -g 'daemon off;' -e stderr -c \"\${CREDENTIALS_DIRECTORY}/nginx.conf\"";
             };

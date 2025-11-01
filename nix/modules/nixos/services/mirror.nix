@@ -1,19 +1,11 @@
 { foxDenLib, pkgs, lib, config, ... }:
 let
-  util = foxDenLib.util;
   services = foxDenLib.services;
 
   svcConfig = config.foxDen.services.mirror;
   hostCfg = foxDenLib.hosts.getByName config svcConfig.host;
   primaryInterfaceName = lib.lists.head (lib.attrsets.attrNames hostCfg.interfaces);
   primaryInterface = hostCfg.interfaces.${primaryInterfaceName};
-
-  nginxPkg = pkgs.nginxQuic.override {
-    modules = [
-      pkgs.nginxModules.njs
-      pkgs.nginxModules.fancyindex
-    ];
-  };
 
   svcRootName = lib.strings.removePrefix "mirror." primaryInterface.dns.name;
 
@@ -32,6 +24,11 @@ let
       };
     };
   };
+
+  jsIndexConf = ''
+    set $request_original_filename $request_filename;
+    index /_dori-static/_js/index;
+  '';
 in
 {
   options.foxDen.services.mirror = {
@@ -56,8 +53,74 @@ in
   } // (services.http.mkOptions { svcName = "mirror"; name = "Mirror server"; });
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
-    (services.make {
+    (services.http.make {
       name = "mirror-nginx";
+      modules = [
+        pkgs.nginxModules.njs
+        pkgs.nginxModules.fancyindex
+      ];
+      rawConfig = { baseWebConfig, proxyConfigNoHost, ... }: ''
+        js_shared_dict_zone zone=render_cache:1m;
+        js_import files from files.js;
+        js_var $root_domain "${svcRootName}";
+        js_var $arch_mirror_id "${svcConfig.archMirrorId}";
+
+        server {
+          server_name mirror.${svcRootName};
+          ${ baseWebConfig true }
+
+          root /data;
+
+          set $jsindex_ignore "/archlinux /cachyos";
+          set $jsindex_header "/njs/templates/mirror_header.html";
+          set $jsindex_entry "/njs/templates/entry.html";
+          set $jsindex_footer "/njs/templates/footer.html";
+
+          location /archlinux/ {
+            rewrite ^/archlinux/(.*)$  https://archlinux.__ROOT_DOMAIN__/$1 redirect;
+          }
+
+          location /cachyos/ {
+            rewrite ^/cachyos/(.*)$  https://cachyos.__ROOT_DOMAIN__/$1 redirect;
+          }
+
+          location / {
+            log_not_found off;
+            ${jsIndexConf}
+          }
+        }
+
+        server {
+          server_name archlinux.${svcRootName};
+          ${ baseWebConfig false }
+          root /data/archlinux;
+
+          set $jsindex_ignore "";
+          set $jsindex_header "/njs/templates/archlinux_header.html";
+          set $jsindex_entry "/njs/templates/entry.html";
+          set $jsindex_footer "/njs/templates/footer.html";
+
+          location / {
+            log_not_found off;
+            ${jsIndexConf}
+          }
+        }
+
+        server {
+          server_name cachyos.${svcRootName};
+          ${ baseWebConfig false }
+          root /data/cachyos;
+
+          location / {
+            log_not_found off;
+            fancyindex on;
+            fancyindex_exact_size off;
+            fancyindex_header "/.theme/header.html";
+            fancyindex_footer "/.theme/footer.html";
+            fancyindex_show_path off;
+          }
+        }
+      '';
       inherit svcConfig pkgs config;
     }).config
     (services.make {
@@ -103,27 +166,13 @@ in
 
           serviceConfig = {
             BindReadOnlyPaths = [
-              "${foxDenLib.nginx.mkProxiesConf config}:/etc/nginx/proxies.conf"
               "${pkgs.foxden-mirror}:/njs"
               "${svcConfig.dataDir}:/data"
             ];
 
-            Environment = [
-              "\"ROOT_DOMAIN=${svcRootName}\""
-              "\"ARCH_MIRROR_ID=${svcConfig.archMirrorId}\""
-              "\"RESOLVERS=${lib.strings.concatStringsSep " " (map util.bracketIPv6 hostCfg.nameservers)}\""
-            ];
-
+            DynamicUser = lib.mkForce false;
             User = "mirror";
             Group = "mirror";
-
-            ExecStartPre = [
-              "${pkgs.coreutils}/bin/mkdir -p /var/lib/mirror/ssl"
-              "${pkgs.nodejs_24}/bin/node /njs/lib/util/renderconf.js"
-            ];
-            ExecStart = [ "${nginxPkg}/bin/nginx -g 'daemon off;' -p /tmp/ngxconf -c nginx.conf" ];
-
-            StateDirectory = "mirror";
           };
 
           wantedBy = [ "multi-user.target" ];
