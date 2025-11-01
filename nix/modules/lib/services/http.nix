@@ -278,7 +278,7 @@ in
               http {
                 access_log off;
 
-                include mime.types;
+                include ${pkgs.nginx}/conf/mime.types;
                 default_type application/octet-stream;
 
                 sendfile on;
