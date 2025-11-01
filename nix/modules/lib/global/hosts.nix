@@ -4,7 +4,7 @@ let
   globalConfig = foxDenLib.global.config;
 
   getInterfaces = nixosConfigurations: getInterfacesFromHosts (globalConfig.getAttrSet ["foxDen" "hosts" "hosts"] nixosConfigurations);
-  getInterfacesFromHosts = hosts: lib.flatten (map (host: map (iface: iface.value // { name = iface.name; host = host.name; hostVal = host; }) (lib.attrsets.attrsToList host.value.interfaces)) (lib.attrsets.attrsToList hosts));
+  getInterfacesFromHosts = hosts: lib.flatten (map (host: map (iface: iface.value // { name = iface.name; host = host.name; }) (lib.attrsets.attrsToList host.value.interfaces)) (lib.attrsets.attrsToList hosts));
 in
 {
   inherit getInterfaces getInterfacesFromHosts;

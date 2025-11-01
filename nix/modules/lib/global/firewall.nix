@@ -25,10 +25,10 @@ let
     dstport = fwd.port;
     toAddresses = fwd.target;
   }) portForwards;
-  mkIfaceRules = interfaces: lib.flatten (
+  mkIfaceRules = config: interfaces: lib.flatten (
     map (iface: let
       addresses = map util.removeIPCidr iface.addresses;
-      webservice = iface.hostVal.webservice;
+      webservice = config.foxDen.hosts.hosts.${iface.host}.webservice;
       webserviceRules =
         if webservice.enable && iface.webservice.enable then
           (if webservice.httpPort > 0 then [{
@@ -230,6 +230,6 @@ in
     config.foxDen.firewall.portForwards = mkIfacePF (foxDenLib.global.hosts.getInterfacesFromHosts config.foxDen.hosts.hosts);
 
     config.foxDen.firewall.rules = (mkPFRules config.foxDen.firewall.portForwards)
-      ++ (mkIfaceRules (foxDenLib.global.hosts.getInterfacesFromHosts config.foxDen.hosts.hosts));
+      ++ (mkIfaceRules config (foxDenLib.global.hosts.getInterfacesFromHosts config.foxDen.hosts.hosts));
   };
 }
