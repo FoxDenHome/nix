@@ -171,13 +171,19 @@ in
     config,
     svcConfig,
     pkgs,
-    package ? pkgs.nginx,
+    modules ? [],
     webdav ? false,
     rawConfig ? null,
     ...
   }:
     let
       name = inputs.name;
+
+      package = pkgs.nginxQuic.override {
+        modules = [
+          pkgs.nginxModules.acme
+        ] ++ modules;
+      };
 
       storageRoot = "/var/lib/foxden/${name}";
 
@@ -278,7 +284,7 @@ in
               http {
                 access_log off;
 
-                include ${pkgs.nginx}/conf/mime.types;
+                include ${package}/conf/mime.types;
                 default_type application/octet-stream;
 
                 sendfile on;
