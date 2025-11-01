@@ -14,14 +14,10 @@ in
   foxDen.hosts.hosts = {
     doridian-website = mkVlanHost 2 {
       dns = {
-        name = "website.foxden.network";
+        name = "doridian.net";
         dynDns = true;
       };
       cnames = [
-        {
-          name = "doridian.net";
-          type = "ALIAS";
-        }
         {
           name = "www.doridian.net";
         }

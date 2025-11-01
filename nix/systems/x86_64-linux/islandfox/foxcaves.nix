@@ -13,7 +13,7 @@ in
   foxDen.hosts.hosts = {
     foxcaves = mkVlanHost 3 {
       dns = {
-        name = "foxcaves.foxden.network";
+        name = "foxcav.es";
         dynDns = true;
       };
       cnames = [
@@ -23,10 +23,6 @@ in
         }
         {
           name = "www.f0x.es";
-        }
-        {
-          name = "foxcav.es";
-          type = "ALIAS";
         }
         {
           name = "www.foxcav.es";

@@ -38,14 +38,10 @@ in
   foxDen.hosts.hosts = {
     darksignsonline = mkVlanHost 3 {
       dns = {
-        name = "darksignsonline.foxden.network";
+        name = "darksignsonline.com";
         dynDns = true;
       };
       cnames = [
-        {
-          name = "darksignsonline.com";
-          type = "ALIAS";
-        }
         {
           name = "www.darksignsonline.com";
         }
@@ -138,17 +134,13 @@ in
     };
     spaceage-website = mkVlanHost 3 {
       dns = {
-        name = "spaceage-website.foxden.network";
+        name = "spaceage.mp";
         dynDns = true;
       };
       webservice.enable = true;
       cnames = [
         {
           name = "www.spaceage.mp";
-        }
-        {
-          name = "spaceage.mp";
-          type = "ALIAS";
         }
       ];
       addresses = [
