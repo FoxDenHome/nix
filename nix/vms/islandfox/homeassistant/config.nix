@@ -17,9 +17,5 @@
       "fd2c:f4cb:63be:2::c02/64"
     ];
   };
-  webservice = {
-    enable = true;
-    proxyProtocol = false;
-    checkExpectCode = 301;
-  };
+  webservice.enable = true;
 }
