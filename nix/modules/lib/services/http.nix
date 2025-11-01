@@ -246,13 +246,13 @@ in
       '';
       baseHttpsConfig = first: let
         proxyOpts = if first then "proxy_protocol" else "";
-        quicOpts = if first then "quic reuseport" else "";
+        reuseportOpts = if first then "reuseport" else "";
         sslOpts = if first then "ssl" else "";
       in ''
         listen 443 ${sslOpts};
         listen [::]:443 ${sslOpts};
-        listen 443 ${quicOpts};
-        listen [::]:443 ${quicOpts};
+        listen 443 quic ${reuseportOpts};
+        listen [::]:443 quic ${reuseportOpts};
         listen 444 ${sslOpts} ${proxyOpts};
         listen [::]:444 ${sslOpts} ${proxyOpts};
         http2 on;
