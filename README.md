@@ -75,15 +75,6 @@ I am not sure whether I plan to instrument RouterOS enough to make this possible
 	- LAN: 10 GbE (SFP+)
 	- WAN: 2.5 GbE (RJ45)
 
-## TODO
-
-- bengalfox
-	- [ ] hashtopolis
-		- [x] mysql
-		- [ ] backend
-	- [ ] hashtopolis-agent
-	- [ ] ollama
-
 ## Notes
 
 zfs must be mountpoint=legacy
