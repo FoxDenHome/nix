@@ -10,7 +10,7 @@ in
       type = lib.types.str;
       description = "Domain name for the service";
     };
-    tls = lib.mkEnabledOption "Enable TLS for the service";
+    tls = lib.mkEnableOption "Enable TLS for the service";
   } // services.mkOptions { svcName = "darksignsonline"; name = "Dark Signs Online"; };
 
   config = lib.mkIf svcConfig.enable (lib.mkMerge [
