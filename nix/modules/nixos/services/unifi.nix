@@ -30,7 +30,7 @@ in
     }).config
     (lib.mkIf svcConfig.enableHttp (services.http.make {
       inherit svcConfig pkgs config;
-      name = "caddy-unifi";
+      name = "http-unifi";
       target = ''
         reverse_proxy https://127.0.0.1:8443 {
           transport http {

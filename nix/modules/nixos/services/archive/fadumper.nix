@@ -32,7 +32,7 @@ in
     }).config
     (services.http.make {
       inherit svcConfig pkgs config;
-      name = "caddy-fadumper-api";
+      name = "http-fadumper-api";
       target = "reverse_proxy http://127.0.0.1:8001";
     }).config
     {

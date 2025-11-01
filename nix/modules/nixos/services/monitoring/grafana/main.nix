@@ -26,7 +26,7 @@ in
     }).config
     (services.http.make {
       inherit svcConfig pkgs config;
-      name = "caddy-grafana";
+      name = "http-grafana";
       target = ''
         reverse_proxy 127.0.0.1:3000
       '';

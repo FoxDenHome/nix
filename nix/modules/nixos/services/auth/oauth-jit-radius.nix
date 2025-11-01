@@ -71,7 +71,7 @@ in
     }).config
     (services.http.make {
       inherit svcConfig pkgs config;
-      name = "caddy-oauth-jit-radius";
+      name = "http-oauth-jit-radius";
       target = "reverse_proxy http://127.0.0.1:1444";
     }).config
     {

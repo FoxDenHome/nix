@@ -27,7 +27,7 @@ in
     }).config
     (services.http.make {
       inherit svcConfig pkgs config;
-      name = "caddy-jellyfin";
+      name = "http-jellyfin";
       target = "reverse_proxy http://127.0.0.1:8096";
     }).config
     {

@@ -14,7 +14,7 @@ in
     }).config
     (services.http.make {
       inherit svcConfig pkgs config;
-      name = "caddy-spaceage-tts";
+      name = "http-spaceage-tts";
       target = "reverse_proxy 127.0.0.1:8000";
     }).config
     {

@@ -15,7 +15,7 @@ in
     }).config
     (services.http.make {
       inherit svcConfig pkgs config;
-      name = "caddy-spaceage-api";
+      name = "http-spaceage-api";
       target = "reverse_proxy http://127.0.0.1:4000";
     }).config
     {

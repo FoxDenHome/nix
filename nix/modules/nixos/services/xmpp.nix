@@ -15,7 +15,7 @@ let
   primaryInterface = lib.lists.head (lib.attrsets.attrValues hostCfg.interfaces);
   hostName = foxDenLib.global.dns.mkHost primaryInterface.dns;
 
-  tlsRoot = "/var/lib/foxden/caddy-prosody/certificates/acme-v02.api.letsencrypt.org-directory";
+  tlsRoot = "/var/lib/foxden/http-prosody/certificates/acme-v02.api.letsencrypt.org-directory";
   tlsChain = "${tlsRoot}/${hostName}/${hostName}.crt";
   tlsKey = "${tlsRoot}/${hostName}/${hostName}.key";
 in
@@ -30,11 +30,11 @@ in
     }).config
     (services.http.make {
       inherit svcConfig pkgs config;
-      name = "caddy-prosody";
+      name = "http-prosody";
       target = "reverse_proxy 127.0.0.1:5280";
     }).config
     {
-      systemd.services.caddy-prosody = {
+      systemd.services.http-prosody = {
         serviceConfig = {
           DynamicUser = lib.mkForce false;
           User = config.services.prosody.user;

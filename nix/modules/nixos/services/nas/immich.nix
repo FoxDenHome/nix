@@ -34,7 +34,7 @@ in
     }).config
     (services.http.make {
       inherit svcConfig pkgs config;
-      name = "caddy-immich";
+      name = "http-immich";
       target = "reverse_proxy http://127.0.0.1:${builtins.toString config.services.immich.port}";
     }).config
     {

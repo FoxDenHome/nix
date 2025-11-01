@@ -32,7 +32,7 @@ in
     }).config
     (services.http.make {
       inherit svcConfig pkgs config;
-      name = "caddy-e621dumper-api";
+      name = "http-e621dumper-api";
       target = "reverse_proxy http://127.0.0.1:8001";
     }).config
     {

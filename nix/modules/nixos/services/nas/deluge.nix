@@ -36,7 +36,7 @@ in
     }).config
     (lib.mkIf svcConfig.enableHttp (services.http.make {
       inherit svcConfig pkgs config;
-      name = "caddy-deluge";
+      name = "http-deluge";
       target = "reverse_proxy http://127.0.0.1:8112";
     }).config)
     {

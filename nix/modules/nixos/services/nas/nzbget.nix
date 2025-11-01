@@ -28,7 +28,7 @@ in
     }).config
     (lib.mkIf svcConfig.enableHttp (services.http.make {
       inherit svcConfig pkgs config;
-      name = "caddy-nzbget";
+      name = "http-nzbget";
       target = "reverse_proxy http://127.0.0.1:6789";
     }).config)
     {

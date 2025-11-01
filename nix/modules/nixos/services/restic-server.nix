@@ -26,7 +26,7 @@ in
     restServerConfig
     (services.http.make {
       inherit svcConfig pkgs config;
-      name = "caddy-restic-rest-server";
+      name = "http-restic-rest-server";
       target = "reverse_proxy http://127.0.0.1:8000";
     }).config
     {
