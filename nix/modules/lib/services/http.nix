@@ -270,7 +270,6 @@ in
           environment.etc.${confFileEtc} = {
             text = ''
               worker_processes auto;
-              daemon off;
 
               error_log stderr notice;
               pid /tmp/nginx.pid;
@@ -322,7 +321,7 @@ in
                   hash = "sha256-Gu+3Ca/C7YHAf7xfarZYeC/pnohWnuho4l06bx5TVcs=";
                 }}:/njs/acme.js"
               ];
-              ExecStart = "${package}/bin/nginx -e stderr -c \"\${CREDENTIALS_DIRECTORY}/nginx.conf\"";
+              ExecStart = "${package}/bin/nginx -g 'daemon off;' -e stderr -c \"\${CREDENTIALS_DIRECTORY}/nginx.conf\"";
             };
             wantedBy = ["multi-user.target"];
           };
