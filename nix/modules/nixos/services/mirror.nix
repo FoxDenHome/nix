@@ -97,7 +97,6 @@ in
         server {
           server_name mirror.${svcRootName};
           ${ baseWebConfig true }
-
           root /data;
 
           set $jsindex_ignore "/archlinux /cachyos";
