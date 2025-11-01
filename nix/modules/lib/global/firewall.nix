@@ -41,12 +41,12 @@ let
             protocol = "tcp";
             comment = "auto-https-${iface.host}-${iface.name}";
           }] else []) ++
-          (if webservice.httpProxyPort > 0 && webservice.httpProxyPort != webservice.httpPort then [{
+          (if webservice.proxyProtocol && webservice.httpProxyPort > 0 && webservice.httpProxyPort != webservice.httpPort then [{
             port = webservice.httpProxyPort;
             protocol = "tcp";
             comment = "auto-http-proxy-${iface.host}-${iface.name}";
           }] else []) ++
-          (if webservice.httpsProxyPort > 0 && webservice.httpsProxyPort != webservice.httpsPort then [{
+          (if webservice.proxyProtocol && webservice.httpsProxyPort > 0 && webservice.httpsProxyPort != webservice.httpsPort then [{
             port = webservice.httpsProxyPort;
             protocol = "tcp";
             comment = "auto-https-proxy-${iface.host}-${iface.name}";

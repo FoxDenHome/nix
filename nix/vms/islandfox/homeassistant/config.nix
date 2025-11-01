@@ -9,6 +9,8 @@
     webservice = {
       enable = true;
       proxyProtocol = false;
+      httpProxyPort = 80;
+      httpsProxyPort = 443;
     };
     mac = "52:54:00:e9:7e:50";
     dhcpv6 = {

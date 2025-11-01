@@ -116,18 +116,19 @@ in
         ipNoCidr = util.removeIPCidr ip;
       in (util.isIPv4 ipNoCidr) && (util.isPrivateIP ipNoCidr)) "" iface.addresses;
       host = util.removeIPCidr privateIPv4;
+      proxyProtocol = iface.webservice.proxyProtocol;
     in lib.mkIf (privateIPv4 != "" && iface.webservice.enable) {
       inherit (iface) gateway;
       names = map mkHost ([iface.dns] ++ iface.cnames);
       http = {
         inherit host;
-        inherit (iface.webservice) proxyProtocol;
-        port = iface.webservice.httpProxyPort;
+        inherit proxyProtocol;
+        port = if proxyProtocol then iface.webservice.httpProxyPort else iface.webservice.httpPort;
       };
       https = {
         inherit host;
-        inherit (iface.webservice) proxyProtocol;
-        port = iface.webservice.httpsProxyPort;
+        inherit proxyProtocol;
+        port = if proxyProtocol then iface.webservice.httpsProxyPort else iface.webservice.httpsPort;
       };
     });
 
