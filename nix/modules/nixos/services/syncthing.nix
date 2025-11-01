@@ -47,7 +47,7 @@ in
           }
         }
         server {
-          access_log syslog:local0;
+          access_log syslog:;
 
           server_name ${svcConfig.webdavHost};
           ${baseWebConfig false}
