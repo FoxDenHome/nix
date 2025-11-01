@@ -20,7 +20,5 @@
   webservice = {
     enable = true;
     proxyProtocol = false;
-    httpProxyPort = 80;
-    httpsProxyPort = 443;
   };
 }

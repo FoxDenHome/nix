@@ -133,6 +133,7 @@ in
 
     foxDen.hosts.hosts = lib.attrsets.genAttrs vmNames (name: {
       interfaces = lib.attrsets.mapAttrs (_: iface: { driver = "null"; useDHCP = true; } // iface) vms.${name}.config.interfaces;
+      webservice = vms.${name}.config.webservice or {};
     });
 
     foxDen.dns.records = lib.mkMerge (map (vm: vm.config.records or []) (lib.attrsets.attrValues vms));
