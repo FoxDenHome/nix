@@ -64,6 +64,7 @@ in
           }
           location /dav {
             dav_methods PUT DELETE MKCOL COPY MOVE;
+            dav_ext_methods PROPFIND OPTIONS;
             create_full_put_path on;
             dav_access user:rw;
           }
