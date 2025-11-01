@@ -19,7 +19,7 @@ in
       oci = {
         image = "ghcr.io/doridian/darksignsonline/server:latest";
         volumes = [
-          "caddy:/var/lib/caddy"
+          "nginx:/var/lib/nginx"
           "wiki:/var/www/wiki"
         ];
         environment = {
