@@ -68,7 +68,6 @@ in
       enable = true;
       package = sanoidPackage;
       templates.foxden = {
-        interval = "hourly";
         hourly = 36;
         daily = 30;
         monthly = 3;
