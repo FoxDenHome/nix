@@ -9,10 +9,10 @@ let
   hostName = foxDenLib.global.dns.mkHost primaryInterface.dns;
 in
 {
-  options.foxDen.services.kanidm = {
+  options.foxDen.services.kanidm = with lib.types; {
     oauth2 = options.services.kanidm.provision.systems.oauth2;
     externalIPs = lib.mkOption {
-      type = lib.types.uniq lib.types.str;
+      type = uniq (listOf foxDenLib.types.ip);
       default = [ ];
       description = "List of external IPs that will access kanidm internal endpoints.";
     };
