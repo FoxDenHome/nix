@@ -346,6 +346,8 @@ in
             mode = "0600";
           };
 
+          foxDen.hosts.hosts.${svcConfig.host}.webservice.enable = true;
+
           systemd.services.${name} = {
             restartTriggers = [ config.environment.etc.${confFileEtc}.text ];
             serviceConfig = {
