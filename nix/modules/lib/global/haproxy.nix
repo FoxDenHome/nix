@@ -37,9 +37,9 @@ let
       #uid# 980
       #gid# 980
       log stdout format raw local0 info
+      ca-file /etc/ssl/certs/ca-certificates.crt
 
     defaults
-      ca-file /etc/ssl/certs/ca-certificates.crt
       log global
       timeout client 30s
       timeout server 30s
