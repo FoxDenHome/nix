@@ -26,7 +26,9 @@ let
       in if host.host != null then ''
         backend be_${name}
           mode ${mode}
+          option httpchk
           http-check send meth GET uri ${host.readyzPath} hdr Host ${primaryHost}
+          http-check expect status 200
         ${if directives != [] then nixpkgs.lib.concatStringsSep "\n" (map (dir: "  ${dir}") (procHostVars directives)) else ""}
           server srv_main ${host.host}:${builtins.toString host."${cfgName}Port"} ${nixpkgs.lib.concatStringsSep " " flags}
       '' else "") hosts
