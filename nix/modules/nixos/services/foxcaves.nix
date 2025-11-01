@@ -39,6 +39,8 @@ in
         group = "foxcaves";
       };
 
+      foxDen.hosts.hosts.${svcConfig.host}.webservice.readyzPath = "/v1/system/info";
+
       foxDen.services.mysql.services = [
         {
           name = "foxcaves";

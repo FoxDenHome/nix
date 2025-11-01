@@ -28,7 +28,7 @@ let
       in if portCfg.host != null then ''
         backend be_${name}
           mode ${mode}
-          http-check send meth GET uri /readyz hdr Host ${primaryHost}
+          http-check send meth GET uri ${host.readyzPath} hdr Host ${primaryHost}
         ${if directives != [] then nixpkgs.lib.concatStringsSep "\n" (map (dir: "  ${dir}") (procHostVars directives)) else ""}
           server srv_main ${portCfg.host}:${builtins.toString portCfg.port} ${nixpkgs.lib.concatStringsSep " " flags}
       '' else "") hosts
@@ -113,6 +113,10 @@ in
         https = lib.mkOption {
           type = protoCfgType 443;
           default = {};
+        };
+        readyzPath = lib.mkOption {
+          type = str;
+          default = "/readyz";
         };
         gateway = lib.mkOption {
           type = str;

@@ -106,6 +106,10 @@ in
             type = ints.u16;
             default = 443;
           };
+          readyzPath = nixpkgs.lib.mkOption {
+            type = str;
+            default = "/readyz";
+          };
         };
         firewall = {
           ingressAcceptRules = nixpkgs.lib.mkOption {
