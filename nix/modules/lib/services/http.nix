@@ -209,6 +209,7 @@ in
         # Normal /readyz handling disabled
       '' else ''
         location = /readyz {
+          add_header Content-Type text/plain always;
           return 200 "OK";
         }
       '';
