@@ -69,6 +69,7 @@ let
       ];
       cluster_permissions = [
         "indices:data/write/bulk"
+        "indices:data/read/scroll"
       ];
       tenant_permissions = [];
     }) svcConfig.users)));
