@@ -26,8 +26,36 @@ let
   };
 
   jsIndexConf = ''
-    set $request_original_filename $request_filename;
-    index /_dori-static/_js/index;
+    location = /favicon.ico {
+        root /njs/www;
+    }
+
+    location = /robots.txt {
+        root /njs/www;
+    }
+
+    location = /_dori-static {
+        return 301 /_dori-static/;
+    }
+
+    location /_dori-static/ {
+        root /njs/www;
+    }
+
+    location = /_dori-static/_js/index {
+        internal;
+        js_content files.index;
+    }
+
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header Strict-Transport-Security "max-age=31536000; preload; includeSubDomains" always;
+
+    location / {
+      log_not_found off;
+      set $request_original_filename $request_filename;
+      index /_dori-static/_js/index;
+    }
   '';
 in
 {
@@ -85,10 +113,7 @@ in
             rewrite ^/cachyos/(.*)$  https://cachyos.__ROOT_DOMAIN__/$1 redirect;
           }
 
-          location / {
-            log_not_found off;
-            ${jsIndexConf}
-          }
+          ${jsIndexConf}
         }
 
         server {
@@ -101,10 +126,7 @@ in
           set $jsindex_entry "/njs/templates/entry.html";
           set $jsindex_footer "/njs/templates/footer.html";
 
-          location / {
-            log_not_found off;
-            ${jsIndexConf}
-          }
+          ${jsIndexConf}
         }
 
         server {
@@ -113,6 +135,10 @@ in
           root /data/cachyos;
 
           location / {
+            add_header X-Content-Type-Options "nosniff" always;
+            add_header X-Frame-Options "DENY" always;
+            add_header Strict-Transport-Security "max-age=31536000; preload; includeSubDomains" always;
+
             log_not_found off;
             fancyindex on;
             fancyindex_exact_size off;
