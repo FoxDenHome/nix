@@ -184,9 +184,9 @@ in
       name = inputs.name;
 
       package = pkgs.nginxQuic.override {
-        modules = [
+        modules = nixpkgs.lib.lists.unique ([
           pkgs.nginxModules.njs
-        ] ++ modules;
+        ] ++ modules);
       };
 
       storageRoot = "/var/lib/foxden/${name}";
