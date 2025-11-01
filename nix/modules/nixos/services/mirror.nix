@@ -60,7 +60,6 @@ let
     add_header Strict-Transport-Security "max-age=31536000; preload; includeSubDomains" always;
 
     location / {
-      log_not_found off;
       set $request_original_filename $request_filename;
       index /_dori-static/_js/index;
     }
@@ -146,7 +145,6 @@ in
             add_header X-Frame-Options "DENY" always;
             add_header Strict-Transport-Security "max-age=31536000; preload; includeSubDomains" always;
 
-            log_not_found off;
             fancyindex on;
             fancyindex_exact_size off;
             fancyindex_header "/.theme/header.html";

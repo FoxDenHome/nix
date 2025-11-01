@@ -125,7 +125,6 @@ let
       auth_request_set $email $upstream_http_x_auth_request_email;
       proxy_set_header X-User $user;
       proxy_set_header X-Email $email;
-
       ${handler}
     }
   '' else ''
@@ -308,6 +307,7 @@ in
 
               http {
                 access_log off;
+                log_not_found off;
 
                 include ${package}/conf/mime.types;
                 default_type application/octet-stream;

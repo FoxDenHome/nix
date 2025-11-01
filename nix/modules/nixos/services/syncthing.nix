@@ -56,7 +56,6 @@ in
           root /syncthing;
 
           location / {
-            log_not_found off;
             autoindex on;
             dav_methods PUT DELETE MKCOL COPY MOVE;
             dav_ext_methods PROPFIND OPTIONS;
