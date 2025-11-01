@@ -39,6 +39,7 @@ let
       log stdout format raw local0 info
 
     defaults
+      ca-base /etc/ssl/certs/ca-certificates.crt
       log global
       timeout client 30s
       timeout server 30s
