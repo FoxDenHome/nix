@@ -59,11 +59,7 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "http-forgejo";
-      target = ''
-        reverse_proxy 127.0.0.1:3000 {
-          transport fastcgi
-        }
-      '';
+      target = "fastcgi_pass 127.0.0.1:3000;";
     }).config
     {
       foxDen.services.forgejo.oAuth.overrideService = true;

@@ -207,6 +207,8 @@ in
         proxy_http_version 1.1;
         proxy_request_buffering off;
         proxy_buffering off;
+        fastcgi_request_buffering off;
+        fastcgi_buffering off;
         client_max_body_size 0;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
