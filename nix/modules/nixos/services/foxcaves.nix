@@ -41,7 +41,7 @@ in
 
       foxDen.hosts.hosts.${svcConfig.host}.webservice = {
         enable = true;
-        checkUrl = "/v1/system/health";
+        checkUrl = "/api/v1/system/health";
       };
 
       foxDen.services.mysql.services = [
