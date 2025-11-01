@@ -119,7 +119,7 @@ let
 
     location / {
       auth_request /oauth2/auth;
-      error_page 401 =403 /oauth2/sign_in;
+      error_page 401 =307 /oauth2/sign_in;
 
       auth_request_set $user $upstream_http_x_auth_request_user;
       auth_request_set $email $upstream_http_x_auth_request_email;
