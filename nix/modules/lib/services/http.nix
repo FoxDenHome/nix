@@ -186,7 +186,7 @@ in
                           (nixpkgs.lib.attrsets.attrValues host.interfaces))));
 
       svc = services.mkNamed name inputs;
-      caddyFilePath = "${svc.configDir}/Caddyfile.${name}";
+      caddyFilePath = "${svc.configDir}/Caddyfile";
 
       trustedProxies = config.foxDen.services.trustedProxies;
       mkTrustedProxies = (prefix:
