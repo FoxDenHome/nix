@@ -64,9 +64,6 @@ in
             create_full_put_path on;
             dav_access user:rw;
           }
-          basic_auth {
-            doridian {$WEBDAV_PASSWORD_DORIDIAN}
-          }
         }
       '';
     }).config
