@@ -56,6 +56,7 @@ in
       type = uniq (listOf str);
       default = [
         "foxden.network"
+        "doridian.de"
         "doridian.net"
         "darksignsonline.com"
         "f0x.es"
