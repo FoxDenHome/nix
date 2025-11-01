@@ -270,6 +270,7 @@ in
           environment.etc.${confFileEtc} = {
             text = ''
               worker_processes auto;
+              daemon off;
 
               error_log stderr notice;
               pid /tmp/nginx.pid;
