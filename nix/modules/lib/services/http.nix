@@ -307,7 +307,7 @@ in
               DynamicUser = true;
               StateDirectory = nixpkgs.lib.strings.removePrefix "/var/lib/" storageRoot;
               LoadCredential = "nginx.conf:${confFilePath}";
-              ExecStart = "${package}/bin/nginx -c \"\${CREDENTIALS_DIRECTORY}/nginx.conf\"";
+              ExecStart = "${package}/bin/nginx -e stderr -c \"\${CREDENTIALS_DIRECTORY}/nginx.conf\"";
             };
             wantedBy = ["multi-user.target"];
           };
