@@ -127,9 +127,11 @@ let
 
       ${handler}
     }
-  '' else ''location / {
-    ${handler}
-  }'');
+  '' else ''
+    location / {
+      ${handler}
+    }
+  '');
 in
 {
   nixosModule = { ... }:
