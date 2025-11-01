@@ -10,9 +10,8 @@ let
 
     renderMatchers = (cfgName: varName: nixpkgs.lib.concatStringsSep "\n" (nixpkgs.lib.flatten (
       map (host: let
-        portCfg = host.${cfgName};
         name = "${cfgName}_${nixpkgs.lib.lists.head host.names}";
-      in if portCfg.host != null then (map (hostName:
+      in if host.host != null then (map (hostName:
         "  acl acl_${name} ${varName} -i ${hostName}"
       ) host.names) ++ [
         "  use_backend be_${name} if acl_${name}"
@@ -22,15 +21,14 @@ let
       map (host: let
         primaryHost = nixpkgs.lib.lists.head host.names;
         procHostVars = vals: map (val: nixpkgs.lib.replaceString "__HOST__" primaryHost val) vals;
-        portCfg = host.${cfgName};
         name = "${cfgName}_${primaryHost}";
-        flags = ["check"] ++ (procHostVars addFlags) ++ (if portCfg.proxyProtocol then ["send-proxy-v2"] else []);
-      in if portCfg.host != null then ''
+        flags = ["check"] ++ (procHostVars addFlags) ++ (if host.proxyProtocol then ["send-proxy-v2"] else []);
+      in if host.host != null then ''
         backend be_${name}
           mode ${mode}
           http-check send meth GET uri ${host.readyzPath} hdr Host ${primaryHost}
         ${if directives != [] then nixpkgs.lib.concatStringsSep "\n" (map (dir: "  ${dir}") (procHostVars directives)) else ""}
-          server srv_main ${portCfg.host}:${builtins.toString portCfg.port} ${nixpkgs.lib.concatStringsSep " " flags}
+          server srv_main ${host.host}:${builtins.toString host."${cfgName}Port"} ${nixpkgs.lib.concatStringsSep " " flags}
       '' else "") hosts
     ));
   in ''
