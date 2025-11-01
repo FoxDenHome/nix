@@ -94,7 +94,7 @@ let
     #}
 
     #handle @internal {
-    #  ${handler}
+    #  $_{handler}
     #}
   '' else "");
 

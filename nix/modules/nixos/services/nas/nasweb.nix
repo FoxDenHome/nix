@@ -17,10 +17,8 @@ in
       inherit svcConfig pkgs config;
       name = "nasweb";
       target = ''
-        root * /nas
-        file_server {
-          browse
-        }
+        root /nas;
+        autoindex on;
       '';
       # TODO: extraConfig = ''
       #   handle /guest/* {
