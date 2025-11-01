@@ -77,12 +77,8 @@ in
         }
         respond @denied "foxden.network intranet only" 403
 
-        reverse_proxy https://127.0.0.1:8443 {
-          transport http {
-            tls
-            tls_insecure_skip_verify
-          }
-        }
+        proxy_pass https://127.0.0.1:8443;
+        proxy_ssl_verify off;
       '';
     }).config
     {

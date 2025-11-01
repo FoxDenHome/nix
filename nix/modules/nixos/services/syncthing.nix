@@ -37,21 +37,32 @@ in
         plugins = [ "github.com/mholt/caddy-webdav@v0.0.0-20250805175825-7a5c90d8bf90" ];
         hash = "sha256-FOs4Y6UZWmUHDYWdKoqcU8k6hodISYS03BQkGx76OpU=";
       };
-      rawConfig = ''
-        ${svcConfig.syncthingHost} {
-          reverse_proxy http://127.0.0.1:8384 {
-            header_up Host localhost
-          }
+      rawConfig = { baseWebConfig, ... }: ''
+        server {
+          server_name ${svcConfig.syncthingHost};
+          ${baseWebConfig}
+          proxy_pass http://127.0.0.1:8384;
+          proxy_set_header Host localhost;
         }
-        ${svcConfig.webdavHost} {
-          root * /syncthing
-          file_server {
-            browse
-            hide .stfolder
+        server {
+          server_name ${svcConfig.webdavHost};
+          ${baseWebConfig}
+
+          auth_basic "Syncthing WebDAV";
+          auth_basic_user_file ${if config.foxDen.sops.available then config.sops.secrets.http-syncthing.path else "/dev/null"};
+
+          root /syncthing;
+          location / {
+            log_not_found off;
+            autoindex on;
           }
-          rewrite /dav /dav/
-          webdav /dav/* {
-            prefix /dav
+          location = /dav  {
+            return 301 /dav/;
+          }
+          location /dav {
+            dav_methods PUT DELETE MKCOL COPY MOVE;
+            create_full_put_path on;
+            dav_access user:rw;
           }
           basic_auth {
             doridian {$WEBDAV_PASSWORD_DORIDIAN}

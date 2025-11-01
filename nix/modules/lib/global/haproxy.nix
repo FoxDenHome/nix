@@ -122,12 +122,12 @@ in
       http = {
         inherit host;
         inherit (iface.webservice) proxyProtocol;
-        port = iface.webservice.httpPort;
+        port = iface.webservice.httpProxyPort;
       };
       https = {
         inherit host;
         inherit (iface.webservice) proxyProtocol;
-        port = iface.webservice.httpsPort;
+        port = iface.webservice.httpsProxyPort;
       };
     });
 

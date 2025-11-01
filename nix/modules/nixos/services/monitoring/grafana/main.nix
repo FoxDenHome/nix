@@ -27,9 +27,7 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "http-grafana";
-      target = ''
-        reverse_proxy 127.0.0.1:3000
-      '';
+      target = "proxy_pass 127.0.0.1:3000;";
     }).config
     {
       foxDen.services.grafana.oAuth.overrideService = true;

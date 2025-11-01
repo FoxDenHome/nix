@@ -94,6 +94,14 @@ in
             type = ints.u16;
             default = 443;
           };
+          httpProxyPort = nixpkgs.lib.mkOption {
+            type = ints.u16;
+            default = 81;
+          };
+          httpsProxyPort = nixpkgs.lib.mkOption {
+            type = ints.u16;
+            default = 444;
+          };
           quicPort = nixpkgs.lib.mkOption {
             type = ints.u16;
             default = 443;

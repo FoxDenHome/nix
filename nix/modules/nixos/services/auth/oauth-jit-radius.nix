@@ -72,7 +72,7 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "http-oauth-jit-radius";
-      target = "reverse_proxy http://127.0.0.1:1444";
+      target = "proxy_pass http://127.0.0.1:1444;";
     }).config
     {
       foxDen.services.oauth-jit-radius.oAuth.overrideService = true;

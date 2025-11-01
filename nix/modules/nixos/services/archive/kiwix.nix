@@ -24,7 +24,7 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "http-kiwix";
-      target = "reverse_proxy http://127.0.0.1:8080";
+      target = "proxy_pass http://127.0.0.1:8080;";
     }).config
     {
       users.users.kiwix = {

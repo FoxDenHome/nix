@@ -33,7 +33,7 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "http-fadumper-api";
-      target = "reverse_proxy http://127.0.0.1:8001";
+      target = "proxy_pass http://127.0.0.1:8001;";
     }).config
     {
       foxDen.services.opensearch.users.fadumper = {

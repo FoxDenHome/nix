@@ -31,7 +31,7 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "http-prosody";
-      target = "reverse_proxy 127.0.0.1:5280";
+      target = "proxy_pass http://127.0.0.1:5280;";
     }).config
     {
       systemd.services.http-prosody = {

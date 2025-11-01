@@ -35,7 +35,7 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "http-immich";
-      target = "reverse_proxy http://127.0.0.1:${builtins.toString config.services.immich.port}";
+      target = "proxy_pass http://127.0.0.1:${builtins.toString config.services.immich.port};";
     }).config
     {
       foxDen.services.immich.oAuth.overrideService = true;

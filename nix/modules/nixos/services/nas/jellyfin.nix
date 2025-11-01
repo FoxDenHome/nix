@@ -28,7 +28,7 @@ in
     (services.http.make {
       inherit svcConfig pkgs config;
       name = "http-jellyfin";
-      target = "reverse_proxy http://127.0.0.1:8096";
+      target = "proxy_pass http://127.0.0.1:8096;";
     }).config
     {
       services.jellyfin.enable = true;

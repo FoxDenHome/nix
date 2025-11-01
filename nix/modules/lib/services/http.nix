@@ -88,37 +88,42 @@ let
     ]);
   });
 
-  mkCaddyInternalBypass = (handler: svcConfig: if svcConfig.oAuth.bypassInternal then ''
-    @internal {
-      client_ip private_ranges
-    }
+  mkNginxInternalBypass = (handler: svcConfig: if svcConfig.oAuth.bypassInternal then ''
+    #@internal {
+    #  client_ip private_ranges
+    #}
 
-    handle @internal {
-      ${handler}
-    }
+    #handle @internal {
+    #  ${handler}
+    #}
   '' else "");
 
   mkNginxHandler = (handler: svcConfig: if (svcConfig.oAuth.enable && (!svcConfig.oAuth.overrideService)) then ''
-    handle /oauth2/* {
-      reverse_proxy 127.0.0.1:4180 {
-        header_up X-Real-IP {remote_host}
-        header_up X-Forwarded-Uri {uri}
-      }
+    location /oauth2/ {
+      proxy_pass http://127.0.0.1:4180;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Auth-Request-Redirect $request_uri;
     }
+    location = /oauth2/auth {
+      proxy_pass http://127.0.0.1:4180;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-Uri $request_uri;
+      # nginx auth_request includes headers but not body
+      proxy_set_header Content-Length "";
+      proxy_pass_request_body off;
+    }
+    ${mkNginxInternalBypass handler svcConfig}
 
-    ${mkCaddyInternalBypass handler svcConfig}
+    location / {
+      auth_request /oauth2/auth;
+      error_page 401 =403 /oauth2/sign_in;
 
-    handle {
-      forward_auth 127.0.0.1:4180 {
-        uri /oauth2/auth
-        header_up X-Real-IP {remote_host}
-        # Make sure to configure the --set-xauthrequest flag to enable this feature.
-        copy_headers X-Auth-Request-User X-Auth-Request-Email
-        @error status 401
-        handle_response @error {
-          redir * /oauth2/sign_in?rd={scheme}://{host}{uri}
-        }
-      }
+      auth_request_set $user $upstream_http_x_auth_request_user;
+      auth_request_set $email $upstream_http_x_auth_request_email;
+      proxy_set_header X-User $user;
+      proxy_set_header X-Email $email;
 
       ${handler}
     }
@@ -188,21 +193,48 @@ in
       confFilePath = "${svc.configDir}/nginx.conf";
       confFileEtc = nixpkgs.lib.strings.removePrefix "/etc/" confFilePath;
 
+      defaultTarget = ''
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        ${inputs.target}
+      '';
+
       hostConfig = ''
         # TODO: ${if webdav then "order webdav before file_server" else ""}
         # Custom config can be injected here
         ${inputs.extraConfig or ""}
         # Auto generated config below
-        ${mkNginxHandler inputs.target svcConfig}
+        ${mkNginxHandler defaultTarget svcConfig}
       '';
 
-      normalConfig = ''server {
-        server_name ${builtins.concatStringsSep " " hostMatchers};
-
+      baseHttpConfig = ''
         listen 80;
         listen [::]:80;
         listen 81 proxy_protocol;
         listen [::]:81 proxy_protocol;
+      '';
+      baseHttpsConfig = ''
+        listen 443 ssl;
+        listen [::]:443 ssl;
+        listen 443 quic reuseport;
+        listen [::]:443 quic reuseport;
+        listen 444 ssl proxy_protocol;
+        listen [::]:444 ssl proxy_protocol;
+
+        acme_certificate main;
+        ssl_certificate $acme_certificate;
+        ssl_certificate_key $acme_certificate_key;
+        # do not parse the certificate on each request
+        ssl_certificate_cache max=2;
+      '';
+      baseWebConfig = if svcConfig.tls then baseHttpsConfig else baseHttpConfig;
+
+      normalConfig = ''server {
+        server_name ${builtins.concatStringsSep " " hostMatchers};
+
+        ${baseHttpConfig}
 
         ${if svcConfig.tls then ''location / {
           return 301 https://$http_host$request_uri;
@@ -263,7 +295,7 @@ in
                 }
                 acme_shared_zone zone=ngx_acme_shared:1M;
 
-              ${if rawConfig != null then rawConfig else normalConfig}
+              ${if rawConfig != null then rawConfig { inherit baseHttpConfig baseHttpsConfig baseWebConfig; } else normalConfig}
               }
             '';
             mode = "0600";

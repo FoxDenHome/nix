@@ -22,12 +22,12 @@ in
           browse
         }
       '';
-      extraConfig = ''
-        handle /guest/* {
-          root * /nas
-          file_server
-        }
-      '';
+      # TODO: extraConfig = ''
+      #   handle /guest/* {
+      #     root * /nas
+      #     file_server
+      #   }
+      # '';
     }).config
     {
       systemd.services.nasweb.serviceConfig = {

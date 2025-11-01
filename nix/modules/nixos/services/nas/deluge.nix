@@ -37,7 +37,7 @@ in
     (lib.mkIf svcConfig.enableHttp (services.http.make {
       inherit svcConfig pkgs config;
       name = "http-deluge";
-      target = "reverse_proxy http://127.0.0.1:8112";
+      target = "proxy_pass http://127.0.0.1:8112;";
     }).config)
     {
       services.deluge = {
