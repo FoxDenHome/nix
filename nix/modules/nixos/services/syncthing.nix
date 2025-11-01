@@ -93,8 +93,6 @@ in
             config.sops.secrets.http-syncthing.path
           ];
         };
-          EnvironmentFile = [ config.sops.secrets.http-syncthing.path ];
-        };
       };
 
       systemd.services.syncthing = {
