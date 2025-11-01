@@ -89,7 +89,7 @@ in
           BindPaths = [
             "${svcConfig.dataDir}:/syncthing"
           ];
-          BindReadOnlyPaths = config.lib.mkIf config.foxDen.sops.available [
+          BindReadOnlyPaths = config.lib.foxDen.sops.mkIfAvailable [
             config.sops.secrets.http-syncthing.path
           ];
         };
