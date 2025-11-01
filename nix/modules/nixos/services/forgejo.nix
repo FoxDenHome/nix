@@ -144,12 +144,15 @@ in
         }
       ];
 
-      foxDen.services.mysql.services = [
-        {
-          name = "forgejo";
-          targetService = "forgejo";
-        }
-      ];
+      foxDen.services.mysql = {
+        enable = true;
+        services = [
+          {
+            name = "forgejo";
+            targetService = "forgejo";
+          }
+        ];
+      };
 
       environment.persistence."/nix/persist/forgejo" = ifDefaultData {
         hideMounts = true;

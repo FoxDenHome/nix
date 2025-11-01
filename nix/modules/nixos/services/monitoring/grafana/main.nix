@@ -156,12 +156,15 @@ in
         };
       };
 
-      foxDen.services.mysql.services = [
-        {
-          name = "grafana";
-          targetService = "grafana";
-        }
-      ];
+      foxDen.services.mysql = {
+        enable = true;
+        services = [
+          {
+            name = "grafana";
+            targetService = "grafana";
+          }
+        ];
+      };
 
       environment.persistence."/nix/persist/grafana" = {
         hideMounts = true;

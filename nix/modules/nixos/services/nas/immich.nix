@@ -60,18 +60,21 @@ in
         };
       };
 
-      foxDen.services.postgresql.services = [
-        {
-          name = "immich";
-          user = config.services.immich.user;
-          targetService = "immich-server";
-        }
-        {
-          name = "immich";
-          user = config.services.immich.user;
-          targetService = "immich-machine-learning";
-        }
-      ];
+      foxDen.services.postgresql = {
+        enable = true;
+        services = [
+          {
+            name = "immich";
+            user = config.services.immich.user;
+            targetService = "immich-server";
+          }
+          {
+            name = "immich";
+            user = config.services.immich.user;
+            targetService = "immich-machine-learning";
+          }
+        ];
+      };
 
       systemd.services = let
         cfg = {

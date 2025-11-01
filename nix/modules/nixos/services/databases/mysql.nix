@@ -45,8 +45,6 @@ let
     }
   ]) else {});
 
-  enable = (lib.length svcConfig.services) > 0;
-
   mkDbName = lib.replaceString "-" "_";
 in
 {
@@ -62,14 +60,13 @@ in
     };
   };
 
-  config = lib.mkIf enable (lib.mkMerge [
+  config = lib.mkIf svcConfig.enable (lib.mkMerge [
     (services.make {
       name = "mysql";
       inherit svcConfig pkgs config;
     }).config
     {
       foxDen.services.mysql = {
-        enable = true;
         host = "mysql";
         inherit socketPath;
       };
@@ -117,11 +114,8 @@ in
       };
     }
     {
-      systemd.services = lib.attrsets.listToAttrs (map (mySvc: let
-        svcName = if mySvc.proxy then "mysql-${mySvc.name}" else mySvc.targetService;
-      in
-      {
-        name = svcName;
+      systemd.services = lib.attrsets.listToAttrs (map (mySvc: {
+        name = if mySvc.proxy then "mysql-${mySvc.name}" else mySvc.targetService;
         value = {
           requires = [ "mysql.service" ];
           after = [ "mysql.service" ];
@@ -137,19 +131,15 @@ in
       }) svcConfig.services);
     }
     {
-      systemd.services = lib.attrsets.listToAttrs (map (mySvc: let
-        svcName = if mySvc.proxy then "mysql-${mySvc.name}" else mySvc.targetService;
-        usrName = if mySvc.proxy then mySvc.name else mySvc.targetService;
-      in
-      {
+      systemd.services = lib.attrsets.listToAttrs (map (mySvc: {
         name = mySvc.targetService;
-        value = let
-          deps = if mySvc.proxy then ["${svcName}.service"] else [];
-        in {
-          requires = deps;
-          after = deps;
+        value = rec {
+          requires = if mySvc.proxy then ["mysql-${mySvc.name}.service"] else [];
+          after = requires;
           serviceConfig = {
-            Environment = [
+            Environment = let
+              usrName = if mySvc.proxy then mySvc.name else mySvc.targetService;
+            in [
               "MYSQL_DATABASE=${mkDbName mySvc.name}"
               "MYSQL_USERNAME=${usrName}"
             ] ++ (if mySvc.proxy then [

@@ -36,10 +36,13 @@ in
       target = "proxy_pass http://127.0.0.1:8001;";
     }).config
     {
-      foxDen.services.opensearch.users.e621dumper = {
-        indexPatterns = [ "e621dumper_*" ];
+      foxDen.services.opensearch = {
+        enable = true;
+        users.e621dumper = {
+          indexPatterns = [ "e621dumper_*" ];
+        };
+        services = [ "e621dumper-api" "e621dumper-refresh" ];
       };
-      foxDen.services.opensearch.services = [ "e621dumper-api" "e621dumper-refresh" ];
 
       users.users.e621dumper = {
         isSystemUser = true;

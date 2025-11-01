@@ -36,10 +36,13 @@ in
       target = "proxy_pass http://127.0.0.1:8001;";
     }).config
     {
-      foxDen.services.opensearch.users.fadumper = {
-        indexPatterns = [ "fadumper_*" ];
+      foxDen.services.opensearch = {
+        enable = true;
+        users.fadumper = {
+          indexPatterns = [ "fadumper_*" ];
+        };
+        services = [ "fadumper-api" "fadumper-refresh" ];
       };
-      foxDen.services.opensearch.services = [ "fadumper-api" "fadumper-refresh" ];
 
       users.users.fadumper = {
         isSystemUser = true;

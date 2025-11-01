@@ -33,7 +33,7 @@ in
           "MYSQL_PASSWORD" = "";
           "MYSQL_DATABASE" = "darksignsonline";
           "MYSQL_USERNAME" = "darksignsonline";
-        };
+        } ++ config.lib.mysql.mkEnvironmentAttrs;
         environmentFiles = [
           (config.lib.foxDen.sops.mkIfAvailable config.sops.secrets.darksignsonline.path)
         ];

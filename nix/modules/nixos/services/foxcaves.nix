@@ -44,13 +44,16 @@ in
         checkUrl = "/api/v1/system/health";
       };
 
-      foxDen.services.mysql.services = [
-        {
-          name = "foxcaves";
-          proxy = true;
-          targetService = "podman-foxcaves";
-        }
-      ];
+      foxDen.services.mysql = {
+        enable = true;
+        services = [
+          {
+            name = "foxcaves";
+            proxy = true;
+            targetService = "podman-foxcaves";
+          }
+        ];
+      };
     }
   ]);
 }
