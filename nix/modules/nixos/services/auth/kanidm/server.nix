@@ -145,8 +145,8 @@ in
           origin = "https://${hostName}";
           domain = hostName;
 
-          tls_chain = "/var/lib/foxden/http-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.crt";
-          tls_key = "/var/lib/foxden/http-kanidm/certificates/acme-v02.api.letsencrypt.org-directory/${hostName}/${hostName}.key";
+          tls_chain = "/var/lib/foxden/http-kanidm/acme/${hostName}.crt";
+          tls_key = "/var/lib/foxden/http-kanidm/acme/${hostName}.key";
 
           http_client_address_info.x-forward-for = ["127.0.0.1" "127.0.0.0/8"];
         };
@@ -180,7 +180,7 @@ in
 
         serviceConfig = {
           BindReadOnlyPaths = [
-            "/var/lib/foxden/http-kanidm/certificates/acme-v02.api.letsencrypt.org-directory"
+            "/var/lib/foxden/http-kanidm/acme"
           ];
           StateDirectory = "kanidm";
         };

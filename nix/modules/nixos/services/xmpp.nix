@@ -15,9 +15,9 @@ let
   primaryInterface = lib.lists.head (lib.attrsets.attrValues hostCfg.interfaces);
   hostName = foxDenLib.global.dns.mkHost primaryInterface.dns;
 
-  tlsRoot = "/var/lib/foxden/http-prosody/certificates/acme-v02.api.letsencrypt.org-directory";
-  tlsChain = "${tlsRoot}/${hostName}/${hostName}.crt";
-  tlsKey = "${tlsRoot}/${hostName}/${hostName}.key";
+  tlsRoot = "/var/lib/foxden/http-prosody/acme";
+  tlsChain = "${tlsRoot}/${hostName}.crt";
+  tlsKey = "${tlsRoot}/${hostName}.key";
 in
 {
   options.foxDen.services.xmpp = {
