@@ -341,7 +341,7 @@ in
                 }
                 '' else ""}
 
-              ${if rawConfig != null then rawConfig { inherit baseWebConfig proxyConfig proxyConfigNoHost; } else normalConfig}
+              ${if rawConfig != null then rawConfig { inherit package baseWebConfig proxyConfig proxyConfigNoHost; } else normalConfig}
               }
             '';
             mode = "0600";
