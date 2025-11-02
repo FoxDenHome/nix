@@ -223,6 +223,7 @@ in
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $remote_addr;
         proxy_set_header X-Forwarded-Proto $scheme;
+        include ${package}/conf/fastcgi_params;
       '';
       proxyConfig = ''
         ${proxyConfigNoHost}
